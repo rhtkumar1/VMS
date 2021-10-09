@@ -1,0 +1,88 @@
+﻿<form id="UserProfileform">
+    <div class="fields-grid">
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <input type="text" id="FirstName" name="FirstName" placeholder="First Name" required="" />
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <input type="text" id="MiddleName" name="MiddleName" placeholder="Middle Name" required="" />
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <input type="text" id="LastName" name="LastName" placeholder="Last Name" required="" />
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <input type="date" id="DOB" name="DOB" placeholder="Date of birth" required="" />
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field pb-2">
+                <input type="text" id="MobileNo" tp-type="numeric" name="MobileNo" placeholder="Mobile Number" required="" style="width:60%" />
+                <input type="text" id="MobileOtp" tp-type="numeric" name="MobileOtp" placeholder="Otp" style="width:35%" required="" />
+                <button type="submit" name="btnGenerateOtp" id="btnGenerateOtp" class="btn btn-primary">Send Otp</button>
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <input type="email" tp-type="email" id="EmailId" name="EmailId" placeholder="Email id" required="" />
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <select id="CountryId" name="CountryId" class="form-control" required>
+                    <option value="0" selected>Select Country</option>
+                </select>
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <select id="StateId" name="StateId" class="form-control" required>
+                    <option value="0" selected>Select State</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <div class="styled-input">
+                <div class="appointment-form-field">
+                    <select id="CityId" name="CityId" class="form-control" required>
+                        <option value="0" selected>Select City</option>
+                    </select>
+                </div>
+            </div>
+            <div class="styled-input">
+                <div class="appointment-form-field">
+                    <input type="text" id="PinCode" maxlength="7" name="PinCode" placeholder="Pin Code" required="" />
+                </div>
+            </div>
+        </div>
+        <div class="styled-input">
+            <div class="appointment-form-field">
+                <textarea rows="2" cols="20" type="text" id="Address" name="Address" placeholder="Address" required=""></textarea>
+            </div>
+        </div>
+        <div class="styled-input" style="display:none">
+            <div class="appointment-form-field">
+                <input type="text" tp-type="numeric" maxlength="12" id="AadharNumber" name="AadharNumber" placeholder="Aadhar Number" required="" />
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12"><p style="color:#ef0f44;text-align:center" id="userprofilemsg"></p></div>
+    <div class="col-lg-12"><p style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+
+    <div class="appointment-btn text-lg-right">
+        <button type="submit" name="btnSubmit" style="display:none" id="btnSubmit" class="btn btn-primary">Create Account</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#MobileOtp").css("display", "none")
+    });
+    $("#btnGenerateOtp").click(function () {
+        $("#MobileOtp").css("display", "block")
+    }
+</script>

@@ -1,0 +1,112 @@
+﻿@model IMS.Models.ViewModel.CreateUserMaster
+@{
+    ViewBag.Title = "User Master";
+    Layout = "~/Views/Shared/DashBoard/DashBoard/_Layout.cshtml";
+}
+<script>
+    $(document).ready(function () {
+        wsm.userProfileOnLoad();
+    });
+</script>
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>User Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("manageUserMaster", "admin", FormMethod.Post, new { enctype = "multipart/form-data", @id = "UserMaster" }))
+                        {
+                            <input type="hidden" id="UserId" name="UserId" value="0" />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    @Html.TextBoxFor(m => m.FirstName, htmlAttributes: new { @placeholder = "First Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    @Html.TextBoxFor(m => m.MiddleName, htmlAttributes: new { @placeholder = "Middle Name", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    @Html.TextBoxFor(m => m.LastName, htmlAttributes: new { @placeholder = "Last Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group pb-2">
+                                    @Html.TextBoxFor(m => m.MobileNo, htmlAttributes: new { @placeholder = "Mobile No", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    @Html.TextBoxFor(m => m.EmailId, htmlAttributes: new { @placeholder = "Email Id", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    @Html.TextBoxFor(m => m.Country, htmlAttributes: new { @placeholder = "Country Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    @Html.TextBoxFor(m => m.State, htmlAttributes: new { @placeholder = "State Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        @Html.TextBoxFor(m => m.City, htmlAttributes: new { @placeholder = "City Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-2 form-group">
+                                        @Html.TextBoxFor(m => m.PinCode, htmlAttributes: new { @placeholder = "Pin Code", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-2 form-group">
+                                        @Html.TextBoxFor(m => m.LoginId, htmlAttributes: new { @placeholder = "Login Id", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-2 form-group">
+                                        @Html.TextBoxFor(m => m.Password, htmlAttributes: new { @placeholder = "Password", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <textarea rows="1" cols="20" type="text" class="form-control" id="Address" name="Address" placeholder="Address" required=""></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12"><p style="color:#ef0f44;text-align:center" id="userprofilemsg"></p></div>
+                            <div class="col-md-12">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Create Profile</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
