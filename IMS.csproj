@@ -140,6 +140,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CBL\DBManager.cs" />
+    <Compile Include="Models\CBL\SessionAuthentication.cs" />
     <Compile Include="Models\CBL\ThalesSession.cs" />
     <Compile Include="Models\Encryption.cs" />
     <Compile Include="Models\Enums.cs" />
@@ -147,7 +148,6 @@
     <Compile Include="Models\SendEmail.cs" />
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
-    <Compile Include="Models\ViewModel\Datatable.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\User.cs" />
     <Compile Include="Models\ViewModel\USERMASTER.cs" />
