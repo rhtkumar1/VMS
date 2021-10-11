@@ -25,7 +25,6 @@ namespace IMS.Controllers
 
                         Session["SYSSOFTECHSession"] = objUSERMASTER;
                         Session["UserName"] = Convert.ToString(objUSERMASTER.UserName);
-                        //Session["UserId"] = Convert.ToString(objUSERMASTER.UserId);
                         Session["UserType"] = Convert.ToString(objUSERMASTER.UserType);
                         result = "Success";
                     }
