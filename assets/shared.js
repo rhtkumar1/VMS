@@ -31,7 +31,11 @@ var hpls = (function (scope) {
                 $("#msg").text("username and password is wrong..!");
             }
             else {
-                window.location.href = "/admin/dashboard";
+                if (jsonResponse.returnUrl != undefined) {
+                    window.location.href = jsonResponse.returnUrl;
+                } else {
+                    window.location.href = window.location.href+"/Admin/Dashboard";
+                }
                 $("#msg").hide();
             }
         });
