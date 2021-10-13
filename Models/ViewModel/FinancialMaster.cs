@@ -40,6 +40,7 @@ namespace IMS.Models.ViewModel
             try
             {
                 dt = GetFinancialData();
+                if(dt.Rows.Count > 0)
                 financialMaster = CommonUtility.ConvertToList<FinancialMaster>(dt);
             }
             catch (Exception ex)
