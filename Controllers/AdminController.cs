@@ -41,7 +41,7 @@ namespace IMS.Controllers
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@QueryType", "getall"));
-                ds = DBManager.ExecuteDataSetWithParamiter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+                ds = DBManager.ExecuteDataSetWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
                 ds.Tables[0].TableName = "UserLists";
             }
             catch (Exception)
