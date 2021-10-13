@@ -38,7 +38,7 @@ namespace IMS.Models.CBL
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@LoginId", loginid));
                 SqlParameters.Add(new SqlParameter("@Password", Password));
-                loginAuth = DBManager.ExecuteDataTableWithParamiter("User_Master_Authentication", CommandType.StoredProcedure, SqlParameters);
+                loginAuth = DBManager.ExecuteDataTableWithParameter("User_Master_Authentication", CommandType.StoredProcedure, SqlParameters);
                 ThalesSession = new ThalesSession(SessionID, loginAuth);
                 UserName = ThalesSession.UserName;
                 UserId = ThalesSession.UserId;
@@ -71,7 +71,7 @@ namespace IMS.Models.CBL
                 SqlParameters.Add(new SqlParameter("@Country", uSERMASTER.Country));
                 SqlParameters.Add(new SqlParameter("@Address", uSERMASTER.Address));
                 SqlParameters.Add(new SqlParameter("@PinCode", uSERMASTER.PinCode));
-                dt = DBManager.ExecuteDataTableWithParamiter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTableWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
                 DataRow dr = dt.Rows[0];
                 if (dr["msg"].ToString() != "")
                 {
