@@ -38,7 +38,7 @@ namespace IMS.Models.CBL
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@LoginId", loginid));
                 SqlParameters.Add(new SqlParameter("@Password", Password));
-                loginAuth = DBManager.ExecuteDataTableWithParamiter("Proc_User_Authentication", CommandType.StoredProcedure, SqlParameters);
+                loginAuth = DBManager.ExecuteDataTableWithParamiter("User_Master_Authentication", CommandType.StoredProcedure, SqlParameters);
                 ThalesSession = new ThalesSession(SessionID, loginAuth);
                 UserName = ThalesSession.UserName;
                 UserId = ThalesSession.UserId;
