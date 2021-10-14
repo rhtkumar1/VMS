@@ -1,4 +1,5 @@
-﻿using IMS.Models.ViewModel;
+﻿using IMS.Models.CBL;
+using IMS.Models.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
+    [SessionAuthentication]
     public class AdminController : Controller
     {
         // GET: Admin
@@ -39,7 +41,7 @@ namespace IMS.Controllers
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@QueryType", "getall"));
-                ds = DBManager.ExecuteDataSetWithParamiter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+                ds = DBManager.ExecuteDataSetWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
                 ds.Tables[0].TableName = "UserLists";
             }
             catch (Exception)

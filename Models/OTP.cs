@@ -33,7 +33,7 @@ namespace OnlineServiceProvider.Models
             Parameters.Add(new SqlParameter("@RefId", RefId));
             Parameters.Add(new SqlParameter("@RefType", RefType.ToString()));
             Parameters.Add(new SqlParameter("@Value", OTPValue));
-            DataTable DT = DBManager.ExecuteDataTableWithParamiter("Proc_OTPManager_Save", CommandType.StoredProcedure, Parameters);
+            DataTable DT = DBManager.ExecuteDataTableWithParameter("Proc_OTPManager_Save", CommandType.StoredProcedure, Parameters);
             return DT.Rows[0]["Value"].ToString(); 
         }
         public bool ValidateOTP(string RefId, string Value, int RefType = 0)
@@ -44,7 +44,7 @@ namespace OnlineServiceProvider.Models
                 Parameters.Add(new SqlParameter("@RefId", RefId));
                 Parameters.Add(new SqlParameter("@RefType", RefType.ToString()));
                 Parameters.Add(new SqlParameter("@Value", Value));
-                DataTable DT = DBManager.ExecuteDataTableWithParamiter("Proc_OTPManager_Verify", CommandType.StoredProcedure, Parameters);
+                DataTable DT = DBManager.ExecuteDataTableWithParameter("Proc_OTPManager_Verify", CommandType.StoredProcedure, Parameters);
                 if (DT.Rows.Count > 0)
                 {
                     _OTPID = DT.Rows[0]["OTPId"].ToString();
@@ -77,7 +77,7 @@ namespace OnlineServiceProvider.Models
             {
                 List<SqlParameter> Parameters = new List<SqlParameter>();
                 Parameters.Add(new SqlParameter("@OTPID", OTPID));
-                DataTable DT = DBManager.ExecuteDataTableWithParamiter("Proc_OTPManager_Select", CommandType.StoredProcedure, Parameters);
+                DataTable DT = DBManager.ExecuteDataTableWithParameter("Proc_OTPManager_Select", CommandType.StoredProcedure, Parameters);
                 if (DT.Rows.Count > 0)
                 {
                     _OTPID = DT.Rows[0]["OTPId"].ToString();

@@ -11,6 +11,7 @@ namespace IMS.Controllers
     public class HomeController : Controller
     {
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public JsonResult Authenticate(string loginid = "", string password = "")
         {
             string result = "Fail";
@@ -22,9 +23,8 @@ namespace IMS.Controllers
                     if (objUSERMASTER.IsAuthenticated)
                     {
 
-                        Session["ThalesSession"] = objUSERMASTER.ThalesSession;
+                        Session["SYSSOFTECHSession"] = objUSERMASTER;
                         Session["UserName"] = Convert.ToString(objUSERMASTER.UserName);
-                        //Session["UserId"] = Convert.ToString(objUSERMASTER.UserId);
                         Session["UserType"] = Convert.ToString(objUSERMASTER.UserType);
                         result = "Success";
                     }
@@ -74,8 +74,10 @@ namespace IMS.Controllers
         {
             return View("~/Views/Home/Index.cshtml");
         }
+        [ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
+            Session["SYSSOFTECHSession"] = null;
             return View("~/Views/Home/Index.cshtml");
         }
     }

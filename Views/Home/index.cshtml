@@ -6,11 +6,11 @@
 <html lang="zxx">
 
 <head>
-    <title>Wlcome To IMS</title>
+    <title>Syssoftech :: IT</title>
     <!-- Meta tag Keywords -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
-    <meta name="keywords" content="Classic Sign In Form Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements" />
+    
     <script>
         addEventListener("load", function () {
             setTimeout(hideURLbar, 0);
@@ -49,6 +49,7 @@
             </span>
         </div>
         <form action="#" id="loginform" method="post">
+            @Html.AntiForgeryToken()
             <div class="form-style-agile">
                 <label>
                     Username

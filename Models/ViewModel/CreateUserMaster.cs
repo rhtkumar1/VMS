@@ -49,7 +49,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Country", createUser.Country));
                 SqlParameters.Add(new SqlParameter("@Address", createUser.Address));
                 SqlParameters.Add(new SqlParameter("@PinCode", createUser.PinCode));
-                dt = DBManager.ExecuteDataTableWithParamiter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTableWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
                 DataRow dr = dt.Rows[0];
                 if (dr["msg"].ToString() != "")
                 {

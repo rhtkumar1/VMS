@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+
 public class DBManager
 {
     private static string ConnStr = ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString;
-    public static DataTable ExecuteDataTableWithParamiter(string Query, CommandType commandType, List<SqlParameter> Parameter)
+    public static DataTable ExecuteDataTableWithParameter(string Query, CommandType commandType, List<SqlParameter> Parameter)
     {
         DataTable DT = new DataTable();
         using (SqlConnection sqlcon = new SqlConnection((ConnStr)))
@@ -27,9 +29,29 @@ public class DBManager
             }
         }
     }
-    public static string ExecuteScalar(string Query, CommandType commandType, List<SqlParameter> Parameter)
+
+
+    public static DataTable ExecuteDataTable(string Query, CommandType commandType)
     {
         DataTable DT = new DataTable();
+        using (SqlConnection sqlcon = new SqlConnection((ConnStr)))
+        {
+            using (SqlCommand Command = new SqlCommand(Query, sqlcon))
+            {
+                sqlcon.Open();
+                Command.CommandType = commandType;
+                using (var Obj = Command.ExecuteReader())
+                {
+                    DT.Load(Obj);
+                    sqlcon.Close();
+                    return DT;
+                }
+            }
+        }
+    }
+
+    public static int ExecuteScalar(string Query, CommandType commandType, List<SqlParameter> Parameter)
+    {
         using (SqlConnection sqlcon = new SqlConnection((ConnStr)))
         {
             using (SqlCommand Command = new SqlCommand(Query, sqlcon))
@@ -40,13 +62,13 @@ public class DBManager
                 {
                     Command.Parameters.Add(Pr);
                 }
-                string Obj2 = Command.ExecuteScalar().ToString();
+                int Obj2 = Convert.ToInt32(Command.ExecuteScalar());
                 sqlcon.Close();
                 return Obj2;
             }
         }
     }
-    public static DataSet ExecuteDataSetWithParamiter(string Query, CommandType commandType, List<SqlParameter> Parameter)
+    public static DataSet ExecuteDataSetWithParameter(string Query, CommandType commandType, List<SqlParameter> Parameter)
     {
         using (SqlConnection Connection = new SqlConnection(ConnStr))
         {
