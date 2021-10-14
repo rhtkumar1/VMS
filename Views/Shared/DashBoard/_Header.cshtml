@@ -44,48 +44,31 @@
 
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
-            @if (Convert.ToInt64(Session["UserType"]) == 1)
-            {
-                <ul class="nav" id="side-menu">
-                    <li>
-                        <a href="#" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">Master Forms</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="@Url.Action("UserLists", "admin")" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Create Profile</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Project Master</span></a>
-                            </li>
-                        </ul>
-                    </li>
+            @*@if (Convert.ToInt64(Session["UserType"]) == 1)
+                {*@
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a href="#" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">Master Forms</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="@Url.Action("Index", "UserMaster")" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">User Master</span></a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "FinancialMaster")" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Financial Master</span></a>
+                        </li>
+                    </ul>
+                </li>
 
-                    <li>
-                        <a href="#" class="hvr-bounce-to-right"><i class="fa fa-file nav_icon"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li class="hidden">
-                                <a href="dashboard" class="hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Day Book Report</span> </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            }
-            else
-            {
-                <ul class="nav" id="side-menu">
-                    <li>
-                        <a href="#" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">Manage Work List</span></a>
-                    </li>
-
-                    @*<li>
-                            <a href="#" class="hvr-bounce-to-right"><i class="fa fa-file nav_icon"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li class="hidden">
-                                    <a href="dashboard" class="hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Day Book Report</span> </a>
-                                </li>
-                            </ul>
-                        </li>*@
-                </ul>
-            }
+                <li>
+                    <a href="#" class="hvr-bounce-to-right"><i class="fa fa-file nav_icon"></i> <span class="nav-label">Reports</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="hidden">
+                            <a href="dashboard" class="hvr-bounce-to-right"><i class="fa fa-dashboard nav_icon "></i><span class="nav-label">Day Book Report</span> </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            @*}*@
         </div>
     </div>
 </nav>
