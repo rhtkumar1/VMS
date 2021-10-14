@@ -61,5 +61,11 @@ namespace IMS.Models.ViewModel
             
             return createUser;
         }
+        public DataSet UserListAll()
+        {
+            List<SqlParameter> SqlParameters = new List<SqlParameter>();
+            SqlParameters.Add(new SqlParameter("@QueryType", "getall"));
+            return DBManager.ExecuteDataSetWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+        }
     }
 }

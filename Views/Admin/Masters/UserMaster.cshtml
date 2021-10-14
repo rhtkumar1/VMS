@@ -3,11 +3,6 @@
     ViewBag.Title = "User Master";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
-<script>
-    $(document).ready(function () {
-        wsm.userProfileOnLoad();
-    });
-</script>
 
 <div id="page-wrapper" class="gray-bg dashbard-1">
     <div class="content-main">
@@ -110,3 +105,76 @@
     <!--//content-->
     <!---->
 </div>
+
+<script type="text/javascript">
+    IMSC.ajaxCall("GET", "/UserMaster/GetUserMaster", {}, "text", function (d) {
+        var result = JSON.parse(d);
+        if (result.CustomerProfileLists !== "null" && result.CustomerProfileLists !== "") {
+            var fields = [
+                { name: "UserId", css: "hidden", },
+                { name: "FirstName", title: "Customer Name", sorting: true, filtering: true, width: 50 },
+                { name: "MobileNo", title: "Mobile Number", sorting: true, filtering: true, width: 50 },
+                { name: "CompanyName", title: "Company Name", sorting: true, filtering: true, width: 50 },
+                { name: "MobileNo", title: "Mobile Number", sorting: true, filtering: true, width: 50 },
+                {
+                    width: 20,
+                    itemTemplate: function (value, args) {
+                        var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
+                            .click(function (e) {
+                                editCustomerProfile('Edit', args);
+                                return false;
+                            });
+                        return $("<div class='display-flex'></div>").append($customeEditButton);
+                    }
+                }
+            ];
+            var options = {
+                filtering: true,
+                editing: false,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                controller: {
+                    CustomerProfileLists: result.CustomerProfileLists,
+                    loadData: function (filter) {
+                        return $.grep(this.CustomerProfileLists, function (CustomerProfileList) {
+                            return (!filter.FirstName || CustomerProfileList.FirstName.toLowerCase().indexOf(filter.FirstName.toLowerCase()) > -1);
+                        });
+                    }
+                },
+                fields: fields
+            };
+            $.extend(options, IMSC.grid_options);
+            $("#listGrid").jsGrid(options);
+            IMSC.filteOnKeyPress("#listGrid");
+        }
+        formSubmitHandler = function () {
+            manageCustomerProfile()
+        };
+        var editCustomerProfile = function (dilogType, CustomerProfile) {
+            if (CustomerProfile.UserId > 0) {
+                $("#UserId").val(CustomerProfile.UserId);
+                $("#FirstName").val(CustomerProfile.FirstName);
+                $("#MiddleName").val(CustomerProfile.MiddleName);
+                $("#LastName").val(CustomerProfile.LastName);
+                $("#MobileNo").val(CustomerProfile.MobileNo);
+                $("#EmailId").val(CustomerProfile.EmailId);
+                $("#CompanyName").val(CustomerProfile.CompanyName);
+                $("#CityName").val(CustomerProfile.City);
+                $("#StateName").val(CustomerProfile.State);
+                $("#CountryName").val(CustomerProfile.Country);
+                $("#Address").val(CustomerProfile.Address);
+                $("#PinCode").val(CustomerProfile.PinCode);
+                $("#AccountNumber").val(CustomerProfile.AccountNumber);
+                $("#IFSCCode").val(CustomerProfile.IFSCCode);
+                $("#AccountHolderName").val(CustomerProfile.AccountHolderName);
+                $("#CountryName").val(CustomerProfile.Country);
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#UserId").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
+    });
+</script>

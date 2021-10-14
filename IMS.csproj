@@ -134,8 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\UserMaster.cs" />
-    <Compile Include="Controllers\FinancialMaster.cs" />
+    <Compile Include="Controllers\UserMasterController.cs" />
+    <Compile Include="Controllers\FinancialMasterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -154,7 +154,7 @@
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\User.cs" />
-    <Compile Include="Models\ViewModel\USERMASTER.cs" />
+    <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -239,8 +239,6 @@
     <Content Include="assets\home\webfonts\fa-solid-900.woff" />
     <Content Include="assets\home\webfonts\fa-solid-900.woff2" />
     <None Include="packages.config" />
-    <Content Include="Views\Admin\CustomerMaster.cshtml" />
-    <Content Include="Views\Admin\DashBoard.cshtml" />
     <Content Include="Views\Home\ForgetPassword.cshtml" />
     <Content Include="Views\Home\index.cshtml" />
     <Content Include="Views\Home\LoginAuthentication.cshtml" />
@@ -252,7 +250,9 @@
     <Content Include="Views\Shared\Home\_Header.cshtml" />
     <Content Include="Views\Shared\Home\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Admin\UserMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\UserMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\FinancialMaster.cshtml" />
+    <Content Include="Views\Shared\DashBoard\DashBoard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
