@@ -6,7 +6,7 @@ using System.Web;
 
 namespace IMS.Models.CBL
 {
-    public class ThalesSession
+    public class SyssoftechSession
     {
         private string _UserName;
         private string _UserId;
@@ -14,13 +14,16 @@ namespace IMS.Models.CBL
         private string _SessionID;
         private DateTime _SessionStartDateTime;
        
-        public ThalesSession(string sessionID, DataTable loginAuth)
+        public SyssoftechSession(string sessionID, DataTable loginAuth)
         {
-            _UserName = loginAuth.Rows[0].ItemArray[3].ToString();
-            _UserId = loginAuth.Rows[0].ItemArray[0].ToString();
-            _UserType = loginAuth.Rows[0].ItemArray[2].ToString();
-            _SessionID = sessionID;
-            _SessionStartDateTime = DateTime.Now;
+            foreach (DataRow Dr in loginAuth.Rows)
+            {
+                _UserName = Dr["UserName"].ToString();
+                _UserId = Dr["User_Id"].ToString();
+                _UserType = "0";
+                _SessionID = sessionID;
+                _SessionStartDateTime = DateTime.Now;
+            }
 
         }
 
@@ -28,7 +31,7 @@ namespace IMS.Models.CBL
         public string UserId { get { return _UserId; } }
         public string UserType { get { return _UserType; } }
 
-        public string  SessionID { get { return _SessionID+";;;"+ _SessionStartDateTime.ToString("YYYYDDMMHHmmssfffffffK"); } }
+        public string  SessionID { get { return _SessionID; } }
 
     }
 }

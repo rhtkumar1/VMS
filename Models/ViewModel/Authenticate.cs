@@ -28,22 +28,23 @@ namespace IMS.Models.CBL
         public string UserName;
         public string UserId;
         public string UserType;
-        public bool IsAuthenticated;
-        public ThalesSession ThalesSession;
+        public bool IsAuthenticated = false;
+        public SyssoftechSession SyssoftechSession;
         public Authenticate AuthenticateUser(string loginid, string Password, string SessionID)
-        {
-            DataTable loginAuth = new DataTable();
+        {   
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@LoginId", loginid));
                 SqlParameters.Add(new SqlParameter("@Password", Password));
-                loginAuth = DBManager.ExecuteDataTableWithParameter("User_Master_Authentication", CommandType.StoredProcedure, SqlParameters);
-                ThalesSession = new ThalesSession(SessionID, loginAuth);
-                UserName = ThalesSession.UserName;
-                UserId = ThalesSession.UserId;
-                UserType = ThalesSession.UserType;
-                IsAuthenticated = true;
+                SyssoftechSession = new SyssoftechSession(SessionID, DBManager.ExecuteDataTableWithParameter("User_Master_Authentication", CommandType.StoredProcedure, SqlParameters));
+                UserName = SyssoftechSession.UserName;
+                UserId = SyssoftechSession.UserId;
+                UserType = SyssoftechSession.UserType;
+                if (Convert.ToInt32(SyssoftechSession.UserId) > 0)
+                     IsAuthenticated = true;
+                else
+                    IsAuthenticated = false;
             }
             catch (Exception ex)
             { throw ex; }
