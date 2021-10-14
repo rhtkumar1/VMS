@@ -12,10 +12,10 @@ namespace IMS.Models.CBL
     {
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            USERMASTER ObjUSERMASTER = (USERMASTER)filterContext.HttpContext.Session["SYSSOFTECHSession"];
-            if (ObjUSERMASTER != null)
+            Authenticate ObjAuthenticate = (Authenticate)filterContext.HttpContext.Session["SYSSOFTECHSession"];
+            if (ObjAuthenticate != null)
             {
-                if ((Convert.ToInt32(ObjUSERMASTER.LoginId) <= 0))
+                if ((Convert.ToInt32(ObjAuthenticate.LoginId) <= 0))
                 {
                     filterContext.Result = new HttpUnauthorizedResult();
                 }

@@ -1,4 +1,4 @@
-﻿var hplc = (function (scope) {
+﻿var IMSC = (function (scope) {
     scope.ajaxCall = function (method, url, data, dataType, f, headers = null, asyncHit = true) {
         $.ajax({
             type: method,
@@ -119,7 +119,7 @@
     };
 
     return scope;
-})(hplc || {});
+})(IMSC || {});
 
 function exportInExcel(elem) {
     var table = document.getElementById("rpt-table");

@@ -10,7 +10,7 @@
 
     scope.customerProfileOnLoad = function () {
         var formSubmitHandler = $.noop;
-        hplc.ajaxCall("GET", "/admin/customerprofilelists?type=list", {}, "text", function (d) {
+        IMSC.ajaxCall("GET", "/admin/customerprofilelists?type=list", {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result.CustomerProfileLists !== "null" && result.CustomerProfileLists !== "") {
                 var fields = [
@@ -47,9 +47,9 @@
                     },
                     fields: fields
                 };
-                $.extend(options, hplc.grid_options);
+                $.extend(options, IMSC.grid_options);
                 $("#listGrid").jsGrid(options);
-                hplc.filteOnKeyPress("#listGrid");
+                IMSC.filteOnKeyPress("#listGrid");
             }
             formSubmitHandler = function () {
                 manageCustomerProfile()
@@ -84,7 +84,7 @@
 
     scope.liabilitiesOnLoad = function () {
         var formSubmitHandler = $.noop;
-        hplc.ajaxCall("GET", "/admin/customerliabilitieslists?type=list", {}, "text", function (d) {
+        IMSC.ajaxCall("GET", "/admin/customerliabilitieslists?type=list", {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result.CustomerLiablityLists !== "null" && result.CustomerLiablityLists !== "") {
                 var fields = [
@@ -120,9 +120,9 @@
                     },
                     fields: fields
                 };
-                $.extend(options, hplc.grid_options);
+                $.extend(options, IMSC.grid_options);
                 $("#listGrid").jsGrid(options);
-                hplc.filteOnKeyPress("#listGrid");
+                IMSC.filteOnKeyPress("#listGrid");
             }
             formSubmitHandler = function () {
                 manageCustomerLiabilities()

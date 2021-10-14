@@ -8,38 +8,21 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
-    public class AdminController : Controller
+    public class UserMasterController : Controller
     {
         // GET: Admin
-        public ActionResult Dashboard()
+        public ActionResult Index()
         {
-            return View("~/Views/Shared/dashboard/dashboard.cshtml");
+            return View("~/Views/Admin/Masters/UserMaster.cshtml");
         }
-        public ActionResult UserLists(string type = "view")
-        {
-            DataSet ds = new DataSet();
-            try
-            {
-                if (type == "view")
-                {
-                    return View("~/Views/Admin/UserMaster.cshtml");
-                }
-                else
-                    return UserList();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        private ContentResult UserList()
+        public ActionResult GetUserMaster()
         {
             DataSet ds = new DataSet();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@QueryType", "getall"));
-                ds = DBManager.ExecuteDataSetWithParamiter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
+                ds = DBManager.ExecuteDataSetWithParameter("Proc_Manage_UserMasters", CommandType.StoredProcedure, SqlParameters);
                 ds.Tables[0].TableName = "UserLists";
             }
             catch (Exception)

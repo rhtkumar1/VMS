@@ -19,13 +19,13 @@ namespace IMS.Controllers
             {
                 if (loginid != "" && password != "")
                 {
-                    USERMASTER objUSERMASTER = new USERMASTER().AuthenticateUser(loginid, password, Session.SessionID.ToString());
-                    if (objUSERMASTER.IsAuthenticated)
+                    Authenticate ObjAuthenticate = new Authenticate().AuthenticateUser(loginid, password, Session.SessionID.ToString());
+                    if (ObjAuthenticate.IsAuthenticated)
                     {
 
-                        Session["SYSSOFTECHSession"] = objUSERMASTER;
-                        Session["UserName"] = Convert.ToString(objUSERMASTER.UserName);
-                        Session["UserType"] = Convert.ToString(objUSERMASTER.UserType);
+                        Session["SYSSOFTECHSession"] = ObjAuthenticate;
+                        Session["UserName"] = Convert.ToString(ObjAuthenticate.UserName);
+                        Session["UserType"] = Convert.ToString(ObjAuthenticate.UserType);
                         result = "Success";
                     }
                     else
@@ -56,19 +56,6 @@ namespace IMS.Controllers
             {
                 return View("~/Views/Home/Index.cshtml");
             }
-        }
-        public ActionResult DashBoard()
-        {
-            DataSet dt = new DataSet();
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-                ViewBag.Msg = "some error occurred, please try again..!";
-            }
-            return View("~/Views/Shared/DashBoard/DashBoard.cshtml");
         }
         public ActionResult Index()
         {
