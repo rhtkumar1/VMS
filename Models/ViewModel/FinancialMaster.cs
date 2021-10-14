@@ -53,7 +53,6 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
