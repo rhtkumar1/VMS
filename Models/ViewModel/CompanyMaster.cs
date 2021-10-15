@@ -45,22 +45,7 @@ namespace IMS.Models.ViewModel
             return companyMaster;
         }
 
-        public List<CompanyMaster> CompanyMaster_Get(CompanyMaster companyMaster)
-        {
-            DataTable dt = new DataTable();
-            List<CompanyMaster> lstcompanyMaster = new List<CompanyMaster>();
-            try
-            {
-                dt = GetCompanyData(companyMaster);
-                if (dt.Rows.Count > 0)
-                    lstcompanyMaster = CommonUtility.ConvertToList<CompanyMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return lstcompanyMaster;
-        }
-
-        public DataTable GetCompanyData(CompanyMaster companyMaster)
+        public DataTable CompanyMaster_Get(CompanyMaster companyMaster)
         {
             DataTable dt = new DataTable();
             try

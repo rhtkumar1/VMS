@@ -38,22 +38,8 @@ namespace IMS.Models.ViewModel
             return locationMaster;
         }
 
-        public List<LocationMaster> LocationMaster_Get(LocationMaster locationMaster)
-        {
-            DataTable dt = new DataTable();
-            List<LocationMaster> lstlocationMaster = new List<LocationMaster>();
-            try
-            {
-                dt = GetLocationData(locationMaster);
-                if (dt.Rows.Count > 0)
-                    lstlocationMaster = CommonUtility.ConvertToList<LocationMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return lstlocationMaster;
-        }
 
-        public DataTable GetLocationData(LocationMaster locationMaster)
+        public DataTable LocationMaster_Get(LocationMaster locationMaster)
         {
             DataTable dt = new DataTable();
             try

@@ -38,22 +38,8 @@ namespace IMS.Models.ViewModel
             return stateMaster;
         }
 
-        public List<StateMaster> StateMaster_Get(StateMaster stateMaster)
-        {
-            DataTable dt = new DataTable();
-            List<StateMaster> lststateMaster = new List<StateMaster>();
-            try
-            {
-                dt = GetStateData(stateMaster);
-                if (dt.Rows.Count > 0)
-                    lststateMaster = CommonUtility.ConvertToList<StateMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return lststateMaster;
-        }
 
-        public DataTable GetStateData(StateMaster stateMaster)
+        public DataTable StateMaster_Get(StateMaster stateMaster)
         {
             DataTable dt = new DataTable();
             try

@@ -56,22 +56,8 @@ namespace IMS.Models.ViewModel
             return officeMaster;
         }
 
-        public List<OfficeMaster> OfficeMaster_Get(OfficeMaster officeMaster)
-        {
-            DataTable dt = new DataTable();
-            List<OfficeMaster> lstofficeMaster = new List<OfficeMaster>();
-            try
-            {
-                dt = GetOfficeData(officeMaster);
-                if (dt.Rows.Count > 0)
-                    lstofficeMaster = CommonUtility.ConvertToList<OfficeMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return lstofficeMaster;
-        }
 
-        public DataTable GetOfficeData(OfficeMaster officeMaster)
+        public DataTable OfficeMaster_Get(OfficeMaster officeMaster)
         {
             DataTable dt = new DataTable();
             try

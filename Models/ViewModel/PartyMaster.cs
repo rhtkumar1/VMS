@@ -78,22 +78,8 @@ namespace IMS.Models.ViewModel
             return partyMaster;
         }
 
-        public List<PartyMaster> PartyMaster_Get(PartyMaster partyMaster)
-        {
-            DataTable dt = new DataTable();
-            List<PartyMaster> lstpartyMaster = new List<PartyMaster>();
-            try
-            {
-                dt = GetPartyData(partyMaster);
-                if (dt.Rows.Count > 0)
-                    lstpartyMaster = CommonUtility.ConvertToList<PartyMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return lstpartyMaster;
-        }
 
-        public DataTable GetPartyData(PartyMaster partyMaster)
+        public DataTable PartyMaster_Get(PartyMaster partyMaster)
         {
             DataTable dt = new DataTable();
             try

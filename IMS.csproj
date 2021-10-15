@@ -150,6 +150,7 @@
     <Compile Include="Models\OTP.cs" />
     <Compile Include="Models\SendEmail.cs" />
     <Compile Include="Models\SendSMS.cs" />
+    <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
     <Compile Include="Models\ViewModel\User.cs" />
-    <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +267,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Admin\" />
     <Folder Include="Views\Shared\Admin\" />
   </ItemGroup>
   <PropertyGroup>

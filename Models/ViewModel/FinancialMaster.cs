@@ -33,33 +33,20 @@ namespace IMS.Models.ViewModel
             return financialMaster;
         }
 
-        public List<FinancialMaster> FinancialMaster_Get()
+        public DataTable FinancialMaster_Get()
         {
             DataTable dt = new DataTable();
             List<FinancialMaster> financialMaster = new List<FinancialMaster>();
-            try
-            {
-                dt = GetFinancialData();
-                if(dt.Rows.Count > 0)
-                financialMaster = CommonUtility.ConvertToList<FinancialMaster>(dt);
-            }
-            catch (Exception ex)
-            { throw ex; }
-            return financialMaster;
-        }
-
-        public DataTable GetFinancialData()
-        {
-            DataTable dt = new DataTable();
             try
             {
                 dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
-
             return dt;
         }
+
+        
 
 
 

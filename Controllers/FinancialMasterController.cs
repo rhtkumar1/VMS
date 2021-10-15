@@ -22,7 +22,7 @@ namespace IMS.Controllers
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                dt = financialMaster.GetFinancialData();
+                dt = financialMaster.FinancialMaster_Get();
                 dt.TableName = "FinancialLists";
             }
             catch (Exception)
