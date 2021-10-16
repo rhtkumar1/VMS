@@ -1,4 +1,4 @@
-﻿using LiabilitiesManagementSystem.Models.ViewModel;
+﻿using IMS.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data;

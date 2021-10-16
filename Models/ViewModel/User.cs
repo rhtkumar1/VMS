@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace LiabilitiesManagementSystem.Models.ViewModel
+namespace IMS.Models.ViewModel
 {
     public class User
     {
