@@ -13,25 +13,47 @@ namespace IMS.Models.CBL
         private string _UserType;
         private string _SessionID;
         private DateTime _SessionStartDateTime;
-       
-        public SyssoftechSession(string sessionID, DataTable loginAuth)
+        private List<SysSoftechMenuAuthentication> _MenuAuthenticationList = new List<SysSoftechMenuAuthentication>();
+        public SyssoftechSession(string sessionID, DataSet loginAuth)
         {
-            foreach (DataRow Dr in loginAuth.Rows)
+            if (loginAuth.Tables.Count > 1)
             {
-                _UserName = Dr["UserName"].ToString();
-                _UserId = Dr["User_Id"].ToString();
-                _UserType = "0";
-                _SessionID = sessionID;
-                _SessionStartDateTime = DateTime.Now;
+                foreach (DataRow Dr in loginAuth.Tables[0].Rows)
+                {
+                    _UserName = Dr["UserName"].ToString();
+                    _UserId = Dr["User_Id"].ToString();
+                    _UserType = "0";
+                    _SessionID = sessionID;
+                    _SessionStartDateTime = DateTime.Now;
+                }
+                foreach (DataRow Dr in loginAuth.Tables[1].Rows)
+                {
+                    SysSoftechMenuAuthentication ObjT = new SysSoftechMenuAuthentication(Convert.ToInt32(Dr["MenuID"]), Convert.ToInt32(Dr["Authentication"]));
+                    _MenuAuthenticationList.Add(ObjT);
+                    _UserName = Dr["UserName"].ToString();
+                    _UserId = Dr["User_Id"].ToString();
+                    _UserType = "0";
+                    _SessionID = sessionID;
+                    _SessionStartDateTime = DateTime.Now;
+                }
             }
-
         }
 
-        public string UserName { get {  return _UserName; } }
+        public string UserName { get { return _UserName; } }
         public string UserId { get { return _UserId; } }
         public string UserType { get { return _UserType; } }
 
-        public string  SessionID { get { return _SessionID; } }
+        public string SessionID { get { return _SessionID; } }
 
+    }
+    public class SysSoftechMenuAuthentication
+    {
+       private int MenuID;
+       private UserAuthentication Auth;
+       public SysSoftechMenuAuthentication(int menuid, int auth)
+        {
+            MenuID = menuid;
+            Auth = (UserAuthentication)auth;
+        }
     }
 }

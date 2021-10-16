@@ -15,7 +15,7 @@ namespace IMS.Models.CBL
             Authenticate ObjAuthenticate = (Authenticate)filterContext.HttpContext.Session["SYSSOFTECHSession"];
             if (ObjAuthenticate != null)
             {
-                if ((Convert.ToInt32(ObjAuthenticate.LoginId) <= 0))
+                if ((Convert.ToInt32(ObjAuthenticate.UserId) <= 0))
                 {
                     filterContext.Result = new HttpUnauthorizedResult();
                 }

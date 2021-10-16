@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -38,5 +40,21 @@ namespace LiabilitiesManagementSystem.Models.ViewModel
             _LoginId = PLoginId;
             _Islogin = false;
         }
+
+        public DataSet Authentication(string LoginID, string Password)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@LoginId", LoginID));
+                SqlParameters.Add(new SqlParameter("@Password", Password));
+                return DBManager.ExecuteDataSetWithParameter("User_Master_Authentication", System.Data.CommandType.StoredProcedure, SqlParameters);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
