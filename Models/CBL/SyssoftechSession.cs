@@ -28,13 +28,8 @@ namespace IMS.Models.CBL
                 }
                 foreach (DataRow Dr in loginAuth.Tables[1].Rows)
                 {
-                    SysSoftechMenuAuthentication ObjT = new SysSoftechMenuAuthentication(Convert.ToInt32(Dr["MenuID"]), Convert.ToInt32(Dr["Authentication"]));
+                    SysSoftechMenuAuthentication ObjT = new SysSoftechMenuAuthentication(Convert.ToInt32(Dr["MenuID"]), Convert.ToInt32(Dr["Auth"]));
                     _MenuAuthenticationList.Add(ObjT);
-                    _UserName = Dr["UserName"].ToString();
-                    _UserId = Dr["User_Id"].ToString();
-                    _UserType = "0";
-                    _SessionID = sessionID;
-                    _SessionStartDateTime = DateTime.Now;
                 }
             }
         }
