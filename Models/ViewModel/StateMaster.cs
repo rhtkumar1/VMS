@@ -45,8 +45,6 @@ namespace IMS.Models.ViewModel
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@State_Id", stateMaster.StateId));
-                SqlParameters.Add(new SqlParameter("@Title", stateMaster.Title));
                 dt = DBManager.ExecuteDataTableWithParameter("State_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

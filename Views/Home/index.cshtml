@@ -48,7 +48,8 @@
                 @ViewBag.Msg
             </span>
         </div>
-        <form action="#" id="loginform" method="post">
+        <form  id="loginform" novalidate="novalidate" method="post">
+            @Html.AntiForgeryToken()
             <div class="form-style-agile">
                 <label>
                     Username

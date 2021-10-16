@@ -61,7 +61,7 @@ namespace IMS.Controllers
         {
             return View("~/Views/Home/Index.cshtml");
         }
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
             Session["SYSSOFTECHSession"] = null;

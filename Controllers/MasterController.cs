@@ -8,10 +8,10 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
-    public class FinancialMasterController : Controller
+    public class MasterController : Controller
     {
-        // GET: Admin
-        public ActionResult Index()
+        #region
+        public ActionResult FinancialIndex()
         {
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml");
         }
@@ -34,7 +34,6 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageFinancialMaster(FinancialMaster financialMaster)
         {
-            string result = "Fail";
             try
             {
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
@@ -49,6 +48,7 @@ namespace IMS.Controllers
                         ViewBag.Msg = "Saved Sucessfully";
                     }
                 }
+                ModelState.Clear();
             }
             catch (Exception ex)
             {
@@ -56,5 +56,54 @@ namespace IMS.Controllers
             }
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml");
         }
+        #endregion
+
+        #region
+        public ActionResult StateIndex()
+        {
+            return View("~/Views/Admin/Masters/StateMaster.cshtml");
+        }
+        [HttpGet]
+        public ActionResult GetStateMaster(StateMaster stateMaster)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                dt = stateMaster.StateMaster_Get(stateMaster);
+                dt.TableName = "StateLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpPost]
+        public ActionResult ManageStateMaster(StateMaster stateMaster)
+        {
+            try
+            {
+                StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
+                if (objStateMaster != null)
+                {
+                    if (objStateMaster.StateId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/StateMaster.cshtml");
+        }
+        #endregion
     }
 }

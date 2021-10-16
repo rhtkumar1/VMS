@@ -106,7 +106,6 @@
     <Content Include="assets\admin\js\screenfull.js" />
     <Content Include="assets\admin\js\scripts.js" />
     <Content Include="assets\admin\js\skycons.js" />
-    <Content Include="assets\admin\PageWiseJs\masterpages.js" />
     <Content Include="assets\common.js" />
     <Content Include="assets\home\css\fontawesome-all.css" />
     <Content Include="assets\home\css\style.css" />
@@ -135,7 +134,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\UserMasterController.cs" />
-    <Compile Include="Controllers\FinancialMasterController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -251,13 +250,11 @@
     <Content Include="Views\Shared\DashBoard\_Footer.cshtml" />
     <Content Include="Views\Shared\DashBoard\_Header.cshtml" />
     <Content Include="Views\Shared\DashBoard\_Layout.cshtml" />
-    <Content Include="Views\Shared\Home\_Footer.cshtml" />
-    <Content Include="Views\Shared\Home\_Header.cshtml" />
-    <Content Include="Views\Shared\Home\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Admin\Masters\UserMaster.cshtml" />
     <Content Include="Views\Admin\Masters\FinancialMaster.cshtml" />
     <Content Include="Views\Shared\DashBoard\DashBoard.cshtml" />
+    <Content Include="Views\Admin\Masters\StateMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -267,7 +264,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Shared\Admin\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
