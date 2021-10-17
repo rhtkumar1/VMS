@@ -10,7 +10,7 @@ namespace IMS.Controllers
 {
     public class MasterController : Controller
     {
-        #region
+        #region Financial Year
         public ActionResult FinancialIndex()
         {
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml");
@@ -58,7 +58,7 @@ namespace IMS.Controllers
         }
         #endregion
 
-        #region
+        #region State Master
         public ActionResult StateIndex()
         {
             return View("~/Views/Admin/Masters/StateMaster.cshtml");

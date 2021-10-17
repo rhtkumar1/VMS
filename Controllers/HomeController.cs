@@ -22,7 +22,8 @@ namespace IMS.Controllers
                     Authenticate ObjAuthenticate = new Authenticate().AuthenticateUser(loginid, password, Session.SessionID.ToString());
                     if (ObjAuthenticate.IsAuthenticated)
                     {
-                        //Session["Menu_List"] = ObjAuthenticate.Menu_List;
+                        Session["Menu_Master_Role_Wise"] = ObjAuthenticate.ObjMenu_Master_Role_Wise;
+                        ObjAuthenticate.ObjMenu_Master_Role_Wise = null;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;
                         Session["UserName"] = Convert.ToString(ObjAuthenticate.UserName);
                         Session["UserType"] = Convert.ToString(ObjAuthenticate.UserType);

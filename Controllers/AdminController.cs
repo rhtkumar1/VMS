@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
-    //[SessionAuthentication]
+    [SessionAuthentication]
     public class AdminController : Controller
     {
         // GET: Admin

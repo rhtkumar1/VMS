@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMS.Models.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,15 +13,43 @@ namespace IMS.Models.CBL
     {
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            Authenticate ObjAuthenticate = (Authenticate)filterContext.HttpContext.Session["SYSSOFTECHSession"];
-            if (ObjAuthenticate != null)
+            try
             {
-                if ((Convert.ToInt32(ObjAuthenticate.UserId) <= 0))
+                Authenticate ObjAuthenticate = (Authenticate)filterContext.HttpContext.Session["SYSSOFTECHSession"];
+                if (ObjAuthenticate != null)
+                {
+                    if ((Convert.ToInt32(ObjAuthenticate.UserId) <= 0))
+                    {
+                        //List<Menu_Master_Display> objMenu_Master_Display = 
+                        filterContext.Result = new HttpUnauthorizedResult();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            ObjAuthenticate.ObjMenu_Master_Role_Wise = (List<Menu_Master_Role_Wise>)filterContext.HttpContext.Session["Menu_Master_Role_Wise"];
+                            string AppToken = EncryptDecrypt.DecryptString(filterContext.HttpContext.Request.Form["AppToken"].ToString());
+                            //MID={0};AuthMode={1}
+                            int MenuId = CommonUtility.ConvertInt(AppToken.Split(';')[0].Split('=')[1]);
+                            Menu_Master_Role_Wise obj = ObjAuthenticate.ObjMenu_Master_Role_Wise.Find(X => X.MenuID == MenuId);
+                            if (obj == null)
+                            {
+                                filterContext.Result = new HttpUnauthorizedResult();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            filterContext.Result = new HttpUnauthorizedResult();
+                        }
+
+                    }
+                }
+                else
                 {
                     filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
-            else
+            catch (Exception ex)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }

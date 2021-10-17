@@ -11,7 +11,7 @@ namespace IMS.Models.ViewModel
     {
         
 
-        public  List<Menu_Master_Display> GetMinu(int UserID)
+        public  List<Menu_Master_Display> GetMinu(int UserID,out List<Menu_Master_Role_Wise> ObjMenu_Master_Role_Wise)
         {
             DataTable dt = new DataTable();
             List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
@@ -20,6 +20,29 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@UserID", UserID));
                 dt = DBManager.ExecuteDataTableWithParameter("Menu_List", CommandType.StoredProcedure, SqlParameters);
+                ObjMenu_Master_Role_Wise = new List<Menu_Master_Role_Wise>();
+                foreach (DataRow dr0 in dt.Rows)
+                {
+                    Menu_Master_Role_Wise objMenu_Master_Role_Wise = new Menu_Master_Role_Wise();
+                    
+                    objMenu_Master_Role_Wise.MenuID = CommonUtility.ConvertInt(dr0["menu_id"]);
+
+                    if (!String.IsNullOrEmpty(Convert.ToString(dr0["menu_url"])))
+                    {
+                        objMenu_Master_Role_Wise.MenuURL = dr0["menu_url"].ToString();
+                        objMenu_Master_Role_Wise.Controller = dr0["menu_url"].ToString().Split('/')[0].ToString();
+                        objMenu_Master_Role_Wise.Action = dr0["menu_url"].ToString().Split('/')[1].ToString();
+                    }
+                    else
+                    {
+                        objMenu_Master_Role_Wise.MenuURL = "#";
+                        objMenu_Master_Role_Wise.Controller = "#";
+                        objMenu_Master_Role_Wise.Action = "#";
+                    }
+                    objMenu_Master_Role_Wise.AppToken = EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), dr0["Auth"].ToString()));
+                    objMenu_Master_Role_Wise.AuthMode = CommonUtility.ConvertInt(dr0["Auth"].ToString());
+                    ObjMenu_Master_Role_Wise.Add(objMenu_Master_Role_Wise);
+                }
                 foreach (DataRow dr0 in dt.Rows)
                 {
                     if (CommonUtility.ConvertInt(dr0["menu_parent_id"]) == 0)
@@ -122,6 +145,15 @@ namespace IMS.Models.ViewModel
             }
             return listMim;
         }
+    }
+    public class Menu_Master_Role_Wise
+    {
+        public int MenuID { get; set; }
+        public string MenuURL { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string AppToken { get; set; }
+        public int AuthMode { get; set; }
     }
     public class Menu_Master_Display
     {
