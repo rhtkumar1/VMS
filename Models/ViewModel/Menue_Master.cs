@@ -15,12 +15,13 @@ namespace IMS.Models.ViewModel
         {
             DataTable dt = new DataTable();
             List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
+            ObjMenu_Master_Role_Wise = new List<Menu_Master_Role_Wise>();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@UserID", UserID));
                 dt = DBManager.ExecuteDataTableWithParameter("Menu_List", CommandType.StoredProcedure, SqlParameters);
-                ObjMenu_Master_Role_Wise = new List<Menu_Master_Role_Wise>();
+                
                 foreach (DataRow dr0 in dt.Rows)
                 {
                     Menu_Master_Role_Wise objMenu_Master_Role_Wise = new Menu_Master_Role_Wise();
