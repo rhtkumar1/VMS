@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="Models\CBL\CommonUtility.cs" />
     <Compile Include="Models\CBL\DBManager.cs" />
+    <Compile Include="Models\CBL\Enums.cs" />
     <Compile Include="Models\CBL\SessionAuthentication.cs" />
     <Compile Include="Models\CBL\SyssoftechSession.cs" />
     <Compile Include="Models\Encryption.cs" />

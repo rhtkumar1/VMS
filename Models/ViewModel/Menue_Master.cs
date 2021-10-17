@@ -27,6 +27,7 @@ namespace IMS.Models.ViewModel
                         Menu_Master_Display Minu0 = new Menu_Master_Display();
                         Minu0.MenuTitle = dr0["menu_name"].ToString();
                         Minu0.MenuID = CommonUtility.ConvertInt(dr0["menu_id"]);
+                        
                         if (!String.IsNullOrEmpty(Convert.ToString(dr0["menu_url"])))
                         {
                             Minu0.MenuURL = dr0["menu_url"].ToString();
@@ -39,7 +40,7 @@ namespace IMS.Models.ViewModel
                             Minu0.Controller = "#";
                             Minu0.Action = "#";
                         }
-                        Minu0.AppToken += EncryptDecrypt.EncryptString(string.Format("M={0};MN={1}", Minu0.MenuID.ToString(), Minu0.MenuTitle));
+                        Minu0.AppToken += EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu0.MenuID.ToString(), dr0["Auth"].ToString()));
                        // 1 Lable
                         foreach (DataRow dr1 in dt.Rows)
                         {
@@ -60,7 +61,7 @@ namespace IMS.Models.ViewModel
                                     Minu1.Controller = "#";
                                     Minu1.Action = "#";
                                 }
-                                Minu1.AppToken += EncryptDecrypt.EncryptString(string.Format("M={0};MN={1}", Minu1.MenuID.ToString(), Minu1.MenuTitle));
+                                Minu1.AppToken += EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu1.MenuID.ToString(), dr1["Auth"].ToString()));
                                 Minu0.ChildList.Add(Minu1);
                                 // 2 Lable
                                 foreach (DataRow dr2 in dt.Rows)
@@ -82,7 +83,7 @@ namespace IMS.Models.ViewModel
                                             Minu2.Controller = "#";
                                             Minu2.Action = "#";
                                         }
-                                        Minu2.AppToken += EncryptDecrypt.EncryptString(string.Format("M={0};MN={1}", Minu2.MenuID.ToString(), Minu2.MenuTitle));
+                                        Minu2.AppToken += EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu2.MenuID.ToString(), dr2["Auth"].ToString()));
                                         Minu1.ChildList.Add(Minu2);
                                         // 3 Lable
                                         foreach (DataRow dr3 in dt.Rows)
@@ -104,7 +105,7 @@ namespace IMS.Models.ViewModel
                                                     Minu3.Controller = "#";
                                                     Minu3.Action = "#";
                                                 }
-                                                Minu3.AppToken += EncryptDecrypt.EncryptString(string.Format("M={0};MN={1}", Minu3.MenuID.ToString(), Minu3.MenuTitle));
+                                                Minu3.AppToken += EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu3.MenuID.ToString(), dr3["Auth"].ToString()));
                                                 Minu2.ChildList.Add(Minu3);
                                             }
                                         }
