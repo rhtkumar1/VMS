@@ -1,4 +1,5 @@
-﻿using IMS.Models.ViewModel;
+﻿using IMS.Models.CBL;
+using IMS.Models.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
+    [SessionAuthentication]
     public class UserMasterController : Controller
     {
         // GET: Admin
