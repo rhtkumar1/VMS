@@ -28,7 +28,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Code", stateMaster.Code));
                 SqlParameters.Add(new SqlParameter("@Type_Id", stateMaster.TypeId));
                 SqlParameters.Add(new SqlParameter("@Remarks", stateMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@Isactive", stateMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", stateMaster.Loginid));
                 stateMaster.StateId = DBManager.ExecuteScalar("State_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -44,13 +43,28 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                dt = DBManager.ExecuteDataTableWithParameter("State_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTable("State_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
 
             return dt;
+        }
+
+        public int StateMaster_Delete(StateMaster stateMaster)
+        {
+            int stateId=0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@State_Id", stateMaster.StateId));
+                SqlParameters.Add(new SqlParameter("@Loginid", stateMaster.Loginid));
+                stateId = DBManager.ExecuteScalar("State_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return stateId;
         }
 
     }

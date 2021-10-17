@@ -68,7 +68,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Zip", partyMaster.Zip));
                 SqlParameters.Add(new SqlParameter("@Country", partyMaster.Country));
                 SqlParameters.Add(new SqlParameter("@Remarks", partyMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@IsActive", partyMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
                 partyMaster.PartyId = DBManager.ExecuteScalar("Party_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -84,15 +83,29 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Party_Id", partyMaster.PartyId));
-                SqlParameters.Add(new SqlParameter("@Title", partyMaster.Title));
-                dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTable("Party_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
 
             return dt;
+        }
+
+
+        public int PartyMaster_Delete(PartyMaster partyMaster)
+        {
+            int partyId = 0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", partyMaster.PartyId));
+                SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
+                partyId = DBManager.ExecuteScalar("Party_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return partyId;
         }
 
 

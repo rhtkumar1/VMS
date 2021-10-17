@@ -35,7 +35,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Address2", companyMaster.Address2));
                 SqlParameters.Add(new SqlParameter("@Ownership", companyMaster.Ownership));
                 SqlParameters.Add(new SqlParameter("@Remarks", companyMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@Isactive", companyMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", companyMaster.Loginid));
                 companyMaster.CompanyId = DBManager.ExecuteScalar("Company_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -50,15 +49,28 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Company_Id", companyMaster.CompanyId));
-                SqlParameters.Add(new SqlParameter("@Title", companyMaster.Title));
-                dt = DBManager.ExecuteDataTableWithParameter("Financial_Master_Getdata", CommandType.StoredProcedure,SqlParameters);
+                dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
 
             return dt;
+        }
+
+        public int CompanyMaster_Delete(CompanyMaster companyMaster)
+        {
+            int companyId = 0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Company_Id", companyMaster.CompanyId));
+                SqlParameters.Add(new SqlParameter("@Loginid", companyMaster.Loginid));
+                companyId = DBManager.ExecuteScalar("Company_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return companyId;
         }
 
     }

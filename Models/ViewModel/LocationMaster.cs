@@ -28,7 +28,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Code", locationMaster.Code));
                 SqlParameters.Add(new SqlParameter("@State_Id", locationMaster.StateId));
                 SqlParameters.Add(new SqlParameter("@Remarks", locationMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@Isactive", locationMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", locationMaster.Loginid));
                 locationMaster.LocationId = DBManager.ExecuteScalar("Location_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -44,15 +43,28 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Location_Id", locationMaster.LocationId));
-                SqlParameters.Add(new SqlParameter("@Title", locationMaster.Title));
-                dt = DBManager.ExecuteDataTableWithParameter("Location_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTable("Location_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
 
             return dt;
+        }
+
+        public int LocationMaster_Delete(LocationMaster locationMaster)
+        {
+            int locationId = 0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Location_Id", locationMaster.LocationId));
+                SqlParameters.Add(new SqlParameter("@Loginid", locationMaster.Loginid));
+                locationId = DBManager.ExecuteScalar("Location_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return locationId;
         }
 
 

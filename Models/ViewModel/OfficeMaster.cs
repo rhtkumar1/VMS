@@ -46,7 +46,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@ContactNo", officeMaster.ContactNo));
                 SqlParameters.Add(new SqlParameter("@ContactPerson", officeMaster.ContactPerson));
                 SqlParameters.Add(new SqlParameter("@Remarks", officeMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@IsActive", officeMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", officeMaster.Loginid));
                 officeMaster.OfficeId = DBManager.ExecuteScalar("Office_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -62,15 +61,30 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Office_Id", officeMaster.OfficeId));
-                SqlParameters.Add(new SqlParameter("@Title", officeMaster.Title));
-                dt = DBManager.ExecuteDataTableWithParameter("Office_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTable("Office_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
 
             return dt;
+        }
+
+
+        public int OfficeMaster_Delete(OfficeMaster officeMaster)
+        {
+            int officeId = 0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Office_Id", officeMaster.OfficeId));
+                SqlParameters.Add(new SqlParameter("@Loginid", officeMaster.Loginid));
+                officeId = DBManager.ExecuteScalar("Office_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return officeId;
+            
         }
 
 

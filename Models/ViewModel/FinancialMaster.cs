@@ -23,7 +23,6 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Financial_id", financialMaster.FinancialId));
                 SqlParameters.Add(new SqlParameter("@From_date", Convert.ToDateTime(financialMaster.FromDate)));
                 SqlParameters.Add(new SqlParameter("@To_date", Convert.ToDateTime(financialMaster.ToDate)));
-                SqlParameters.Add(new SqlParameter("@Isactive", financialMaster.IsActive));
                 SqlParameters.Add(new SqlParameter("@Loginid", financialMaster.Loginid));
                 financialMaster.FinancialId = DBManager.ExecuteScalar("Financial_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -46,7 +45,21 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        
+        public int FinancialMaster_Delete(FinancialMaster financialMaster)
+        {
+            int financialId=0;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Financial_id", financialMaster.FinancialId));
+                SqlParameters.Add(new SqlParameter("@Loginid", financialMaster.Loginid));
+                financialId = DBManager.ExecuteScalar("Financial_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return financialId;
+        }
 
 
 
