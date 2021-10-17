@@ -13,7 +13,7 @@ namespace IMS.Models.CBL
         private string _UserType;
         private string _SessionID;
         private DateTime _SessionStartDateTime;
-        private List<SysSoftechMenuAuthentication> _MenuAuthenticationList = new List<SysSoftechMenuAuthentication>();
+        //private List<SysSoftechMenuAuthentication> _MenuAuthenticationList = new List<SysSoftechMenuAuthentication>();
         public SyssoftechSession(string sessionID, DataSet loginAuth)
         {
             if (loginAuth.Tables.Count > 1)
@@ -26,11 +26,11 @@ namespace IMS.Models.CBL
                     _SessionID = sessionID;
                     _SessionStartDateTime = DateTime.Now;
                 }
-                foreach (DataRow Dr in loginAuth.Tables[1].Rows)
-                {
-                    SysSoftechMenuAuthentication ObjT = new SysSoftechMenuAuthentication(Convert.ToInt32(Dr["MenuID"]), Convert.ToInt32(Dr["Auth"]));
-                    _MenuAuthenticationList.Add(ObjT);
-                }
+                //foreach (DataRow Dr in loginAuth.Tables[1].Rows)
+                //{
+                //   // SysSoftechMenuAuthentication ObjT = new SysSoftechMenuAuthentication(Convert.ToInt32(Dr["MenuID"]), Convert.ToInt32(Dr["Auth"]));
+                //   //_MenuAuthenticationList.Add(ObjT);
+                //}
             }
         }
 
@@ -41,14 +41,5 @@ namespace IMS.Models.CBL
         public string SessionID { get { return _SessionID; } }
 
     }
-    public class SysSoftechMenuAuthentication
-    {
-       private int MenuID;
-       private UserAuthentication Auth;
-       public SysSoftechMenuAuthentication(int menuid, int auth)
-        {
-            MenuID = menuid;
-            Auth = (UserAuthentication)auth;
-        }
-    }
+    
 }

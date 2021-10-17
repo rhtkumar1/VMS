@@ -17,7 +17,7 @@ namespace IMS.Models.CBL
         public string UserType;
         public bool IsAuthenticated = false;
         public SyssoftechSession SyssoftechSession;
-        
+        public List<Menu_Master_Display> Menu_List = new List<Menu_Master_Display>();
         public Authenticate AuthenticateUser(string loginid, string Password, string SessionID)
         {   
             try
@@ -27,9 +27,14 @@ namespace IMS.Models.CBL
                 UserId = SyssoftechSession.UserId;
                 UserType = SyssoftechSession.UserType;
                 if (Convert.ToInt32(SyssoftechSession.UserId) > 0)
-                     IsAuthenticated = true;
+                {
+                    Menu_List =new  Menue_Master().GetMinu(Convert.ToInt32(SyssoftechSession.UserId));
+                    IsAuthenticated = true;
+                }
                 else
+                {
                     IsAuthenticated = false;
+                }
             }
             catch (Exception ex)
             { throw ex; }

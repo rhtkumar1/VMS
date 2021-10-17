@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -48,7 +49,7 @@ namespace OnlineServiceProvider.Models
                 if (DT.Rows.Count > 0)
                 {
                     _OTPID = DT.Rows[0]["OTPId"].ToString();
-                    _OTPKey = Encryption.Encrypt((_OTPID + DT.Rows[0]["Value"].ToString()));    
+                    _OTPKey = EncryptDecrypt.EncryptString((_OTPID + DT.Rows[0]["Value"].ToString()));    
                     return true;
                 }
                 else
@@ -81,7 +82,7 @@ namespace OnlineServiceProvider.Models
                 if (DT.Rows.Count > 0)
                 {
                     _OTPID = DT.Rows[0]["OTPId"].ToString();
-                    _OTPKey = Encryption.Encrypt((_OTPID + DT.Rows[0]["Value"].ToString()));
+                    _OTPKey = EncryptDecrypt.EncryptString((_OTPID + DT.Rows[0]["Value"].ToString()));
                     return true;
                 }
                 else

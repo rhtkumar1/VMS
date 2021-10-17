@@ -36,5 +36,24 @@ public static class CommonUtility
         }
         return obj;
     }
+    public static int ConvertInt(object value)
+    {
+        int result = 0;
+        try
+        {
+            if (value != null && !Convert.IsDBNull(value))
+            {
+                if (System.Convert.ToString(value).Trim().Length > 0)
+                {
+                    result = System.Convert.ToInt32(value);
+                }
+            }
+        }
+        catch (System.Exception xe)
+        {
+            throw xe;
+        }
+        return result;
+    }
 
 }

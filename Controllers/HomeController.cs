@@ -22,7 +22,7 @@ namespace IMS.Controllers
                     Authenticate ObjAuthenticate = new Authenticate().AuthenticateUser(loginid, password, Session.SessionID.ToString());
                     if (ObjAuthenticate.IsAuthenticated)
                     {
-
+                        //Session["Menu_List"] = ObjAuthenticate.Menu_List;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;
                         Session["UserName"] = Convert.ToString(ObjAuthenticate.UserName);
                         Session["UserType"] = Convert.ToString(ObjAuthenticate.UserType);
