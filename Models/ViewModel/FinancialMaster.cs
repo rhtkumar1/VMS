@@ -62,8 +62,31 @@ namespace IMS.Models.ViewModel
             return financialId;
         }
 
+        List<FinancialData> lstFinancialData = new List<FinancialData>();
+        public List<FinancialData> Financial_List_Get()
+        {
+            DataTable dt = new DataTable();
+            FinancialData financialData = new FinancialData();
+            try
+            {
+                dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    financialData.FinancialId = Convert.ToInt32(dr["Financial_Id"]);
+                    financialData.FinancialYear = Convert.ToString(dr["From_date"]).Substring(6,9) +"-"+ Convert.ToString(dr["To_date"]).Substring(6, 9);
+                    lstFinancialData.Add(financialData);
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
 
+            return lstFinancialData;
+        }
 
-
+    }
+    public class FinancialData
+    { 
+        public int FinancialId { get; set; }
+        public string FinancialYear { get; set; }
     }
 }
