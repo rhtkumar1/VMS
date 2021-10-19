@@ -13,7 +13,8 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
-
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
 
         public FinancialMaster FinancialMaster_InsertUpdate(FinancialMaster financialMaster)
         {
@@ -47,7 +48,7 @@ namespace IMS.Models.ViewModel
 
         public int FinancialMaster_Delete(FinancialMaster financialMaster)
         {
-            int financialId=0;
+            int financialId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();

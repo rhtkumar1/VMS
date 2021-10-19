@@ -4,6 +4,10 @@
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
 
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
 <div id="page-wrapper" class="gray-bg dashbard-1">
     <div class="content-main">
         <!--banner-->
@@ -23,6 +27,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageFinancialMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FinancialMaster" }))
                         {
+                            @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.FinancialId)
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
@@ -36,20 +41,9 @@
                                     @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
                                 </div>
                             </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Status<span class="mandatory">*</span></label>
-                                    @{var listItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Active", Value="1" },
-                                          new SelectListItem { Text = "InActive", Value="2" }
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.IsActive, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="col-md-12">
+                            <div class="col-md-4" style="padding-top:26px">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary hidden">Submit</button>
                                 </div>
                             </div>
                         }
@@ -67,8 +61,9 @@
 </div>
 
 <script type="text/javascript">
+    
     $(document).ready(function () {
-        IMSC.ajaxCall("GET", "/Master/GetFinancialMaster", {}, "text", function (d) {
+        IMSC.ajaxCall("GET", "/Master/GetFinancialMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
                 var fields = [
@@ -78,12 +73,7 @@
                     {
                         width: 20,
                         itemTemplate: function (value, args) {
-                            var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
-                                .click(function (e) {
-                                    editFinancialMaster('Edit', args);
-                                    return false;
-                                });
-                            return $("<div class='display-flex'></div>").append($customeEditButton);
+                            return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
                     }
                 ];
@@ -106,21 +96,39 @@
                 $.extend(options, IMSC.grid_options);
                 $("#listGrid").jsGrid(options);
                 IMSC.filteOnKeyPress("#listGrid");
-            }
-
-            var editFinancialMaster = function (dilogType, FinancialMaster) {
-                if (FinancialMaster.Financial_Id > 0) {
-                    $("#FinancialId").val(FinancialMaster.Financial_Id);
-                    $("#FromDate").val(FinancialMaster.From_date);
-                    $("#ToDate").val(FinancialMaster.To_date);
-                    $("#IsActive").val(FinancialMaster.IsActive == true ? "1" : "2");
-                    $("#btnSubmit").text("Update")
-                }
-                else {
-                    $("#FinancialId").val("0");
-                    $("#btnSubmit").text("Submit")
-                }
-            };
+            }           
         });
+       
+        $('#FromDate').datepicker({
+            autoclose: true,
+            format: "dd-mm-yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true
+        }).datepicker("setDate", "0");
+
+        $('#ToDate').datepicker({
+            autoclose: true,
+            format: "dd-mm-yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true
+        }).datepicker("setDate", "0");
     });
+    var editFormData = function (dilogType, FinancialMaster) {
+        if (FinancialMaster.Financial_Id > 0) {
+            $("#FinancialId").val(FinancialMaster.Financial_Id);
+            $("#FromDate").val(FinancialMaster.From_date);
+            $("#ToDate").val(FinancialMaster.To_date);
+            $("#IsActive").val(FinancialMaster.IsActive == true ? "1" : "2");
+            $("#btnSubmit").text("Update")
+        }
+        else {
+            $("#FinancialId").val("0");
+            $("#btnSubmit").text("Submit")
+        }
+    };
+    function myFunction(p1, p2) {
+        return p1 * p2;   // The function returns the product of p1 and p2
+    }
 </script>

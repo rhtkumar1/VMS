@@ -1,4 +1,5 @@
-﻿using IMS.Models.CBL;
+﻿using IMS.Models;
+using IMS.Models.CBL;
 using IMS.Models.ViewModel;
 using Newtonsoft.Json;
 using System;
@@ -12,13 +13,18 @@ namespace IMS.Controllers
     [SessionAuthentication]
     public class MasterController : Controller
     {
+        string AppToken = "";
         #region Financial Year
         public ActionResult FinancialIndex()
         {
-            return View("~/Views/Admin/Masters/FinancialMaster.cshtml");
+            FinancialMaster financialMaster = new FinancialMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            financialMaster.AppToken = AppToken;
+            financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
         [HttpGet]
-        public ActionResult GetFinancialMaster(FinancialMaster financialMaster)
+        public ActionResult GetFinancialMaster(FinancialMaster financialMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -33,12 +39,16 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+
         [HttpPost]
         public ActionResult ManageFinancialMaster(FinancialMaster financialMaster)
         {
             try
             {
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                financialMaster.AppToken = AppToken;
+                financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
                     if (objFinancialMaster.FinancialId > 0)
@@ -56,7 +66,7 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
-            return View("~/Views/Admin/Masters/FinancialMaster.cshtml");
+            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
         #endregion
 

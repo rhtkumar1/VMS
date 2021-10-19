@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -54,6 +55,19 @@ public static class CommonUtility
             throw xe;
         }
         return result;
+    }
+
+    public static int GetAuthMode(string AppToken)
+    {
+        string AT = EncryptDecrypt.DecryptString(AppToken);
+        //MID={0};AuthMode={1}
+        return CommonUtility.ConvertInt(AT.Split(';')[1].Split('=')[1]);
+    }
+    public static int GetMenuID(string AppToken)
+    {
+        string AT = EncryptDecrypt.DecryptString(AppToken);
+        //MID={0};AuthMode={1}        
+        return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]); ;
     }
 
 }

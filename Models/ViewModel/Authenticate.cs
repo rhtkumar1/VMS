@@ -17,7 +17,7 @@ namespace IMS.Models.CBL
         public string UserType;
         public bool IsAuthenticated = false;
         public SyssoftechSession SyssoftechSession;
-        public List<Menu_Master_Display> Menu_List = new List<Menu_Master_Display>();
+        public IEnumerable<Menu_Master_Display> Menu_List = new List<Menu_Master_Display>();
         public List<Menu_Master_Role_Wise> ObjMenu_Master_Role_Wise;
         public Authenticate AuthenticateUser(string loginid, string Password, string SessionID)
         {   

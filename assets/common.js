@@ -117,7 +117,40 @@
         validRegExp = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
         return validRegExp.test(strEmail);
     };
+    scope.genrateDynamicButtons = function (value,args,AuthMode) {
+        switch (AuthMode) {
+            case 0:
+                break;
+            case 1:
+                $('#btnSubmit').removeClass("hidden");
+                break;
+            case 2:
+                $('#btnSubmit').removeClass("hidden");
+                var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
+                    .click(function (e) {
+                        editFormData('Edit', args);
+                        return false;
+                    });
+                return $("<div class='display-flex'></div>").append($customeEditButton);
+            case 3:
+                $('#btnSubmit').removeClass("hidden");
+                var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
+                    .click(function (e) {
+                        editFormData('Edit', args);
+                        return false;
+                    });
+                var $customeDeleteButton = $('<a class="btn btn-primary"><i class="fa fa-trash"></i></a>')
+                    .click(function (e) {
+                        deleteFinancialMaster('Delete', args);
+                        return false;
+                    });
+                return $("<div class='display-flex'></div>").append($customeEditButton, $customeDeleteButton);
+            default:
+                break;
+        }
 
+        
+    }
     return scope;
 })(IMSC || {});
 

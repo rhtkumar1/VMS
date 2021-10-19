@@ -25,6 +25,8 @@ namespace IMS.Controllers
                         Session["Menu_Master_Role_Wise"] = ObjAuthenticate.ObjMenu_Master_Role_Wise;
                         ObjAuthenticate.ObjMenu_Master_Role_Wise = null;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;
+                        Session["MinuList"] = ObjAuthenticate.Menu_List;
+                        ObjAuthenticate.Menu_List = null;
                         Session["UserName"] = Convert.ToString(ObjAuthenticate.UserName);
                         Session["UserType"] = Convert.ToString(ObjAuthenticate.UserType);
                         result = "Success";
@@ -40,7 +42,7 @@ namespace IMS.Controllers
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }

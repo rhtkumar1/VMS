@@ -9,12 +9,12 @@ namespace IMS.Models.ViewModel
 {
     public class Menue_Master
     {
-        
+       public List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
 
-        public  List<Menu_Master_Display> GetMinu(int UserID,out List<Menu_Master_Role_Wise> ObjMenu_Master_Role_Wise)
+        public  IEnumerable<Menu_Master_Display> GetMinu(int UserID,out List<Menu_Master_Role_Wise> ObjMenu_Master_Role_Wise)
         {
             DataTable dt = new DataTable();
-            List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
+            
             ObjMenu_Master_Role_Wise = new List<Menu_Master_Role_Wise>();
             try
             {
