@@ -61,19 +61,19 @@ namespace IMS.Models.ViewModel
             return financialId;
         }
 
-        List<Financial_Dropdown> lstFinancialData = new List<Financial_Dropdown>();
-        public List<Financial_Dropdown> Financial_Dropdown()
+        List<FinancialData> lstFinancialData = new List<FinancialData>();
+        public List<FinancialData> Financial_List_Get()
         {
             DataTable dt = new DataTable();
-            Financial_Dropdown financial_Dropdown = new Financial_Dropdown();
+            FinancialData financialData = new FinancialData();
             try
             {
                 dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    financial_Dropdown.FinancialId = Convert.ToInt32(dr["Financial_Id"]);
-                    financial_Dropdown.FinancialYear = Convert.ToString(dr["From_date"]).Substring(6,9) +"-"+ Convert.ToString(dr["To_date"]).Substring(6, 9);
-                    lstFinancialData.Add(financial_Dropdown);
+                    financialData.FinancialId = Convert.ToInt32(dr["Financial_Id"]);
+                    financialData.FinancialYear = Convert.ToString(dr["From_date"]).Substring(6,9) +"-"+ Convert.ToString(dr["To_date"]).Substring(6, 9);
+                    lstFinancialData.Add(financialData);
                 }
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace IMS.Models.ViewModel
         }
 
     }
-    public class Financial_Dropdown
+    public class FinancialData
     { 
         public int FinancialId { get; set; }
         public string FinancialYear { get; set; }

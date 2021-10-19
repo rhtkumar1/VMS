@@ -67,6 +67,34 @@ namespace IMS.Models.ViewModel
             return locationId;
         }
 
+        
 
+        List<LocationData> lstLocationData = new List<LocationData>();
+        public List<LocationData> Location_List_Get()
+        {
+            DataTable dt = new DataTable();
+            LocationData locationData = new LocationData();
+            try
+            {
+                dt = DBManager.ExecuteDataTable("Location_Master_Getdata", CommandType.StoredProcedure);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    locationData.LocationId = Convert.ToInt32(dr["Location_Id"]);
+                    locationData.Title = Convert.ToString(dr["Title"]);
+                    lstLocationData.Add(locationData);
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return lstLocationData;
+        }
+
+
+    }
+    public class LocationData
+    {
+        public int LocationId { get; set; }
+        public string Title { get; set; }
     }
 }
