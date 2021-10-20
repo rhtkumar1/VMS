@@ -19,6 +19,8 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
 
 
         public CompanyMaster CompanyMaster_InsertUpdate(CompanyMaster companyMaster)
@@ -44,12 +46,12 @@ namespace IMS.Models.ViewModel
             return companyMaster;
         }
 
-        public DataTable CompanyMaster_Get(CompanyMaster companyMaster)
+        public DataTable CompanyMaster_Get()
         {
             DataTable dt = new DataTable();
             try
             {
-                dt = DBManager.ExecuteDataTable("Financial_Master_Getdata", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Company_Master_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }

@@ -133,7 +133,6 @@ namespace IMS.Controllers
             DataTable dt = new DataTable();
             try
             {
-                locationMaster = new LocationMaster();
                 dt = locationMaster.LocationMaster_Get();
                 dt.TableName = "LocationLists";
             }
@@ -172,6 +171,61 @@ namespace IMS.Controllers
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+        }
+        #endregion
+
+        #region Company Master
+        public ActionResult CompanyIndex()
+        {
+            CompanyMaster companyMaster = new CompanyMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            companyMaster.AppToken = AppToken;
+            companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
+        }
+        [HttpGet]
+        public ActionResult GetCompanyMaster(CompanyMaster companyMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = companyMaster.CompanyMaster_Get();
+                dt.TableName = "CompanyLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageCompanyMaster(CompanyMaster companyMaster)
+        {
+            try
+            {
+                CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_InsertUpdate(companyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                companyMaster.AppToken = AppToken;
+                companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objCompanyMaster != null)
+                {
+                    if (objCompanyMaster.CompanyId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
         #endregion
     }
