@@ -12,10 +12,13 @@ namespace IMS.Models.ViewModel
         public string Title { get; set; }
         public string Code { get; set; }
         public int StateId { get; set; }
+        public string State { get; set; }
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
 
 
         public LocationMaster LocationMaster_InsertUpdate(LocationMaster locationMaster)
@@ -38,7 +41,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public DataTable LocationMaster_Get(LocationMaster locationMaster)
+        public DataTable LocationMaster_Get()
         {
             DataTable dt = new DataTable();
             try

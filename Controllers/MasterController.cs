@@ -117,5 +117,62 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/StateMaster.cshtml");
         }
         #endregion
+
+        #region Location Master
+        public ActionResult LocationIndex()
+        {
+            LocationMaster locationMaster = new LocationMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            locationMaster.AppToken = AppToken;
+            locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+        }
+        [HttpGet]
+        public ActionResult GetLocationMaster(LocationMaster locationMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                locationMaster = new LocationMaster();
+                dt = locationMaster.LocationMaster_Get();
+                dt.TableName = "LocationLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageLocationMaster(LocationMaster locationMaster)
+        {
+            try
+            {
+                //locationMaster.Loginid = SyssoftechSession
+                LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                locationMaster.AppToken = AppToken;
+                locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objLocationMaster != null)
+                {
+                    if (objLocationMaster.LocationId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();                
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+        }
+        #endregion
     }
 }
