@@ -1,0 +1,234 @@
+﻿@model IMS.Models.ViewModel.OfficeMaster
+@{
+    ViewBag.Title = "Office Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Office Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageOfficeMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "OfficeMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.OfficeId)
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>GSTNo.<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.GSTNo, htmlAttributes: new { @placeholder = "Enter GSTNo.", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>GSTNature<span class="mandatory">*</span></label>
+                                    @{var lstGSTNature = new List<SelectListItem>{
+                                          new SelectListItem { Text = "1", Value="1" },
+                                          new SelectListItem { Text = "2", Value="2" },
+                                           new SelectListItem { Text = "3", Value="3" },
+                                          new SelectListItem { Text = "4", Value="4" },
+                                           new SelectListItem { Text = "5", Value="5" },
+                                          new SelectListItem { Text = "6", Value="6" }
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.GSTNature, new SelectList(lstGSTNature, "Value", "Text"), htmlAttributes: new { @required = "required",@class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Type<span class="mandatory">*</span></label>
+                                    @{var lstType = new List<SelectListItem>{
+                                          new SelectListItem { Text = "1", Value="1" },
+                                          new SelectListItem { Text = "2", Value="2" },
+                                           new SelectListItem { Text = "3", Value="3" },
+                                          new SelectListItem { Text = "4", Value="4" },
+                                           new SelectListItem { Text = "5", Value="5" },
+                                          new SelectListItem { Text = "6", Value="6" }
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(lstType, "Value", "Text"), htmlAttributes: new { @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Location<span class="mandatory">*</span></label>
+                                    @{var lstLocation = new List<SelectListItem>{
+                                          new SelectListItem { Text = "1", Value="1" },
+                                          new SelectListItem { Text = "2", Value="2" },
+                                           new SelectListItem { Text = "3", Value="3" },
+                                          new SelectListItem { Text = "4", Value="4" },
+                                           new SelectListItem { Text = "5", Value="5" },
+                                          new SelectListItem { Text = "6", Value="6" }
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.LocationId, new SelectList(lstLocation, "Value", "Text"), htmlAttributes: new { @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>PanNo.<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.PanNo, htmlAttributes: new { @placeholder = "Enter PanNo.", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>ContactNo.<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ContactNo, htmlAttributes: new { @placeholder = "Enter ContactNo", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Contact Person</label>
+                                    @Html.TextBoxFor(m => m.ContactPerson, htmlAttributes: new { @placeholder = "Enter Person", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Email</label>
+                                    @Html.TextBoxFor(m => m.EmailId, htmlAttributes: new { @placeholder = "Enter Email", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-6 form-group">
+                                    <label>Address1<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Address1, htmlAttributes: new { @placeholder = "Enter Address1", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-6 form-group">
+                                    <label>Address2</label>
+                                    @Html.TextBoxFor(m => m.Address2, htmlAttributes: new { @placeholder = "Enter Address2", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        IMSC.ajaxCall("GET", "/Master/GetOfficeMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                var fields = [
+                    { name: "Office_Id", css: "hidden", },
+                    { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", title: "Code", sorting: true, filtering: true, width: 20 },
+                    { name: "GSTNo", title: "GSTNo", sorting: true, filtering: true, width: 20 },
+                    { name: "Type_Id", css: "hidden", },
+                    { name: "GSTNature", css: "hidden", },
+                    { name: "Location_Id", css: "hidden", },
+                    { name: "PanNo", title: "PanNo", sorting: true, filtering: true, width: 20 },
+                    { name: "ContactNo", title: "ContactNo", sorting: true, filtering: true, width: 20 },
+                    { name: "ContactPerson", title: "POC", sorting: true, filtering: true, width: 20 },
+                    { name: "Email", title: "Email", sorting: true, filtering: true, width: 30 },
+                    { name: "Address1", title: "Address1", sorting: true, filtering: true, width: 50 },
+                    { name: "Address2", title: "Address2", sorting: true, filtering: true, width: 50 },
+                    { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 40  },
+                    {
+                        title: "Action",
+                        width: 20,
+                        itemTemplate: function (value, args) {
+                            return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                        }
+                    }
+                ];
+                var options = {
+                    filtering: true,
+                    editing: true,
+                    sorting: true,
+                    paging: true,
+                    autoload: true,
+                    controller: {
+                        OfficeLists: result,
+                        loadData: function (filter) {
+                            return $.grep(this.OfficeLists, function (OfficeList) {
+                                return (!filter.Title || OfficeList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                            });
+                        }
+                    },
+                    fields: fields
+                };
+                $.extend(options, IMSC.grid_options);
+                $("#listGrid").jsGrid(options);
+                IMSC.filteOnKeyPress("#listGrid");
+            }
+
+        });
+    });
+
+    var editFormData = function (dilogType, OfficeMaster) {
+        if (OfficeMaster.Office_Id > 0) {
+            $("#OfficeId").val(OfficeMaster.Office_Id);
+            $("#Title").val(OfficeMaster.Title);
+            $("#Code").val(OfficeMaster.Code);
+            $("#PanNo").val(OfficeMaster.PanNo);
+            $("#EmailId").val(OfficeMaster.Email);
+            $("#ContactNo").val(OfficeMaster.ContactNo);
+            $("#ContactPerson").val(OfficeMaster.ContactPerson);
+            $("#GSTNo").val(OfficeMaster.GSTNo);
+            $("#GSTNature").val(OfficeMaster.GSTNature);
+            $("#Address1").val(OfficeMaster.Address1);
+            $("#Address2").val(OfficeMaster.Address2);
+            $("#Remarks").val(OfficeMaster.Remarks);
+            $("#TypeId").val(OfficeMaster.Type_Id);
+            $("#LocationId").val(OfficeMaster.Location_Id);
+            $("#btnSubmit").text("Update")
+        }
+        else {
+            $("#OfficeId").val("0");
+            $("#btnSubmit").text("Submit")
+        }
+    };
+</script>

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.Mvc;
 
 namespace IMS.Controllers
@@ -226,6 +227,61 @@ namespace IMS.Controllers
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
+        }
+        #endregion
+
+        #region Office Master
+        public ActionResult OfficeIndex()
+        {
+            OfficeMaster OfficeMaster = new OfficeMaster();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
+            OfficeMaster.AppToken = AppToken;
+            OfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", OfficeMaster);
+        }
+        [HttpGet]
+        public ActionResult GetOfficeMaster(OfficeMaster OfficeMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = OfficeMaster.OfficeMaster_Get();
+                dt.TableName = "OfficeLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageOfficeMaster(OfficeMaster OfficeMaster)
+        {
+            try
+            {
+                OfficeMaster objOfficeMaster = OfficeMaster.OfficeMaster_InsertUpdate(OfficeMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                OfficeMaster.AppToken = AppToken;
+                OfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objOfficeMaster != null)
+                {
+                    if (objOfficeMaster.OfficeId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", OfficeMaster);
         }
         #endregion
     }

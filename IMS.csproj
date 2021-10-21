@@ -259,6 +259,7 @@
     <Content Include="Views\Shared\DashBoard\DashBoard.cshtml" />
     <Content Include="Views\Admin\Masters\StateMaster.cshtml" />
     <Content Include="Views\Admin\Masters\LocationMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\OfficeMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

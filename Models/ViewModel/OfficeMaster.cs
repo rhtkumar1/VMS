@@ -25,6 +25,9 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
+
 
 
         public OfficeMaster OfficeMaster_InsertUpdate(OfficeMaster officeMaster)
@@ -45,7 +48,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Email", officeMaster.EmailId));
                 SqlParameters.Add(new SqlParameter("@ContactNo", officeMaster.ContactNo));
                 SqlParameters.Add(new SqlParameter("@ContactPerson", officeMaster.ContactPerson));
-                SqlParameters.Add(new SqlParameter("@Remarks", officeMaster.Remarks));
+                SqlParameters.Add(new SqlParameter("@Remarks", Convert.ToString(officeMaster.Remarks)));
                 SqlParameters.Add(new SqlParameter("@Loginid", officeMaster.Loginid));
                 officeMaster.OfficeId = DBManager.ExecuteScalar("Office_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
@@ -56,7 +59,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public DataTable OfficeMaster_Get(OfficeMaster officeMaster)
+        public DataTable OfficeMaster_Get()
         {
             DataTable dt = new DataTable();
             try

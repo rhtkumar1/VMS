@@ -28,7 +28,7 @@ namespace IMS.Models.CBL
                         try
                         {
                             ObjAuthenticate.ObjMenu_Master_Role_Wise = (List<Menu_Master_Role_Wise>)filterContext.HttpContext.Session["Menu_Master_Role_Wise"];
-                            string AppToken = filterContext.HttpContext.Request.QueryString["AppToken"] == null ? filterContext.HttpContext.Request.Form["AppToken"] : filterContext.HttpContext.Request.QueryString["AppToken"];
+                            string AppToken = (filterContext.HttpContext.Request.QueryString["AppToken"] == null ? filterContext.HttpContext.Request.Form["AppToken"] : filterContext.HttpContext.Request.QueryString["AppToken"]).Replace(' ','+');
                             int MenuId = CommonUtility.GetMenuID(AppToken);
                             Menu_Master_Role_Wise obj = ObjAuthenticate.ObjMenu_Master_Role_Wise.Find(X => X.MenuID == MenuId);
                             if (obj == null)
