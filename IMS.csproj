@@ -128,6 +128,7 @@
     <Content Include="fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="fonts\oswald\OFL.txt" />
     <Content Include="Global.asax" />
+    <Content Include="Views\Admin\Masters\CompanyMaster.cshtml" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -155,7 +156,7 @@
     <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
-    <Compile Include="Models\ViewModel\Menue_Master.cs" />
+    <Compile Include="Models\CommonModel\Menue_Master.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
@@ -257,6 +258,8 @@
     <Content Include="Views\Admin\Masters\FinancialMaster.cshtml" />
     <Content Include="Views\Shared\DashBoard\DashBoard.cshtml" />
     <Content Include="Views\Admin\Masters\StateMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\LocationMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\OfficeMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
