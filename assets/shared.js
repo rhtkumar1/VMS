@@ -34,11 +34,12 @@ var IMSS = (function (scope) {
                 if (jsonResponse.returnUrl != undefined) {
                     window.location.href = jsonResponse.returnUrl;
                 } else {
-                    window.location.href = window.location.href + "/Admin/Dashboard";
+                    window.location.href = "Admin/Dashboard";
                 }
                 $("#msg").hide();
             }
         });
+       // return true;
     };
     return scope;
 

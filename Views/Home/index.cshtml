@@ -48,49 +48,52 @@
                 @ViewBag.Msg
             </span>
         </div>
-        <form  id="loginform" novalidate="novalidate" method="post">
-            @Html.AntiForgeryToken()
-            <div class="form-style-agile">
-                <label>
-                    Username
-                    <i class="fas fa-user"></i>
-                </label>
-                <input placeholder="Username" id="loginid" name="loginid" type="text" />
-            </div>
-            <div class="form-style-agile">
-                <label>
-                    Password
-                    <i class="fas fa-unlock-alt"></i>
-                </label>
-                <input placeholder="password" name="password" type="password" />
-            </div>
-            <!-- checkbox -->
-            <div class="wthree-text">
-                <ul>
-                    <li>
-                        <!-- switch -->
-                        <div class="checkout-w3l">
-                            <div class="demo5">
-                                <div class="switch demo3">
-                                    <input type="checkbox">
-                                    <label>
-                                        <i></i>
-                                    </label>
+        @*<form id="loginform" novalidate="novalidate" method="post">*@
+            @using (Html.BeginForm("Authenticate", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @id = "loginform" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-style-agile">
+                    <label>
+                        Username
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input placeholder="Username" id="loginid" name="loginid" type="text" />
+                </div>
+                <div class="form-style-agile">
+                    <label>
+                        Password
+                        <i class="fas fa-unlock-alt"></i>
+                    </label>
+                    <input placeholder="password" name="password" type="password" />
+                </div>
+                <!-- checkbox -->
+                <div class="wthree-text">
+                    <ul>
+                        <li>
+                            <!-- switch -->
+                            <div class="checkout-w3l">
+                                <div class="demo5">
+                                    <div class="switch demo3">
+                                        <input type="checkbox">
+                                        <label>
+                                            <i></i>
+                                        </label>
+                                    </div>
                                 </div>
+                                <a href="#">Stay Signed In</a>
                             </div>
-                            <a href="#">Stay Signed In</a>
-                        </div>
-                        <!-- //checkout -->
-                    </li>
-                    <li>
-                        <a href="#">Forgot Password?</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- //switch -->
-            <div class="col-lg-12"><p style="color:#03A9F4;text-align:center" id="msg"></p></div>
-            <input type="submit" id="loginsubmit" name="loginsubmit" value="Log In">
-        </form>
+                            <!-- //checkout -->
+                        </li>
+                        <li>
+                            <a href="#">Forgot Password?</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- //switch -->
+                <div class="col-lg-12"><p style="color:#03A9F4;text-align:center" id="msg"></p></div>
+                <input type="submit" id="loginsubmit" name="loginsubmit" value="Log In">
+            }
+            @*</form>*@
     </div>
     <!-- //content -->
     <!-- copyright -->
