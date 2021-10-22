@@ -165,20 +165,20 @@
                     { name: "Office_Id", css: "hidden", },
                     { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", title: "Code", sorting: true, filtering: true, width: 20 },
-                    { name: "GSTNo", title: "GSTNo", sorting: true, filtering: true, width: 20 },
+                    { name: "GSTNo", title: "GSTNo", sorting: true, filtering: true, width: 30 },
                     { name: "Type_Id", css: "hidden", },
                     { name: "GSTNature", css: "hidden", },
                     { name: "Location_Id", css: "hidden", },
-                    { name: "PanNo", title: "PanNo", sorting: true, filtering: true, width: 20 },
-                    { name: "ContactNo", title: "ContactNo", sorting: true, filtering: true, width: 20 },
-                    { name: "ContactPerson", title: "POC", sorting: true, filtering: true, width: 20 },
-                    { name: "Email", title: "Email", sorting: true, filtering: true, width: 30 },
+                    { name: "PanNo", title: "PanNo", sorting: true, filtering: true, width: 30 },
+                    { name: "ContactNo", title: "ContactNo", sorting: true, filtering: true, width: 30 },
+                    { name: "ContactPerson", title: "POC", sorting: true, filtering: true, width: 30 },
+                    { name: "Email", title: "Email", sorting: true, filtering: true, width: 40 },
                     { name: "Address1", title: "Address1", sorting: true, filtering: true, width: 50 },
-                    { name: "Address2", title: "Address2", sorting: true, filtering: true, width: 50 },
-                    { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 40  },
+                    { name: "Address2", title: "Address2", sorting: true, filtering: true, width: 30 },
+                    { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 30  },
                     {
                         title: "Action",
-                        width: 20,
+                        width: 30,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
@@ -209,6 +209,7 @@
     });
 
     var editFormData = function (dilogType, OfficeMaster) {
+        $("msg").text = "";
         if (OfficeMaster.Office_Id > 0) {
             $("#OfficeId").val(OfficeMaster.Office_Id);
             $("#Title").val(OfficeMaster.Title);
@@ -230,5 +231,9 @@
             $("#OfficeId").val("0");
             $("#btnSubmit").text("Submit")
         }
+    };
+
+    var deleteFormData = function (dialogType, OfficeMaster) {
+      
     };
 </script>

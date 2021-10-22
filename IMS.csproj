@@ -129,6 +129,7 @@
     <Content Include="fonts\oswald\OFL.txt" />
     <Content Include="Global.asax" />
     <Content Include="Views\Admin\Masters\CompanyMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\RoleMaster.cshtml" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -154,12 +155,12 @@
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
-    <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
     <Compile Include="Models\CommonModel\Menue_Master.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
+    <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
     <Compile Include="Models\ViewModel\User.cs" />

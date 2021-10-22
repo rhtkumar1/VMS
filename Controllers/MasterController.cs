@@ -74,7 +74,11 @@ namespace IMS.Controllers
         #region State Master
         public ActionResult StateIndex()
         {
-            return View("~/Views/Admin/Masters/StateMaster.cshtml");
+            StateMaster stateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
+            stateMaster.AppToken = AppToken;
+            stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/StateMaster.cshtml",stateMaster);
         }
         [HttpGet]
         public ActionResult GetStateMaster(StateMaster stateMaster)
@@ -82,8 +86,7 @@ namespace IMS.Controllers
             DataTable dt = new DataTable();
             try
             {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                dt = stateMaster.StateMaster_Get(stateMaster);
+                dt = stateMaster.StateMaster_Get();
                 dt.TableName = "StateLists";
             }
             catch (Exception)
@@ -98,6 +101,9 @@ namespace IMS.Controllers
             try
             {
                 StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+'); ;
+                stateMaster.AppToken = AppToken;
+                stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
                     if (objStateMaster.StateId > 0)
@@ -115,7 +121,7 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
-            return View("~/Views/Admin/Masters/StateMaster.cshtml");
+            return View("~/Views/Admin/Masters/StateMaster.cshtml",stateMaster);
         }
         #endregion
 
@@ -123,7 +129,7 @@ namespace IMS.Controllers
         public ActionResult LocationIndex()
         {
             LocationMaster locationMaster = new LocationMaster();
-            AppToken = Request.QueryString["AppToken"].ToString();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
             locationMaster.AppToken = AppToken;
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
@@ -151,7 +157,7 @@ namespace IMS.Controllers
             {
                 //locationMaster.Loginid = SyssoftechSession
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
-                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ','+');
                 locationMaster.AppToken = AppToken;
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
@@ -233,19 +239,19 @@ namespace IMS.Controllers
         #region Office Master
         public ActionResult OfficeIndex()
         {
-            OfficeMaster OfficeMaster = new OfficeMaster();
+            OfficeMaster officeMaster = new OfficeMaster();
             AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
-            OfficeMaster.AppToken = AppToken;
-            OfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", OfficeMaster);
+            officeMaster.AppToken = AppToken;
+            officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
         [HttpGet]
-        public ActionResult GetOfficeMaster(OfficeMaster OfficeMaster, string AppToken = "")
+        public ActionResult GetOfficeMaster(OfficeMaster officeMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
-                dt = OfficeMaster.OfficeMaster_Get();
+                dt = officeMaster.OfficeMaster_Get();
                 dt.TableName = "OfficeLists";
             }
             catch (Exception)
@@ -256,14 +262,14 @@ namespace IMS.Controllers
         }
 
         [HttpPost]
-        public ActionResult ManageOfficeMaster(OfficeMaster OfficeMaster)
+        public ActionResult ManageOfficeMaster(OfficeMaster officeMaster)
         {
             try
             {
-                OfficeMaster objOfficeMaster = OfficeMaster.OfficeMaster_InsertUpdate(OfficeMaster);
+                OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_InsertUpdate(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                OfficeMaster.AppToken = AppToken;
-                OfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                officeMaster.AppToken = AppToken;
+                officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
                     if (objOfficeMaster.OfficeId > 0)
@@ -281,7 +287,62 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
-            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", OfficeMaster);
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
+        }
+        #endregion
+
+        #region Role
+        public ActionResult RoleIndex()
+        {
+            RoleMaster roleMaster = new RoleMaster();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            roleMaster.AppToken = AppToken;
+            roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+        }
+        [HttpGet]
+        public ActionResult GetRoleMaster(RoleMaster roleMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = roleMaster.RoleMaster_Get();
+                dt.TableName = "RoleLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageRoleMaster(RoleMaster roleMaster)
+        {
+            try
+            {
+                RoleMaster objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                roleMaster.AppToken = AppToken;
+                roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objRoleMaster != null)
+                {
+                    if (objRoleMaster.RoleId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
         #endregion
     }

@@ -141,7 +141,7 @@
                     });
                 var $customeDeleteButton = $('<a class="btn btn-primary"><i class="fa fa-trash"></i></a>')
                     .click(function (e) {
-                        deleteFinancialMaster('Delete', args);
+                        deleteFormData('Delete', args);
                         return false;
                     });
                 return $("<div class='display-flex'></div>").append($customeEditButton, $customeDeleteButton);
