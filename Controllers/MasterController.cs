@@ -20,6 +20,7 @@ namespace IMS.Controllers
         {
             FinancialMaster financialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
+            int I = CommonUtility.GetLoginID();
             financialMaster.AppToken = AppToken;
             financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
