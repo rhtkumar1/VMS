@@ -146,6 +146,7 @@
     <Compile Include="Models\CBL\Enums.cs" />
     <Compile Include="Models\CBL\SessionAuthentication.cs" />
     <Compile Include="Models\CBL\SyssoftechSession.cs" />
+    <Compile Include="Models\CommonModel\Comman_Controller.cs" />
     <Compile Include="Models\Encryption.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\OTP.cs" />
