@@ -40,7 +40,7 @@ var IMSS = (function (scope) {
     //        }
     //    });
     //   // return true;
-    //};
+    };
     return scope;
 
 })(IMSS || {});
@@ -48,7 +48,7 @@ var IMSS = (function (scope) {
 $(function () {
     $("#loginform").validate({
         submitHandler: function () {
-           // IMSS.login()
+            return true // IMSS.login()
         },
         rules: {
             loginid: { required: true },
