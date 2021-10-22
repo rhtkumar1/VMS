@@ -163,7 +163,7 @@
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
-    <Compile Include="Models\ViewModel\User.cs" />
+    <Compile Include="Models\ViewModel\UserMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

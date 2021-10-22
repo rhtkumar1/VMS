@@ -33,12 +33,12 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(ds));
         }
-        public ActionResult ManageUserMaster(CreateUserMaster createUser)
+        public ActionResult ManageUserMaster(UserMaster createUser)
         {
             string result = "Fail";
             try
             {
-                CreateUserMaster objUserCreation = createUser.ManageUsers(createUser);
+                UserMaster objUserCreation = createUser.ManageUsers(createUser);
                 if (objUserCreation != null)
                 {
                     if (objUserCreation.IsExists)
