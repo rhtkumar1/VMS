@@ -157,7 +157,7 @@
     <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
-    <Compile Include="Models\ViewModel\Menue_Master.cs" />
+    <Compile Include="Models\CommonModel\Menue_Master.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
