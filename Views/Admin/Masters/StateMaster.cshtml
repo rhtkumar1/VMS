@@ -122,21 +122,21 @@
                     IMSC.filteOnKeyPress("#listGrid");
                 }
 
-                var editStateMaster = function (dilogType, StateMaster) {
-                    $("msg").text = "";
-                    if (StateMaster.State_Id > 0) {
-                        $("#StateId").val(StateMaster.State_Id);
-                        $("#Title").val(StateMaster.Title);
-                        $("#Code").val(StateMaster.Code);
-                        $("#Remarks").val(StateMaster.Remarks);
-                        $("#Type_Id").val(StateMaster.Type_Id);
-                        $("#btnSubmit").text("Update")
-                    }
-                    else {
-                        $("#StateId").val("0");
-                        $("#btnSubmit").text("Submit")
-                    }
-                };
             });
         });
+        var editFormData = function (dilogType, StateMaster) {
+            $("msg").text = "";
+            if (StateMaster.State_Id > 0) {
+                $("#StateId").val(StateMaster.State_Id);
+                $("#Title").val(StateMaster.Title);
+                $("#Code").val(StateMaster.Code);
+                $("#Remarks").val(StateMaster.Remarks);
+                $("#TypeId").val(StateMaster.Type_Id);
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#StateId").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
     </script>
