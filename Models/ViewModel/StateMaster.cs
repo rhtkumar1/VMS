@@ -16,7 +16,8 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
-
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
 
         public StateMaster StateMaster_InsertUpdate(StateMaster stateMaster)
         {
@@ -38,7 +39,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public DataTable StateMaster_Get(StateMaster stateMaster)
+        public DataTable StateMaster_Get()
         {
             DataTable dt = new DataTable();
             try
