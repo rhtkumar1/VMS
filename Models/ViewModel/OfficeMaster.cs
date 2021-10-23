@@ -73,7 +73,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public int OfficeMaster_Delete(OfficeMaster officeMaster)
+        public OfficeMaster OfficeMaster_Delete(OfficeMaster officeMaster)
         {
             int officeId = 0;
             try
@@ -86,7 +86,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return officeId;
+            return officeMaster;
             
         }
 

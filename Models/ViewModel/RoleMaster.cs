@@ -49,20 +49,20 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int RoleMaster_Delete(RoleMaster roleMaster)
+        public RoleMaster RoleMaster_Delete(RoleMaster roleMaster)
         {
             int roleId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
-                SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
+                SqlParameters.Add(new SqlParameter("@Loginid", commo));
                 roleId = DBManager.ExecuteScalar("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return roleId;
+            return roleMaster;
         }
     }
 }

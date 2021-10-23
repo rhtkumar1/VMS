@@ -134,7 +134,7 @@
                 return $("<div class='display-flex'></div>").append($customeEditButton);
             case 3:
                 $('#btnSubmit').removeClass("hidden");
-                var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
+                var $customeEditButton = $('<a class="btn btn-primary" style="margin-right:5px"><i class="fa fa-edit"></i></a>')
                     .click(function (e) {
                         editFormData('Edit', args);
                         return false;

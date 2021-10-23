@@ -46,7 +46,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int FinancialMaster_Delete(FinancialMaster financialMaster)
+        public FinancialMaster FinancialMaster_Delete(FinancialMaster financialMaster)
         {
             int financialId = 0;
             try
@@ -59,7 +59,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return financialId;
+            return financialMaster;
         }
 
         List<FinancialData> lstFinancialData = new List<FinancialData>();
