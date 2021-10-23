@@ -85,14 +85,17 @@ namespace IMS.Controllers
                 {
                     if (objFinancialMaster.FinancialId > 0)
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
                     }
                     else
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
                     }
                 }
-                ModelState.Clear();
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -168,14 +171,17 @@ namespace IMS.Controllers
                 {
                     if (objStateMaster.StateId > 0)
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
                     }
                     else
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
                     }
                 }
-                ModelState.Clear();
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -254,14 +260,17 @@ namespace IMS.Controllers
                 {
                     if (objLocationMaster.LocationId > 0)
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
                     }
                     else
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
                     }
                 }
-                ModelState.Clear();
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -340,20 +349,22 @@ namespace IMS.Controllers
                 {
                     if (objCompanyMaster.CompanyId > 0)
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
                     }
                     else
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
                     }
                 }
-                ModelState.Clear();
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
             }
-            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
         #endregion
 
@@ -426,14 +437,17 @@ namespace IMS.Controllers
                 {
                     if (objOfficeMaster.OfficeId > 0)
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
                     }
                     else
                     {
-                        ViewBag.Msg = "Deleted sucessfully";
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
                     }
                 }
-                ModelState.Clear();
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -489,6 +503,39 @@ namespace IMS.Controllers
                     }
                 }
                 ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteRoleMaster(RoleMaster roleMaster, int roleId)
+        {
+            try
+            {
+                roleMaster.RoleId = roleId;
+                RoleMaster objRoleMaster = roleMaster.RoleMaster_Delete(roleMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                roleMaster.AppToken = AppToken;
+                roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objRoleMaster != null)
+                {
+                    if (objRoleMaster.RoleId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {

@@ -130,12 +130,17 @@
     };
 
     var deleteFormData = function (dialogType, FinancialMaster) {
-        IMSC.ajaxCall("POST", "/Master/DeleteFinancialMaster?financialId="+FinancialMaster.Financial_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+        var result = confirm("Want to delete?");
+        if (result == true) {
+             IMSC.ajaxCall("POST", "/Master/DeleteFinancialMaster?financialId="+FinancialMaster.Financial_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
                 window.location.reload();
             }
         });
+        } else {
+            return false;
+        }
     };
     function myFunction(p1, p2) {
         return p1 * p2;   // The function returns the product of p1 and p2

@@ -143,11 +143,16 @@
     };
 
     var deleteFormData = function (dialogType, LocationMaster) {
+        var result = confirm("Want to delete?");
+        if (result == true) {
         IMSC.ajaxCall("POST", "/Master/DeleteLocationMaster?locationId="+LocationMaster.Location_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
                 window.location.reload();
             }
         });
+        } else {
+            return false;
+        }
     };
 </script>

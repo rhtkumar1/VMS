@@ -7,43 +7,43 @@
 @{
     var AppToken = Convert.ToString(@Model.AppToken);
 }
-    <div id="page-wrapper" class="gray-bg dashbard-1">
-        <div class="content-main">
-            <!--banner-->
-            <div class="banner">
-                <h2>
-                    <a href="/admin/dashboard">Home</a>
-                    <i class="fa fa-angle-right"></i>
-                    <span>State Master</span>
-                </h2>
-            </div>
-            <!--//banner-->
-            <!--content-->
-            <div id="modelForm">
-                <div class="blank">
-                    <div class="blank-page">
-                        <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                            @using (Html.BeginForm("ManageStateMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StateMaster" }))
-                            {
-                                @Html.HiddenFor(m => m.StateId, htmlAttributes: new { @id = "StateId" })
-                                @Html.HiddenFor(m => m.AppToken)
-                                <div class="styled-input">
-                                    <div class="col-md-4 form-group">
-                                        <label>Title<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
-                                    </div>
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>State Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageStateMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StateMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.StateId, htmlAttributes: new { @id = "StateId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
                                 </div>
-                                <div class="styled-input">
-                                    <div class="col-md-4 form-group">
-                                        <label>Code<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
-                                    </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
                                 </div>
-                                <div class="styled-input">
-                                    <div class="col-md-4 form-group">
-                                        <label>Type</label>
-                                        @{var listItems = new List<SelectListItem>{
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Type</label>
+                                    @{var listItems = new List<SelectListItem>{
                                           new SelectListItem { Text = "1", Value="1" },
                                           new SelectListItem { Text = "2", Value="2" },
                                            new SelectListItem { Text = "3", Value="3" },
@@ -51,38 +51,38 @@
                                            new SelectListItem { Text = "5", Value="5" },
                                           new SelectListItem { Text = "6", Value="6" }
                                      };
-                                        }
-                                        @Html.DropDownListFor(m => m.TypeId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                    </div>
+                                    }
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="styled-input">
-                                    <div class="col-md-12 form-group">
-                                        <label>Remarks</label>
-                                        @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
-                                    </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-12">
-                                    <div class="appointment-btn text-lg-right">
-                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
-                                    </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="blank-page">
-                        <div id="listGrid"></div>
+                            </div>
+                        }
                     </div>
                 </div>
-                <div class="clearfix"> </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
             </div>
+            <div class="clearfix"> </div>
         </div>
-        <!--//content-->
-        <!---->
     </div>
+    <!--//content-->
+    <!---->
+</div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             IMSC.ajaxCall("GET", "/Master/GetStateMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
                 var StateLists = JSON.parse(d);
@@ -141,11 +141,16 @@
         };
 
         var deleteFormData = function (dialogType, StateMaster) {
+            var result = confirm("Want to delete?");
+            if (result == true) {
             IMSC.ajaxCall("POST", "/Master/DeleteStateMaster?stateId=" + StateMaster.State_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
                 window.location.reload();
             }
         });
+            } else {
+                return false;
+            }
     };
-    </script>
+</script>

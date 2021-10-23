@@ -123,4 +123,18 @@
             $("#btnSubmit").text("Submit")
         }
     };
+
+    var deleteFormData = function (dialogType, RoleMaster) {
+        var result = confirm("Want to delete?");
+        if (result == true) {
+            IMSC.ajaxCall("POST", "/Master/DeleteRoleMaster?officeId=" + RoleMaster.Role_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+        } else {
+            return false;
+        }
+    };
 </script>
