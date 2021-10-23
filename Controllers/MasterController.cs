@@ -544,5 +544,93 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
         #endregion
+
+        #region Party Master
+        public ActionResult PartyIndex()
+        {
+            PartyMaster partyMaster = new PartyMaster();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            partyMaster.AppToken = AppToken;
+            partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+        [HttpGet]
+        public ActionResult GetPartyMaster(PartyMaster partyMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = partyMaster.PartyMaster_Get();
+                dt.TableName = "PartyLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManagePartyMaster(PartyMaster partyMaster)
+        {
+            try
+            {
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = AppToken;
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeletePartyMaster(PartyMaster partyMaster, int partyId)
+        {
+            try
+            {
+                partyMaster.PartyId = partyId;
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_Delete(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = AppToken;
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+        #endregion
     }
 }
