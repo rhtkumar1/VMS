@@ -183,4 +183,13 @@
             $("#btnSubmit").text("Submit")
         }
     };
+
+    var deleteFormData = function (dialogType, CompanyMaster) {
+        IMSC.ajaxCall("POST", "/Master/DeleteCompanyMaster?companyId="+CompanyMaster.Company_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+    };
 </script>

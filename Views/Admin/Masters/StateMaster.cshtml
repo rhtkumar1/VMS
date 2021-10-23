@@ -139,4 +139,13 @@
                 $("#btnSubmit").text("Submit")
             }
         };
+
+        var deleteFormData = function (dialogType, StateMaster) {
+            IMSC.ajaxCall("POST", "/Master/DeleteStateMaster?stateId=" + StateMaster.State_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+    };
     </script>

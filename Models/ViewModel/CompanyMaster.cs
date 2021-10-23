@@ -59,7 +59,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int CompanyMaster_Delete(CompanyMaster companyMaster)
+        public CompanyMaster CompanyMaster_Delete(CompanyMaster companyMaster)
         {
             int companyId = 0;
             try
@@ -72,7 +72,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return companyId;
+            return companyMaster;
         }
 
     }

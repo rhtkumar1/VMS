@@ -141,4 +141,13 @@
             $("#btnSubmit").text("Submit")
         }
     };
+
+    var deleteFormData = function (dialogType, LocationMaster) {
+        IMSC.ajaxCall("POST", "/Master/DeleteLocationMaster?locationId="+LocationMaster.Location_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+    };
 </script>

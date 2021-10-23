@@ -54,7 +54,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int LocationMaster_Delete(LocationMaster locationMaster)
+        public LocationMaster LocationMaster_Delete(LocationMaster locationMaster)
         {
             int locationId = 0;
             try
@@ -67,7 +67,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return locationId;
+            return locationMaster;
         }
 
         

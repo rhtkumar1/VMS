@@ -52,7 +52,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int StateMaster_Delete(StateMaster stateMaster)
+        public StateMaster StateMaster_Delete(StateMaster stateMaster)
         {
             int stateId=0;
             try
@@ -65,7 +65,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return stateId;
+            return stateMaster;
         }
 
         List<StateData> lstStateData = new List<StateData>();
