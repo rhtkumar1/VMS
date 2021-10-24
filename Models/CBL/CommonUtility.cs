@@ -61,15 +61,17 @@ public static class CommonUtility
 
     public static int GetAuthMode(string AppToken)
     {
-        string AT = EncryptDecrypt.DecryptString(AppToken);
-        //MID={0};AuthMode={1}
-        return CommonUtility.ConvertInt(AT.Split(';')[1].Split('=')[1]);
+        //string AT = EncryptDecrypt.DecryptString(AppToken);
+        ////MID={0};AuthMode={1}
+        //return CommonUtility.ConvertInt(AT.Split(';')[1].Split('=')[1]);
+        return CommonUtility.ConvertInt(AppToken.Split(';')[1].Split('=')[1]);
     }
     public static int GetMenuID(string AppToken)
     {
-        string AT = EncryptDecrypt.DecryptString(AppToken);
-        //MID={0};AuthMode={1}        
-        return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]); ;
+        //string AT = EncryptDecrypt.DecryptString(AppToken);
+        ////MID={0};AuthMode={1}        
+        //return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]); ;
+        return CommonUtility.ConvertInt(AppToken.Split(';')[0].Split('=')[1]);
     }
     public static int GetLoginID()
     {
@@ -85,6 +87,7 @@ public static class CommonUtility
     }
     public static string URLAppToken(string AppToken)
     {
-       return Uri.EscapeDataString(AppToken);
+        //return Uri.EscapeDataString(AppToken);
+        return AppToken;
     }
 }

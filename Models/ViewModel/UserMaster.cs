@@ -43,8 +43,13 @@ namespace IMS.Models.ViewModel
 
         public UserMaster()
         {
-            CreatedBy = CommonUtility.GetLoginID();
-            ModifiedBy = CommonUtility.GetLoginID();
+            try
+            {
+                CreatedBy = CommonUtility.GetLoginID();
+                ModifiedBy = CommonUtility.GetLoginID();
+            }
+            catch(Exception ex)
+            { }
             _LoginId = "0";
             _Islogin = false;
         }     
