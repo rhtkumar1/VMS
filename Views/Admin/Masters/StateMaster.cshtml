@@ -31,13 +31,13 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Code<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -52,20 +52,21 @@
                                           new SelectListItem { Text = "6", Value="6" }
                                      };
                                     }
-                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Code" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-12 form-group">
                                     <label>Remarks</label>
-                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control", @id = "Remarks" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-12">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                    <button type="button" name="btnReset" id="btnReset" style="margin-right: 10px !important;" class="btn btn-primary pull-right">Reset</button>
                                 </div>
                             </div>
                         }
@@ -75,8 +76,8 @@
                     <div id="listGrid"></div>
                 </div>
             </div>
-            <div class="clearfix"> </div>
         </div>
+        <div class="clearfix"> </div>
     </div>
     <!--//content-->
     <!---->
@@ -88,11 +89,11 @@
                 var StateLists = JSON.parse(d);
                 if (StateLists !== "null") {
                     var fields = [
-                        { name: "State_Id", css: "hidden", },
-                        { name: "Title", title: "Title", sorting: true, filtering: true, width: 50 },
-                        { name: "Code", title: "Code", sorting: true, filtering: true, width: 50 },
-                        { name: "Type_Id", css: "hidden", },
-                        { name: "Remarks", css: "hidden", },
+                        { name: "State_Id", css: "hidden" },
+                        { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
+                        { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 50 },
+                        { name: "Type_Id", css: "hidden" },
+                        { name: "Remarks", css: "hidden" },
                         {
                             title: "Action",
                             width: 30,
@@ -111,7 +112,8 @@
                             StateLists: StateLists,
                             loadData: function (filter) {
                                 return $.grep(this.StateLists, function (StateList) {
-                                    return (!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                                    return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                        && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                                 });
                             }
                         },
@@ -121,7 +123,7 @@
                     $("#listGrid").jsGrid(options);
                     IMSC.filteOnKeyPress("#listGrid");
                 }
-
+                $("#btnReset").click();
             });
         });
         var editFormData = function (dilogType, StateMaster) {
@@ -137,6 +139,7 @@
             else {
                 $("#StateId").val("0");
                 $("#btnSubmit").text("Submit")
+                $("#btnReset").click();
             }
         };
 
