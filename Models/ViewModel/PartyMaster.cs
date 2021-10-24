@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
+using IMS.Models.CommonModel;
 
 namespace IMS.Models.ViewModel
 {
@@ -14,6 +16,7 @@ namespace IMS.Models.ViewModel
         public string Title { get; set; }
         public string Code { get; set; }
         public int OfficeId { get; set; }
+        public SelectList OfficeLists { get; set; }
         public int GroupId { get; set; }
         public bool MaintainRef { get; set; }
         public int CreditDays { get; set; }
@@ -30,6 +33,7 @@ namespace IMS.Models.ViewModel
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public SelectList StateLists { get; set; }
         public string Region { get; set; }
         public string Zip { get; set; }
         public string Country { get; set; }
@@ -37,7 +41,14 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
 
+        public PartyMaster()
+        {
+            StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
+            OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+        }
 
         public PartyMaster PartyMaster_InsertUpdate(PartyMaster partyMaster)
         {
@@ -53,18 +64,16 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@CreditDays", partyMaster.CreditDays));
                 SqlParameters.Add(new SqlParameter("@CreditLimit", partyMaster.CreditLimit));
                 SqlParameters.Add(new SqlParameter("@VariableLimit", partyMaster.VariableLimit));
-                SqlParameters.Add(new SqlParameter("@Prefix", partyMaster.Prefix));
                 SqlParameters.Add(new SqlParameter("@FirstName", partyMaster.FirstName));
                 SqlParameters.Add(new SqlParameter("@MiddleName", partyMaster.MiddleName));
                 SqlParameters.Add(new SqlParameter("@LastName", partyMaster.LastName));
                 SqlParameters.Add(new SqlParameter("@Mobile", partyMaster.Mobile));
                 SqlParameters.Add(new SqlParameter("@Email", partyMaster.Email));
                 SqlParameters.Add(new SqlParameter("@Gender", partyMaster.Gender));
-                SqlParameters.Add(new SqlParameter("@Address1", partyMaster.Address1)); 
+                SqlParameters.Add(new SqlParameter("@Address1", partyMaster.Address1));
                 SqlParameters.Add(new SqlParameter("@Address2", partyMaster.Address2));
                 SqlParameters.Add(new SqlParameter("@City", partyMaster.City));
                 SqlParameters.Add(new SqlParameter("@State", partyMaster.State));
-                SqlParameters.Add(new SqlParameter("@Region", partyMaster.Region));
                 SqlParameters.Add(new SqlParameter("@Zip", partyMaster.Zip));
                 SqlParameters.Add(new SqlParameter("@Country", partyMaster.Country));
                 SqlParameters.Add(new SqlParameter("@Remarks", partyMaster.Remarks));
@@ -78,7 +87,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public DataTable PartyMaster_Get(PartyMaster partyMaster)
+        public DataTable PartyMaster_Get()
         {
             DataTable dt = new DataTable();
             try
@@ -92,7 +101,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public int PartyMaster_Delete(PartyMaster partyMaster)
+        public PartyMaster PartyMaster_Delete(PartyMaster partyMaster)
         {
             int partyId = 0;
             try
@@ -105,7 +114,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return partyId;
+            return partyMaster;
         }
 
 

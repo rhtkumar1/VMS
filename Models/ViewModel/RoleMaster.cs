@@ -56,7 +56,7 @@ namespace IMS.Models.ViewModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
-                SqlParameters.Add(new SqlParameter("@Loginid", commo));
+                SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
                 roleId = DBManager.ExecuteScalar("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

@@ -83,4 +83,8 @@ public static class CommonUtility
             throw Ex;
         }
     }
+    public static string URLAppToken(string AppToken)
+    {
+       return Uri.EscapeDataString(AppToken);
+    }
 }

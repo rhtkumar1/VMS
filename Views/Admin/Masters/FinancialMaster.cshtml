@@ -23,9 +23,9 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    @*<div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>*@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        @using (Html.BeginForm("ManageFinancialMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "FinancialMaster" }))
+                        @using (Html.BeginForm("ManageFinancialMaster", "Master", FormMethod.Post, new { @id = "FinancialMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.FinancialId)
@@ -63,6 +63,18 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        var msg = "@ViewBag.Msg";
+        if (msg !== "null") {
+            if (msg ==="add") {
+                alert("Year added sucessfully!");
+                window.location = "OfficeIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "update") {
+                alert("Year updated sucessfully!");
+                window.location = "OfficeIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "error") {
+                alert("some error occurred, please try again..!");
+            }
+        }
         IMSC.ajaxCall("GET", "/Master/GetFinancialMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
@@ -71,6 +83,7 @@
                     { name: "From_date", title: "From Date", sorting: true, filtering: true, width: 50 },
                     { name: "To_date", title: "To Date", sorting: true, filtering: true, width: 50 },
                     {
+                        name:"Action",
                         width: 20,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
@@ -84,10 +97,10 @@
                     paging: true,
                     autoload: true,
                     controller: {
-                        StateLists: result,
+                        FinancialLists: result,
                         loadData: function (filter) {
-                            return $.grep(this.StateLists, function (StateList) {
-                                return (!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                            return $.grep(this.FinancialLists, function (FinancialList) {
+                                return (!filter.Title || FinancialList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
                             });
                         }
                     },
@@ -105,7 +118,7 @@
             immediateUpdates: true,
             todayBtn: true,
             todayHighlight: true
-        }).datepicker("setDate", "0");
+        }).datepicker();
 
         $('#ToDate').datepicker({
             autoclose: true,
@@ -113,7 +126,7 @@
             immediateUpdates: true,
             todayBtn: true,
             todayHighlight: true
-        }).datepicker("setDate", "0");
+        }).datepicker();
     });
     var editFormData = function (dilogType, FinancialMaster) {
         if (FinancialMaster.Financial_Id > 0) {

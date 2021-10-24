@@ -20,13 +20,12 @@ namespace IMS.Controllers
         {
             FinancialMaster financialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            int I = CommonUtility.GetLoginID();
-            financialMaster.AppToken = AppToken;
+            financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
-        [HttpGet]
 
+        [HttpGet]
         public ActionResult GetFinancialMaster(FinancialMaster financialMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -50,24 +49,24 @@ namespace IMS.Controllers
             {
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                financialMaster.AppToken = AppToken;
+                financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
                     if (objFinancialMaster.FinancialId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
@@ -80,7 +79,7 @@ namespace IMS.Controllers
                 financialMaster.FinancialId = financialId;
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_Delete(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                financialMaster.AppToken = AppToken;
+                financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
@@ -110,13 +109,13 @@ namespace IMS.Controllers
         public ActionResult StateIndex()
         {
             StateMaster stateMaster = new StateMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            stateMaster.AppToken = AppToken;
+            AppToken = Request.QueryString["AppToken"].ToString();
+            stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
         [HttpGet]
-        public ActionResult GetStateMaster(StateMaster stateMaster)
+        public ActionResult GetStateMaster(StateMaster stateMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -130,6 +129,7 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+
         [HttpPost]
         public ActionResult ManageStateMaster(StateMaster stateMaster)
         {
@@ -137,27 +137,28 @@ namespace IMS.Controllers
             {
                 StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
                 AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+'); ;
-                stateMaster.AppToken = AppToken;
+                stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
                     if (objStateMaster.StateId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
+
         [HttpPost]
         public ActionResult DeleteStateMaster(StateMaster stateMaster, int stateId)
         {
@@ -166,7 +167,7 @@ namespace IMS.Controllers
                 stateMaster.StateId = stateId;
                 StateMaster objStateMaster = stateMaster.StateMaster_Delete(stateMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                stateMaster.AppToken = AppToken;
+                stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
@@ -197,10 +198,11 @@ namespace IMS.Controllers
         {
             LocationMaster locationMaster = new LocationMaster();
             AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            locationMaster.AppToken = AppToken;
+            locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
+
         [HttpGet]
         public ActionResult GetLocationMaster(LocationMaster locationMaster, string AppToken = "")
         {
@@ -231,18 +233,18 @@ namespace IMS.Controllers
                 {
                     if (objLocationMaster.LocationId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
@@ -255,7 +257,7 @@ namespace IMS.Controllers
                 locationMaster.LocationId = locationId;
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_Delete(locationMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                locationMaster.AppToken = AppToken;
+                locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
                 {
@@ -286,12 +288,12 @@ namespace IMS.Controllers
         {
             CompanyMaster companyMaster = new CompanyMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            companyMaster.AppToken = AppToken;
+            companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
-        [HttpGet]
 
+        [HttpGet]
         public ActionResult GetCompanyMaster(CompanyMaster companyMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -314,24 +316,24 @@ namespace IMS.Controllers
             {
                 CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_InsertUpdate(companyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                companyMaster.AppToken = AppToken;
+                companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
                     if (objCompanyMaster.CompanyId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
@@ -344,7 +346,7 @@ namespace IMS.Controllers
                 companyMaster.CompanyId = companyId;
                 CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_Delete(companyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                companyMaster.AppToken = AppToken;
+                companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
@@ -374,7 +376,7 @@ namespace IMS.Controllers
         {
             OfficeMaster officeMaster = new OfficeMaster();
             AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            officeMaster.AppToken = AppToken;
+            officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
@@ -402,24 +404,24 @@ namespace IMS.Controllers
             {
                 OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_InsertUpdate(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                officeMaster.AppToken = AppToken;
+                officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
                     if (objOfficeMaster.OfficeId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
@@ -432,7 +434,7 @@ namespace IMS.Controllers
                 officeMaster.OfficeId = officeId;
                 OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_Delete(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                officeMaster.AppToken = AppToken;
+                officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
@@ -462,11 +464,12 @@ namespace IMS.Controllers
         public ActionResult RoleIndex()
         {
             RoleMaster roleMaster = new RoleMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            roleMaster.AppToken = AppToken;
+            AppToken = Request.QueryString["AppToken"].ToString();
+            roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
+
         [HttpGet]
         public ActionResult GetRoleMaster(RoleMaster roleMaster, string AppToken = "")
         {
@@ -490,24 +493,21 @@ namespace IMS.Controllers
             {
                 RoleMaster objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                roleMaster.AppToken = AppToken;
+                roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-                if (objRoleMaster != null)
+                if (objRoleMaster.RoleId == 0)
                 {
-                    if (objRoleMaster.RoleId > 0)
-                    {
-                        ViewBag.Msg = "Updated Sucessfully";
-                    }
-                    else
-                    {
-                        ViewBag.Msg = "Saved Sucessfully";
-                    }
+                    ViewBag.Msg = "add";
+                }
+                else
+                {
+                    ViewBag.Msg = "update";
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";// "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
@@ -520,7 +520,7 @@ namespace IMS.Controllers
                 roleMaster.RoleId = roleId;
                 RoleMaster objRoleMaster = roleMaster.RoleMaster_Delete(roleMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                roleMaster.AppToken = AppToken;
+                roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster != null)
                 {
@@ -543,6 +543,95 @@ namespace IMS.Controllers
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+        }
+        #endregion
+
+        #region Party Master
+        public ActionResult PartyIndex()
+        {
+            PartyMaster partyMaster = new PartyMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GetPartyMaster(PartyMaster partyMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = partyMaster.PartyMaster_Get();
+                dt.TableName = "PartyLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManagePartyMaster(PartyMaster partyMaster)
+        {
+            try
+            {
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        ViewBag.Msg = "update";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "add";
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "error";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeletePartyMaster(PartyMaster partyMaster, int partyId)
+        {
+            try
+            {
+                partyMaster.PartyId = partyId;
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_Delete(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
         #endregion
     }
