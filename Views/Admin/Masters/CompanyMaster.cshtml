@@ -23,9 +23,8 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        @using (Html.BeginForm("ManageCompanyMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "CompanyMaster" }))
+                        @using (Html.BeginForm("ManageCompanyMaster", "Master", FormMethod.Post, new {  @id = "CompanyMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.CompanyId)
@@ -119,6 +118,18 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var msg = "@ViewBag.Msg";
+        if (msg !== "null") {
+            if (msg ==="add") {
+                alert("Company added sucessfully!");
+                window.location = "CompanyIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "update") {
+                alert("Company updated sucessfully!");
+                window.location = "CompanyIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "error") {
+                alert("some error occurred, please try again..!");
+            }
+        }
         IMSC.ajaxCall("GET", "/Master/GetCompanyMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {

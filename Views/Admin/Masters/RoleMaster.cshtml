@@ -23,29 +23,9 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12">
-                        @if (ViewBag.Msg == "add")
-                        {
-                            <script type="text/javascript">
-                                alert("Added sucessfully!");
-                                window.location = "Master/RoleIndex?AppToken="+'@Model.AppToken';
-                            </script>
-                        }
-                        else if (ViewBag.Msg == "update")
-                        {
-                            <script type="text/javascript">
-                                alert("Data updated sucessfully!");
-                                window.location = "Master/RoleIndex?AppToken="+'@Model.AppToken';
-                            </script>
-                        }
-                        else
-                        {
-                            <script type="text/javascript">
-                                window.location = "Master/RoleIndex?AppToken=" + '@Model.AppToken';
-                            </script>
-                        }
+                    @*<div class="col-lg-12">
                         <p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p>
-                    </div>
+                    </div>*@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageRoleMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "RoleMaster" }))
                         {
@@ -99,6 +79,19 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var msg = "@ViewBag.Msg";
+        if (msg !== "null") {
+            if (msg ==="add") {
+                alert("Role added sucessfully!");
+                window.location = "RoleIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "update") {
+                alert("Role updated sucessfully!");
+                window.location = "RoleIndex?AppToken="+'@Model.AppToken';
+            } else if (msg === "error") {
+                alert("some error occurred, please try again..!");
+            }
+        }
+
         IMSC.ajaxCall("GET", "/Master/GetRoleMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {

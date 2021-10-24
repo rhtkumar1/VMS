@@ -55,18 +55,18 @@ namespace IMS.Controllers
                 {
                     if (objFinancialMaster.FinancialId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
@@ -322,18 +322,18 @@ namespace IMS.Controllers
                 {
                     if (objCompanyMaster.CompanyId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
@@ -495,22 +495,19 @@ namespace IMS.Controllers
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 roleMaster.AppToken = AppToken;
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-                if (objRoleMaster != null)
+                if (objRoleMaster.RoleId == 0)
                 {
-                    if (objRoleMaster.RoleId > 0)
-                    {
-                        ViewBag.Msg = "add";
-                    }
-                    else
-                    {
-                        ViewBag.Msg = "update";
-                    }
+                    ViewBag.Msg = "add";
+                }
+                else
+                {
+                    ViewBag.Msg = "update";
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";// "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
