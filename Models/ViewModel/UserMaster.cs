@@ -7,7 +7,7 @@ using System.Web;
 
 namespace IMS.Models.ViewModel
 {
-    public class User
+    public class UserMaster
     {
         public int UserId { get; set; }
         public int LoginId { get; set; }
@@ -30,15 +30,23 @@ namespace IMS.Models.ViewModel
         private bool _Islogin;
         public bool Islogin { get { return _Islogin; } }
 
-        public User()
+        public bool IsExists { get; internal set; }
+        public dynamic Msg { get; internal set; }
+
+        public UserMaster()
                    : this("0")
         {
 
         }
-        public User(string PLoginId)
+        public UserMaster(string PLoginId)
         {
             _LoginId = PLoginId;
             _Islogin = false;
+        }
+
+        internal UserMaster ManageUsers(UserMaster createUser)
+        {
+            throw new NotImplementedException();
         }
 
         public DataSet Authentication(string LoginID, string Password)

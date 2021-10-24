@@ -30,6 +30,7 @@ public class DBManager
         }
     }
 
+    
 
     public static DataTable ExecuteDataTable(string Query, CommandType commandType)
     {

@@ -142,11 +142,18 @@
                 $("#btnReset").click();
             }
         };
-        $("#btnReset").on("click", function () {
-            $("#StateId").val(0);
-            $("#Title").val("");
-            $("#Code").val("");
-            $("#Remarks").val("");
-            $("#TypeId").val(1);
+
+        var deleteFormData = function (dialogType, StateMaster) {
+            var result = confirm("Want to delete?");
+            if (result == true) {
+            IMSC.ajaxCall("POST", "/Master/DeleteStateMaster?stateId=" + StateMaster.State_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
         });
+            } else {
+                return false;
+            }
+    };
 </script>

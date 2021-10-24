@@ -6,13 +6,14 @@ using System.Data.SqlClient;
 using System.Web.Mvc;
 using IMS.Models.CBL;
 
+
 namespace IMS.Controllers
 {
     public class HomeController : Controller
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Authenticate(string loginid = "", string password = "")
+        public ActionResult Authenticate(string loginid = "", string password = "")
         {
             string result = "Fail";
             try
@@ -30,6 +31,9 @@ namespace IMS.Controllers
                         Session["UserName"] = Convert.ToString(ObjAuthenticate.UserName);
                         Session["UserType"] = Convert.ToString(ObjAuthenticate.UserType);
                         result = "Success";
+                        //Redirecting the user to the Login View of Account Controller  
+                        //filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary{ { "controller", "Home" }, { "action", "Index" }});
+                        return RedirectToAction("DashBoard", "Admin");//RedirectToRoute(new System.Web.Routing.RouteValueDictionary { { "controller", "Home" }, { "action", "Index" } }); //RedirectToAction("~/Admin/DashBoard");
                     }
                     else
                     {
@@ -40,6 +44,7 @@ namespace IMS.Controllers
                 {
                     ViewBag.Msg = "Enter User Name and password ";
                 }
+                return View("~/Views/Home/Index.cshtml");
 
             }
             catch (Exception ex)
@@ -50,24 +55,31 @@ namespace IMS.Controllers
         }
         public ActionResult Login()
         {
-            if (Session["UserName"] != null)
-            {
+            //if (Session["UserName"] != null)
+            //{
 
-                return View("~/Views/Shared/DashBoard/DashBoard.cshtml");
-            }
-            else
-            {
+            //    return View("~/Views/Shared/DashBoard/DashBoard.cshtml");
+            //}
+            //else
+            //{
                 return View("~/Views/Home/Index.cshtml");
-            }
+            //}
         }
         public ActionResult Index()
         {
+            Session["Menu_Master_Role_Wise"] = null;
+            Session["SYSSOFTECHSession"] = null;
+            Session["MinuList"] = null;
+            Session["UserName"] = null;
+            Session["UserType"] = null;
+            Session["SYSSOFTECHSession"] = null;
+            Session.Abandon();
             return View("~/Views/Home/Index.cshtml");
         }
         //[ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
-            Session["SYSSOFTECHSession"] = null;
+            
             return View("~/Views/Home/Index.cshtml");
         }
     }

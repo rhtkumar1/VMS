@@ -135,7 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\UserMasterController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -147,6 +146,7 @@
     <Compile Include="Models\CBL\Enums.cs" />
     <Compile Include="Models\CBL\SessionAuthentication.cs" />
     <Compile Include="Models\CBL\SyssoftechSession.cs" />
+    <Compile Include="Models\CommonModel\Comman_Controller.cs" />
     <Compile Include="Models\Encryption.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\OTP.cs" />
@@ -154,7 +154,6 @@
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
-    <Compile Include="Models\ViewModel\CreateUserMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
     <Compile Include="Models\CommonModel\Menue_Master.cs" />
@@ -163,7 +162,7 @@
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
-    <Compile Include="Models\ViewModel\User.cs" />
+    <Compile Include="Models\ViewModel\UserMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +261,7 @@
     <Content Include="Views\Admin\Masters\StateMaster.cshtml" />
     <Content Include="Views\Admin\Masters\LocationMaster.cshtml" />
     <Content Include="Views\Admin\Masters\OfficeMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\PartyMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

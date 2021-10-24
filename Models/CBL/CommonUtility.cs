@@ -1,10 +1,12 @@
 ﻿using IMS.Models;
+using IMS.Models.CBL;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Web.Mvc.Filters;
 
 public static class CommonUtility
 {
@@ -69,5 +71,16 @@ public static class CommonUtility
         //MID={0};AuthMode={1}        
         return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]); ;
     }
-
+    public static int GetLoginID()
+    {
+        try
+        {
+            Authenticate ObjAuthenticate = (Authenticate)System.Web.HttpContext.Current.Session["SYSSOFTECHSession"];
+            return Convert.ToInt32(ObjAuthenticate.UserId);
+        }
+        catch(Exception Ex)
+        {
+            throw Ex;
+        }
+    }
 }

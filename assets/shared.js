@@ -21,24 +21,25 @@ var IMSS = (function (scope) {
         });
     };
     scope.login = function () {
-        $("#responsemsg", "#loginform").html("");
-        var url = "/home/authenticate";
-        var data = $("#loginform").serialize();
-        IMSC.ajaxCall("POST", url, data, "text", function (d) {
-            var jsonResponse = JSON.parse(d);
-            if (jsonResponse == "Fail") {
-                $("#loginForm").val("");
-                $("#msg").text("username and password is wrong..!");
-            }
-            else {
-                if (jsonResponse.returnUrl != undefined) {
-                    window.location.href = jsonResponse.returnUrl;
-                } else {
-                    window.location.href = window.location.href + "/Admin/Dashboard";
-                }
-                $("#msg").hide();
-            }
-        });
+    //    $("#responsemsg", "#loginform").html("");
+    //    var url = "/home/authenticate";
+    //    var data = $("#loginform").serialize();
+    //    IMSC.ajaxCall("POST", url, data, "text", function (d) {
+    //        var jsonResponse = JSON.parse(d);
+    //        if (jsonResponse == "Fail") {
+    //            $("#loginForm").val("");
+    //            $("#msg").text("username and password is wrong..!");
+    //        }
+    //        else {
+    //            if (jsonResponse.returnUrl != undefined) {
+    //                window.location.href = jsonResponse.returnUrl;
+    //            } else {
+    //                window.location.href = "Admin/Dashboard";
+    //            }
+    //            $("#msg").hide();
+    //        }
+    //    });
+    //   // return true;
     };
     return scope;
 
@@ -46,7 +47,9 @@ var IMSS = (function (scope) {
 
 $(function () {
     $("#loginform").validate({
-        submitHandler: function () { IMSS.login() },
+        submitHandler: function () {
+            return true // IMSS.login()
+        },
         rules: {
             loginid: { required: true },
             password: { required: true },

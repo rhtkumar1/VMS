@@ -61,7 +61,7 @@
 </div>
 
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
         IMSC.ajaxCall("GET", "/Master/GetFinancialMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
@@ -96,9 +96,9 @@
                 $.extend(options, IMSC.grid_options);
                 $("#listGrid").jsGrid(options);
                 IMSC.filteOnKeyPress("#listGrid");
-            }           
+            }
         });
-       
+
         $('#FromDate').datepicker({
             autoclose: true,
             format: "dd-mm-yyyy",
@@ -126,6 +126,20 @@
         else {
             $("#FinancialId").val("0");
             $("#btnSubmit").text("Submit")
+        }
+    };
+
+    var deleteFormData = function (dialogType, FinancialMaster) {
+        var result = confirm("Want to delete?");
+        if (result == true) {
+             IMSC.ajaxCall("POST", "/Master/DeleteFinancialMaster?financialId="+FinancialMaster.Financial_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+        } else {
+            return false;
         }
     };
     function myFunction(p1, p2) {

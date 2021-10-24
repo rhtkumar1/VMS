@@ -49,7 +49,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int RoleMaster_Delete(RoleMaster roleMaster)
+        public RoleMaster RoleMaster_Delete(RoleMaster roleMaster)
         {
             int roleId = 0;
             try
@@ -62,7 +62,7 @@ namespace IMS.Models.ViewModel
             catch (Exception ex)
             { throw ex; }
 
-            return roleId;
+            return roleMaster;
         }
     }
 }

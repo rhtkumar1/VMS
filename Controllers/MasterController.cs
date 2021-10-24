@@ -20,11 +20,13 @@ namespace IMS.Controllers
         {
             FinancialMaster financialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
+            int I = CommonUtility.GetLoginID();
             financialMaster.AppToken = AppToken;
             financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
         [HttpGet]
+
         public ActionResult GetFinancialMaster(FinancialMaster financialMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -69,16 +71,49 @@ namespace IMS.Controllers
             }
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
+
+        [HttpPost]
+        public ActionResult DeleteFinancialMaster(FinancialMaster financialMaster, int financialId)
+        {
+            try
+            {
+                financialMaster.FinancialId = financialId;
+                FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_Delete(financialMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                financialMaster.AppToken = AppToken;
+                financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objFinancialMaster != null)
+                {
+                    if (objFinancialMaster.FinancialId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
+        }
         #endregion
 
         #region State Master
         public ActionResult StateIndex()
         {
             StateMaster stateMaster = new StateMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
             stateMaster.AppToken = AppToken;
             stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/StateMaster.cshtml",stateMaster);
+            return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
         [HttpGet]
         public ActionResult GetStateMaster(StateMaster stateMaster)
@@ -121,7 +156,39 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
-            return View("~/Views/Admin/Masters/StateMaster.cshtml",stateMaster);
+            return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
+        }
+        [HttpPost]
+        public ActionResult DeleteStateMaster(StateMaster stateMaster, int stateId)
+        {
+            try
+            {
+                stateMaster.StateId = stateId;
+                StateMaster objStateMaster = stateMaster.StateMaster_Delete(stateMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                stateMaster.AppToken = AppToken;
+                stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objStateMaster != null)
+                {
+                    if (objStateMaster.StateId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
         #endregion
 
@@ -129,7 +196,7 @@ namespace IMS.Controllers
         public ActionResult LocationIndex()
         {
             LocationMaster locationMaster = new LocationMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
             locationMaster.AppToken = AppToken;
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
@@ -157,7 +224,7 @@ namespace IMS.Controllers
             {
                 //locationMaster.Loginid = SyssoftechSession
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
-                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ','+');
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+');
                 locationMaster.AppToken = AppToken;
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
@@ -171,7 +238,40 @@ namespace IMS.Controllers
                         ViewBag.Msg = "Saved Sucessfully";
                     }
                 }
-                ModelState.Clear();                
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteLocationMaster(LocationMaster locationMaster, int locationId)
+        {
+            try
+            {
+                locationMaster.LocationId = locationId;
+                LocationMaster objLocationMaster = locationMaster.LocationMaster_Delete(locationMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                locationMaster.AppToken = AppToken;
+                locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objLocationMaster != null)
+                {
+                    if (objLocationMaster.LocationId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -191,6 +291,7 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
         [HttpGet]
+
         public ActionResult GetCompanyMaster(CompanyMaster companyMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -234,18 +335,51 @@ namespace IMS.Controllers
             }
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
+
+        [HttpPost]
+        public ActionResult DeleteCompanyMaster(CompanyMaster companyMaster, int companyId)
+        {
+            try
+            {
+                companyMaster.CompanyId = companyId;
+                CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_Delete(companyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                companyMaster.AppToken = AppToken;
+                companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objCompanyMaster != null)
+                {
+                    if (objCompanyMaster.CompanyId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+            }
+        }
         #endregion
 
         #region Office Master
         public ActionResult OfficeIndex()
         {
             OfficeMaster officeMaster = new OfficeMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ','+');
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
             officeMaster.AppToken = AppToken;
             officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
         [HttpGet]
+
         public ActionResult GetOfficeMaster(OfficeMaster officeMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -282,6 +416,39 @@ namespace IMS.Controllers
                     }
                 }
                 ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteOfficeMaster(OfficeMaster officeMaster, int officeId)
+        {
+            try
+            {
+                officeMaster.OfficeId = officeId;
+                OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_Delete(officeMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                officeMaster.AppToken = AppToken;
+                officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objOfficeMaster != null)
+                {
+                    if (objOfficeMaster.OfficeId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
             }
             catch (Exception ex)
             {
@@ -343,6 +510,127 @@ namespace IMS.Controllers
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteRoleMaster(RoleMaster roleMaster, int roleId)
+        {
+            try
+            {
+                roleMaster.RoleId = roleId;
+                RoleMaster objRoleMaster = roleMaster.RoleMaster_Delete(roleMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                roleMaster.AppToken = AppToken;
+                roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objRoleMaster != null)
+                {
+                    if (objRoleMaster.RoleId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+        }
+        #endregion
+
+        #region Party Master
+        public ActionResult PartyIndex()
+        {
+            PartyMaster partyMaster = new PartyMaster();
+            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            partyMaster.AppToken = AppToken;
+            partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+        [HttpGet]
+        public ActionResult GetPartyMaster(PartyMaster partyMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = partyMaster.PartyMaster_Get();
+                dt.TableName = "PartyLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManagePartyMaster(PartyMaster partyMaster)
+        {
+            try
+            {
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = AppToken;
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeletePartyMaster(PartyMaster partyMaster, int partyId)
+        {
+            try
+            {
+                partyMaster.PartyId = partyId;
+                PartyMaster objPartyMaster = partyMaster.PartyMaster_Delete(partyMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                partyMaster.AppToken = AppToken;
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objPartyMaster != null)
+                {
+                    if (objPartyMaster.PartyId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
         #endregion
     }

@@ -23,7 +23,7 @@ namespace IMS.Models.CBL
         {   
             try
             {
-                SyssoftechSession = new SyssoftechSession(SessionID, new User().Authentication(loginid, Password));
+                SyssoftechSession = new SyssoftechSession(SessionID, new UserMaster().Authentication(loginid, Password));
                 UserName = SyssoftechSession.UserName;
                 UserId = SyssoftechSession.UserId;
                 UserType = SyssoftechSession.UserType;
