@@ -114,8 +114,8 @@ namespace IMS.Controllers
                     {
                         ViewBag.Msg = "Saved Sucessfully";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
