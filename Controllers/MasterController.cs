@@ -20,7 +20,7 @@ namespace IMS.Controllers
         {
             FinancialMaster financialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            financialMaster.AppToken = AppToken;
+            financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
@@ -49,7 +49,7 @@ namespace IMS.Controllers
             {
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                financialMaster.AppToken = AppToken;
+                financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
@@ -79,7 +79,7 @@ namespace IMS.Controllers
                 financialMaster.FinancialId = financialId;
                 FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_Delete(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                financialMaster.AppToken = AppToken;
+                financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
@@ -110,7 +110,7 @@ namespace IMS.Controllers
         {
             StateMaster stateMaster = new StateMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            stateMaster.AppToken = AppToken;
+            stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
@@ -137,7 +137,7 @@ namespace IMS.Controllers
             {
                 StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
                 AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+'); ;
-                stateMaster.AppToken = AppToken;
+                stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
@@ -167,7 +167,7 @@ namespace IMS.Controllers
                 stateMaster.StateId = stateId;
                 StateMaster objStateMaster = stateMaster.StateMaster_Delete(stateMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                stateMaster.AppToken = AppToken;
+                stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
@@ -198,7 +198,7 @@ namespace IMS.Controllers
         {
             LocationMaster locationMaster = new LocationMaster();
             AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            locationMaster.AppToken = AppToken;
+            locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
@@ -257,7 +257,7 @@ namespace IMS.Controllers
                 locationMaster.LocationId = locationId;
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_Delete(locationMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                locationMaster.AppToken = AppToken;
+                locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
                 {
@@ -288,7 +288,7 @@ namespace IMS.Controllers
         {
             CompanyMaster companyMaster = new CompanyMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            companyMaster.AppToken = AppToken;
+            companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
@@ -316,7 +316,7 @@ namespace IMS.Controllers
             {
                 CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_InsertUpdate(companyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                companyMaster.AppToken = AppToken;
+                companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
@@ -346,7 +346,7 @@ namespace IMS.Controllers
                 companyMaster.CompanyId = companyId;
                 CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_Delete(companyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                companyMaster.AppToken = AppToken;
+                companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
@@ -376,7 +376,7 @@ namespace IMS.Controllers
         {
             OfficeMaster officeMaster = new OfficeMaster();
             AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            officeMaster.AppToken = AppToken;
+            officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
@@ -404,7 +404,7 @@ namespace IMS.Controllers
             {
                 OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_InsertUpdate(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                officeMaster.AppToken = AppToken;
+                officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
@@ -434,7 +434,7 @@ namespace IMS.Controllers
                 officeMaster.OfficeId = officeId;
                 OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_Delete(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                officeMaster.AppToken = AppToken;
+                officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
@@ -464,8 +464,8 @@ namespace IMS.Controllers
         public ActionResult RoleIndex()
         {
             RoleMaster roleMaster = new RoleMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            roleMaster.AppToken = AppToken;
+            AppToken = Request.QueryString["AppToken"].ToString();
+            roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
@@ -493,7 +493,7 @@ namespace IMS.Controllers
             {
                 RoleMaster objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                roleMaster.AppToken = AppToken;
+                roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster.RoleId == 0)
                 {
@@ -520,7 +520,7 @@ namespace IMS.Controllers
                 roleMaster.RoleId = roleId;
                 RoleMaster objRoleMaster = roleMaster.RoleMaster_Delete(roleMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                roleMaster.AppToken = AppToken;
+                roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster != null)
                 {
@@ -550,8 +550,8 @@ namespace IMS.Controllers
         public ActionResult PartyIndex()
         {
             PartyMaster partyMaster = new PartyMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
-            partyMaster.AppToken = AppToken;
+            AppToken = Request.QueryString["AppToken"].ToString();
+            partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
@@ -579,7 +579,7 @@ namespace IMS.Controllers
             {
                 PartyMaster objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                partyMaster.AppToken = AppToken;
+                partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objPartyMaster != null)
                 {
@@ -609,7 +609,7 @@ namespace IMS.Controllers
                 partyMaster.PartyId = partyId;
                 PartyMaster objPartyMaster = partyMaster.PartyMaster_Delete(partyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                partyMaster.AppToken = AppToken;
+                partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objPartyMaster != null)
                 {
