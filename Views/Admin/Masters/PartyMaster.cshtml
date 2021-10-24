@@ -47,7 +47,6 @@
                                     @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
-
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>Group<span class="mandatory">*</span></label>
@@ -65,7 +64,8 @@
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>Maintain Ref<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.MaintainRef, htmlAttributes: new { @placeholder = "Enter Maintain Ref", @required = "required", @class = "form-control" })
+                                    @Html.CheckBoxFor(m => m.MaintainRef, new { @checked = "checked", @class = "form-control", @Name = "Maintain Ref" })
+                                    @*@Html.CheckBoxFor(m => m.MaintainRef, htmlAttributes: new { @placeholder = "Enter Maintain Ref", @required = "required", @class = "form-control" })*@
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -144,38 +144,23 @@
                                     <label>Address 2</label>
                                     @Html.TextAreaFor(m => m.Address2, htmlAttributes: new { @placeholder = "Address 2", @class = "form-control" })
                                 </div>
-                            </div>
+                            </div> 
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
-                                    <label>City<span class="mandatory">*</span></label>
-                                    @{var cityItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select City", Value="" },
-                                          new SelectListItem { Text = "Delhi", Value="1" },
-                                          new SelectListItem { Text = "Mumbai", Value="2" },
-                                           new SelectListItem { Text = "Chennai", Value="3" },
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.City, new SelectList(cityItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    <label>Country<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Country, htmlAttributes: new { @placeholder = "Enter Country", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>State<span class="mandatory">*</span></label>
-                                   
                                     @Html.DropDownListFor(m => m.State, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
-                                    <label>Country<span class="mandatory">*</span></label>
-                                    @{var countryItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Gender", Value="" },
-                                          new SelectListItem { Text = "India", Value="1" },
-                                          new SelectListItem { Text = "Aus", Value="2" },
-                                           new SelectListItem { Text = "Eng", Value="3" },
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.Country, new SelectList(countryItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    <label>City<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.City, htmlAttributes: new { @placeholder = "Enter City", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -224,10 +209,8 @@
             $('#OfficeId').select2();
             $('#GroupId').select2();
             $('#Gender').select2();
-            $('#City').select2();
             $('#State').select2();
             $('#Region').select2();
-            $('#Country').select2();
         });
         IMSC.ajaxCall("GET", "/Master/GetPartyMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
@@ -274,7 +257,7 @@
             $("#Title").val(PartyMaster.Title);
             $("#Code").val(PartyMaster.Code);
             $("#OfficeId").val(PartyMaster.Office_Id);
-            $("#Title").val(PartyMaster.Group_Id);
+            $("#GroupId").val(PartyMaster.Group_Id);
             $("#MaintainRef").val(PartyMaster.Maintain_Ref);
             $("#CreditDays").val(PartyMaster.CreditDays);
             $("#CreditLimit").val(PartyMaster.CreditLimit);
