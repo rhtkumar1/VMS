@@ -9,23 +9,31 @@ namespace IMS.Models.ViewModel
 {
     public class UserMaster
     {
-        public int UserId { get; set; }
-        public int LoginId { get; set; }
-        public int UserType { get; set; }
+       public int User_Id{ get; set; }
         public string UserName { get; set; }
+        public string PasswordHash { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string DOB { get; set; }
-        public string MobileNo { get; set; }
-        public string EmailId { get; set; }
-        public string Password { get; set; }
-        public int CityId { get; set; }
-        public int StateId { get; set; }
-        public int CountryId { get; set; }
-        public string PinCode { get; set; }
-        public string Address { get; set; }
-        public string AadharNumber { get; set; }
+        public string Mobile { get; set; }
+        public string Email { get; set; }
+        public string Gender { get; set; }
+        public DateTime DOB { get; set; }
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Relegion { get; set; }
+        public string Pincode { get; set; }
+        public string Country { get; set; }
+        public DateTime DOJ { get; set; }
+        public int PrimaryRole { get; set; }
+        DateTime LastLogin { get; set; }
+        public string Remarks { get; set; }
+        int IsActive { get; set; }
+        int CreatedBy { get; set; }
+        int ModifiedBy { get; set; }
+
         private string _LoginId;
         private bool _Islogin;
         public bool Islogin { get { return _Islogin; } }
@@ -34,21 +42,34 @@ namespace IMS.Models.ViewModel
         public dynamic Msg { get; internal set; }
 
         public UserMaster()
-                   : this("0")
         {
-
-        }
-        public UserMaster(string PLoginId)
-        {
-            _LoginId = PLoginId;
+            CreatedBy = CommonUtility.GetLoginID();
+            ModifiedBy = CommonUtility.GetLoginID();
+            _LoginId = "0";
             _Islogin = false;
-        }
+        }     
 
         internal UserMaster ManageUsers(UserMaster createUser)
         {
             throw new NotImplementedException();
         }
+        public UserMaster UserMaster_InsertUpdate()
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Financial_id", User_Id));
+                SqlParameters.Add(new SqlParameter("@From_date", Convert.ToDateTime(DOB)));
+                SqlParameters.Add(new SqlParameter("@To_date", Convert.ToDateTime(DOJ)));
+                SqlParameters.Add(new SqlParameter("@Loginid", DOJ));
+                User_Id =Convert.ToInt32(DBManager.ExecuteScalar("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters));
+                return this;
+            }
+            catch (Exception ex)
+            { throw ex; }
 
+            
+        }
         public DataSet Authentication(string LoginID, string Password)
         {
             try
