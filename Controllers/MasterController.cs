@@ -20,13 +20,12 @@ namespace IMS.Controllers
         {
             FinancialMaster financialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
-            int I = CommonUtility.GetLoginID();
             financialMaster.AppToken = AppToken;
             financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
         }
-        [HttpGet]
 
+        [HttpGet]
         public ActionResult GetFinancialMaster(FinancialMaster financialMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -110,13 +109,13 @@ namespace IMS.Controllers
         public ActionResult StateIndex()
         {
             StateMaster stateMaster = new StateMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            AppToken = Request.QueryString["AppToken"].ToString();
             stateMaster.AppToken = AppToken;
             stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
         [HttpGet]
-        public ActionResult GetStateMaster(StateMaster stateMaster)
+        public ActionResult GetStateMaster(StateMaster stateMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -130,6 +129,7 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+
         [HttpPost]
         public ActionResult ManageStateMaster(StateMaster stateMaster)
         {
@@ -158,6 +158,7 @@ namespace IMS.Controllers
             }
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
+
         [HttpPost]
         public ActionResult DeleteStateMaster(StateMaster stateMaster, int stateId)
         {
@@ -201,6 +202,7 @@ namespace IMS.Controllers
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
+
         [HttpGet]
         public ActionResult GetLocationMaster(LocationMaster locationMaster, string AppToken = "")
         {
@@ -290,8 +292,8 @@ namespace IMS.Controllers
             companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
         }
-        [HttpGet]
 
+        [HttpGet]
         public ActionResult GetCompanyMaster(CompanyMaster companyMaster, string AppToken = "")
         {
             DataTable dt = new DataTable();
@@ -467,6 +469,7 @@ namespace IMS.Controllers
             roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
         }
+
         [HttpGet]
         public ActionResult GetRoleMaster(RoleMaster roleMaster, string AppToken = "")
         {
@@ -496,11 +499,11 @@ namespace IMS.Controllers
                 {
                     if (objRoleMaster.RoleId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "add";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                 }
                 ModelState.Clear();
@@ -555,6 +558,7 @@ namespace IMS.Controllers
             partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
+
         [HttpGet]
         public ActionResult GetPartyMaster(PartyMaster partyMaster, string AppToken = "")
         {

@@ -85,10 +85,10 @@
                     paging: true,
                     autoload: true,
                     controller: {
-                        StateLists: result,
+                        FinancialLists: result,
                         loadData: function (filter) {
-                            return $.grep(this.StateLists, function (StateList) {
-                                return (!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                            return $.grep(this.FinancialLists, function (FinancialList) {
+                                return (!filter.Title || FinancialList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
                             });
                         }
                     },
