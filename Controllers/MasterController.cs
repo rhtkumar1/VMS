@@ -143,18 +143,18 @@ namespace IMS.Controllers
                 {
                     if (objStateMaster.StateId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
         }
@@ -233,18 +233,18 @@ namespace IMS.Controllers
                 {
                     if (objLocationMaster.LocationId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
@@ -410,18 +410,18 @@ namespace IMS.Controllers
                 {
                     if (objOfficeMaster.OfficeId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
         }
@@ -585,18 +585,18 @@ namespace IMS.Controllers
                 {
                     if (objPartyMaster.PartyId > 0)
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "update";
                     }
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "add";
                     }
+                    ModelState.Clear();
                 }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "error";
             }
             return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
