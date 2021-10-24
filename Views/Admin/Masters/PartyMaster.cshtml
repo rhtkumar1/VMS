@@ -43,21 +43,14 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
-                                    <label>Office</label>
-                                    @{var listItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Office", Value="" },
-                                          new SelectListItem { Text = "Delhi", Value="1" },
-                                          new SelectListItem { Text = "Mumbai", Value="2" },
-                                           new SelectListItem { Text = "Chennai", Value="3" },
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
 
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
-                                    <label>Group</label>
+                                    <label>Group<span class="mandatory">*</span></label>
                                     @{var groupItems = new List<SelectListItem>{
                                           new SelectListItem { Text = "Select Office", Value="" },
                                           new SelectListItem { Text = "Group-1", Value="1" },
@@ -65,7 +58,7 @@
                                            new SelectListItem { Text = "Group-3", Value="3" },
                                      };
                                     }
-                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -168,14 +161,8 @@
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>State<span class="mandatory">*</span></label>
-                                    @{var stateItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Gender", Value="" },
-                                          new SelectListItem { Text = "Bihar", Value="1" },
-                                          new SelectListItem { Text = "Jharkhand", Value="2" },
-                                           new SelectListItem { Text = "Uttar Pradesh", Value="3" },
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.State, new SelectList(stateItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                   
+                                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">

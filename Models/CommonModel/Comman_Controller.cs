@@ -29,7 +29,7 @@ namespace IMS.Models.CommonModel
                 SqlParameters.Add(new SqlParameter("@TableValue", TableValue));
                 SqlParameters.Add(new SqlParameter("@TableName", TableName));
                 SqlParameters.Add(new SqlParameter("@WhereCondition", WhereCondition));
-                Record = DBManager.ExecuteDataTableWithParamiter("DDLValue_Dynamic", CommandType.StoredProcedure, SqlParameters);
+                Record = DBManager.ExecuteDataTableWithParameter("DDLValue_Dynamic", CommandType.StoredProcedure, SqlParameters);
                 List<DDLSELECT> PD = new List<DDLSELECT>();
                 foreach (DataRow DT in Record.Rows)
                 {

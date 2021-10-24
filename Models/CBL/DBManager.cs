@@ -30,10 +30,7 @@ public class DBManager
         }
     }
 
-    internal static DataTable ExecuteDataTableWithParamiter(string v, CommandType storedProcedure, List<SqlParameter> sqlParameters)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public static DataTable ExecuteDataTable(string Query, CommandType commandType)
     {
