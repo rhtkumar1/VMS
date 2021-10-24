@@ -64,7 +64,7 @@
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>Maintain Ref<span class="mandatory">*</span></label>
-                                    @Html.CheckBoxFor(m => m.MaintainRef, new { @checked = "checked", @class = "form-control", @Name = "Maintain Ref" })
+                                    @Html.CheckBoxFor(m => m.MaintainRef, new { @checked = "checked", @class = "form-control", @id = "MaintainRef" })
                                     @*@Html.CheckBoxFor(m => m.MaintainRef, htmlAttributes: new { @placeholder = "Enter Maintain Ref", @required = "required", @class = "form-control" })*@
                                 </div>
                             </div>
@@ -258,7 +258,11 @@
             $("#Code").val(PartyMaster.Code);
             $("#OfficeId").val(PartyMaster.Office_Id);
             $("#GroupId").val(PartyMaster.Group_Id);
-            $("#MaintainRef").val(PartyMaster.Maintain_Ref);
+            if (PartyMaster.Maintain_Ref) {
+                $('#MaintainRef').prop('checked', true);
+            } else {
+                $('#MaintainRef').prop('checked', false);
+            }
             $("#CreditDays").val(PartyMaster.CreditDays);
             $("#CreditLimit").val(PartyMaster.CreditLimit);
             $("#VariableLimit").val(PartyMaster.VariableLimit);
@@ -296,4 +300,11 @@
             return false;
         }
     };
+    $("#MaintainRef").change(function () {
+        if (this.checked) {
+            $('#MaintainRef').prop('checked', true);
+        } else {
+            $('#MaintainRef').prop('checked', false);
+        }
+    });
 </script>
