@@ -75,9 +75,9 @@
             if (result !== "null" && result !== "") {
                 var fields = [
                     { name: "Role_Id", css: "hidden", },
-                    { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 80  },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
+                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: true, width: 80  },
                     {
                         title: "Action",
                         width: 20,
@@ -96,7 +96,9 @@
                         RoleLists: result,
                         loadData: function (filter) {
                             return $.grep(this.RoleLists, function (RoleList) {
-                                return (!filter.Title || RoleList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                                return ((!filter.Title || RoleList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                    && (!filter.Code || RoleList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
+                                    && (!filter.Remarks || RoleList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
                             });
                         }
                     },

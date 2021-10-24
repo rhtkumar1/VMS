@@ -59,7 +59,7 @@
                                           new SelectListItem { Text = "6", Value="6" }
                                      };
                                     }
-                                    @Html.DropDownListFor(m => m.GSTNature, new SelectList(lstGSTNature, "Value", "Text"), htmlAttributes: new { @required = "required",@class = "form-control" })
+                                    @Html.DropDownListFor(m => m.GSTNature, new SelectList(lstGSTNature, "Value", "Text"), htmlAttributes: new { @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -163,16 +163,16 @@
             if (result !== "null" && result !== "") {
                 var fields = [
                     { name: "Office_Id", css: "hidden", },
-                    { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", title: "Code", sorting: true, filtering: true, width: 20 },
-                    { name: "GSTNo", title: "GSTNo", sorting: true, filtering: true, width: 30 },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 20 },
+                    { name: "GSTNo", type: "text", title: "GSTNo", sorting: true, filtering: true, width: 30 },
                     { name: "Type_Id", css: "hidden", },
                     { name: "GSTNature", css: "hidden", },
                     { name: "Location_Id", css: "hidden", },
-                    { name: "PanNo", title: "PanNo", sorting: true, filtering: true, width: 30 },
-                    { name: "ContactNo", title: "ContactNo", sorting: true, filtering: true, width: 30 },
-                    { name: "ContactPerson", title: "POC", sorting: true, filtering: true, width: 30 },
-                    { name: "Email", title: "Email", sorting: true, filtering: true, width: 40 },
+                    { name: "PanNo", type: "text",title: "PanNo", sorting: true, filtering: true, width: 30 },
+                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true, width: 30 },
+                    { name: "ContactPerson", type: "text", title: "POC", sorting: true, filtering: true, width: 30 },
+                    { name: "Email", type: "text", title: "Email", sorting: true, filtering: true, width: 40 },
                     { name: "Address1", title: "Address1", sorting: true, filtering: true, width: 50 },
                     { name: "Address2", title: "Address2", sorting: true, filtering: true, width: 30 },
                     { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 30  },
@@ -194,7 +194,13 @@
                         OfficeLists: result,
                         loadData: function (filter) {
                             return $.grep(this.OfficeLists, function (OfficeList) {
-                                return (!filter.Title || OfficeList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                                return ((!filter.Title || OfficeList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                    && (!filter.Code || OfficeList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
+                                    && (!filter.GSTNo || OfficeList.GSTNo.toLowerCase().indexOf(filter.GSTNo.toLowerCase()) > -1)
+                                    && (!filter.PanNo || OfficeList.PanNo.toLowerCase().indexOf(filter.PanNo.toLowerCase()) > -1)
+                                    && (!filter.ContactNo || OfficeList.ContactNo.toLowerCase().indexOf(filter.ContactNo.toLowerCase()) > -1)
+                                    && (!filter.ContactPerson || OfficeList.ContactPerson.toLowerCase().indexOf(filter.ContactPerson.toLowerCase()) > -1)
+                                    && (!filter.Email || OfficeList.Email.toLowerCase().indexOf(filter.Email.toLowerCase()) > -1));
                             });
                         }
                     },
@@ -234,6 +240,6 @@
     };
 
     var deleteFormData = function (dialogType, OfficeMaster) {
-      
+
     };
 </script>
