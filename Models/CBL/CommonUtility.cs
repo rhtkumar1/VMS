@@ -1,5 +1,6 @@
 ﻿using IMS.Models;
 using IMS.Models.CBL;
+using IMS.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -85,6 +86,19 @@ public static class CommonUtility
     }
     public static string URLAppToken(string AppToken)
     {
-       return Uri.EscapeDataString(AppToken);
+        Authenticate ObjAuthenticate = (Authenticate)System.Web.HttpContext.Current.Session["SYSSOFTECHSession"];
+        Convert.ToInt32(ObjAuthenticate.UserId);
+        int MenuId = CommonUtility.GetMenuID(AppToken);
+        Menu_Master_Role_Wise obj = ObjAuthenticate.ObjMenu_Master_Role_Wise.Find(X => X.MenuID == MenuId);
+        string URI = Uri.EscapeDataString(obj.AppToken);
+        return AppToken;
+        //if(AppToken.Contains("+"))
+        //{
+        //   return URI;
+        //}
+        //else
+        //{
+        //    return AppToken;
+        //}       
     }
 }

@@ -136,7 +136,7 @@ namespace IMS.Controllers
             try
             {
                 StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
-                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+'); ;
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
                 stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
@@ -197,7 +197,7 @@ namespace IMS.Controllers
         public ActionResult LocationIndex()
         {
             LocationMaster locationMaster = new LocationMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            AppToken = Request.QueryString["AppToken"].ToString();
             locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
@@ -226,7 +226,7 @@ namespace IMS.Controllers
             {
                 //locationMaster.Loginid = SyssoftechSession
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
-                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]).Replace(' ', '+');
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
                 locationMaster.AppToken = AppToken;
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
@@ -375,7 +375,7 @@ namespace IMS.Controllers
         public ActionResult OfficeIndex()
         {
             OfficeMaster officeMaster = new OfficeMaster();
-            AppToken = Request.QueryString["AppToken"].ToString().Replace(' ', '+');
+            AppToken = Request.QueryString["AppToken"].ToString();
             officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);

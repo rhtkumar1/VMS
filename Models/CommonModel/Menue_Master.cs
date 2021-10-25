@@ -40,8 +40,9 @@ namespace IMS.Models.ViewModel
                         objMenu_Master_Role_Wise.Controller = "#";
                         objMenu_Master_Role_Wise.Action = "#";
                     }
-                    objMenu_Master_Role_Wise.AppToken = Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), dr0["Auth"].ToString())));
                     objMenu_Master_Role_Wise.AuthMode = CommonUtility.ConvertInt(dr0["Auth"].ToString());
+                    objMenu_Master_Role_Wise.AppToken = (EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), objMenu_Master_Role_Wise.AuthMode.ToString())));
+                    
                     ObjMenu_Master_Role_Wise.Add(objMenu_Master_Role_Wise);
                 }
                 foreach (DataRow dr0 in dt.Rows)
