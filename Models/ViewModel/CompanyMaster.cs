@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -12,6 +14,7 @@ namespace IMS.Models.ViewModel
         public string Code { get; set; }
         public int TypeId { get; set; }
         public int FinancialId { get; set; }
+        public SelectList FinancialLists { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Ownership { get; set; }
@@ -22,7 +25,10 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
 
-
+        public CompanyMaster()
+        {
+            FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Title", "Financial_Master", "And IsActive=1"), "Id", "Value");
+        }
         public CompanyMaster CompanyMaster_InsertUpdate(CompanyMaster companyMaster)
         {
             try

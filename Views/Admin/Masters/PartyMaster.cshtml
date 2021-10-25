@@ -23,7 +23,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    @*<div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>*@
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManagePartyMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "PartyMaster" }))
                         {
@@ -65,7 +65,6 @@
                                 <div class="col-md-3 form-group">
                                     <label>Maintain Ref<span class="mandatory">*</span></label>
                                     @Html.CheckBoxFor(m => m.MaintainRef, new { @checked = "checked", @class = "form-control", @id = "MaintainRef" })
-                                    @*@Html.CheckBoxFor(m => m.MaintainRef, htmlAttributes: new { @placeholder = "Enter Maintain Ref", @required = "required", @class = "form-control" })*@
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -144,7 +143,7 @@
                                     <label>Address 2</label>
                                     @Html.TextAreaFor(m => m.Address2, htmlAttributes: new { @placeholder = "Address 2", @class = "form-control" })
                                 </div>
-                            </div> 
+                            </div>
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>Country<span class="mandatory">*</span></label>
@@ -205,18 +204,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var msg = "@ViewBag.Msg";
-        if (msg !== "null") {
-            if (msg ==="add") {
-                alert("Party added sucessfully!");
-                window.location = "PartyIndex?AppToken="+'@Model.AppToken';
-            } else if (msg === "update") {
-                alert("Party updated sucessfully!");
-                window.location = "PartyIndex?AppToken="+'@Model.AppToken';
-            } else if (msg === "error") {
-                alert("some error occurred, please try again..!");
-            }
-        }
         $(document).ready(function () {
             $('#OfficeId').select2();
             $('#GroupId').select2();
@@ -230,8 +217,8 @@
                 var fields = [
                     { name: "Party_Id", css: "hidden", },
                     { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "CreditDays", title: "CreditDays", sorting: true, filtering: true, width: 80  },
+                    { name: "Code", title: "Code", sorting: true, filtering: false, width: 40 },
+                    { name: "CreditDays", title: "CreditDays", sorting: true, filtering: false, width: 80  },
                     {
                         title: "Action",
                         width: 20,

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -13,6 +15,7 @@ namespace IMS.Models.ViewModel
         public string Code { get; set; }
         public int TypeId { get; set; }
         public int LocationId { get; set; }
+        public SelectList LocationLists { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string GSTNo { get; set; }
@@ -28,7 +31,10 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
 
-
+        public OfficeMaster()
+        {
+            LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
+        }
 
         public OfficeMaster OfficeMaster_InsertUpdate(OfficeMaster officeMaster)
         {

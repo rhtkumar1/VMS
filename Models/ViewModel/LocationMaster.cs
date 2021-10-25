@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -12,6 +14,7 @@ namespace IMS.Models.ViewModel
         public string Title { get; set; }
         public string Code { get; set; }
         public int StateId { get; set; }
+        public SelectList StateLists { get; set; }
         public string State { get; set; }
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
@@ -20,6 +23,10 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
 
+        public LocationMaster()
+        {
+            StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
+        }
 
         public LocationMaster LocationMaster_InsertUpdate(LocationMaster locationMaster)
         {
@@ -70,7 +77,7 @@ namespace IMS.Models.ViewModel
             return locationMaster;
         }
 
-        
+
 
         List<LocationData> lstLocationData = new List<LocationData>();
         public List<LocationData> Location_List_Get()
