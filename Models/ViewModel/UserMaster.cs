@@ -31,12 +31,13 @@ namespace IMS.Models.ViewModel
         public string Country { get; set; }
         public DateTime DOJ { get; set; }
         public int PrimaryRole { get; set; }
+        public SelectList RoleLists { get; set; }
         DateTime LastLogin { get; set; }
         public string Remarks { get; set; }
         int IsActive { get; set; }
         int CreatedBy { get; set; }
         int ModifiedBy { get; set; }
-        public SelectList RoleLists { get; set; }
+        
 
         private string _LoginId;
         private bool _Islogin;
