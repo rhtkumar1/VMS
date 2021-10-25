@@ -22,8 +22,8 @@ namespace IMS.Models.ViewModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Financial_id", financialMaster.FinancialId));
-                SqlParameters.Add(new SqlParameter("@From_date", Convert.ToDateTime(financialMaster.FromDate)));
-                SqlParameters.Add(new SqlParameter("@To_date", Convert.ToDateTime(financialMaster.ToDate)));
+                SqlParameters.Add(new SqlParameter("@From_date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(financialMaster.FromDate))));
+                SqlParameters.Add(new SqlParameter("@To_date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(financialMaster.ToDate))));
                 SqlParameters.Add(new SqlParameter("@Loginid", financialMaster.Loginid));
                 financialMaster.FinancialId = DBManager.ExecuteScalar("Financial_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
             }
