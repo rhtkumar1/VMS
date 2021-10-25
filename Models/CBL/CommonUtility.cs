@@ -1,5 +1,6 @@
 ﻿using IMS.Models;
 using IMS.Models.CBL;
+using IMS.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -64,14 +65,18 @@ public static class CommonUtility
         //string AT = EncryptDecrypt.DecryptString(AppToken);
         ////MID={0};AuthMode={1}
         //return CommonUtility.ConvertInt(AT.Split(';')[1].Split('=')[1]);
-        return CommonUtility.ConvertInt(AppToken.Split(';')[1].Split('=')[1]);
+        string AT = URLEncryption.Decrypt(AppToken);
+        return CommonUtility.ConvertInt(AT.Split(';')[1].Split('=')[1]);
+        //return CommonUtility.ConvertInt(AppToken.Split(';')[1].Split('=')[1]);
     }
     public static int GetMenuID(string AppToken)
     {
         //string AT = EncryptDecrypt.DecryptString(AppToken);
         ////MID={0};AuthMode={1}        
         //return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]); ;
-        return CommonUtility.ConvertInt(AppToken.Split(';')[0].Split('=')[1]);
+        string AT = URLEncryption.Decrypt(AppToken);
+        return CommonUtility.ConvertInt(AT.Split(';')[0].Split('=')[1]);
+        //return CommonUtility.ConvertInt(AppToken.Split(';')[0].Split('=')[1]);
     }
     public static int GetLoginID()
     {
@@ -87,7 +92,19 @@ public static class CommonUtility
     }
     public static string URLAppToken(string AppToken)
     {
-        //return Uri.EscapeDataString(AppToken);
+        
         return AppToken;
+    }
+    public static Menu_Master_Role_Wise GetMenu(string AppToken)
+    {
+        Menu_Master_Role_Wise obj=null;
+        Authenticate ObjAuthenticate = (Authenticate)System.Web.HttpContext.Current.Session["SYSSOFTECHSession"];
+        if (ObjAuthenticate != null)
+        {
+            //string AppToken = (filterContext.HttpContext.Request.QueryString["AppToken"] == null ? filterContext.HttpContext.Request.Form["AppToken"] : filterContext.HttpContext.Request.QueryString["AppToken"]);//.Replace(' ','+');
+            int MenuId = CommonUtility.GetMenuID(AppToken);
+            obj = ObjAuthenticate.ObjMenu_Master_Role_Wise.Find(X => X.MenuID == MenuId);
+        }
+        return obj;
     }
 }
