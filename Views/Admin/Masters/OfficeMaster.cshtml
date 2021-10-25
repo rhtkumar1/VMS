@@ -128,15 +128,21 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-12">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
-                <div class="blank-page">
+                <div class="blank-page table-responsive">
                     <div id="listGrid"></div>
                 </div>
             </div>
@@ -157,16 +163,11 @@
                     { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 20 },
                     { name: "GSTNo", type: "text", title: "GSTNo", sorting: true, filtering: false, width: 30 },
-                    { name: "Type_Id", css: "hidden", },
-                    { name: "GSTNature", css: "hidden", },
-                    { name: "Location_Id", css: "hidden", },
                     { name: "PanNo", type: "text",title: "PanNo", sorting: true, filtering: false, width: 30 },
                     { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: false, width: 30 },
                     { name: "ContactPerson", type: "text", title: "POC", sorting: true, filtering: false, width: 30 },
                     { name: "Email", type: "text", title: "Email", sorting: true, filtering: false, width: 40 },
                     { name: "Address1", title: "Address1", sorting: true, filtering: false, width: 50 },
-                    { name: "Address2", title: "Address2", sorting: true, filtering: false, width: 30 },
-                    { name: "Remarks", title: "Remarks", sorting: true, filtering: false, width: 30  },
                     {
                         title: "Action",
                         width: 30,
@@ -186,7 +187,7 @@
                         loadData: function (filter) {
                             return $.grep(this.OfficeLists, function (OfficeList) {
                                 return ((!filter.Title || OfficeList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
-                                    && (!filter.Code || OfficeList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
+                                    && (!filter.Code || OfficeList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                                     //&& (!filter.GSTNo || OfficeList.GSTNo.toLowerCase().indexOf(filter.GSTNo.toLowerCase()) > -1)
                                     //&& (!filter.PanNo || OfficeList.PanNo.toLowerCase().indexOf(filter.PanNo.toLowerCase()) > -1)
                                     //&& (!filter.ContactNo || OfficeList.ContactNo.toLowerCase().indexOf(filter.ContactNo.toLowerCase()) > -1)

@@ -51,8 +51,7 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-10">
-                            </div>
+                            <div class="col-md-10"></div>
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
@@ -86,7 +85,7 @@
                     { name: "Role_Id", css: "hidden", },
                     { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: true, width: 80  },
+                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
                     {
                         title: "Action",
                         width: 20,
@@ -106,8 +105,8 @@
                         loadData: function (filter) {
                             return $.grep(this.RoleLists, function (RoleList) {
                                 return ((!filter.Title || RoleList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
-                                    && (!filter.Code || RoleList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
-                                    && (!filter.Remarks || RoleList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
+                                    && (!filter.Code || RoleList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                                    //&& (!filter.Remarks || RoleList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
                             });
                         }
                     },

@@ -55,9 +55,15 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-12">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
                                 </div>
                             </div>
                         }
@@ -105,7 +111,7 @@
                         loadData: function (filter) {
                             return $.grep(this.LocationLists, function (LocationList) {
                                 return ((!filter.Title || LocationList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
-                                    && (!filter.Code || LocationList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
+                                    && (!filter.Code || LocationList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                                     //&& (!filter.State || LocationList.State.toLowerCase().indexOf(filter.State.toLowerCase()) > -1)
                                     //&& (!filter.Remarks || LocationList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
                             });

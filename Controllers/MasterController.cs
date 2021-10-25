@@ -55,11 +55,11 @@ namespace IMS.Controllers
                 {
                     if (objFinancialMaster.FinancialId > 0)
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Updated Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "Saved Sucessfully";
                     }
                     ModelState.Clear();
                 }
@@ -519,7 +519,7 @@ namespace IMS.Controllers
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-                if (objRoleMaster.RoleId == 0)
+                if (objRoleMaster.RoleId > 0)
                 {
                     ViewBag.Msg = "Updated Sucessfully!";
                 }

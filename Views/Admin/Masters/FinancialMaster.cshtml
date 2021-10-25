@@ -41,9 +41,15 @@
                                     @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
                                 </div>
                             </div>
-                            <div class="col-md-4" style="padding-top:26px">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary hidden">Submit</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
                                 </div>
                             </div>
                         }
