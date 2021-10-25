@@ -66,7 +66,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             FinancialMaster newFinancialMaster = new FinancialMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -147,18 +147,18 @@ namespace IMS.Controllers
                 {
                     if (objStateMaster.StateId > 0)
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Updated Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             StateMaster newStateMaster = new StateMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -241,18 +241,18 @@ namespace IMS.Controllers
                 {
                     if (objLocationMaster.LocationId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Updated Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             LocationMaster newLocationMaster = new LocationMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -338,18 +338,18 @@ namespace IMS.Controllers
                 {
                     if (objCompanyMaster.CompanyId > 0)
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Update Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "Updated Sucessfully";
+                        ViewBag.Msg = "Saved Sucessfully";
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             CompanyMaster newCompanyMaster = new CompanyMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -430,18 +430,18 @@ namespace IMS.Controllers
                 {
                     if (objOfficeMaster.OfficeId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Updated Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             OfficeMaster newOfficeMaster  = new OfficeMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -521,17 +521,17 @@ namespace IMS.Controllers
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster.RoleId == 0)
                 {
-                    ViewBag.Msg = "Saved Sucessfully!";
+                    ViewBag.Msg = "Updated Sucessfully!";
                 }
                 else
                 {
-                    ViewBag.Msg = "Updated Sucessfully!";
+                    ViewBag.Msg = "Saved Sucessfully!";
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";// "some error occurred, please try again..!";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             RoleMaster newRoleMaster = new RoleMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -613,18 +613,18 @@ namespace IMS.Controllers
                 {
                     if (objPartyMaster.PartyId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Updated Sucessfuly!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "error";
+                ViewBag.Msg = "some error occurred, please try again..!";
             }
             PartyMaster newPartyMaster = new PartyMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
