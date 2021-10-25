@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -16,7 +18,13 @@ namespace IMS.Models.ViewModel
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public SelectList MenuModule { get; set; }
 
+        public RoleMaster()
+        {
+            MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 AND Menu_Parent_Id is null"), "Id", "Value");
+
+        }
 
         public RoleMaster RoleMaster_InsertUpdate(RoleMaster roleMaster)
         {
@@ -64,5 +72,7 @@ namespace IMS.Models.ViewModel
 
             return roleMaster;
         }
+
+        
     }
 }

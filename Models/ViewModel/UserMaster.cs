@@ -114,6 +114,19 @@ namespace IMS.Models.ViewModel
             { throw ex; }
 
         }
+        public DataTable UserMaster_Get()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+            
+                dt = DBManager.ExecuteDataTable("User_Master_Getdata", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
 
     }
 }

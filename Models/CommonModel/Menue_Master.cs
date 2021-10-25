@@ -9,7 +9,22 @@ namespace IMS.Models.ViewModel
 {
     public class Menue_Master
     {
-       public List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
+        public DataTable MenuMaster_Get(int Menu_Parent_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Menu_Parent_Id", Menu_Parent_Id));
+                dt = DBManager.ExecuteDataTableWithParameter("Menu_Master_Getdata", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        
+        public List<Menu_Master_Display> listMim = new List<Menu_Master_Display>();
 
         public  IEnumerable<Menu_Master_Display> GetMinu(int UserID,out List<Menu_Master_Role_Wise> ObjMenu_Master_Role_Wise)
         {
