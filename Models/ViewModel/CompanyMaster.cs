@@ -27,7 +27,7 @@ namespace IMS.Models.ViewModel
 
         public CompanyMaster()
         {
-            FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "From_date", "Financial_Master", "And IsActive=1"), "Id", "Value");
+            FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
         }
         public CompanyMaster CompanyMaster_InsertUpdate(CompanyMaster companyMaster)
         {
