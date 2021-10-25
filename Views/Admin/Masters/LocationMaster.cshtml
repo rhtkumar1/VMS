@@ -23,7 +23,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    @*<div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>*@
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageLocationMaster", "Master", FormMethod.Post, new { @id = "LocationMaster" }))
                         {
@@ -44,16 +44,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>State</label>
-                                    @{var listItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "1", Value="1" },
-                                          new SelectListItem { Text = "2", Value="2" },
-                                           new SelectListItem { Text = "3", Value="3" },
-                                          new SelectListItem { Text = "4", Value="4" },
-                                           new SelectListItem { Text = "5", Value="5" },
-                                          new SelectListItem { Text = "6", Value="6" }
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.StateId, new SelectList(listItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.StateId, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -85,18 +76,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var msg = "@ViewBag.Msg";
-        if (msg !== "null") {
-            if (msg ==="add") {
-                alert("Location added sucessfully!");
-                window.location = "LocationIndex?AppToken="+'@Model.AppToken';
-            } else if (msg === "update") {
-                alert("Location updated sucessfully!");
-                window.location = "LocationIndex?AppToken="+'@Model.AppToken';
-            } else if (msg === "error") {
-                alert("some error occurred, please try again..!");
-            }
-        }
         IMSC.ajaxCall("GET", "/Master/GetLocationMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
@@ -104,9 +83,9 @@
                     { name: "Location_Id", css: "hidden", },
                     { name: "Title",type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "State", type: "text", title: "State", sorting: true, filtering: true, width: 30 },
+                    { name: "State", type: "text", title: "State", sorting: true, filtering: false, width: 30 },
                     { name: "State_Id", css: "hidden", },
-                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: true, width: 80  },
+                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
                     {
                         title: "Action",
                         width: 20,
@@ -127,8 +106,8 @@
                             return $.grep(this.LocationLists, function (LocationList) {
                                 return ((!filter.Title || LocationList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
                                     && (!filter.Code || LocationList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1)
-                                    && (!filter.State || LocationList.State.toLowerCase().indexOf(filter.State.toLowerCase()) > -1)
-                                    && (!filter.Remarks || LocationList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
+                                    //&& (!filter.State || LocationList.State.toLowerCase().indexOf(filter.State.toLowerCase()) > -1)
+                                    //&& (!filter.Remarks || LocationList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
                             });
                         }
                     },

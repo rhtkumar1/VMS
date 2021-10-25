@@ -22,7 +22,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    @*<div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>*@
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageStateMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StateMaster" }))
                         {
@@ -63,10 +63,16 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
-                                    <button type="button" name="btnReset" id="btnReset" style="margin-right: 10px !important;" class="btn btn-primary pull-right">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
                                 </div>
                             </div>
                         }
@@ -85,57 +91,44 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-            var msg = "@ViewBag.Msg";
-            if (msg !== "null") {
-                if (msg ==="add") {
-                    alert("State added sucessfully!");
-                    window.location = "StateIndex?AppToken="+'@Model.AppToken';
-                } else if (msg === "update") {
-                    alert("State updated sucessfully!");
-                    window.location = "StateIndex?AppToken="+'@Model.AppToken';
-                } else if (msg === "error") {
-                    alert("some error occurred, please try again..!");
+        IMSC.ajaxCall("GET", "/Master/GetStateMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var StateLists = JSON.parse(d);
+         if (StateLists !== "null") {
+             var fields = [
+                 { name: "State_Id", css: "hidden" },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 50 },
+                 { name: "Type_Id", css: "hidden" },
+                 { name: "Remarks", css: "hidden" },
+                 {
+                     title: "Action",
+                     width: 30,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 }
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     StateLists: StateLists,
+                     loadData: function (filter) {
+                         return $.grep(this.StateLists, function (StateList) {
+                             return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                 && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
                 }
-            }
-            IMSC.ajaxCall("GET", "/Master/GetStateMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
-                var StateLists = JSON.parse(d);
-                if (StateLists !== "null") {
-                    var fields = [
-                        { name: "State_Id", css: "hidden" },
-                        { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
-                        { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 50 },
-                        { name: "Type_Id", css: "hidden" },
-                        { name: "Remarks", css: "hidden" },
-                        {
-                            title: "Action",
-                            width: 30,
-                            itemTemplate: function (value, args) {
-                                return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
-                            }
-                        }
-                    ];
-                    var options = {
-                        filtering: true,
-                        editing: true,
-                        sorting: true,
-                        paging: true,
-                        autoload: true,
-                        controller: {
-                            StateLists: StateLists,
-                            loadData: function (filter) {
-                                return $.grep(this.StateLists, function (StateList) {
-                                    return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
-                                        && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
-                                });
-                            }
-                        },
-                        fields: fields
-                    };
-                    $.extend(options, IMSC.grid_options);
-                    $("#listGrid").jsGrid(options);
-                    IMSC.filteOnKeyPress("#listGrid");
-                }
-                $("#btnReset").click();
             });
         });
         var editFormData = function (dilogType, StateMaster) {
@@ -151,7 +144,6 @@
             else {
                 $("#StateId").val("0");
                 $("#btnSubmit").text("Submit")
-                $("#btnReset").click();
             }
         };
 

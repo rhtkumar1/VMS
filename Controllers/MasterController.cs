@@ -55,11 +55,11 @@ namespace IMS.Controllers
                 {
                     if (objFinancialMaster.FinancialId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Updated Sucessfully";
                     }
                     ModelState.Clear();
                 }
@@ -68,7 +68,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", financialMaster);
+            FinancialMaster newFinancialMaster = new FinancialMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newFinancialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newFinancialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", newFinancialMaster);
         }
 
         [HttpPost]
@@ -143,11 +147,11 @@ namespace IMS.Controllers
                 {
                     if (objStateMaster.StateId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Updated Sucessfully!";
                     }
                     ModelState.Clear();
                 }
@@ -156,7 +160,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/StateMaster.cshtml", stateMaster);
+            StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newStateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newStateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/StateMaster.cshtml", newStateMaster);
         }
 
         [HttpPost]
@@ -226,7 +234,7 @@ namespace IMS.Controllers
             {
                 //locationMaster.Loginid = SyssoftechSession
                 LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
-                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 locationMaster.AppToken = AppToken;
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
@@ -246,7 +254,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+            LocationMaster newLocationMaster = new LocationMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newLocationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newLocationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", newLocationMaster);
         }
 
         [HttpPost]
@@ -279,6 +291,10 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
+            StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
         #endregion
@@ -322,11 +338,11 @@ namespace IMS.Controllers
                 {
                     if (objCompanyMaster.CompanyId > 0)
                     {
-                        ViewBag.Msg = "update";
+                        ViewBag.Msg = "Saved Sucessfully!";
                     }
                     else
                     {
-                        ViewBag.Msg = "add";
+                        ViewBag.Msg = "Updated Sucessfully";
                     }
                     ModelState.Clear();
                 }
@@ -335,7 +351,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", companyMaster);
+            CompanyMaster newCompanyMaster = new CompanyMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newCompanyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newCompanyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", newCompanyMaster);
         }
 
         [HttpPost]
@@ -423,7 +443,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", officeMaster);
+            OfficeMaster newOfficeMaster  = new OfficeMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newOfficeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newOfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", newOfficeMaster);
         }
 
         [HttpPost]
@@ -497,11 +521,11 @@ namespace IMS.Controllers
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster.RoleId == 0)
                 {
-                    ViewBag.Msg = "add";
+                    ViewBag.Msg = "Saved Sucessfully!";
                 }
                 else
                 {
-                    ViewBag.Msg = "update";
+                    ViewBag.Msg = "Updated Sucessfully!";
                 }
                 ModelState.Clear();
             }
@@ -509,7 +533,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";// "some error occurred, please try again..!";
             }
-            return View("~/Views/Admin/Masters/RoleMaster.cshtml", roleMaster);
+            RoleMaster newRoleMaster = new RoleMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newRoleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newRoleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", newRoleMaster);
         }
 
         [HttpPost]
@@ -598,7 +626,11 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "error";
             }
-            return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
+            PartyMaster newPartyMaster = new PartyMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newPartyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newPartyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", newPartyMaster);
         }
 
         [HttpPost]
