@@ -173,7 +173,7 @@ namespace IMS.Controllers
             try
             {
                 stateMaster.StateId = stateId;
-                StateMaster objStateMaster = stateMaster.StateMaster_Delete(stateMaster);
+                StateMaster objStateMaster = stateMaster.StateMaster_Delete();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();

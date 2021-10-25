@@ -23,13 +23,12 @@ namespace IMS.Models.CBL
         {   
             try
             {
-                SyssoftechSession = new SyssoftechSession(SessionID, new UserMaster().Authentication(loginid, Password));
+                SyssoftechSession = new SyssoftechSession(SessionID, Authentication(loginid, Password));
                 UserName = SyssoftechSession.UserName;
                 UserId = SyssoftechSession.UserId;
                 UserType = SyssoftechSession.UserType;
                 if (Convert.ToInt32(SyssoftechSession.UserId) > 0)
-                {
-                    
+                {   
                     Menu_List =new  Menue_Master().GetMinu(Convert.ToInt32(SyssoftechSession.UserId),out ObjMenu_Master_Role_Wise);
                     IsAuthenticated = true;
                 }
@@ -42,5 +41,20 @@ namespace IMS.Models.CBL
             { throw ex; }
             return this;
         }
+        private DataSet Authentication(string LoginID, string Password)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@LoginId", LoginID));
+                SqlParameters.Add(new SqlParameter("@Password", Password));
+                return DBManager.ExecuteDataSetWithParameter("User_Master_Authentication", System.Data.CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
