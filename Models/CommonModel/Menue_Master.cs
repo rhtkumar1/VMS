@@ -41,8 +41,7 @@ namespace IMS.Models.ViewModel
                         objMenu_Master_Role_Wise.Action = "#";
                     }
                     objMenu_Master_Role_Wise.AuthMode = CommonUtility.ConvertInt(dr0["Auth"].ToString());
-                    objMenu_Master_Role_Wise.AppToken = (EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), objMenu_Master_Role_Wise.AuthMode.ToString())));
-                    
+                    objMenu_Master_Role_Wise.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), objMenu_Master_Role_Wise.AuthMode.ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), dr0["Auth"].ToString())));
                     ObjMenu_Master_Role_Wise.Add(objMenu_Master_Role_Wise);
                 }
                 foreach (DataRow dr0 in dt.Rows)
@@ -65,7 +64,8 @@ namespace IMS.Models.ViewModel
                             Minu0.Controller = "#";
                             Minu0.Action = "#";
                         }
-                        Minu0.AppToken += Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu0.MenuID.ToString(), dr0["Auth"].ToString())));
+                        //Minu0.AuthMode = CommonUtility.ConvertInt(dr0["Auth"].ToString());
+                        Minu0.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", Minu0.MenuID.ToString(), dr0["Auth"].ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu0.MenuID.ToString(), dr0["Auth"].ToString())));
                        // 1 Lable
                         foreach (DataRow dr1 in dt.Rows)
                         {
@@ -86,7 +86,7 @@ namespace IMS.Models.ViewModel
                                     Minu1.Controller = "#";
                                     Minu1.Action = "#";
                                 }
-                                Minu1.AppToken += Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu1.MenuID.ToString(), dr1["Auth"].ToString())));
+                                Minu1.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", Minu1.MenuID.ToString(), dr1["Auth"].ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu1.MenuID.ToString(), dr1["Auth"].ToString())));
                                 Minu0.ChildList.Add(Minu1);
                                 // 2 Lable
                                 foreach (DataRow dr2 in dt.Rows)
@@ -108,7 +108,7 @@ namespace IMS.Models.ViewModel
                                             Minu2.Controller = "#";
                                             Minu2.Action = "#";
                                         }
-                                        Minu2.AppToken += Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu2.MenuID.ToString(), dr2["Auth"].ToString())));
+                                        Minu2.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", Minu2.MenuID.ToString(), dr2["Auth"].ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu2.MenuID.ToString(), dr2["Auth"].ToString())));
                                         Minu1.ChildList.Add(Minu2);
                                         // 3 Lable
                                         foreach (DataRow dr3 in dt.Rows)
@@ -130,7 +130,7 @@ namespace IMS.Models.ViewModel
                                                     Minu3.Controller = "#";
                                                     Minu3.Action = "#";
                                                 }
-                                                Minu3.AppToken += Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu3.MenuID.ToString(), dr3["Auth"].ToString())));
+                                                Minu3.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", Minu3.MenuID.ToString(), dr3["Auth"].ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", Minu3.MenuID.ToString(), dr3["Auth"].ToString())));
                                                 Minu2.ChildList.Add(Minu3);
                                             }
                                         }

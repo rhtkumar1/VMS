@@ -51,7 +51,8 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return View("~/Views/Home/Index.cshtml");
+            //return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Login()
         {
