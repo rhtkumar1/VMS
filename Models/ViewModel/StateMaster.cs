@@ -19,6 +19,10 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
 
+        public StateMaster()
+        {
+            Loginid= CommonUtility.GetLoginID();
+        }
         public StateMaster StateMaster_InsertUpdate(StateMaster stateMaster)
         {
             try
@@ -52,20 +56,20 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public StateMaster StateMaster_Delete(StateMaster stateMaster)
+        public StateMaster StateMaster_Delete()
         {
             int stateId=0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@State_Id", stateMaster.StateId));
-                SqlParameters.Add(new SqlParameter("@Loginid", stateMaster.Loginid));
+                SqlParameters.Add(new SqlParameter("@State_Id",StateId));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
                 stateId = DBManager.ExecuteScalar("State_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return stateMaster;
+            return this;
         }
 
         List<StateData> lstStateData = new List<StateData>();
