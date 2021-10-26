@@ -48,6 +48,7 @@ namespace IMS.Models.ViewModel
         {
             StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+            Loginid = CommonUtility.GetLoginID();
         }
 
         public PartyMaster PartyMaster_InsertUpdate(PartyMaster partyMaster)
@@ -103,13 +104,13 @@ namespace IMS.Models.ViewModel
 
         public PartyMaster PartyMaster_Delete(PartyMaster partyMaster)
         {
-            int partyId = 0;
+            
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", partyMaster.PartyId));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
-                partyId = DBManager.ExecuteScalar("Party_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                partyMaster.PartyId = DBManager.ExecuteScalar("Party_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }

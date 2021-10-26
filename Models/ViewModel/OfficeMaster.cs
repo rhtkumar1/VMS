@@ -34,6 +34,7 @@ namespace IMS.Models.ViewModel
         public OfficeMaster()
         {
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
+            Loginid = CommonUtility.GetLoginID();
         }
 
         public OfficeMaster OfficeMaster_InsertUpdate(OfficeMaster officeMaster)
@@ -81,13 +82,12 @@ namespace IMS.Models.ViewModel
 
         public OfficeMaster OfficeMaster_Delete(OfficeMaster officeMaster)
         {
-            int officeId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Office_Id", officeMaster.OfficeId));
                 SqlParameters.Add(new SqlParameter("@Loginid", officeMaster.Loginid));
-                officeId = DBManager.ExecuteScalar("Office_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                officeMaster.OfficeId = DBManager.ExecuteScalar("Office_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
