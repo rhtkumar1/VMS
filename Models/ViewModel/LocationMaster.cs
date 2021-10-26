@@ -26,6 +26,7 @@ namespace IMS.Models.ViewModel
         public LocationMaster()
         {
             StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
+            Loginid = CommonUtility.GetLoginID();
         }
 
         public LocationMaster LocationMaster_InsertUpdate(LocationMaster locationMaster)
@@ -63,13 +64,12 @@ namespace IMS.Models.ViewModel
 
         public LocationMaster LocationMaster_Delete(LocationMaster locationMaster)
         {
-            int locationId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Location_Id", locationMaster.LocationId));
                 SqlParameters.Add(new SqlParameter("@Loginid", locationMaster.Loginid));
-                locationId = DBManager.ExecuteScalar("Location_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                locationMaster.LocationId = DBManager.ExecuteScalar("Location_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
@@ -77,34 +77,6 @@ namespace IMS.Models.ViewModel
             return locationMaster;
         }
 
-
-
-        List<LocationData> lstLocationData = new List<LocationData>();
-        public List<LocationData> Location_List_Get()
-        {
-            DataTable dt = new DataTable();
-            LocationData locationData = new LocationData();
-            try
-            {
-                dt = DBManager.ExecuteDataTable("Location_Master_Getdata", CommandType.StoredProcedure);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    locationData.LocationId = Convert.ToInt32(dr["Location_Id"]);
-                    locationData.Title = Convert.ToString(dr["Title"]);
-                    lstLocationData.Add(locationData);
-                }
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            return lstLocationData;
-        }
-
-
     }
-    public class LocationData
-    {
-        public int LocationId { get; set; }
-        public string Title { get; set; }
-    }
+
 }

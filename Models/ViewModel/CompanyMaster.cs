@@ -27,8 +27,10 @@ namespace IMS.Models.ViewModel
 
         public CompanyMaster()
         {
-            FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
+                FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
+                Loginid = CommonUtility.GetLoginID();
         }
+
         public CompanyMaster CompanyMaster_InsertUpdate(CompanyMaster companyMaster)
         {
             try
@@ -67,13 +69,12 @@ namespace IMS.Models.ViewModel
 
         public CompanyMaster CompanyMaster_Delete(CompanyMaster companyMaster)
         {
-            int companyId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Company_Id", companyMaster.CompanyId));
                 SqlParameters.Add(new SqlParameter("@Loginid", companyMaster.Loginid));
-                companyId = DBManager.ExecuteScalar("Company_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                companyMaster.CompanyId = DBManager.ExecuteScalar("Company_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }

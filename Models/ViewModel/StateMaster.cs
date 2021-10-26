@@ -56,47 +56,21 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public StateMaster StateMaster_Delete()
+        public StateMaster StateMaster_Delete(StateMaster stateMaster)
         {
-            int stateId=0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@State_Id",StateId));
-                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-                stateId = DBManager.ExecuteScalar("State_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@State_Id", stateMaster.StateId));
+                SqlParameters.Add(new SqlParameter("@Loginid", stateMaster.Loginid));
+                stateMaster.StateId = DBManager.ExecuteScalar("State_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return this;
-        }
-
-        List<StateData> lstStateData = new List<StateData>();
-        public List<StateData> State_List_Get()
-        {
-            DataTable dt = new DataTable();
-            StateData stateData = new StateData();
-            try
-            {
-                dt = DBManager.ExecuteDataTable("State_Master_Getdata", CommandType.StoredProcedure);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    stateData.StateId = Convert.ToInt32(dr["State_Id"]);
-                    stateData.Title = Convert.ToString(dr["Title"]);
-                    lstStateData.Add(stateData);
-                }
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            return lstStateData;
+            return stateMaster;
         }
 
     }
-    public class StateData
-    {
-        public int StateId { get; set; }
-        public string Title { get; set; }
-    }
+    
 }

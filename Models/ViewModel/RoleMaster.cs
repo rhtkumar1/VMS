@@ -23,7 +23,7 @@ namespace IMS.Models.ViewModel
         public RoleMaster()
         {
             MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 AND Menu_Parent_Id is null"), "Id", "Value");
-
+            Loginid = CommonUtility.GetLoginID();
         }
 
         public RoleMaster RoleMaster_InsertUpdate(RoleMaster roleMaster)
@@ -59,13 +59,12 @@ namespace IMS.Models.ViewModel
 
         public RoleMaster RoleMaster_Delete(RoleMaster roleMaster)
         {
-            int roleId = 0;
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
                 SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
-                roleId = DBManager.ExecuteScalar("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                roleMaster.RoleId = DBManager.ExecuteScalar("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
