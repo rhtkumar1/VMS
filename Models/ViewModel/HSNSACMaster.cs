@@ -9,13 +9,13 @@ namespace IMS.Models.ViewModel
 {
     class HSN_SAC_Master
     {
-        public string HSN_SACCODE;
-        public decimal Tax_Slab;
-        public int HSN_SACID;
-        public decimal CESS;
-        public decimal CESSP;
-        public DateTime StartDate;
-        public DateTime EndDate;
+        public string HSN_SACCODE { get; set; }
+        public decimal Tax_Slab { get; set; }
+        public int HSN_SACID { get; set; }
+        public decimal CESS { get; set; }
+        public decimal CESSP { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public HSN_SAC_Master()
         {
             HSN_SACCODE = "";
