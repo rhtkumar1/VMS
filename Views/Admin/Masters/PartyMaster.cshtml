@@ -215,8 +215,8 @@
             if (result !== "null" && result !== "") {
                 var fields = [
                     { name: "Party_Id", css: "hidden", },
-                    { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", title: "Code", sorting: true, filtering: false, width: 40 },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
                     { name: "CreditDays", title: "CreditDays", sorting: true, filtering: false, width: 80  },
                     {
                         title: "Action",
@@ -236,7 +236,8 @@
                         PartyLists: result,
                         loadData: function (filter) {
                             return $.grep(this.PartyLists, function (PartyList) {
-                                return (!filter.Title || PartyList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                                return ((!filter.Title || PartyList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                    && (!filter.Code || PartyList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                             });
                         }
                     },
