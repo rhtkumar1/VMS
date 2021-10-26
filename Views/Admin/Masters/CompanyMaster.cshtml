@@ -120,8 +120,8 @@
             if (result !== "null" && result !== "") {
                 var fields = [
                     { name: "Company_Id", css: "hidden", },
-                    { name: "Title", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", title: "Code", sorting: true, filtering: true, width: 40 },
+                    { name: "Title",type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
                     { name: "Ownership", title: "Ownership", sorting: true, filtering: true, width: 30 },
                     { name: "Type_Id", css: "hidden", },
                     { name: "Financial_Id", css: "hidden", },
@@ -147,7 +147,8 @@
                         CompanyLists: result,
                         loadData: function (filter) {
                             return $.grep(this.CompanyLists, function (CompanyList) {
-                                return (!filter.Title || CompanyList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1);
+                                return ((!filter.Title || CompanyList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                    && (!filter.Code || CompanyList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                             });
                         }
                     },
