@@ -37,7 +37,9 @@ namespace IMS.Models.ViewModel
         int IsActive { get; set; }
         int CreatedBy { get; set; }
         int ModifiedBy { get; set; }
-        
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
+
 
         private string _LoginId;
         private bool _Islogin;

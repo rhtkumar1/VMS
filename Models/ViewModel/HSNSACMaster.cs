@@ -16,6 +16,8 @@ namespace IMS.Models.ViewModel
         public decimal CESSP { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string AppToken { get; set; }
+        public string AuthMode { get; set; }
         public HSN_SAC_Master()
         {
             HSN_SACCODE = "";
