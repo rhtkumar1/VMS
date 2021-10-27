@@ -666,5 +666,102 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/PartyMaster.cshtml", partyMaster);
         }
         #endregion
+
+        #region User Master
+        public ActionResult UserIndex()
+        {
+            UserMaster userMaster = new UserMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            userMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            userMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/UserMaster.cshtml", userMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GetUserMaster(LocationMaster locationMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = locationMaster.LocationMaster_Get();
+                dt.TableName = "LocationLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageUserMaster(UserMaster userMaster)
+        {
+            try
+            {
+                UserMaster objuserMaster = userMaster.UserMaster_InsertUpdate(userMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                userMaster.AppToken = AppToken;
+                userMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objuserMaster != null)
+                {
+                    if (objuserMaster.User_Id > 0)
+                    {
+                        ViewBag.Msg = "Updated Sucessfully!";
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Saved Sucessfully!";
+                    }
+                }
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            LocationMaster newLocationMaster = new LocationMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newLocationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newLocationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", newLocationMaster);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteUserMaster(LocationMaster locationMaster, int locationId)
+        {
+            try
+            {
+                locationMaster.LocationId = locationId;
+                LocationMaster objLocationMaster = locationMaster.LocationMaster_Delete(locationMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objLocationMaster != null)
+                {
+                    if (objLocationMaster.LocationId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            locationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
+        }
+        #endregion
     }
 }

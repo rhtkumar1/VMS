@@ -263,6 +263,7 @@
     <Content Include="Views\Admin\Masters\LocationMaster.cshtml" />
     <Content Include="Views\Admin\Masters\OfficeMaster.cshtml" />
     <Content Include="Views\Admin\Masters\PartyMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\UserList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

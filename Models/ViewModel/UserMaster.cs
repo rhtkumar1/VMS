@@ -11,7 +11,7 @@ namespace IMS.Models.ViewModel
 {
     public class UserMaster
     {
-       public int User_Id{ get; set; }
+        public int User_Id{ get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
@@ -26,12 +26,15 @@ namespace IMS.Models.ViewModel
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public SelectList StateLists { get; set; }
         public string Relegion { get; set; }
         public string Pincode { get; set; }
         public string Country { get; set; }
         public DateTime DOJ { get; set; }
         public int PrimaryRole { get; set; }
         public SelectList RoleLists { get; set; }
+        public SelectList LocationLists { get; set; }
+        public string  sRoles { get; set; }
         DateTime LastLogin { get; set; }
         public string Remarks { get; set; }
         int IsActive { get; set; }
@@ -53,6 +56,8 @@ namespace IMS.Models.ViewModel
             try
             {
                 RoleLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Role_Id", "Title", "Role_Master", "And IsActive=1"), "Id", "Value");
+                StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
+                LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
                 CreatedBy = CommonUtility.GetLoginID();
                 ModifiedBy = CommonUtility.GetLoginID();
             }
@@ -61,35 +66,36 @@ namespace IMS.Models.ViewModel
             _LoginId = "0";
             _Islogin = false;
         }     
-        public UserMaster UserMaster_InsertUpdate()
+        public UserMaster UserMaster_InsertUpdate(UserMaster userMaster)
         {
             try
             {
                 if (ConfirmPassword == Password)
                 {
                     List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                    SqlParameters.Add(new SqlParameter("@User_Id", User_Id));
-                    SqlParameters.Add(new SqlParameter("@UserName", UserName));
-                    SqlParameters.Add(new SqlParameter("@PasswordHash", Password));
-                    SqlParameters.Add(new SqlParameter("@FirstName", FirstName));
-                    SqlParameters.Add(new SqlParameter("@MiddleName", MiddleName));
-                    SqlParameters.Add(new SqlParameter("@LastName", LastName));
-                    SqlParameters.Add(new SqlParameter("@Mobile", Mobile));
-                    SqlParameters.Add(new SqlParameter("@Email", Email));
-                    SqlParameters.Add(new SqlParameter("@Gender", Gender));
-                    SqlParameters.Add(new SqlParameter("@DOB", Convert.ToDateTime(DOB)));
-                    SqlParameters.Add(new SqlParameter("@Address1", Address1));
-                    SqlParameters.Add(new SqlParameter("@Address2", Address2));
-                    SqlParameters.Add(new SqlParameter("@City", City));
-                    SqlParameters.Add(new SqlParameter("@State", State));
-                    SqlParameters.Add(new SqlParameter("@Relegion", Relegion));
-                    SqlParameters.Add(new SqlParameter("@Pincode", Pincode));
-                    SqlParameters.Add(new SqlParameter("@Country", Country));
-                    SqlParameters.Add(new SqlParameter("@DOJ", Convert.ToDateTime(DOJ)));
-                    SqlParameters.Add(new SqlParameter("@PrimaryRole", PrimaryRole));
-                    SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
-                    SqlParameters.Add(new SqlParameter("@CreatedBy", CreatedBy));
-                    SqlParameters.Add(new SqlParameter("@ModifiedBy", ModifiedBy));
+                    SqlParameters.Add(new SqlParameter("@User_Id", userMaster.User_Id));
+                    SqlParameters.Add(new SqlParameter("@UserName", userMaster.UserName));
+                    SqlParameters.Add(new SqlParameter("@PasswordHash", userMaster.Password));
+                    SqlParameters.Add(new SqlParameter("@FirstName", userMaster.FirstName));
+                    SqlParameters.Add(new SqlParameter("@MiddleName", userMaster.MiddleName));
+                    SqlParameters.Add(new SqlParameter("@LastName", userMaster.LastName));
+                    SqlParameters.Add(new SqlParameter("@Mobile", userMaster.Mobile));
+                    SqlParameters.Add(new SqlParameter("@Email", userMaster.Email));
+                    SqlParameters.Add(new SqlParameter("@Gender", userMaster.Gender));
+                    SqlParameters.Add(new SqlParameter("@DOB", Convert.ToDateTime(userMaster.DOB)));
+                    SqlParameters.Add(new SqlParameter("@Address1", userMaster.Address1));
+                    SqlParameters.Add(new SqlParameter("@Address2", userMaster.Address2));
+                    SqlParameters.Add(new SqlParameter("@City", userMaster.City));
+                    SqlParameters.Add(new SqlParameter("@State", userMaster.State));
+                    SqlParameters.Add(new SqlParameter("@Relegion", userMaster.Relegion));
+                    SqlParameters.Add(new SqlParameter("@Pincode", userMaster.Pincode));
+                    SqlParameters.Add(new SqlParameter("@Country", "India"));
+                    SqlParameters.Add(new SqlParameter("@DOJ", Convert.ToDateTime(userMaster.DOJ)));
+                    SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole));
+                    SqlParameters.Add(new SqlParameter("@Remarks", userMaster.Remarks));
+                    SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
+                    SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
+                    SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
                     User_Id = Convert.ToInt32(DBManager.ExecuteScalar("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters));
                  }
                 return this;
