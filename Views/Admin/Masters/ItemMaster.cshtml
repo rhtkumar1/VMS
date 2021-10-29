@@ -1,0 +1,262 @@
+﻿@model IMS.Models.ViewModel.ItemMaster
+@{
+    ViewBag.Title = "Item Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Item Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageItemMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "ItemMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.ItemId, htmlAttributes: new { @id = "ItemId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Group</label>
+                                    @{
+                                        var groupItems = new List<SelectListItem>{
+                                       new SelectListItem { Text = "Value-1", Value="1" },
+                                          new SelectListItem { Text = "Value-2", Value="2" },
+                                          new SelectListItem { Text = "Value-3", Value="3" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Nature</label>
+                                    @{
+                                        var natureItems = new List<SelectListItem>{
+                                          new SelectListItem { Text = "Value-1", Value="1" },
+                                          new SelectListItem { Text = "Value-2", Value="2" },
+                                          new SelectListItem { Text = "Value-3", Value="3" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.Nature, new SelectList(natureItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Dead Stock Days<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.DeadStockDays, htmlAttributes: new { @placeholder = "Dead Stock Days", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Min Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MinLevel, htmlAttributes: new { @placeholder = "Min Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Max Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MaxLevel, htmlAttributes: new { @placeholder = "Max Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Reorder Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ReorderLevel, htmlAttributes: new { @placeholder = "Reorder Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Unit<span class="mandatory">*</span></label>
+                                    @{
+                                        var unitItems = new List<SelectListItem>{
+                                          new SelectListItem { Text = "Value-1", Value="1" },
+                                          new SelectListItem { Text = "Value-2", Value="2" },
+                                          new SelectListItem { Text = "Value-3", Value="3" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(unitItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Inward Unit<span class="mandatory">*</span></label>
+                                    @{
+                                        var inwardItems = new List<SelectListItem>{
+                                          new SelectListItem { Text = "Value-1", Value="1" },
+                                          new SelectListItem { Text = "Value-2", Value="2" },
+                                          new SelectListItem { Text = "Value-3", Value="3" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.InwardUnitId, new SelectList(inwardItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Outward Unit<span class="mandatory">*</span></label>
+                                    @{
+                                        var outwardItems = new List<SelectListItem>{
+                                          new SelectListItem { Text = "Value-1", Value="1" },
+                                          new SelectListItem { Text = "Value-2", Value="2" },
+                                          new SelectListItem { Text = "Value-3", Value="3" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.OutwardUnitId, new SelectList(outwardItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>HSN SAC<span class="mandatory">*</span></label>
+                                    @{
+                                        var hsnItems = new List<SelectListItem>{
+                                          new SelectListItem { Text = "42344234", Value="42344234" },
+                                          new SelectListItem { Text = "23424223", Value="23424223" },
+                                          new SelectListItem { Text = "234234234", Value="234234234" },
+                                     };
+                                    }
+                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(hsnItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        IMSC.ajaxCall("GET", "/Master/GetItemMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var ItemLists = JSON.parse(d);
+         if (ItemLists !== "null") {
+             var fields = [
+                 { name: "Item_Id", css: "hidden" },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 50 },
+                 { name: "Type_Id", css: "hidden" },
+                 { name: "Remarks", css: "hidden" },
+                 {
+                     title: "Action",
+                     width: 30,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 }
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     ItemLists: ItemLists,
+                     loadData: function (filter) {
+                         return $.grep(this.ItemLists, function (ItemList) {
+                             return ((!filter.Title || ItemList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                 && (!filter.Code || ItemList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        });
+        var editFormData = function (dilogType, ItemMaster) {
+            $("msg").text = "";
+            if (ItemMaster.Item_Id > 0) {
+                $("#ItemId").val(ItemMaster.Item_Id);
+                $("#Title").val(ItemMaster.Title);
+                $("#Code").val(ItemMaster.Code);
+                $("#GroupId").val(ItemMaster.Group_Id);
+                $("#Nature").val(ItemMaster.Nature);
+                $("#DeadStockDays").val(ItemMaster.DeadStockDays);
+                $("#MinLevel").val(ItemMaster.MinLevel);
+                $("#MaxLevel").val(ItemMaster.ReorderLevel);
+                $("#BaseUnitId").val(ItemMaster.BaseUnit_Id);
+                $("#InwardUnitId").val(ItemMaster.InwardUnit_Id);
+                $("#OutwardUnitId").val(ItemMaster.OutwardUnit_Id);
+                $("#HSN_SAC").val(ItemMaster.HSN_SAC);
+                $("#Remarks").val(ItemMaster.Remarks);
+                $("#TypeId").val(ItemMaster.Type_Id);
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#ItemId").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
+
+        var deleteFormData = function (dialogType, ItemMaster) {
+            var result = confirm("Want to delete?");
+            if (result == true) {
+            IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+            } else {
+                return false;
+            }
+    };
+</script>

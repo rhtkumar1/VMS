@@ -775,6 +775,210 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Item Master
+        public ActionResult ItemIndex()
+        {
+            ItemMaster itemMaster = new ItemMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/ItemMaster.cshtml", itemMaster);
+        }
 
+        [HttpGet]
+        public ActionResult GetItemMaster(ItemMaster itemMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = itemMaster.ItemMaster_Get();
+                dt.TableName = "ItemLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageItemMaster(ItemMaster itemMaster)
+        {
+            ItemMaster objItemMaster = new ItemMaster();
+            try
+            {
+                objItemMaster = itemMaster.ItemMaster_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objItemMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objItemMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objItemMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objItemMaster.IsSucceed && objItemMaster.ItemId != -1)
+                    {
+                        ViewBag.Msg = objItemMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            ItemMaster newItemMaster = new ItemMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newItemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newItemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/ItemMaster.cshtml", (objItemMaster.IsSucceed ? newItemMaster : itemMaster));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteItemMaster(ItemMaster itemMaster, int itemId)
+        {
+            try
+            {
+                itemMaster.ItemId = itemId;
+                ItemMaster objItemMaster = itemMaster.ItemMaster_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objItemMaster != null)
+                {
+                    if (objItemMaster.ItemId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/ItemMaster.cshtml", itemMaster);
+        }
+        #endregion
+
+        #region HSNSAC Master
+        public ActionResult HSNSACIndex()
+        {
+            HSN_SAC_Master hSN_SAC_Master = new HSN_SAC_Master();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            hSN_SAC_Master.AppToken = CommonUtility.URLAppToken(AppToken);
+            hSN_SAC_Master.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
+        }
+
+        [HttpGet]
+        public ActionResult GetHSNSACMaster(HSN_SAC_Master hSN_SAC_Master, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = hSN_SAC_Master.HSN_SAC_Get();
+                dt.TableName = "HSNSACLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageHSNSACMaster(HSN_SAC_Master hSN_SAC_Master)
+        {
+            HSN_SAC_Master objHSNSACMaster = new HSN_SAC_Master();
+            try
+            {
+                objHSNSACMaster = hSN_SAC_Master.HSNSAC_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                hSN_SAC_Master.AppToken = CommonUtility.URLAppToken(AppToken);
+                hSN_SAC_Master.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objHSNSACMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objHSNSACMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objHSNSACMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objHSNSACMaster.IsSucceed && objHSNSACMaster.HSN_SACID != -1)
+                    {
+                        ViewBag.Msg = objHSNSACMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            HSN_SAC_Master newHSNSACMaster = new HSN_SAC_Master();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newHSNSACMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newHSNSACMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", (objHSNSACMaster.IsSucceed ? newHSNSACMaster : hSN_SAC_Master));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteHSNSACMaster(HSN_SAC_Master hSN_SAC_Master, int HSNSACId)
+        {
+            try
+            {
+                hSN_SAC_Master.HSN_SACID = HSNSACId;
+                HSN_SAC_Master objHSNSACMaster = hSN_SAC_Master.HSN_SAC_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                hSN_SAC_Master.AppToken = CommonUtility.URLAppToken(AppToken);
+                hSN_SAC_Master.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objHSNSACMaster != null)
+                {
+                    if (objHSNSACMaster.HSN_SACID > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
+        }
+        #endregion
     }
 }

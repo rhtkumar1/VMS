@@ -44,7 +44,7 @@ namespace IMS.Models.ViewModel
         public ItemMaster()
         {
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
-            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value"); 
+            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
@@ -119,7 +119,5 @@ namespace IMS.Models.ViewModel
 
             return this;
         }
-
     }
-
 }
