@@ -24,22 +24,28 @@ namespace IMS.Models.ViewModel
         public int OutwardUnitId { get; set; }
         public int HSN_SAC_Id { get; set; }
         public string HSN_SAC { get; set; }
+        public SelectList HSN_SAC_Lists { get; set; }
         public SelectList GroupLists { get; set; }
         public SelectList UnitLists { get; set; }
         public SelectList Unit_In_Lists { get; set; }
         public SelectList Unit_Out_Lists { get; set; }
         public string GroupName { get; set; }
+        public string ItemBarCode { get; set; }
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
+
 
         public ItemMaster()
         {
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
-            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
+            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value"); 
+            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
             Loginid = CommonUtility.GetLoginID();
@@ -55,7 +61,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Code", Code));
                 SqlParameters.Add(new SqlParameter("@Group_Id", GroupId));
                 SqlParameters.Add(new SqlParameter("@Nature", Nature));
-                SqlParameters.Add(new SqlParameter("@HSN_SAC_Id", HSN_SAC_Id));
+                SqlParameters.Add(new SqlParameter("@HSN_SAC", HSN_SAC));
                 SqlParameters.Add(new SqlParameter("@DeadStockDays", DeadStockDays));
                 SqlParameters.Add(new SqlParameter("@MinLevel", MinLevel));
                 SqlParameters.Add(new SqlParameter("@MaxLevel", MaxLevel));
@@ -65,7 +71,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@OutwardUnitId", OutwardUnitId));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-                ItemId = DBManager.ExecuteScalar("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ItemId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
@@ -87,19 +99,25 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public int ItemMaster_Delete()
+        public ItemMaster ItemMaster_Delete()
         {
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Item_Id", ItemId));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-                ItemId = DBManager.ExecuteScalar("Item_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ItemId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
 
-            return ItemId;
+            return this;
         }
 
     }

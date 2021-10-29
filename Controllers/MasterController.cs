@@ -328,34 +328,45 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageCompanyMaster(CompanyMaster companyMaster)
         {
+            CompanyMaster objCompanyMaster = new CompanyMaster();
             try
             {
-                CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_InsertUpdate(companyMaster);
+                objCompanyMaster = companyMaster.CompanyMaster_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
-                    if (objCompanyMaster.CompanyId > 0)
+                    // In case of record successfully added or updated
+                    if (objCompanyMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Update Sucessfully!";
+                        ViewBag.Msg = objCompanyMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objCompanyMaster.IsSucceed && objCompanyMaster.CompanyId != -1)
+                    {
+                        ViewBag.Msg = objCompanyMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+                        
                     }
                     ModelState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "Unknown Error Occured !!!";
             }
             CompanyMaster newCompanyMaster = new CompanyMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newCompanyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newCompanyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", newCompanyMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/CompanyMaster.cshtml", (objCompanyMaster.IsSucceed ? newCompanyMaster : companyMaster));
+            
         }
 
         [HttpPost]
@@ -364,29 +375,29 @@ namespace IMS.Controllers
             try
             {
                 companyMaster.CompanyId = companyId;
-                CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_Delete(companyMaster);
+                CompanyMaster objCompanyMaster = companyMaster.CompanyMaster_Delete();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 companyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 companyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objCompanyMaster != null)
                 {
-                    if (objCompanyMaster.CompanyId > 0)
+                    if (objCompanyMaster.IsSucceed)
                     {
-                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = objCompanyMaster.ActionMsg }));
                     }
                     else
                     {
-                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
                     }
                 }
                 else
                 {
-                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
                 }
             }
             catch (Exception ex)
             {
-                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
             }
         }
         #endregion
@@ -763,5 +774,7 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/LocationMaster.cshtml", locationMaster);
         }
         #endregion
+
+
     }
 }

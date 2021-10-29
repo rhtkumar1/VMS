@@ -24,6 +24,8 @@ namespace IMS.Models.ViewModel
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
 
         public CompanyMaster()
         {
@@ -31,27 +33,33 @@ namespace IMS.Models.ViewModel
                 Loginid = CommonUtility.GetLoginID();
         }
 
-        public CompanyMaster CompanyMaster_InsertUpdate(CompanyMaster companyMaster)
+        public CompanyMaster CompanyMaster_InsertUpdate()
         {
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Company_Id", companyMaster.CompanyId));
-                SqlParameters.Add(new SqlParameter("@Title", companyMaster.Title));
-                SqlParameters.Add(new SqlParameter("@Code", companyMaster.Code));
-                SqlParameters.Add(new SqlParameter("@Type_Id", companyMaster.TypeId));
-                SqlParameters.Add(new SqlParameter("@Financial_Id", companyMaster.FinancialId));
-                SqlParameters.Add(new SqlParameter("@Address1", companyMaster.Address1));
-                SqlParameters.Add(new SqlParameter("@Address2", companyMaster.Address2));
-                SqlParameters.Add(new SqlParameter("@Ownership", companyMaster.Ownership));
-                SqlParameters.Add(new SqlParameter("@Remarks", companyMaster.Remarks));
-                SqlParameters.Add(new SqlParameter("@Loginid", companyMaster.Loginid));
-                companyMaster.CompanyId = DBManager.ExecuteScalar("Company_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
+                SqlParameters.Add(new SqlParameter("@Title", Title));
+                SqlParameters.Add(new SqlParameter("@Code", Code));
+                SqlParameters.Add(new SqlParameter("@Type_Id", TypeId));
+                SqlParameters.Add(new SqlParameter("@Financial_Id", FinancialId));
+                SqlParameters.Add(new SqlParameter("@Address1", Address1));
+                SqlParameters.Add(new SqlParameter("@Address2", Address2));
+                SqlParameters.Add(new SqlParameter("@Ownership", Ownership));
+                SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Company_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    CompanyId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
 
-            return companyMaster;
+            return this;
         }
 
         public DataTable CompanyMaster_Get()
@@ -67,19 +75,25 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public CompanyMaster CompanyMaster_Delete(CompanyMaster companyMaster)
+        public CompanyMaster CompanyMaster_Delete()
         {
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Company_Id", companyMaster.CompanyId));
-                SqlParameters.Add(new SqlParameter("@Loginid", companyMaster.Loginid));
-                companyMaster.CompanyId = DBManager.ExecuteScalar("Company_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Company_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    CompanyId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
 
-            return companyMaster;
+            return this;
         }
 
     }

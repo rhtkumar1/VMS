@@ -23,6 +23,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageCompanyMaster", "Master", FormMethod.Post, new { @id = "CompanyMaster" }))
                         {
@@ -164,6 +165,7 @@
 
     var editFormData = function (dilogType, CompanyMaster) {
         if (CompanyMaster.Company_Id > 0) {
+            $("#msg").text("");
             $("#CompanyId").val(CompanyMaster.Company_Id);
             $("#Title").val(CompanyMaster.Title);
             $("#Code").val(CompanyMaster.Code);
@@ -182,6 +184,7 @@
     };
 
     var deleteFormData = function (dialogType, CompanyMaster) {
+        $("#msg").text("");
         var result = confirm("Want to delete?");
         if (result == true) {
             IMSC.ajaxCall("POST", "/Master/DeleteCompanyMaster?companyId="+CompanyMaster.Company_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
