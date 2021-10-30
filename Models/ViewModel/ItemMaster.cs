@@ -31,6 +31,11 @@ namespace IMS.Models.ViewModel
         public SelectList Unit_Out_Lists { get; set; }
         public string GroupName { get; set; }
         public string ItemBarCode { get; set; }
+        // it would be a xml string for item location and party mapping grid
+        // e.i <ItemMaping><listnode Location_Id="1" Party_Id="3"/><listnode Location_Id="2" Party_Id="4"/></ItemMaping>
+        public string ItemMapping { get; set; }
+        // by default it would be 0 and if make any change in item location and party mapping grid then set it by 1 
+        public bool IsMappingChanged { get; set; }
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
@@ -69,6 +74,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@BaseUnitId", BaseUnitId));
                 SqlParameters.Add(new SqlParameter("@InwardUnitId", InwardUnitId));
                 SqlParameters.Add(new SqlParameter("@OutwardUnitId", OutwardUnitId));
+                SqlParameters.Add(new SqlParameter("@ItemMapping", ItemMapping));
+                SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
