@@ -1,4 +1,5 @@
 ﻿var IMSC = (function (scope) {
+    scope.listItems = [];
     scope.ajaxCall = function (method, url, data, dataType, f, headers = null, asyncHit = true) {
         $.ajax({
             type: method,
