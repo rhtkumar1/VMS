@@ -43,7 +43,8 @@ namespace IMS.Models.ViewModel
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
-
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
         public PartyMaster()
         {
             StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
@@ -79,7 +80,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Country", partyMaster.Country));
                 SqlParameters.Add(new SqlParameter("@Remarks", partyMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
-                partyMaster.PartyId = DBManager.ExecuteScalar("Party_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    PartyId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
@@ -110,7 +117,13 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", partyMaster.PartyId));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
-                partyMaster.PartyId = DBManager.ExecuteScalar("Party_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    PartyId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }

@@ -22,6 +22,9 @@ namespace IMS.Models.ViewModel
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
+
 
         public LocationMaster()
         {
@@ -40,7 +43,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@State_Id", locationMaster.StateId));
                 SqlParameters.Add(new SqlParameter("@Remarks", locationMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", locationMaster.Loginid));
-                locationMaster.LocationId = DBManager.ExecuteScalar("Location_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Location_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    LocationId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
@@ -69,7 +78,13 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Location_Id", locationMaster.LocationId));
                 SqlParameters.Add(new SqlParameter("@Loginid", locationMaster.Loginid));
-                locationMaster.LocationId = DBManager.ExecuteScalar("Location_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Location_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    LocationId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }

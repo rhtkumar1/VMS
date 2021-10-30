@@ -19,6 +19,9 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public SelectList MenuModule { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
+
 
         public RoleMaster()
         {
@@ -36,7 +39,14 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Code", roleMaster.Code));
                 SqlParameters.Add(new SqlParameter("@Remarks", roleMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
-                roleMaster.RoleId = DBManager.ExecuteScalar("Role_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Role_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    RoleId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+
             }
             catch (Exception ex)
             { throw ex; }
@@ -64,7 +74,13 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
                 SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
-                roleMaster.RoleId = DBManager.ExecuteScalar("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Role_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    RoleId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }

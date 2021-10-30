@@ -42,6 +42,8 @@ namespace IMS.Models.ViewModel
         int ModifiedBy { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
 
 
         private string _LoginId;
@@ -96,8 +98,15 @@ namespace IMS.Models.ViewModel
                     SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
                     SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
                     SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
-                    User_Id = Convert.ToInt32(DBManager.ExecuteScalar("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters));
-                 }
+                    DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        User_Id = Convert.ToInt32(dr[0]);
+                        IsSucceed = Convert.ToBoolean(dr[1]);
+                        ActionMsg = dr[2].ToString();
+                    }
+
+                }
                 return this;
             }
             catch (Exception ex)
@@ -113,10 +122,12 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@User_Id", User_Id));
                 SqlParameters.Add(new SqlParameter("@ModifiedBy", ModifiedBy));
-                int UserId = DBManager.ExecuteScalar("User_Master_Delete", CommandType.StoredProcedure, SqlParameters);
-                if(User_Id != UserId)
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    throw new Exception("-1");
+                    User_Id = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
                 }
             }
             catch (Exception ex)
