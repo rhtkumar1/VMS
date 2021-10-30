@@ -15,6 +15,8 @@ namespace IMS.Models.ViewModel
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
 
         public FinancialMaster()
         {
@@ -30,7 +32,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@From_date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(financialMaster.FromDate))));
                 SqlParameters.Add(new SqlParameter("@To_date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(financialMaster.ToDate))));
                 SqlParameters.Add(new SqlParameter("@Loginid", financialMaster.Loginid));
-                financialMaster.FinancialId = DBManager.ExecuteScalar("Financial_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Financial_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    FinancialId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }
@@ -58,7 +66,13 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Financial_id", financialMaster.FinancialId));
                 SqlParameters.Add(new SqlParameter("@Loginid", financialMaster.Loginid));
-                financialMaster.FinancialId = DBManager.ExecuteScalar("Financial_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Financial_Master_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    FinancialId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
             }
             catch (Exception ex)
             { throw ex; }

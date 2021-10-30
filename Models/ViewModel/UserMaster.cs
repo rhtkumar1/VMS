@@ -44,6 +44,8 @@ namespace IMS.Models.ViewModel
         int ModifiedBy { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string ActionMsg { get; set; }
+        public bool IsSucceed { get; set; }
 
 
         private string _LoginId;

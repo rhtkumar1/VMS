@@ -184,7 +184,6 @@
     };
 
     var deleteFormData = function (dialogType, CompanyMaster) {
-        $("#msg").text("");
         var result = confirm("Want to delete?");
         if (result == true) {
             IMSC.ajaxCall("POST", "/Master/DeleteCompanyMaster?companyId="+CompanyMaster.Company_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
