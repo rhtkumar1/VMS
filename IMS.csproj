@@ -269,6 +269,7 @@
     <Content Include="Views\Admin\Masters\HSNSACMaster.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Admin\Masters\ManageUserMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\UnitMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

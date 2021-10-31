@@ -29,19 +29,19 @@
                             @Html.HiddenFor(m => m.ItemId, htmlAttributes: new { @id = "ItemId" })
                             @Html.HiddenFor(m => m.AppToken)
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Code<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Group</label>
                                     @{
                                         var groupItems = new List<SelectListItem>{
@@ -53,9 +53,8 @@
                                     @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Nature</label>
                                     @{
                                         var natureItems = new List<SelectListItem>{
@@ -67,33 +66,34 @@
                                     @Html.DropDownListFor(m => m.Nature, new SelectList(natureItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Dead Stock Days<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.DeadStockDays, htmlAttributes: new { @placeholder = "Dead Stock Days", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Min Level<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.MinLevel, htmlAttributes: new { @placeholder = "Min Level", @class = "form-control", @required = "required" })
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Max Level<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.MaxLevel, htmlAttributes: new { @placeholder = "Max Level", @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Reorder Level<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.ReorderLevel, htmlAttributes: new { @placeholder = "Reorder Level", @class = "form-control", @required = "required" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
                                     @{
                                         var unitItems = new List<SelectListItem>{
@@ -105,9 +105,8 @@
                                     @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(unitItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Inward Unit<span class="mandatory">*</span></label>
                                     @{
                                         var inwardItems = new List<SelectListItem>{
@@ -120,7 +119,7 @@
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Outward Unit<span class="mandatory">*</span></label>
                                     @{
                                         var outwardItems = new List<SelectListItem>{
@@ -133,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>HSN SAC<span class="mandatory">*</span></label>
                                     @{
                                         var hsnItems = new List<SelectListItem>{
@@ -169,6 +168,45 @@
                     </div>
                 </div>
                 <div class="blank-page">
+                    @using (Html.BeginForm("ItemPartyPriorityMapping", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "ItemPartyPriorityMapping" }))
+                    {
+                        @Html.HiddenFor(m => m.ItemId, htmlAttributes: new { @id = "ItemId" })
+                        <div class="styled-input">
+                            <div class="col-md-12 form-group">
+                                <h5>Item Party Priority Mapping</h5>
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>Location<span class="mandatory">*</span></label>
+                                @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>Party<span class="mandatory">*</span></label>
+                                @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-1">
+                            <div class="appointment-btn text-lg-right">
+                                <button type="button" name="btnAdd" id="btnAdd" class="btn btn-success pull-right">Add</button>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="appointment-btn text-lg-right">
+                                <button type="button" name="btnRemove" id="btnRemove" class="btn btn-danger pull-right">Remove</button>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="appointment-btn text-lg-right">
+                                <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="blank-page">
                     <div id="listGrid"></div>
                 </div>
             </div>
@@ -181,6 +219,12 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#btnAdd").click(function(){
+
+        });
+        $("#btnRemove").click(function(){
+
+        });
         IMSC.ajaxCall("GET", "/Master/GetItemMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
          var ItemLists = JSON.parse(d);
          if (ItemLists !== "null") {

@@ -46,21 +46,30 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageFinancialMaster(FinancialMaster financialMaster)
         {
+            FinancialMaster objFinancialMaster = new FinancialMaster();
             try
             {
-                FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
+                objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objFinancialMaster != null)
                 {
-                    if (objFinancialMaster.FinancialId > 0)
+                    // In case of record successfully added or updated
+                    if (objFinancialMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = objFinancialMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objFinancialMaster.IsSucceed && objFinancialMaster.FinancialId != -1)
+                    {
+                        ViewBag.Msg = objFinancialMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                     ModelState.Clear();
                 }
@@ -73,7 +82,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newFinancialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newFinancialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", newFinancialMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/FinancialMaster.cshtml", (objFinancialMaster.IsSucceed ? newFinancialMaster : financialMaster));
         }
 
         [HttpPost]
@@ -138,21 +148,30 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageStateMaster(StateMaster stateMaster)
         {
+            StateMaster objStateMaster = new StateMaster();
             try
             {
-                StateMaster objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
+                objStateMaster = stateMaster.StateMaster_InsertUpdate(stateMaster);
                 AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
                 stateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 stateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objStateMaster != null)
                 {
-                    if (objStateMaster.StateId > 0)
+                    // In case of record successfully added or updated
+                    if (objStateMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = objStateMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objStateMaster.IsSucceed && objStateMaster.StateId != -1)
+                    {
+                        ViewBag.Msg = objStateMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                     ModelState.Clear();
                 }
@@ -165,7 +184,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newStateMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newStateMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/StateMaster.cshtml", newStateMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/StateMaster.cshtml", (objStateMaster.IsSucceed ? newStateMaster : stateMaster));
         }
 
         [HttpPost]
@@ -231,22 +251,31 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageLocationMaster(LocationMaster locationMaster)
         {
+            LocationMaster objLocationMaster = new LocationMaster();
             try
             {
                 //locationMaster.Loginid = SyssoftechSession
-                LocationMaster objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
+                objLocationMaster = locationMaster.LocationMaster_InsertUpdate(locationMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 locationMaster.AppToken = AppToken;
                 locationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objLocationMaster != null)
                 {
-                    if (objLocationMaster.LocationId > 0)
+                    // In case of record successfully added or updated
+                    if (objLocationMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = objLocationMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objLocationMaster.IsSucceed && objLocationMaster.LocationId != -1)
+                    {
+                        ViewBag.Msg = objLocationMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                 }
                 ModelState.Clear();
@@ -259,7 +288,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newLocationMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newLocationMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/LocationMaster.cshtml", newLocationMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/LocationMaster.cshtml", (objLocationMaster.IsSucceed ? newLocationMaster : locationMaster));
         }
 
         [HttpPost]
@@ -432,21 +462,30 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageOfficeMaster(OfficeMaster officeMaster)
         {
+            OfficeMaster objOfficeMaster = new OfficeMaster();
             try
             {
-                OfficeMaster objOfficeMaster = officeMaster.OfficeMaster_InsertUpdate(officeMaster);
+                objOfficeMaster = officeMaster.OfficeMaster_InsertUpdate(officeMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 officeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 officeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objOfficeMaster != null)
                 {
-                    if (objOfficeMaster.OfficeId > 0)
+                    // In case of record successfully added or updated
+                    if (objOfficeMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = objOfficeMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objOfficeMaster.IsSucceed && objOfficeMaster.OfficeId != -1)
+                    {
+                        ViewBag.Msg = objOfficeMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                     ModelState.Clear();
                 }
@@ -459,7 +498,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newOfficeMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newOfficeMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", newOfficeMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/OfficeMaster.cshtml", (objOfficeMaster.IsSucceed ? newOfficeMaster : officeMaster));
         }
 
         [HttpPost]
@@ -525,21 +565,33 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManageRoleMaster(RoleMaster roleMaster)
         {
+            RoleMaster objRoleMaster = new RoleMaster();
             try
             {
-                RoleMaster objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
+                objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-                if (objRoleMaster.RoleId > 0)
+                if (objRoleMaster != null)
                 {
-                    ViewBag.Msg = "Updated Sucessfully!";
+                    // In case of record successfully added or updated
+                    if (objRoleMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objRoleMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objRoleMaster.IsSucceed && objRoleMaster.RoleId != -1)
+                    {
+                        ViewBag.Msg = objRoleMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
                 }
-                else
-                {
-                    ViewBag.Msg = "Saved Sucessfully!";
-                }
-                ModelState.Clear();
             }
             catch (Exception ex)
             {
@@ -549,7 +601,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newRoleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newRoleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/RoleMaster.cshtml", newRoleMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/RoleMaster.cshtml", (objRoleMaster.IsSucceed ? newRoleMaster : roleMaster));
         }
 
         [HttpPost]
@@ -615,21 +668,30 @@ namespace IMS.Controllers
         [HttpPost]
         public ActionResult ManagePartyMaster(PartyMaster partyMaster)
         {
+            PartyMaster objPartyMaster = new PartyMaster();
             try
             {
-                PartyMaster objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
+                objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objPartyMaster != null)
                 {
-                    if (objPartyMaster.PartyId > 0)
+                    // In case of record successfully added or updated
+                    if (objPartyMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfuly!";
+                        ViewBag.Msg = objPartyMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!objPartyMaster.IsSucceed && objPartyMaster.OfficeId != -1)
+                    {
+                        ViewBag.Msg = objPartyMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                     ModelState.Clear();
                 }
@@ -642,7 +704,8 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             newPartyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newPartyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/PartyMaster.cshtml", newPartyMaster);
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/PartyMaster.cshtml", (objPartyMaster.IsSucceed ? newPartyMaster : partyMaster));
         }
 
         [HttpPost]
@@ -736,13 +799,21 @@ namespace IMS.Controllers
                 bool bIsSuccess = userMaster.UserMaster_InsertUpdate(userMaster);
                 if (bIsSuccess)
                 {
-                    if (userid > 0)
+                    // In case of record successfully added or updated
+                    if (userMaster.IsSucceed)
                     {
-                        ViewBag.Msg = "Updated Sucessfully!";
+                        ViewBag.Msg = userMaster.ActionMsg;
                     }
+                    // In case of record already exists
+                    else if (!userMaster.IsSucceed && userMaster.User_Id != -1)
+                    {
+                        ViewBag.Msg = userMaster.ActionMsg;
+                    }
+                    // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Saved Sucessfully!";
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
                     }
                 }
                 ModelState.Clear();
@@ -985,6 +1056,109 @@ namespace IMS.Controllers
                 ViewBag.Msg = "some error occurred, please try again..!";
             }
             return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
+        }
+        #endregion
+
+        #region Unit Master
+        public ActionResult UnitIndex()
+        {
+            UnitMaster unitMaster = new UnitMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            unitMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            unitMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/UnitMaster.cshtml", unitMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GetUnitMaster(UnitMaster unitMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = unitMaster.UnitMaster_Get();
+                dt.TableName = "UnitLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageUnitMaster(UnitMaster unitMaster)
+        {
+            UnitMaster objUnitMaster = new UnitMaster();
+            try
+            {
+                objUnitMaster = unitMaster.UnitMaster_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                unitMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                unitMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objUnitMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objUnitMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objUnitMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objUnitMaster.IsSucceed && objUnitMaster.UnitId != -1)
+                    {
+                        ViewBag.Msg = objUnitMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            UnitMaster newUnitMaster = new UnitMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newUnitMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newUnitMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/UnitMaster.cshtml", (objUnitMaster.IsSucceed ? newUnitMaster : unitMaster));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteUnitMaster(UnitMaster unitMaster, int UnitId)
+        {
+            try
+            {
+                unitMaster.UnitId = UnitId;
+                UnitMaster objUnitMaster = unitMaster.UnitMaster_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                unitMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                unitMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objUnitMaster != null)
+                {
+                    if (objUnitMaster.UnitId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/UnitMaster.cshtml", unitMaster);
         }
         #endregion
     }

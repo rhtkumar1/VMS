@@ -23,7 +23,7 @@
         editing: false,
         sorting: true,
         autoload: true,
-        pageSize: 15,
+        pageSize: 10,
         pageButtonCount: 5,
         paging: true
     };

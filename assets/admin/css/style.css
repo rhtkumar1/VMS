@@ -2060,35 +2060,28 @@ td i {
     color: #fff;
 }
 
-td span {
+td span.fam {
     color: #fff;
     font-size: 0.8em;
     padding: 4px 7px;
     font-family: 'Muli-Regular';
 }
 
-    td span.fam {
-        color: #fff;
-        font-size: 0.8em;
-        padding: 4px 7px;
-        font-family: 'Muli-Regular';
-    }
+td span.fam {
+    background: #3BB2D0;
+}
 
-    td span.fam {
-        background: #3BB2D0;
-    }
+td span.ur {
+    background: #FFA800;
+}
 
-    td span.ur {
-        background: #FFA800;
-    }
+td span.work {
+    background: #7F8C8D;
+}
 
-    td span.work {
-        background: #7F8C8D;
-    }
-
-    td span.mar {
-        background: #1ABC9C;
-    }
+td span.mar {
+    background: #1ABC9C;
+}
 
 .compose h2 {
     font-size: 1.2em;

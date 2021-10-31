@@ -23,12 +23,16 @@ namespace IMS.Models.ViewModel
         public int InwardUnitId { get; set; }
         public int OutwardUnitId { get; set; }
         public int HSN_SAC_Id { get; set; }
+        public int LocationId { get; set; }
+        public int PartyId { get; set; }
         public string HSN_SAC { get; set; }
         public SelectList HSN_SAC_Lists { get; set; }
         public SelectList GroupLists { get; set; }
         public SelectList UnitLists { get; set; }
         public SelectList Unit_In_Lists { get; set; }
         public SelectList Unit_Out_Lists { get; set; }
+        public SelectList LocationLists { get; set; }
+        public SelectList PartyLists { get; set; }
         public string GroupName { get; set; }
         public string ItemBarCode { get; set; }
         // it would be a xml string for item location and party mapping grid
@@ -51,6 +55,8 @@ namespace IMS.Models.ViewModel
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
+            LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
             Loginid = CommonUtility.GetLoginID();
