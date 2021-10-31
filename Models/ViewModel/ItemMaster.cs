@@ -112,6 +112,19 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
+        public DataTable Item_Party_Mapping_Get()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = DBManager.ExecuteDataTable("Item_Party_Mapping_Getdata", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
         public ItemMaster ItemMaster_Delete()
         {
             try
