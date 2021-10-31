@@ -22,7 +22,7 @@ namespace IMS.Models.ViewModel
         public string Mobile { get; set; }
         public string Email { get; set; }
         public string Gender { get; set; }
-        public DateTime DOB { get; set; }
+        public string DOB { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }
@@ -31,7 +31,7 @@ namespace IMS.Models.ViewModel
         public string Relegion { get; set; }
         public string Pincode { get; set; }
         public string Country { get; set; }
-        public DateTime DOJ { get; set; }
+        public string DOJ { get; set; }
         public int PrimaryRole { get; set; }
         public SelectList RoleLists { get; set; }
         public SelectList LocationLists { get; set; }
@@ -85,7 +85,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Mobile", userMaster.Mobile));
                 SqlParameters.Add(new SqlParameter("@Email", userMaster.Email));
                 SqlParameters.Add(new SqlParameter("@Gender", userMaster.Gender));
-                SqlParameters.Add(new SqlParameter("@DOB", Convert.ToDateTime(userMaster.DOB)));
+                SqlParameters.Add(new SqlParameter("@DOB", CommonUtility.GetDateDDMMYYYY(userMaster.DOB)));
                 SqlParameters.Add(new SqlParameter("@Address1", userMaster.Address1));
                 SqlParameters.Add(new SqlParameter("@Address2", userMaster.Address2));
                 SqlParameters.Add(new SqlParameter("@City", userMaster.City));
@@ -93,14 +93,14 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Relegion", userMaster.Relegion));
                 SqlParameters.Add(new SqlParameter("@Pincode", userMaster.Pincode));
                 SqlParameters.Add(new SqlParameter("@Country", "India"));
-                SqlParameters.Add(new SqlParameter("@DOJ", Convert.ToDateTime(userMaster.DOJ)));
+                SqlParameters.Add(new SqlParameter("@DOJ", CommonUtility.GetDateDDMMYYYY(userMaster.DOJ)));
                 SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole));
                 SqlParameters.Add(new SqlParameter("@Remarks", userMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
                 SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
                 SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
-                User_Id = Convert.ToInt32(DBManager.ExecuteScalar("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters));
-                if (User_Id > 0)
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                if (Convert.ToInt32(dt.Rows[0]["User_Id"]) > 0)
                 {
                     bIsSuccess = true;
                 }
@@ -177,14 +177,14 @@ namespace IMS.Models.ViewModel
                     Mobile = drUser["Mobile"].ToString(),
                     Email = drUser["Email"].ToString(),
                     Gender = drUser["Gender"].ToString(),
-                    DOB = Convert.ToDateTime(drUser["DOB"]),
+                    DOB = drUser["DOB"].ToString(),
                     Address1 = drUser["Address1"].ToString(),
                     Address2 = drUser["Address2"].ToString(),
                     City = drUser["City"].ToString(),
                     State = drUser["State"].ToString(),
                     Relegion = drUser["Relegion"].ToString(),
                     Pincode = drUser["Pincode"].ToString(),
-                    DOJ = Convert.ToDateTime(drUser["DOJ"]),
+                    DOJ = drUser["DOJ"].ToString(),
                     PrimaryRole = Convert.ToInt32(drUser["PrimaryRole"]),
                     Remarks = drUser["Remarks"].ToString(),
                     sRoles = dtUserRollMapping.Rows[0]["Roles"].ToString()
