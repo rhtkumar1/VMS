@@ -43,17 +43,8 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Type</label>
-                                    @{var lstType = new List<SelectListItem>{
-                                          new SelectListItem { Text = "1", Value="1" },
-                                          new SelectListItem { Text = "2", Value="2" },
-                                           new SelectListItem { Text = "3", Value="3" },
-                                          new SelectListItem { Text = "4", Value="4" },
-                                           new SelectListItem { Text = "5", Value="5" },
-                                          new SelectListItem { Text = "6", Value="6" }
-                                     };
-                                    }
-                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(lstType, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    <label>Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Type", @required = "required",@class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">

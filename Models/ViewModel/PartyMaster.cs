@@ -18,6 +18,7 @@ namespace IMS.Models.ViewModel
         public int OfficeId { get; set; }
         public SelectList OfficeLists { get; set; }
         public int GroupId { get; set; }
+        public SelectList GroupLists { get; set; }
         public bool MaintainRef { get; set; }
         public int CreditDays { get; set; }
         public decimal CreditLimit { get; set; }
@@ -49,6 +50,7 @@ namespace IMS.Models.ViewModel
         {
             StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+            GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
         }
 

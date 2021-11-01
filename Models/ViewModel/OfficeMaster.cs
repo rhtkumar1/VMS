@@ -16,6 +16,8 @@ namespace IMS.Models.ViewModel
         public int TypeId { get; set; }
         public int LocationId { get; set; }
         public SelectList LocationLists { get; set; }
+        public SelectList TypeLists { get; set; }
+        public SelectList GSTNatureLists { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string GSTNo { get; set; }
@@ -36,6 +38,8 @@ namespace IMS.Models.ViewModel
         public OfficeMaster()
         {
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
+            TypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=1 And IsActive=1"), "Id", "Value");
+            GSTNatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=2 And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
         }
 

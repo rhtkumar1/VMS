@@ -155,7 +155,9 @@
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
+    <Compile Include="Models\ViewModel\GroupMaster.cs" />
     <Compile Include="Models\ViewModel\HSNSACMaster.cs" />
+    <Compile Include="Models\ViewModel\ItemGroupMaster.cs" />
     <Compile Include="Models\ViewModel\ItemMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
     <Compile Include="Models\CommonModel\Menue_Master.cs" />

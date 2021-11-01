@@ -27,6 +27,7 @@ namespace IMS.Models.ViewModel
         public int PartyId { get; set; }
         public string HSN_SAC { get; set; }
         public SelectList HSN_SAC_Lists { get; set; }
+        public SelectList NatureLists { get; set; }
         public SelectList GroupLists { get; set; }
         public SelectList UnitLists { get; set; }
         public SelectList Unit_In_Lists { get; set; }
@@ -57,6 +58,8 @@ namespace IMS.Models.ViewModel
             HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
+            GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
+            NatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
             Loginid = CommonUtility.GetLoginID();

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -12,6 +14,7 @@ namespace IMS.Models.ViewModel
         public string Title { get; set; }
         public string Code { get; set; }
         public int TypeId { get; set; }
+        public SelectList TypeLists { get; set; }
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
@@ -24,7 +27,8 @@ namespace IMS.Models.ViewModel
 
         public StateMaster()
         {
-            Loginid= CommonUtility.GetLoginID();
+            TypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10009 And IsActive=1"), "Id", "Value");
+            Loginid = CommonUtility.GetLoginID();
         }
         public StateMaster StateMaster_InsertUpdate(StateMaster stateMaster)
         {
