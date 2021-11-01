@@ -272,6 +272,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Admin\Masters\ManageUserMaster.cshtml" />
     <Content Include="Views\Admin\Masters\UnitMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\ItemGroupMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\GroupMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

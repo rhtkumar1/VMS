@@ -51,11 +51,11 @@
                                 <div class="col-md-3 form-group">
                                     <label>Group<span class="mandatory">*</span></label>
                                     @{var groupItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Office", Value="" },
-                                          new SelectListItem { Text = "Group-1", Value="1" },
-                                          new SelectListItem { Text = "Group-2", Value="2" },
-                                           new SelectListItem { Text = "Group-3", Value="3" },
-                                     };
+                                                                  new SelectListItem { Text = "Select Office", Value="" },
+                                                                  new SelectListItem { Text = "Group-1", Value="1" },
+                                                                  new SelectListItem { Text = "Group-2", Value="2" },
+                                                                   new SelectListItem { Text = "Group-3", Value="3" },
+                                                             };
                                     }
                                     @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
@@ -121,11 +121,11 @@
                                 <div class="col-md-4 form-group">
                                     <label>Gender<span class="mandatory">*</span></label>
                                     @{var genderItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Gender", Value="" },
-                                          new SelectListItem { Text = "Male", Value="1" },
-                                          new SelectListItem { Text = "Female", Value="2" },
-                                           new SelectListItem { Text = "Other", Value="3" },
-                                     };
+                                                                  new SelectListItem { Text = "Select Gender", Value="" },
+                                                                  new SelectListItem { Text = "Male", Value="1" },
+                                                                  new SelectListItem { Text = "Female", Value="2" },
+                                                                   new SelectListItem { Text = "Other", Value="3" },
+                                                             };
                                     }
                                     @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
@@ -203,13 +203,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $(document).ready(function () {
-            $('#OfficeId').select2();
-            $('#GroupId').select2();
-            $('#Gender').select2();
-            $('#State').select2();
-            $('#Region').select2();
-        });
         IMSC.ajaxCall("GET", "/Master/GetPartyMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {

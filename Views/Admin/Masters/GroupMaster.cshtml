@@ -1,0 +1,163 @@
+﻿@model IMS.Models.ViewModel.GroupMaster
+@{
+    ViewBag.Title = "Group Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Group Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageGroupMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "GroupMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.GroupId, htmlAttributes: new { @id = "GroupId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Under Group<span class="mandatory">*</span></label>
+                                    @{
+                                        var underGroup = new List<SelectListItem>{
+                                               new SelectListItem { Text = "Sundry Debtors", Value="1" },
+                                               new SelectListItem { Text = "Sundry Creditor", Value="2" },
+                                              };
+                                    }
+                                    @Html.DropDownListFor(m => m.UnderGroupId, new SelectList(underGroup, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Under Group", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                @{
+                                    var reportGroup = new List<SelectListItem>{
+                                    new SelectListItem { Text = "Assets", Value="1" },
+                                    new SelectListItem { Text = "libilites", Value="2" },
+                                   };
+                                }
+                                <div class="col-md-4 form-group">
+                                    <label>Report Group<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.ReportGroupId, new SelectList(reportGroup, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Reporting Group", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control", @id = "Remarks" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        IMSC.ajaxCall("GET", "/Master/GetGroupMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var GroupLists = JSON.parse(d);
+         if (GroupLists !== "null") {
+             var fields = [
+                 { name: "Group_Id", css: "hidden" },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
+                 { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 50},
+                 {
+                     title: "Action",
+                     width: 30,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 }
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     GroupLists: GroupLists,
+                     loadData: function (filter) {
+                         return $.grep(this.GroupLists, function (GroupList) {
+                             return ((!filter.Title || GroupList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        });
+        var editFormData = function (dilogType, GroupMaster) {
+            $("msg").text = "";
+            if (GroupMaster.Group_Id > 0) {
+                $("#GroupId").val(GroupMaster.Group_Id);
+                $("#Title").val(GroupMaster.Title);
+                $("#UnderGroupId").val(GroupMaster.UnderGroup_Id);
+                $("#ReportGroupId").val(GroupMaster.ReportingGroup_Id);
+                $("#Remarks").val(GroupMaster.Remarks);
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#GroupId").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
+
+        var deleteFormData = function (dialogType, GroupMaster) {
+            var result = confirm("Want to delete?");
+            if (result == true) {
+            IMSC.ajaxCall("POST", "/Master/DeleteGroupMaster?GroupId=" + GroupMaster.Group_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+            } else {
+                return false;
+            }
+    };
+</script>

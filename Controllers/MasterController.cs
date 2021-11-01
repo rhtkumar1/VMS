@@ -1161,5 +1161,211 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/UnitMaster.cshtml", unitMaster);
         }
         #endregion
+
+        #region Group Master
+        public ActionResult GroupIndex()
+        {
+            GroupMaster groupMaster = new GroupMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            groupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            groupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/GroupMaster.cshtml", groupMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GetGroupMaster(GroupMaster groupMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = groupMaster.GroupMaster_Get();
+                dt.TableName = "GroupLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageGroupMaster(GroupMaster groupMaster)
+        {
+            GroupMaster objGroupMaster = new GroupMaster();
+            try
+            {
+                objGroupMaster = groupMaster.GroupMaster_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                groupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                groupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objGroupMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objGroupMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objGroupMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objGroupMaster.IsSucceed && objGroupMaster.GroupId != -1)
+                    {
+                        ViewBag.Msg = objGroupMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            GroupMaster newGroupMaster = new GroupMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newGroupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newGroupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/GroupMaster.cshtml", (objGroupMaster.IsSucceed ? newGroupMaster : groupMaster));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteGroupMaster(GroupMaster groupMaster, int GroupId)
+        {
+            try
+            {
+                groupMaster.GroupId = GroupId;
+                GroupMaster objGroupMaster = groupMaster.GroupMaster_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                groupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                groupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objGroupMaster != null)
+                {
+                    if (objGroupMaster.GroupId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/GroupMaster.cshtml", groupMaster);
+        }
+        #endregion
+
+        #region ItemGroup Master
+        public ActionResult ItemGroupIndex()
+        {
+            ItemGroupMaster itemGroupMaster = new ItemGroupMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            itemGroupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            itemGroupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/ItemGroupMaster.cshtml", itemGroupMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GetItemGroupMaster(ItemGroupMaster itemGroupMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = itemGroupMaster.ItemGroupMaster_Get();
+                dt.TableName = "ItemGroupLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageItemGroupMaster(ItemGroupMaster itemGroupMaster)
+        {
+            ItemGroupMaster objItemGroupMaster = new ItemGroupMaster();
+            try
+            {
+                objItemGroupMaster = itemGroupMaster.ItemGroupMaster_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemGroupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                itemGroupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objItemGroupMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objItemGroupMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objItemGroupMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objItemGroupMaster.IsSucceed && objItemGroupMaster.GroupId != -1)
+                    {
+                        ViewBag.Msg = objItemGroupMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            ItemGroupMaster newItemGroupMaster = new ItemGroupMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newItemGroupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newItemGroupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/ItemGroupMaster.cshtml", (objItemGroupMaster.IsSucceed ? newItemGroupMaster : itemGroupMaster));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteItemGroupMaster(ItemGroupMaster itemGroupMaster, int GroupId)
+        {
+            try
+            {
+                itemGroupMaster.GroupId = GroupId;
+                ItemGroupMaster objItemGroupMaster = itemGroupMaster.ItemGroupMaster_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemGroupMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                itemGroupMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objItemGroupMaster != null)
+                {
+                    if (objItemGroupMaster.GroupId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/ItemGroupMaster.cshtml", itemGroupMaster);
+        }
+        #endregion
     }
 }
