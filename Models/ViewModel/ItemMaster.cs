@@ -76,11 +76,13 @@ namespace IMS.Models.ViewModel
         {
             try
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                string sString = string.Empty;
                 foreach (var item in PartyAndLocationMapping)
                 {
-                     stringBuilder.Append("<ItemMaping><listnode Location_Id=" + Convert.ToString(item.LocationId) + " Party_Id=" + Convert.ToString(item.PartyId) + "/>");
+                    sString += "<listnode Location_Id=" + Convert.ToString(item.LocationId) + " Party_Id=" + Convert.ToString(item.PartyId) + "/>";
                 }
+                ItemMapping = "<ItemMaping>" + sString + "</ItemMaping>";
+
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Item_Id", ItemId));
                 SqlParameters.Add(new SqlParameter("@Title", Title));
@@ -95,7 +97,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@BaseUnitId", BaseUnitId));
                 SqlParameters.Add(new SqlParameter("@InwardUnitId", InwardUnitId));
                 SqlParameters.Add(new SqlParameter("@OutwardUnitId", OutwardUnitId));
-                SqlParameters.Add(new SqlParameter("@ItemMapping", Convert.ToString(stringBuilder)));
+                SqlParameters.Add(new SqlParameter("@ItemMapping", ItemMapping));
                 SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
