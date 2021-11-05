@@ -1,0 +1,268 @@
+﻿@model IMS.Models.ViewModel.ItemMaster
+@{
+    ViewBag.Title = "Item Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+    string sBtnName = Model.ItemMappingList.Count > 0 ? "Edit Party & Location Mapping" : "Add Party & Location Mapping";
+    string sClass = Model.ItemMappingList.Count > 0 ? "btn btn-warning" : "btn btn-primary";
+}
+
+@{
+    var AppToken = Convert.ToString(Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Item Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageItemMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "ItemMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.ItemId, htmlAttributes: new { @id = "ItemId" })
+                            @Html.HiddenFor(m => m.ItemMasterValues, htmlAttributes: new { @id = "ItemMasterValues" })
+                            @Html.HiddenFor(m => m.IsMappingChanged, htmlAttributes: new { @id = "IsMappingChanged" })
+                            @Html.HiddenFor(m => m.ItemMapping, htmlAttributes: new { @id = "ItemMapping" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Group</label>
+                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(Model.GroupLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Nature</label>
+                                    @Html.DropDownListFor(m => m.Nature, new SelectList(Model.NatureLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Dead Stock Days<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.DeadStockDays, htmlAttributes: new { @placeholder = "Dead Stock Days", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Min Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MinLevel, htmlAttributes: new { @placeholder = "Min Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Max Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MaxLevel, htmlAttributes: new { @placeholder = "Max Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Reorder Level<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ReorderLevel, htmlAttributes: new { @placeholder = "Reorder Level", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Unit<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Inward Unit<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.InwardUnitId, new SelectList(Model.Unit_In_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Outward Unit<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OutwardUnitId, new SelectList(Model.Unit_Out_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>HSN SAC<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <button type="button" id="btnPartyAndLocationMapping" class="@sClass" name="btnPartyAndLocationMapping">@sBtnName</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div id="divShowPartyAndLocationMapping" style=" display:none">
+                                <div class="styled-input">
+                                    <div class="col-md-12 form-group">
+                                        <h5>Item Party Priority Mapping</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="tblCustomers" class="table" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Location</th>
+                                                <th>Party</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var oMapping in Model.ItemMappingList.AsEnumerable())
+                                            {
+                                                var location = Model.LocationLists.Where(x => Convert.ToInt32(x.Value) == Convert.ToInt32(oMapping.Location_Id)).FirstOrDefault();
+                                                string sLocationName = location != null ? location.Text : "Location Not Added";
+                                                var party = Model.PartyLists.Where(x => Convert.ToInt32(x.Value) == Convert.ToInt32(oMapping.Party_Id)).FirstOrDefault();
+                                                string sPartyName = party != null ? party.Text : "Party Not Added";
+                                                <tr>
+                                                    <td data-party-id="@Convert.ToInt32(oMapping.Party_Id)">
+                                                        @sLocationName
+                                                    </td>
+                                                    <td data-location-id="@Convert.ToInt32(oMapping.Location_Id)">
+                                                        @sPartyName
+                                                    </td>
+                                                    <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>
+                                                    <label>Select Location<span class="mandatory">*</span></label>
+                                                    @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "addLocationId", @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    <label>Select Party<span class="mandatory">*</span></label>
+                                                    @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "addPartyId", @class = "form-control" })
+                                                </td>
+                                                <td><input type="button" style="margin-top: 24px;" id="btnAdd" value="btnAdd" /></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="col-md-1 pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+        $("body").on("click", "#btnAdd", function () {
+            var bAdded = true;
+            $("#IsMappingChanged").val(bAdded);
+            //Reference the Party and Location ddl.
+            var ddlParty = $("#addPartyId");
+            var ddlLocation = $("#addLocationId");
+            if ($("#tblCustomers TBODY TR").length > 0) {
+                $("#tblCustomers TBODY TR").each(function () {
+                    var row = $(this);
+                    var partyId = parseInt(row.find("TD").eq(0).attr('data-party-id'));
+                    var locationId = parseInt(row.find("TD").eq(1).attr('data-location-id'));
+                    if (parseInt(ddlParty.val()) != partyId && parseInt(ddlLocation.val()) != locationId) {
+                        bAdded = false;
+                    } else {
+                        bAdded = true;
+                    }
+                });
+            } else {
+                bAdded = false;
+            }
+
+            if (!bAdded) {
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblCustomers > TBODY")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //Add Party cell.
+                var cell = $(row.insertCell(-1));
+                cell.html(ddlParty.text());
+                cell.attr('data-party-id', ddlParty.val())
+                //Add Location cell.
+                cell = $(row.insertCell(-1));
+                cell.html(ddlLocation.text());
+                cell.attr('data-location-id', ddlLocation.val())
+                //Add Button cell.
+                cell = $(row.insertCell(-1));
+                var btnRemove = $("<input />");
+                btnRemove.attr("type", "button");
+                btnRemove.attr("onclick", "Remove(this);");
+                btnRemove.val("Remove");
+                cell.append(btnRemove);
+            } else {
+                alert("Location and party alreday added. please select another.", "Select Valid Party And Location");
+            }
+        });
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            var ItemMasterValues = [];
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var oMapping = {};
+                oMapping.PartyId = row.find("TD").eq(0).attr('data-party-id');
+                oMapping.LocationId = row.find("TD").eq(1).attr('data-location-id');
+                ItemMasterValues.push(oMapping);
+            });
+            $("#ItemMapping").val(JSON.stringify(ItemMasterValues));
+        });
+        $("#btnPartyAndLocationMapping").click(function () {
+            $("#divShowPartyAndLocationMapping").toggle();
+        });
+    });
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).text();
+        if (confirm("Do you want to remove this mapping.", "Remove location and party")) {
+            //Get the reference of the Table.
+            var table = $("#tblCustomers")[0];
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>

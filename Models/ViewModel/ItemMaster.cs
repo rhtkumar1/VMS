@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Dynamic;
+using System.Text;
 using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
@@ -39,6 +41,9 @@ namespace IMS.Models.ViewModel
         // it would be a xml string for item location and party mapping grid
         // e.i <ItemMaping><listnode Location_Id="1" Party_Id="3"/><listnode Location_Id="2" Party_Id="4"/></ItemMaping>
         public string ItemMapping { get; set; }
+        public string ItemMasterValues { get; set; }
+        public List<PartyAndLocationMapping> PartyAndLocationMapping { get; set; }
+        public List<dynamic> ItemMappingList { get; set; }
         // by default it would be 0 and if make any change in item location and party mapping grid then set it by 1 
         public bool IsMappingChanged { get; set; }
         public string Remarks { get; set; }
@@ -63,12 +68,19 @@ namespace IMS.Models.ViewModel
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
             Loginid = CommonUtility.GetLoginID();
+            ItemMappingList = new List<dynamic>();
+            PartyAndLocationMapping = new List<PartyAndLocationMapping>();
         }
 
         public ItemMaster ItemMaster_InsertUpdate()
         {
             try
             {
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (var item in PartyAndLocationMapping)
+                {
+                     stringBuilder.Append("<ItemMaping><listnode Location_Id=" + Convert.ToString(item.LocationId) + " Party_Id=" + Convert.ToString(item.PartyId) + "/>");
+                }
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Item_Id", ItemId));
                 SqlParameters.Add(new SqlParameter("@Title", Title));
@@ -83,7 +95,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@BaseUnitId", BaseUnitId));
                 SqlParameters.Add(new SqlParameter("@InwardUnitId", InwardUnitId));
                 SqlParameters.Add(new SqlParameter("@OutwardUnitId", OutwardUnitId));
-                SqlParameters.Add(new SqlParameter("@ItemMapping", ItemMapping));
+                SqlParameters.Add(new SqlParameter("@ItemMapping", Convert.ToString(stringBuilder)));
                 SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
@@ -100,7 +112,6 @@ namespace IMS.Models.ViewModel
 
             return this;
         }
-
 
         public DataTable ItemMaster_Get()
         {
@@ -148,5 +159,54 @@ namespace IMS.Models.ViewModel
 
             return this;
         }
+
+        public ItemMaster ItemMaster_Get_By_Id(int item_Id)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", item_Id));
+                DataSet ds = DBManager.ExecuteDataSetWithParameter("Item_Master_Getdata_By_Id", CommandType.StoredProcedure, SqlParameters);
+                DataTable dtItem = ds.Tables[0];
+                DataTable dtItem_Party_Mapping = ds.Tables[1];
+                foreach (DataRow item in dtItem_Party_Mapping.AsEnumerable())
+                {
+                    dynamic dPartyMapping = new ExpandoObject();
+                    dPartyMapping.Item_Id = item["Item_Id"].ToString();
+                    dPartyMapping.Location_Id = item["Location_Id"].ToString();
+                    dPartyMapping.Party_Id = item["Party_Id"].ToString();
+                    ItemMappingList.Add(dPartyMapping);
+                }
+                foreach (DataRow dr in dtItem.Rows)
+                {
+                    ItemId = Convert.ToInt32(dr["Item_Id"]);
+                    Title = dr["Title"].ToString();
+                    Code = dr["Code"].ToString();
+                    GroupId = Convert.ToInt32(dr["Group_Id"]);
+                    Nature = Convert.ToInt32(dr["Nature"]);
+                    HSN_SAC = dr["HSN_SAC"].ToString();
+                    DeadStockDays = Convert.ToInt32(dr["DeadStockDays"]);
+                    MinLevel = Convert.ToInt32(dr["MinLevel"]);
+                    MaxLevel = Convert.ToInt32(dr["MaxLevel"]);
+                    ReorderLevel = Convert.ToInt32(dr["ReorderLevel"]);
+                    BaseUnitId = Convert.ToInt32(dr["BaseUnit_Id"]);
+                    InwardUnitId = Convert.ToInt32(dr["InwardUnit_Id"]);
+                    OutwardUnitId = Convert.ToInt32(dr["OutwardUnit_Id"]);
+                    //ItemMapping = dr["ItemMapping"].ToString();
+                    //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
+                    Remarks = dr["Remarks"].ToString();
+                    //Loginid = Convert.ToInt32(dr["LoginId"]);
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
+    }
+    public class PartyAndLocationMapping
+    {
+        public int PartyId { get; set; }
+        public int LocationId { get; set; }
     }
 }

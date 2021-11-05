@@ -2,6 +2,7 @@
 using IMS.Models.CBL;
 using IMS.Models.ViewModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +10,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace IMS.Controllers
 {
@@ -878,6 +880,23 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+        [HttpGet]
+        public ActionResult GetItemMasterById(int item_Id, string appToken = "")
+        {
+            try
+            {
+                ItemMaster itemMaster = new ItemMaster();
+                itemMaster = itemMaster.ItemMaster_Get_By_Id(item_Id);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemMaster.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+                itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+                return View("~/Views/Admin/Masters/ManageItemMaster.cshtml", itemMaster);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpPost]
         public ActionResult ManageItemMaster(ItemMaster itemMaster)
@@ -885,6 +904,8 @@ namespace IMS.Controllers
             ItemMaster objItemMaster = new ItemMaster();
             try
             {
+                //JArray array = JArray.Parse(itemMaster.ItemMasterValues);
+                itemMaster.PartyAndLocationMapping = JsonConvert.DeserializeObject<List<PartyAndLocationMapping>>(itemMaster.ItemMapping);
                 objItemMaster = itemMaster.ItemMaster_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -905,7 +926,6 @@ namespace IMS.Controllers
                     else
                     {
                         ViewBag.Msg = "Unknown Error Occured !!!";
-
                     }
                     ModelState.Clear();
                 }
@@ -919,7 +939,7 @@ namespace IMS.Controllers
             newItemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             newItemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Masters/ItemMaster.cshtml", (objItemMaster.IsSucceed ? newItemMaster : itemMaster));
+            return View("~/Views/Admin/Masters/ManageItemMaster.cshtml", (objItemMaster.IsSucceed ? newItemMaster : itemMaster));
         }
 
         [HttpPost]
