@@ -70,11 +70,10 @@ namespace IMS.Models.ViewModel
             _LoginId = "0";
             _Islogin = false;
         }
-        public bool UserMaster_InsertUpdate(UserMaster userMaster)
+        public UserMaster UserMaster_InsertUpdate(UserMaster userMaster)
         {
             try
             {
-                bool bIsSuccess = false; ;
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@User_Id", userMaster.User_Id));
                 SqlParameters.Add(new SqlParameter("@UserName", userMaster.UserName));
@@ -100,11 +99,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
                 SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
-                if (Convert.ToInt32(dt.Rows[0]["User_Id"]) > 0)
+                foreach (DataRow dr in dt.Rows)
                 {
-                    bIsSuccess = true;
+                    User_Id = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
                 }
-                return bIsSuccess;
+                return this;
             }
             catch (Exception ex)
             { throw ex; }

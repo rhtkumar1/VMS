@@ -798,31 +798,28 @@ namespace IMS.Controllers
             try
             {
                 int userid = userMaster.User_Id;
-                bool bIsSuccess = userMaster.UserMaster_InsertUpdate(userMaster);
-                if (bIsSuccess)
+                UserMaster oUserMaster = userMaster.UserMaster_InsertUpdate(userMaster);
+                // In case of record successfully added or updated
+                if (oUserMaster.IsSucceed)
                 {
-                    // In case of record successfully added or updated
-                    if (userMaster.IsSucceed)
-                    {
-                        ViewBag.Msg = userMaster.ActionMsg;
-                    }
-                    // In case of record already exists
-                    else if (!userMaster.IsSucceed && userMaster.User_Id != -1)
-                    {
-                        ViewBag.Msg = userMaster.ActionMsg;
-                    }
-                    // In case of any error occured
-                    else
-                    {
-                        ViewBag.Msg = "Unknown Error Occured !!!";
+                    ViewBag.Msg = oUserMaster.ActionMsg;
+                }
+                // In case of record already exists
+                else if (!oUserMaster.IsSucceed && oUserMaster.User_Id != -1)
+                {
+                    ViewBag.Err = oUserMaster.ActionMsg;
+                }
+                // In case of any error occured
+                else
+                {
+                    ViewBag.Err = "Unknown Error Occured !!!";
 
-                    }
                 }
                 ModelState.Clear();
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Err = "some error occurred, please try again..!";
             }
             userMaster.AppToken = CommonUtility.URLAppToken(userMaster.AppToken);
             userMaster.AuthMode = CommonUtility.GetAuthMode(userMaster.AppToken).ToString();
@@ -856,8 +853,9 @@ namespace IMS.Controllers
         #endregion
 
         #region Item Master
-        public ActionResult ItemIndex()
+        public ActionResult ItemIndex(string sMsg = "", string appToken = "")
         {
+            if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
             ItemMaster itemMaster = new ItemMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
             itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -881,12 +879,16 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult GetItemMasterById(int item_Id, string appToken = "")
+        public ActionResult ItemMaster(int item_Id = 0, string appToken = "", string sMsg = "")
         {
             try
             {
+                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
                 ItemMaster itemMaster = new ItemMaster();
-                itemMaster = itemMaster.ItemMaster_Get_By_Id(item_Id);
+                if (item_Id > 0)
+                {
+                    itemMaster = itemMaster.ItemMaster_Get_By_Id(item_Id);
+                }
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 itemMaster.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
                 itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
@@ -902,12 +904,12 @@ namespace IMS.Controllers
         public ActionResult ManageItemMaster(ItemMaster itemMaster)
         {
             ItemMaster objItemMaster = new ItemMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             try
             {
                 //JArray array = JArray.Parse(itemMaster.ItemMasterValues);
                 itemMaster.PartyAndLocationMapping = JsonConvert.DeserializeObject<List<PartyAndLocationMapping>>(itemMaster.ItemMapping);
                 objItemMaster = itemMaster.ItemMaster_InsertUpdate();
-                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objItemMaster != null)
@@ -915,31 +917,52 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objItemMaster.IsSucceed)
                     {
-                        ViewBag.Msg = objItemMaster.ActionMsg;
+                        ModelState.Clear();
+                        return RedirectToAction("ItemIndex", new { sMsg = objItemMaster.ActionMsg, appToken = itemMaster.AppToken, });
                     }
                     // In case of record already exists
                     else if (!objItemMaster.IsSucceed && objItemMaster.ItemId != -1)
                     {
-                        ViewBag.Msg = objItemMaster.ActionMsg;
+                        if (itemMaster.ItemId > 0)
+                        {
+                            return RedirectToAction("ItemMaster", new { item_Id = itemMaster.ItemId, appToken = itemMaster.AppToken, sMsg = objItemMaster.ActionMsg });
+                        }
+                        else
+                        {
+                            return RedirectToAction("ItemMaster", new { appToken = itemMaster.AppToken, sMsg = objItemMaster.ActionMsg });
+                        }
                     }
                     // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Unknown Error Occured !!!";
+                        return RedirectToAction("ItemMaster", new { item_Id = itemMaster.ItemId, appToken = itemMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
                     }
-                    ModelState.Clear();
+                }
+                else
+                {
+                    if (itemMaster.ItemId > 0)
+                    {
+                        return RedirectToAction("ItemMaster", new { item_Id = itemMaster.ItemId, appToken = itemMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("ItemMaster", new { appToken = itemMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                    }
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.Msg = "Unknown Error Occured !!!";
+                // to reset fields only in case of added or updated.
+                if (itemMaster.ItemId > 0)
+                {
+                    return RedirectToAction("ItemMaster", new { item_Id = itemMaster.ItemId, appToken = itemMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                }
+                else
+                {
+                    return RedirectToAction("ItemMaster", new { appToken = itemMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                }
             }
-            ItemMaster newItemMaster = new ItemMaster();
-            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-            newItemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-            newItemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Masters/ManageItemMaster.cshtml", (objItemMaster.IsSucceed ? newItemMaster : itemMaster));
         }
 
         [HttpPost]

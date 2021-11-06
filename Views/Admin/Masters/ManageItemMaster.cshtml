@@ -178,7 +178,7 @@
                             </div>
                             <div class="col-md-1 pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btn btn-primary pull-right">Reset</button>
+                                    <a href="/master/ItemIndex?appToken=@Model.AppToken"name="btnBack" id="btnBack" class="btn btn-primary pull-right">Back To Item List</a>
                                 </div>
                             </div>
                         }
@@ -202,17 +202,13 @@ $(document).ready(function () {
                     var row = $(this);
                     var partyId = parseInt(row.find("TD").eq(0).attr('data-party-id'));
                     var locationId = parseInt(row.find("TD").eq(1).attr('data-location-id'));
-                    if (parseInt(ddlParty.val()) != partyId && parseInt(ddlLocation.val()) != locationId) {
+                    if ((parseInt(ddlParty.val()) === partyId && parseInt(ddlLocation.val()) === locationId)) {
                         bAdded = false;
-                    } else {
-                        bAdded = true;
-                    }
+                    } 
                 });
-            } else {
-                bAdded = false;
-            }
+            } 
 
-            if (!bAdded) {
+            if (bAdded) {
                 //Get the reference of the Table's TBODY element.
                 var tBody = $("#tblCustomers > TBODY")[0];
 
@@ -256,6 +252,8 @@ $(document).ready(function () {
     });
     function Remove(button) {
         //Determine the reference of the Row using the Button.
+        var bAdded = true;
+        $("#IsMappingChanged").val(bAdded);
         var row = $(button).closest("TR");
         var name = $("TD", row).eq(0).text();
         if (confirm("Do you want to remove this mapping.", "Remove location and party")) {

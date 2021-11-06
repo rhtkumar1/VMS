@@ -149,8 +149,14 @@
             default:
                 break;
         }
-
-        
+    }
+    scope.message = function functionName(msg, status) {
+        $("#pMessage").text("");
+        $("#pMessage").show();
+        if (status === "Success") { $("#pMessage").text(msg).css("color", "green"); } else { $("#pMessage").text(msg).css("color", "red"); }
+        setTimeout(function () {
+            $("#pMessage").hide();
+        }, 3000);
     }
     return scope;
 })(IMSC || {});
