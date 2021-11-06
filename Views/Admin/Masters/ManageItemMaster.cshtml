@@ -164,7 +164,7 @@
                                                     <label>Select Party<span class="mandatory">*</span></label>
                                                     @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "addPartyId", @class = "form-control" })
                                                 </td>
-                                                <td><input type="button" style="margin-top: 24px;" id="btnAdd" value="btnAdd" /></td>
+                                                <td><input type="button" style="margin-top: 24px;" id="btnAdd" value="Add" /></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -235,7 +235,7 @@ $(document).ready(function () {
                 btnRemove.val("Remove");
                 cell.append(btnRemove);
             } else {
-                alert("Location and party alreday added. please select another.", "Select Valid Party And Location");
+                alert("Item is already mapped with selected Location and Party !!!", "Select Valid Party And Location");
             }
         });
         $("body").on("click", "#btnSubmit", function () {
