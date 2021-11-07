@@ -158,11 +158,11 @@
                                             <tr>
                                                 <td>
                                                     <label>Select Location<span class="mandatory">*</span></label>
-                                                    @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "addLocationId", @class = "form-control" })
+                                                    @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                                 </td>
                                                 <td>
                                                     <label>Select Party<span class="mandatory">*</span></label>
-                                                    @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "addPartyId", @class = "form-control" })
+                                                    @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                                 </td>
                                                 <td><input type="button" style="margin-top: 24px;" id="btnAdd" value="Add" /></td>
                                             </tr>
@@ -195,14 +195,12 @@ $(document).ready(function () {
             var bAdded = true;
             $("#IsMappingChanged").val(bAdded);
             //Reference the Party and Location ddl.
-            var ddlParty = $("#addPartyId");
-            var ddlLocation = $("#addLocationId");
             if ($("#tblCustomers TBODY TR").length > 0) {
                 $("#tblCustomers TBODY TR").each(function () {
                     var row = $(this);
-                    var partyId = parseInt(row.find("TD").eq(0).attr('data-party-id'));
-                    var locationId = parseInt(row.find("TD").eq(1).attr('data-location-id'));
-                    if ((parseInt(ddlParty.val()) === partyId && parseInt(ddlLocation.val()) === locationId)) {
+                    let party = parseInt(row.find("TD").eq(0).attr('data-party-id'));
+                    let location = parseInt(row.find("TD").eq(1).attr('data-location-id'));
+                    if ((parseInt($("#PartyId").val()) === party && parseInt($("#LocationId").val()) === location)) {
                         bAdded = false;
                     } 
                 });
@@ -217,12 +215,12 @@ $(document).ready(function () {
 
                 //Add Party cell.
                 var cell = $(row.insertCell(-1));
-                cell.html(ddlParty.text());
-                cell.attr('data-party-id', ddlParty.val())
+                cell.html($("#PartyId :selected").text());
+                cell.attr('data-party-id', $("#PartyId").val())
                 //Add Location cell.
                 cell = $(row.insertCell(-1));
-                cell.html(ddlLocation.text());
-                cell.attr('data-location-id', ddlLocation.val())
+                cell.html($("#LocationId :selected").text());
+                cell.attr('data-location-id', $("#LocationId").val())
                 //Add Button cell.
                 cell = $(row.insertCell(-1));
                 var btnRemove = $("<input />");
