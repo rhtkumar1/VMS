@@ -51,7 +51,7 @@ namespace IMS.Controllers
             FinancialMaster objFinancialMaster = new FinancialMaster();
             try
             {
-                objFinancialMaster = financialMaster.FinancialMaster_InsertUpdate(financialMaster);
+                //objFinancialMaster= financialMaster.FinancialMaster_InsertUpdate(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
@@ -93,8 +93,8 @@ namespace IMS.Controllers
         {
             try
             {
-                financialMaster.FinancialId = financialId;
-                FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_Delete(financialMaster);
+                //financialMaster.FinancialId = financialId;
+                FinancialMaster objFinancialMaster= financialMaster.FinancialMaster_Delete(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();

@@ -127,7 +127,9 @@
     <Content Include="fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="fonts\oswald\OFL.txt" />
-    <Content Include="Global.asax" />
+    <Content Include="Global.asax">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Admin\Masters\CompanyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\RoleMaster.cshtml" />
     <Content Include="Views\web.config" />
@@ -140,6 +142,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\CBL\CommonUtility.cs" />
     <Compile Include="Models\CBL\DBManager.cs" />
@@ -269,7 +272,6 @@
     <Content Include="Views\Admin\Masters\PartyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\ItemMaster.cshtml" />
     <Content Include="Views\Admin\Masters\HSNSACMaster.cshtml" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Admin\Masters\ManageUserMaster.cshtml" />
     <Content Include="Views\Admin\Masters\UnitMaster.cshtml" />
     <Content Include="Views\Admin\Masters\ItemGroupMaster.cshtml" />

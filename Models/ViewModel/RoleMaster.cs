@@ -90,4 +90,9 @@ namespace IMS.Models.ViewModel
 
         
     }
+
+    public class RoleMenuMaping
+    {
+
+    }
 }
