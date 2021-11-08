@@ -22,7 +22,8 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public List<RoleMenuMapping> ObjRoleMenuMapping { get; set; }
-        public string MenuMapping; //XML Formate '<RoleMaping><listnode Menu_Id="10001" Auth="3"/><listnode Menu_Id="10002" Auth="1"/></RoleMaping>'
+        //XML Formate '<RoleMaping><listnode Menu_Id="10001" Auth="3"/><listnode Menu_Id="10002" Auth="1"/></RoleMaping>'
+        public string MenuMapping; 
 
 
         public RoleMaster()
@@ -30,6 +31,7 @@ namespace IMS.Models.ViewModel
             ObjRoleMenuMapping = new List<RoleMenuMapping>();
             MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 AND Menu_Parent_Id is null"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
+            MenuMapping = string.Empty;
         }
 
         public RoleMaster RoleMaster_InsertUpdate(RoleMaster roleMaster)
@@ -42,14 +44,16 @@ namespace IMS.Models.ViewModel
                 {
                     sString += @"<listnode Menu_Id=""" + Convert.ToString(item.MenuId) + @""" Auth=""" + Convert.ToString(item.Auth) + @"""/>";
                 }
-                MenuMapping = "<RoleMaping>" + sString + "</RoleMaping>";
+                if(!string.IsNullOrEmpty(sString))
+                     MenuMapping = "<RoleMaping>" + sString + "</RoleMaping>";
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
                 SqlParameters.Add(new SqlParameter("@Title", roleMaster.Title));
                 SqlParameters.Add(new SqlParameter("@Code", roleMaster.Code));
                 SqlParameters.Add(new SqlParameter("@Remarks", roleMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", roleMaster.Loginid));
-                SqlParameters.Add(new SqlParameter("@MenuMaping", MenuMapping));
+                if (!string.IsNullOrEmpty(MenuMapping))
+                    SqlParameters.Add(new SqlParameter("@MenuMaping", MenuMapping));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Role_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
