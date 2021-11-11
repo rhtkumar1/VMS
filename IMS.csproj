@@ -94,11 +94,14 @@
     <Content Include="assets\admin\css\bootstrap.min.css" />
     <Content Include="assets\admin\css\custom.css" />
     <Content Include="assets\admin\css\font-awesome.css" />
+    <Content Include="assets\admin\css\jsgrid-theme.min.css" />
+    <Content Include="assets\admin\css\jsgrid.min.css" />
     <Content Include="assets\admin\css\style.css" />
     <Content Include="assets\admin\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\admin\images\logo.png" />
     <Content Include="assets\admin\images\search.png" />
     <Content Include="assets\admin\js\bootstrap.min.js" />
+    <Content Include="assets\admin\js\jsgrid.min.js" />
     <Content Include="assets\admin\js\custom.js" />
     <Content Include="assets\admin\js\jquery.metisMenu.js" />
     <Content Include="assets\admin\js\jquery.min.js" />

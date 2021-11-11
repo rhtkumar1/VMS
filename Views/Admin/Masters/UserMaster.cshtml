@@ -22,7 +22,7 @@
                 <div class="blank-page">
                     <div class="col-md-1">
                         <div class="appointment-btn" style="margin-right: -18px !important;margin-bottom: 50px !important;">
-                            <a href="/master/manageusermaster?AppToken=@Model.AppToken" name="AddUser" id="AddUser" class="btn btn-primary pull-right">Add User</a>
+                            <a href="/master/manageusermaster?AppToken=@Model.AppToken" name="AddUser" id="AddUser" class="btncustome pull-right">Add User</a>
                         </div>
                     </div>
                     <div id="listGrid"></div>
@@ -52,12 +52,12 @@
                                         break;
                                     case 2:
                                         $('#btnSubmit').removeClass("hidden");
-                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&appToken=@Model.AppToken" class="btn btn-primary"><i class="fa fa-edit"></i></a>`;
+                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&appToken=@Model.AppToken" class="btncustome"><i class="fa fa-edit"></i></a>`;
                                         return $("<div class='display-flex'></div>").append($customeEditButton);
                                     case 3:
                                         $('#btnSubmit').removeClass("hidden");
-                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&AppToken=@Model.AppToken" class="btn btn-primary" style="margin-right:5px"><i class="fa fa-edit"></i></a>`;
-                                        var $customeDeleteButton = $('<a class="btn btn-primary"><i class="fa fa-trash"></i></a>')
+                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&AppToken=@Model.AppToken" class="btncustome" style="margin-right:5px"><i class="fa fa-edit"></i></a>`;
+                                        var $customeDeleteButton = $('<a class="btncustome"><i class="fa fa-trash"></i></a>')
                                             .click(function (e) {
                                                 deleteFormData(args);
                                                 return false;

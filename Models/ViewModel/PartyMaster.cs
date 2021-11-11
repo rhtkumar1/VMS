@@ -46,11 +46,23 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
+        public SelectList LocationLists { get; set; }
+        public SelectList GSTTypeLists { get; set; }
+        public SelectList GSTNatureLists { get; set; }
+        public string PartyMapping { get; set; }
+        public bool IsMappingChanged { get; set; }
+        public string CategoryId { get; set; }
+        public string OpeningBalance { get; set; }
+
         public PartyMaster()
         {
             StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
+            LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
+            GSTTypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10008 And Sub_Type=1 And IsActive=1"), "Id", "Value");
+            GSTNatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=2 And IsActive=1"), "Id", "Value");
+
             Loginid = CommonUtility.GetLoginID();
         }
 
@@ -80,6 +92,10 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@State", partyMaster.State));
                 SqlParameters.Add(new SqlParameter("@Zip", partyMaster.Zip));
                 SqlParameters.Add(new SqlParameter("@Country", partyMaster.Country));
+                SqlParameters.Add(new SqlParameter("@PartyMapping", PartyMapping));
+                SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
+                SqlParameters.Add(new SqlParameter("@Category_Id", CategoryId));
+                SqlParameters.Add(new SqlParameter("@OpeningBalance", OpeningBalance));
                 SqlParameters.Add(new SqlParameter("@Remarks", partyMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);

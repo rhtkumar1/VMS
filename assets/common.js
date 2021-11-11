@@ -127,7 +127,7 @@
                 break;
             case 2:
                 $('#btnSubmit').removeClass("hidden");
-                var $customeEditButton = $('<a class="btn btn-primary"><i class="fa fa-edit"></i></a>')
+                var $customeEditButton = $('<a class="btn btn-success"><i class="fa fa-edit"></i></a>')
                     .click(function (e) {
                         editFormData('Edit', args);
                         return false;
@@ -135,12 +135,12 @@
                 return $("<div class='display-flex'></div>").append($customeEditButton);
             case 3:
                 $('#btnSubmit').removeClass("hidden");
-                var $customeEditButton = $('<a class="btn btn-primary" style="margin-right:5px"><i class="fa fa-edit"></i></a>')
+                var $customeEditButton = $('<a class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>')
                     .click(function (e) {
                         editFormData('Edit', args);
                         return false;
                     });
-                var $customeDeleteButton = $('<a class="btn btn-primary"><i class="fa fa-trash"></i></a>')
+                var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px;"><i class="fa fa-trash"></i></a>')
                     .click(function (e) {
                         deleteFormData('Delete', args);
                         return false;

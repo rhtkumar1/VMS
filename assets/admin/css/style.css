@@ -12,30 +12,49 @@ h1, h2, h3 {
 .mandatory {
     color: red;
 }
+.btncustome {
+    background: #0C67AE;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 35px;
+    font-size: 14px;
+    padding: 0 10px;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+}
 
+    .btncustome:hover {
+        background: #fff;
+        color: #0C67AE;
+    }
+
+    .btncustome:before, button:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #0C67AE;
+        transition: 400ms ease all;
+    }
+
+    .btncustome:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    .btncustome:hover:before, button:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
 ul, ol {
     margin: 0;
     padding: 0;
-}
-
-.jsgrid-row > jsgrid-alt-row {
-    font-size: 12px;
-}
-
-.jsgrid-cell {
-    font-size: 12px;
-    font-family: 'Nunito', sans-serif;
-    line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.jsgrid-header-row > .jsgrid-header-cell {
-    font-size: 13px;
-    font-family: 'Nunito', sans-serif;
-    line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 p {
@@ -43,7 +62,7 @@ p {
 }
 
 html, body {
-    font-family: 'Montserrat-Regular';
+    font-family: 'Muli-Regular';
     font-size: 100%;
     background: #F3F3F4;
     overflow-x: hidden;
@@ -284,7 +303,7 @@ h1 a.navbar-brand {
     font-size: 20px;
     font-weight: 500;
     padding: 20px 0px;
-    background: #d95459;
+    background: #0C67AE;
     text-align: center;
     width: 248px;
     height: 60px;
@@ -292,7 +311,7 @@ h1 a.navbar-brand {
 
 .navbar-default .navbar-brand:hover {
     color: #fff;
-    background-color: #d95459;
+    background-color: #0C67AE;
 }
 
 .navbar-right {
@@ -309,7 +328,7 @@ i.nav_icon {
 }
 
 .sidebar ul li a {
-    color: #999;
+    color: #000000;
     font-size: 14px;
 }
 
@@ -349,7 +368,7 @@ ul.nav.navbar-nav.navbar-right {
         left: 0;
         right: 80%;
         bottom: 0;
-        background: #7f8c8d;
+        background: #007dd4;
         -webkit-transform: scaleX(0);
         transform: scaleX(0);
         -webkit-transform-origin: 0 50%;
@@ -391,7 +410,7 @@ ul.nav.navbar-nav.navbar-right {
 }
 
 i.nav_icon {
-    color: #999;
+    color: #0c67ae;
     padding: 15px;
     width: 44px;
     height: 44px;
@@ -617,7 +636,7 @@ i.fa.fa-globe {
 
 .dropdown-menu > li > a.view:focus, .dropdown-menu > li > a.view:hover {
     background: none;
-    color: #d95459;
+    color: #0C67AE;
 }
 
 .dropdown-menu {
@@ -653,7 +672,7 @@ i.fa.fa-globe {
     }
 
         .banner h2 a {
-            color: #D95459;
+            color: #0C67AE;
             text-decoration: none;
             font-family: 'Muli-Regular';
             padding: 0.3em;
@@ -996,7 +1015,7 @@ i.fa.fa-globe {
 }
 
     .text-sub input[type="submit"] {
-        background-color: #D95459;
+        background-color: #0C67AE;
         font-size: 1em;
         color: #fff;
         border: none;
@@ -1729,7 +1748,7 @@ label.control-label {
 }
 
     .login h1 a {
-        color: #d95459;
+        color: #0C67AE;
         text-decoration: none;
     }
 
@@ -1744,7 +1763,7 @@ label.control-label {
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
-    background: #d95459;
+    background: #0C67AE;
     -webkit-transition-property: color;
     transition-property: color;
     -webkit-transition-duration: 0.3s;
@@ -1787,7 +1806,7 @@ label.control-label {
 }
 
     .login-sub:before {
-        background: #d95459;
+        background: #0C67AE;
     }
 /*--profile--*/
 .profile {
@@ -1847,7 +1866,7 @@ label.control-label {
 }
 
     .profile-text td a {
-        color: #D95459;
+        color: #0C67AE;
     }
 
 .profile-bottom-top img {
@@ -1883,7 +1902,7 @@ label.control-label {
         -o-border-radius: 4px;
         -moz-border-radius: 4px;
         -ms-border-radius: 4px;
-        background: #D95459;
+        background: #0C67AE;
         display: block;
         text-align: center;
     }
@@ -2086,7 +2105,7 @@ td span.mar {
 .compose h2 {
     font-size: 1.2em;
     color: #fff;
-    background: #D95459;
+    background: #0C67AE;
     text-align: center;
     padding: 10px;
     border-radius: 4px;
@@ -2169,7 +2188,7 @@ td span.mar {
 .nav-sidebar ul li a span {
     color: #fff;
     font-size: 0.8em;
-    background: #D95459;
+    background: #0C67AE;
     border-radius: 10px;
     width: 25px;
     height: 18px;
@@ -2352,7 +2371,7 @@ tr.table-row {
 }
 
 #os-Other-lbl {
-    border-left: #D95459 solid 1em;
+    border-left: #0C67AE solid 1em;
     padding-left: .5em;
     font-size: 1em;
     color: #777F8C;
@@ -2393,7 +2412,7 @@ tr.table-row {
         color: #fff;
         display: block;
         text-decoration: none;
-        background: #d95459;
+        background: #0C67AE;
         margin: 0 auto;
         width: 10%;
     }
@@ -2796,7 +2815,7 @@ tr.table-row {
     }
 
     .navbar-header {
-        background-color: #D95459;
+        background-color: #0C67AE;
     }
 
     h1 a.navbar-brand {

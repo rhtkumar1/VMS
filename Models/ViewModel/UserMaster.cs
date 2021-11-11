@@ -40,6 +40,10 @@ namespace IMS.Models.ViewModel
         DateTime LastLogin { get; set; }
         public string Remarks { get; set; }
         int IsActive { get; set; }
+
+        public string UserMapping { get; set; }
+        public bool IsMappingChanged { get; set; }
+        public int Default_OfficeId { get; set; }
         int CreatedBy { get; set; }
         int ModifiedBy { get; set; }
         public string AppToken { get; set; }
@@ -93,7 +97,10 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Pincode", userMaster.Pincode));
                 SqlParameters.Add(new SqlParameter("@Country", "India"));
                 SqlParameters.Add(new SqlParameter("@DOJ", CommonUtility.GetDateDDMMYYYY(userMaster.DOJ)));
-                SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole));
+                SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole)); 
+                SqlParameters.Add(new SqlParameter("@Default_OfficeId", Default_OfficeId));
+                SqlParameters.Add(new SqlParameter("@UserMapping", UserMapping));
+                SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", userMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
                 SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));

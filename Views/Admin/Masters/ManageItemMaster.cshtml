@@ -3,7 +3,7 @@
     ViewBag.Title = "Item Master";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
     string sBtnName = Model.ItemMappingList.Count > 0 ? "Edit Party & Location Mapping" : "Add Party & Location Mapping";
-    string sClass = Model.ItemMappingList.Count > 0 ? "btn btn-warning" : "btn btn-primary";
+    string sClass = Model.ItemMappingList.Count > 0 ? "btn btn-warning" : "btncustome";
 }
 
 @{
@@ -173,12 +173,12 @@
                             </div>
                             <div class="col-md-1 pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btn btn-primary pull-right">Submit</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
                                 </div>
                             </div>
                             <div class="col-md-1 pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <a href="/master/ItemIndex?appToken=@Model.AppToken"name="btnBack" id="btnBack" class="btn btn-primary pull-right">Back To Item List</a>
+                                    <a href="/master/ItemIndex?appToken=@Model.AppToken"name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</a>
                                 </div>
                             </div>
                         }
