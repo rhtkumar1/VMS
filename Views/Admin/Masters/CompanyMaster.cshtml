@@ -44,17 +44,23 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Type<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Type", @required = "required",@class = "form-control" })
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Type", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Fin-Year</label>
-                                    @Html.DropDownListFor(m => m.FinancialId, new SelectList(Model.FinancialLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    <label>Start Date</label>
+                                    @Html.TextBoxFor(m => m.StartDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-8 form-group">
+                                <div class="col-md-4 form-group">
+                                    <label>Opening Balance<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.OpeningBalance, htmlAttributes: new { @placeholder = "Enter Ownership", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
                                     <label>Ownership<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Ownership, htmlAttributes: new { @placeholder = "Enter Ownership", @required = "required", @class = "form-control" })
                                 </div>
@@ -117,7 +123,8 @@
                     { name: "Ownership", title: "Ownership", sorting: true, filtering: true, width: 30 },
                     { name: "Type_Id", css: "hidden", },
                     { name: "Financial_Id", css: "hidden", },
-                    { name: "Financial_Year", title: "Fin-Year", sorting: true, filtering: true, width: 20 },
+                    { name: "StartDate", title: "Start Date", sorting: true, filtering: true, width: 20 },
+                    { name: "OpeningBalance", title: "Opening Balance", sorting: true, filtering: true, width: 30 },
                     { name: "Address1", title: "Address1", sorting: true, filtering: true, width: 50 },
                     { name: "Address2", title: "Address2", sorting: true, filtering: true, width: 50 },
                     { name: "Remarks", title: "Remarks", sorting: true, filtering: true, width: 40  },
@@ -152,6 +159,14 @@
             }
 
         });
+        $('#StartDate').datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true
+        }).datepicker();
+
     });
 
     var editFormData = function (dilogType, CompanyMaster) {

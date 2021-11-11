@@ -14,7 +14,7 @@ namespace IMS.Models.ViewModel
         public string Code { get; set; }
         public int TypeId { get; set; }
         public int FinancialId { get; set; }
-        public SelectList FinancialLists { get; set; }
+        //public SelectList FinancialLists { get; set; }
         public SelectList TypeLists { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
@@ -22,6 +22,8 @@ namespace IMS.Models.ViewModel
         public string Remarks { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
+        public string StartDate { get; set; }
+        public decimal OpeningBalance { get; set; }
         public int Loginid { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
@@ -30,7 +32,7 @@ namespace IMS.Models.ViewModel
 
         public CompanyMaster()
         {
-            FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
+            //FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
             TypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10004 And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
         }
@@ -44,12 +46,13 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Title", Title));
                 SqlParameters.Add(new SqlParameter("@Code", Code));
                 SqlParameters.Add(new SqlParameter("@Type_Id", TypeId));
-                SqlParameters.Add(new SqlParameter("@Financial_Id", FinancialId));
+                SqlParameters.Add(new SqlParameter("@StartDate", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(StartDate))));
                 SqlParameters.Add(new SqlParameter("@Address1", Address1));
                 SqlParameters.Add(new SqlParameter("@Address2", Address2));
                 SqlParameters.Add(new SqlParameter("@Ownership", Ownership));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                SqlParameters.Add(new SqlParameter("@OpeningBalance", OpeningBalance));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Company_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
