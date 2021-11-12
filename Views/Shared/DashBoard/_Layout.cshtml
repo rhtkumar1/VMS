@@ -13,8 +13,8 @@
 
 
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>*@
     <!--JsGrid Files -->
     <link type="text/css" href="~/assets/admin/css/jsgrid.min.css" rel="stylesheet" />
     <link type="text/css" href="~/assets/admin/css/jsgrid-theme.min.css" rel="stylesheet" />
@@ -53,6 +53,9 @@
     </script>
 </head>
 <body class="body">
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
     <div id="wrapper">
         <header id="header">
             @Html.Partial("~/Views/Shared/DashBoard/_Header.cshtml")

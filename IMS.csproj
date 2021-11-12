@@ -100,6 +100,7 @@
     <Content Include="assets\admin\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\admin\images\logo.png" />
     <Content Include="assets\admin\images\search.png" />
+    <Content Include="assets\admin\images\status.gif" />
     <Content Include="assets\admin\js\bootstrap.min.js" />
     <Content Include="assets\admin\js\jsgrid.min.js" />
     <Content Include="assets\admin\js\custom.js" />
