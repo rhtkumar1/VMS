@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 
 namespace IMS.Models.ViewModel
 {
+    // This Master is not in USE 
+    // We are creating Fy at the time of Company Creation
     public class FinancialMaster
     {
         public string FromDate { get; set; }
