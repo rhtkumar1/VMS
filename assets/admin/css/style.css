@@ -8,6 +8,7 @@ h4, h5, h6,
 h1, h2, h3 {
     margin: 0;
 }
+
 #preloader {
     position: fixed;
     top: 0;
@@ -29,9 +30,11 @@ h1, h2, h3 {
     background-position: center;
     margin: -100px 0 0 -100px
 }
+
 .mandatory {
     color: red;
 }
+
 .btncustome {
     background: #0C67AE;
     color: #fff;
@@ -72,6 +75,7 @@ h1, h2, h3 {
         width: 100%;
         transition: 800ms ease all;
     }
+
 ul, ol {
     margin: 0;
     padding: 0;
@@ -412,6 +416,23 @@ ul.nav.navbar-nav.navbar-right {
         }
 /*----*/
 .nav > li > a {
+    color: #999;
+    font-weight: 500;
+    padding: 0px 20px 0px 0px;
+    font-size: 0.85em;
+    border-bottom: 1px solid #E9E9E9;
+}
+
+.side-menu-ddl-txt {
+    border: none;
+    color: #000000;
+    font-size: 14px;
+    position: absolute;
+    width: 76%;
+    padding: 12px;
+}
+
+.nav > li.side-menu-ddl {
     color: #999;
     font-weight: 500;
     padding: 0px 20px 0px 0px;
