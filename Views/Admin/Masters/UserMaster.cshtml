@@ -20,9 +20,9 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-md-1">
+                    <div class="col-md-12">
                         <div class="appointment-btn" style="margin-right: -18px !important;margin-bottom: 50px !important;">
-                            <a href="/master/manageusermaster?AppToken=@Model.AppToken" name="AddUser" id="AddUser" class="btncustome pull-right">Add User</a>
+                            <a href="/master/manageusermaster?AppToken=@Model.AppToken" name="AddUser" id="AddUser" class="btn btn-success pull-right">Add User</a>
                         </div>
                     </div>
                     <div id="listGrid"></div>
@@ -42,7 +42,7 @@
                     var fields = [
                         {
                             title: "Action",
-                            width: 40,
+                            width: 20,
                             itemTemplate: function (value, args) {
                                 switch (@Model.AuthMode) {
                                     case 0:
@@ -52,12 +52,12 @@
                                         break;
                                     case 2:
                                         $('#btnSubmit').removeClass("hidden");
-                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&appToken=@Model.AppToken" class="btncustome"><i class="fa fa-edit"></i></a>`;
+                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px;"><i class="fa fa-edit"></i></a>`;
                                         return $("<div class='display-flex'></div>").append($customeEditButton);
                                     case 3:
                                         $('#btnSubmit').removeClass("hidden");
-                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&AppToken=@Model.AppToken" class="btncustome" style="margin-right:5px"><i class="fa fa-edit"></i></a>`;
-                                        var $customeDeleteButton = $('<a class="btncustome"><i class="fa fa-trash"></i></a>')
+                                        var $customeEditButton = `<a href="/master/ManageUserMaster?userId=${args.User_Id}&AppToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px;"><i class="fa fa-edit"></i></a>`;
+                                        var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px;"><i class="fa fa-trash"></i></a>')
                                             .click(function (e) {
                                                 deleteFormData(args);
                                                 return false;
@@ -69,11 +69,11 @@
                             }
                         },
                         { name: "User_Id", css: "hidden", },
-                        { name: "UserName", type: "text", title: "User Name", sorting: true, filtering: true, width: 40 },
-                        { name: "FullName", type: "text", title: "Name", sorting: true, filtering: true, width: 40 },
-                        { name: "Mobile", type: "text",title: "Mobile", sorting: true, filtering: false, width: 80 },
-                        { name: "Email", type: "text",title: "Email", sorting: true, filtering: false, width: 80 },
-                        { name: "PrimaryRoleName", title: "Role", sorting: true, filtering: false, width: 80 }
+                        { name: "UserName", type: "text", title: "User Name", sorting: true, filtering: true, width: 50 },
+                        { name: "FullName", type: "text", title: "Name", sorting: true, filtering: true, width: 50 },
+                        { name: "Mobile", type: "text",title: "Mobile", sorting: true, filtering: false, width: 30 },
+                        { name: "Email", type: "text",title: "Email", sorting: true, filtering: false, width: 60 },
+                        { name: "PrimaryRoleName", title: "Role", sorting: true, filtering: false, width: 50 }
                     ];
                     var options = {
                         filtering: true,
