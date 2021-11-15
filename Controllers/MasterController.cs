@@ -549,9 +549,10 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetRoleMaster(RoleMaster roleMaster, string AppToken = "")
+        public ActionResult GetRoleMaster(string AppToken = "")
         {
             DataTable dt = new DataTable();
+            RoleMaster roleMaster= new RoleMaster();
             try
             {
                 dt = roleMaster.RoleMaster_Get();
@@ -563,15 +564,16 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
-
         [HttpPost]
         public ActionResult ManageRoleMaster(RoleMaster roleMaster)
         {
             RoleMaster objRoleMaster = new RoleMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             try
             {
+                //JArray array = JArray.Parse(itemMaster.ItemMasterValues);
+                roleMaster.ObjRoleMenuMapping = JsonConvert.DeserializeObject<List<RoleMenuMapping>>(roleMaster.MenuMapping);
                 objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
-                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
                 if (objRoleMaster != null)
@@ -579,34 +581,116 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objRoleMaster.IsSucceed)
                     {
-                        ViewBag.Msg = objRoleMaster.ActionMsg;
+                        ModelState.Clear();
+                        return RedirectToAction("RoleIndex", new { sMsg = objRoleMaster.ActionMsg, appToken = roleMaster.AppToken, });
                     }
                     // In case of record already exists
                     else if (!objRoleMaster.IsSucceed && objRoleMaster.RoleId != -1)
                     {
-                        ViewBag.Msg = objRoleMaster.ActionMsg;
+                        if (roleMaster.RoleId > 0)
+                        {
+                            return RedirectToAction("RoleMaster", new { iRoleId = roleMaster.RoleId, appToken = roleMaster.AppToken, sMsg = objRoleMaster.ActionMsg });
+                        }
+                        else
+                        {
+                            return RedirectToAction("RoleMaster", new { appToken = roleMaster.AppToken, sMsg = objRoleMaster.ActionMsg });
+                        }
                     }
                     // In case of any error occured
                     else
                     {
-                        ViewBag.Msg = "Unknown Error Occured !!!";
-
+                        return RedirectToAction("RoleMaster", new { iRoleId = roleMaster.RoleId, appToken = roleMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
                     }
-                    ModelState.Clear();
+                }
+                else
+                {
+                    if (roleMaster.RoleId > 0)
+                    {
+                        return RedirectToAction("RoleMaster", new { iRoleId = roleMaster.RoleId, appToken = roleMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("RoleMaster", new { appToken = roleMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                    }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "some error occurred, please try again..!";
+                ViewBag.Msg = "Unknown Error Occured !!!";
+                // to reset fields only in case of added or updated.
+                if (roleMaster.RoleId > 0)
+                {
+                    return RedirectToAction("RoleMaster", new { iRoleId = roleMaster.RoleId, appToken = roleMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                }
+                else
+                {
+                    return RedirectToAction("RoleMaster", new { appToken = roleMaster.AppToken, sMsg = "Unknown Error Occured !!!" });
+                }
             }
-            RoleMaster newRoleMaster = new RoleMaster();
-            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-            newRoleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-            newRoleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Masters/RoleMaster.cshtml", (objRoleMaster.IsSucceed ? newRoleMaster : roleMaster));
         }
+        //[HttpPost]
+        //public ActionResult ManageRoleMaster(RoleMaster roleMaster)
+        //{
+        //    RoleMaster objRoleMaster = new RoleMaster();
+        //    try
+        //    {
+        //        objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
+        //        AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+        //        roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+        //        roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+        //        if (objRoleMaster != null)
+        //        {
+        //            // In case of record successfully added or updated
+        //            if (objRoleMaster.IsSucceed)
+        //            {
+        //                ViewBag.Msg = objRoleMaster.ActionMsg;
+        //            }
+        //            // In case of record already exists
+        //            else if (!objRoleMaster.IsSucceed && objRoleMaster.RoleId != -1)
+        //            {
+        //                ViewBag.Msg = objRoleMaster.ActionMsg;
+        //            }
+        //            // In case of any error occured
+        //            else
+        //            {
+        //                ViewBag.Msg = "Unknown Error Occured !!!";
 
+        //            }
+        //            ModelState.Clear();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Msg = "some error occurred, please try again..!";
+        //    }
+        //    RoleMaster newRoleMaster = new RoleMaster();
+        //    AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+        //    newRoleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+        //    newRoleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+        //    // to reset fields only in case of added or updated.
+        //    return View("~/Views/Admin/Masters/RoleMaster.cshtml", (objRoleMaster.IsSucceed ? newRoleMaster : roleMaster));
+        //}
+        [HttpGet]
+        public ActionResult RoleMaster(int iRoleId = 0, string appToken = "", string sMsg = "")
+        {
+            try
+            {
+                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
+                RoleMaster roleMaster = new RoleMaster();
+                if (iRoleId > 0)
+                {
+                    roleMaster = roleMaster.RoleMaster_Get_By_Id(iRoleId);
+                }
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                roleMaster.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+                roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+                return View("~/Views/Admin/Masters/ManageRoleMaster.cshtml", roleMaster);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpPost]
         public ActionResult DeleteRoleMaster(RoleMaster roleMaster, int roleId)
         {

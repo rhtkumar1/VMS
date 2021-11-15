@@ -282,6 +282,7 @@
     <Content Include="Views\Admin\Masters\ItemGroupMaster.cshtml" />
     <Content Include="Views\Admin\Masters\GroupMaster.cshtml" />
     <Content Include="Views\Admin\Masters\ManageItemMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\ManageRoleMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

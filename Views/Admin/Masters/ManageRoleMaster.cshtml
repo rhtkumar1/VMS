@@ -1,0 +1,208 @@
+﻿@model IMS.Models.ViewModel.RoleMaster
+@{
+    ViewBag.Title = "Role Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+    string sBtnName = Model.ObjRoleMenuMapping.Count > 0 ? "Edit Role & Menu Mapping" : "Add Role & Menu Mapping";
+    string sClass = Model.ObjRoleMenuMapping.Count > 0 ? "btn btn-warning" : "btncustome";
+}
+
+@{
+    var AppToken = Convert.ToString(Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Item Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageRoleMaster", "Master", FormMethod.Post, new { @id = "RoleMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.RoleId)
+                            @Html.HiddenFor(m => m.MenuMapping, htmlAttributes: new { @id = "MenuMapping" })
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <button type="button" id="btnRoleAndMenuMapping" class="@sClass" name="btnRoleAndMenuMapping">@sBtnName</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div id="divShowRoleAndMenuMapping" style=" display:none">
+                                <div class="styled-input">
+                                    <div class="col-md-12 form-group">
+                                        <h5>Role Menu Priority Mapping</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="tblRole" class="table" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Form</th>
+                                                <th>Action</th>
+                                                <th>Permission</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var oRole in Model.MenuModule.Select((value, index) => (value, index)))
+                                            {
+                                                //var location = Model.LocationLists.Where(x => Convert.ToInt32(x.Value) == Convert.ToInt32(oMapping.Location_Id)).FirstOrDefault();
+                                                //string sLocationName = location != null ? location.Text : "Location Not Added";
+                                                //var party = Model.PartyLists.Where(x => Convert.ToInt32(x.Value) == Convert.ToInt32(oMapping.Party_Id)).FirstOrDefault();
+                                                //string sPartyName = party != null ? party.Text : "Party Not Added";
+                                                <tr>
+                                                    <td>
+                                                        @oRole.value.Text
+                                                    </td>
+                                                    <td>
+                                                        <input type="checkbox" id="chkMenu_@oRole.index" data-index="@oRole.index" class="form-control clsChekPermission" data-menu-id="@Convert.ToInt32(oRole.value.Value)" />
+                                                    </td>
+                                                    <td>
+                                                        <select id="ddlPermission_@oRole.index" disabled name="ddlPermission_@oRole.index">
+                                                            <option value="0">Select Permission</option>
+                                                            <option value="1">Add</option>
+                                                            <option value="2">Edit</option>
+                                                            <option value="3">Delete</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="col-md-1 pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <a href="/master/RoleIndex?appToken=@Model.AppToken" name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("body").on("click", "#btnAdd", function () {
+        //    //var bAdded = true;
+        //    //$("#IsMappingChanged").val(bAdded);
+        //    ////Reference the Party and Location ddl.
+        //    //if ($("#tblRole TBODY TR").length > 0) {
+        //    //    $("#tblRole TBODY TR").each(function () {
+        //    //        var row = $(this);
+        //    //        let party = parseInt(row.find("TD").eq(0).attr('data-party-id'));
+        //    //        let location = parseInt(row.find("TD").eq(1).attr('data-location-id'));
+        //    //        if ((parseInt($("#PartyId").val()) === party && parseInt($("#LocationId").val()) === location)) {
+        //    //            bAdded = false;
+        //    //        }
+        //    //    });
+        //    //}
+
+        //    //if (bAdded) {
+        //    //Get the reference of the Table's TBODY element.
+        //    var tBody = $("#tblRole > TBODY")[0];
+
+        //    //Add Row.
+        //    var row = tBody.insertRow(-1);
+
+        //    //Add Party cell.
+        //    var cell = $(row.insertCell(-1));
+        //    cell.html($("#PartyId :selected").text());
+        //    cell.attr('data-party-id', $("#PartyId").val())
+        //    //Add Location cell.
+        //    cell = $(row.insertCell(-1));
+        //    cell.html($("#LocationId :selected").text());
+        //    cell.attr('data-location-id', $("#LocationId").val())
+        //    //Add Button cell.
+        //    cell = $(row.insertCell(-1));
+        //    var btnRemove = $("<input />");
+        //    btnRemove.attr("type", "button");
+        //    btnRemove.attr("onclick", "Remove(this);");
+        //    btnRemove.val("Remove");
+        //    cell.append(btnRemove);
+        //    //} else {
+        //    //    alert("Item is already mapped with selected Location and Party !!!", "Select Valid Party And Location");
+        //    //}
+        //});
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            var RoleMenuMapping = [];
+            $(".clsChekPermission  input:checked").each(function () {
+                let oMapping = {};
+                if (this.checked) {
+                    let index = $(this).attr('data-index');
+                    let ddlId = "#ddlPermission_" + index;
+                    oMapping.MenuId = $(this).attr('data-menu-id');
+                    oMapping.Auth = $(ddlId).val();
+                    RoleMenuMapping.push(oMapping);
+                }
+            });
+            $("#MenuMapping").val(JSON.stringify(RoleMenuMapping));
+        });
+        $("#btnRoleAndMenuMapping").click(function () {
+            $("#divShowRoleAndMenuMapping").toggle();
+        });
+        $("[id*=chkMenu_]").click(function () {
+            let index = $(this).attr('data-index');
+            let ddlId = "#ddlPermission_" + index;
+            if (this.checked){
+                $(ddlId).prop('required', true).prop("disabled", false);
+            } else {
+                $(ddlId).prop('required', false).prop("disabled", true);
+            }
+        });
+    });
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var bAdded = true;
+        $("#IsMappingChanged").val(bAdded);
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).text();
+        if (confirm("Do you want to remove this mapping.", "Remove role and menu")) {
+            //Get the reference of the Table.
+            var table = $("#tblRole")[0];
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>

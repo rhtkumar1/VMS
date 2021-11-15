@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
@@ -23,7 +24,7 @@ namespace IMS.Models.ViewModel
         public bool IsSucceed { get; set; }
         public List<RoleMenuMapping> ObjRoleMenuMapping { get; set; }
         //XML Formate '<RoleMaping><listnode Menu_Id="10001" Auth="3"/><listnode Menu_Id="10002" Auth="1"/></RoleMaping>'
-        public string MenuMapping; 
+        public string MenuMapping;
 
 
         public RoleMaster()
@@ -44,8 +45,8 @@ namespace IMS.Models.ViewModel
                 {
                     sString += @"<listnode Menu_Id=""" + Convert.ToString(item.MenuId) + @""" Auth=""" + Convert.ToString(item.Auth) + @"""/>";
                 }
-                if(!string.IsNullOrEmpty(sString))
-                     MenuMapping = "<RoleMaping>" + sString + "</RoleMaping>";
+                if (!string.IsNullOrEmpty(sString))
+                    MenuMapping = "<RoleMaping>" + sString + "</RoleMaping>";
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Role_Id", roleMaster.RoleId));
                 SqlParameters.Add(new SqlParameter("@Title", roleMaster.Title));
@@ -102,7 +103,36 @@ namespace IMS.Models.ViewModel
 
             return roleMaster;
         }
+        public RoleMaster RoleMaster_Get_By_Id(int iRoleId)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Role_Id", iRoleId));
+                DataSet ds = DBManager.ExecuteDataSetWithParameter("Role_Menu_Mapping_Getdata", CommandType.StoredProcedure, SqlParameters);
 
+                DataRow drRole = ds.Tables[0].Rows[0];
+                RoleId = Convert.ToInt32(drRole["Role_Id"]);
+                Title = Convert.ToString(drRole["Title"]);
+                Code = Convert.ToString(drRole["Code"]);
+                IsActive = Convert.ToBoolean(drRole["Status"]);
+
+                foreach (DataRow item in ds.Tables[0].AsEnumerable())
+                {
+                    RoleMenuMapping roleMenuMapping = new RoleMenuMapping()
+                    {
+                        MenuId = Convert.ToInt32(item["Menu_Id"]),
+                        //MenuName = Convert.ToString(item["Menu_Name"]),
+                        Auth = Convert.ToInt32(item["Auth"]),
+                    };
+                    ObjRoleMenuMapping.Add(roleMenuMapping);
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
         public DataTable Role_Menu_Mapping_Get()
         {
             DataTable dt = new DataTable();
@@ -122,6 +152,7 @@ namespace IMS.Models.ViewModel
     public class RoleMenuMapping
     {
         public int MenuId { get; set; }
+        //public string MenuName { get; set; }
         public int Auth { get; set; }
     }
 }

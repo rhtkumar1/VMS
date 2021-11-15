@@ -26,7 +26,7 @@
                     <div class="col-lg-12">
                         <p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                    @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageRoleMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "RoleMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                         }
-                    </div>
+                    </div>*@
                 </div>
                 <div class="blank-page">
                     <div id="listGrid"></div>
@@ -86,13 +86,42 @@
                     { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
                     { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
-                    {
+                    @*{
                         title: "Action",
                         width: 20,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
-                    }
+                    }*@
+                    ,
+                    {
+                            title: "Action",
+                            width: 40,
+                            itemTemplate: function (value, args) {
+                                switch (@Model.AuthMode) {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        break;
+                                    case 2:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customeEditButton = `<a href="/master/rolemaster?iRoleId=${args.Role_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        return $("<div class='display-flex'></div>").append($customeEditButton);
+                                    case 3:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customeEditButton = `<a href="/master/rolemaster?iRoleId=${args.Role_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px"><i class="fa fa-trash"></i></a>')
+                                            .click(function (e) {
+                                                deleteFormData(args);
+                                                return false;
+                                            });
+                                        return $("<div class='display-flex'></div>").append($customeEditButton, $customeDeleteButton);
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
                 ];
                 var options = {
                     filtering: true,
@@ -120,19 +149,19 @@
         });
     });
 
-    var editFormData = function (dilogType, RoleMaster) {
-        if (RoleMaster.Role_Id > 0) {
-            $("#RoleId").val(RoleMaster.Role_Id);
-            $("#Title").val(RoleMaster.Title);
-            $("#Code").val(RoleMaster.Code);
-            $("#Remarks").val(RoleMaster.Remarks);
-            $("#btnSubmit").text("Update")
-        }
-        else {
-            $("#RoleId").val("0");
-            $("#btnSubmit").text("Submit")
-        }
-    };
+    //var editFormData = function (dilogType, RoleMaster) {
+    //    if (RoleMaster.Role_Id > 0) {
+    //        $("#RoleId").val(RoleMaster.Role_Id);
+    //        $("#Title").val(RoleMaster.Title);
+    //        $("#Code").val(RoleMaster.Code);
+    //        $("#Remarks").val(RoleMaster.Remarks);
+    //        $("#btnSubmit").text("Update")
+    //    }
+    //    else {
+    //        $("#RoleId").val("0");
+    //        $("#btnSubmit").text("Submit")
+    //    }
+    //};
 
     var deleteFormData = function (dialogType, RoleMaster) {
         var result = confirm("Want to delete?");
