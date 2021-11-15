@@ -27,43 +27,43 @@
                         <p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p>
                     </div>
                     @*<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        @using (Html.BeginForm("ManageRoleMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "RoleMaster" }))
-                        {
-                            @Html.HiddenFor(m => m.AppToken)
-                            @Html.HiddenFor(m => m.RoleId)
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Title<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                            @using (Html.BeginForm("ManageRoleMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "RoleMaster" }))
+                            {
+                                @Html.HiddenFor(m => m.AppToken)
+                                @Html.HiddenFor(m => m.RoleId)
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>Title<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Code<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>Code<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="styled-input">
-                                <div class="col-md-12 form-group">
-                                    <label>Remarks</label>
-                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                <div class="clearfix"></div>
+                                <div class="styled-input">
+                                    <div class="col-md-12 form-group">
+                                        <label>Remarks</label>
+                                        @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="col-md-10"></div>
-                            <div class="col-md-1">
-                                <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                <div class="clearfix"></div>
+                                <div class="col-md-10"></div>
+                                <div class="col-md-1">
+                                    <div class="appointment-btn text-lg-right">
+                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                <div class="col-md-1">
+                                    <div class="appointment-btn text-lg-right">
+                                        <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </div>*@
+                            }
+                        </div>*@
                 </div>
                 <div class="blank-page">
                     <div id="listGrid"></div>
@@ -86,14 +86,6 @@
                     { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
                     { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
                     { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
-                    @*{
-                        title: "Action",
-                        width: 20,
-                        itemTemplate: function (value, args) {
-                            return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
-                        }
-                    }*@
-                    ,
                     {
                             title: "Action",
                             width: 40,
@@ -135,7 +127,6 @@
                             return $.grep(this.RoleLists, function (RoleList) {
                                 return ((!filter.Title || RoleList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
                                     && (!filter.Code || RoleList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
-                                    //&& (!filter.Remarks || RoleList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
                             });
                         }
                     },
