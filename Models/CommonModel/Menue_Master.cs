@@ -70,12 +70,14 @@ namespace IMS.Models.ViewModel
                         if (!String.IsNullOrEmpty(Convert.ToString(dr0["menu_url"])))
                         {
                             Minu0.MenuURL = dr0["menu_url"].ToString();
+                            Minu0.MenuIcon = dr0["menu_icon"].ToString();
                             Minu0.Controller = dr0["menu_url"].ToString().Split('/')[0].ToString();
                             Minu0.Action = dr0["menu_url"].ToString().Split('/')[1].ToString();
                         }
                         else
                         {
                             Minu0.MenuURL = "#";
+                            Minu0.MenuIcon = "#";
                             Minu0.Controller = "#";
                             Minu0.Action = "#";
                         }
@@ -92,12 +94,14 @@ namespace IMS.Models.ViewModel
                                 if (!String.IsNullOrEmpty(Convert.ToString(dr1["menu_url"])))
                                 {
                                     Minu1.MenuURL = dr1["menu_url"].ToString();
+                                    Minu1.MenuIcon = dr1["menu_icon"].ToString();
                                     Minu1.Controller = dr1["menu_url"].ToString().Split('/')[0].ToString();
                                     Minu1.Action = dr1["menu_url"].ToString().Split('/')[1].ToString();
                                 }
                                 else
                                 {
                                     Minu1.MenuURL = "#";
+                                    Minu1.MenuIcon = "#";
                                     Minu1.Controller = "#";
                                     Minu1.Action = "#";
                                 }
@@ -114,12 +118,14 @@ namespace IMS.Models.ViewModel
                                         if (!String.IsNullOrEmpty(Convert.ToString(dr2["menu_url"])))
                                         {
                                             Minu2.MenuURL = dr2["menu_url"].ToString();
+                                            Minu2.MenuIcon = dr2["menu_icon"].ToString();
                                             Minu2.Controller = dr2["menu_url"].ToString().Split('/')[0].ToString();
                                             Minu2.Action = dr2["menu_url"].ToString().Split('/')[1].ToString();
                                         }
                                         else
                                         {
                                             Minu2.MenuURL = "#";
+                                            Minu2.MenuIcon = "#";
                                             Minu2.Controller = "#";
                                             Minu2.Action = "#";
                                         }
@@ -136,12 +142,14 @@ namespace IMS.Models.ViewModel
                                                 if (!String.IsNullOrEmpty(Convert.ToString(dr3["menu_url"])))
                                                 {
                                                     Minu3.MenuURL = dr3["menu_url"].ToString();
+                                                    Minu3.MenuIcon = dr3["menu_icon"].ToString();
                                                     Minu3.Controller = dr3["menu_url"].ToString().Split('/')[0].ToString();
                                                     Minu3.Action = dr3["menu_url"].ToString().Split('/')[1].ToString();
                                                 }
                                                 else
                                                 {
                                                     Minu3.MenuURL = "#";
+                                                    Minu3.MenuIcon = "#";
                                                     Minu3.Controller = "#";
                                                     Minu3.Action = "#";
                                                 }
@@ -181,6 +189,7 @@ namespace IMS.Models.ViewModel
         public string Action { get; set; }
         public string AppToken { get; set; }
         public string MenuTitle { get; set; }
+        public string MenuIcon { get; set; }
         public int MenuSequence { get; set; }
         public int MenuParentID { get; set; }
         public List<Menu_Master_Display> ChildList = new List<Menu_Master_Display>();
