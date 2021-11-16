@@ -46,6 +46,7 @@ namespace IMS.Models.ViewModel
                     if (!String.IsNullOrEmpty(Convert.ToString(dr0["menu_url"])))
                     {
                         objMenu_Master_Role_Wise.MenuURL = dr0["menu_url"].ToString();
+                        objMenu_Master_Role_Wise.MenuIcon = dr0["Menu_Icon"].ToString();
                         objMenu_Master_Role_Wise.Controller = dr0["menu_url"].ToString().Split('/')[0].ToString();
                         objMenu_Master_Role_Wise.Action = dr0["menu_url"].ToString().Split('/')[1].ToString();
                     }
@@ -54,6 +55,7 @@ namespace IMS.Models.ViewModel
                         objMenu_Master_Role_Wise.MenuURL = "#";
                         objMenu_Master_Role_Wise.Controller = "#";
                         objMenu_Master_Role_Wise.Action = "#";
+                        objMenu_Master_Role_Wise.MenuIcon = "";
                     }
                     objMenu_Master_Role_Wise.AuthMode = CommonUtility.ConvertInt(dr0["Auth"].ToString());
                     objMenu_Master_Role_Wise.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), objMenu_Master_Role_Wise.AuthMode.ToString()));//Uri.EscapeDataString(EncryptDecrypt.EncryptString(string.Format("MID={0};AuthMode={1}", objMenu_Master_Role_Wise.MenuID.ToString(), dr0["Auth"].ToString())));
@@ -179,6 +181,7 @@ namespace IMS.Models.ViewModel
         public string Action { get; set; }
         public string AppToken { get; set; }
         public int AuthMode { get; set; }
+        public string MenuIcon { get; set; }
     }
     public class Menu_Master_Display
     {
