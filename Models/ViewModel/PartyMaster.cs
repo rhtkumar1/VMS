@@ -125,11 +125,48 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
-
+        public PartyMaster GetPartyById(int partyId)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Clear();
+                SqlParameters.Add(new SqlParameter("@Party_Id", partyId));
+                DataSet ds = DBManager.ExecuteDataSetWithParameter("Party_Master_Get_By_Id", CommandType.StoredProcedure, SqlParameters);
+                DataRow drParty = ds.Tables[0].Rows[0];
+                PartyId = Convert.ToInt32(drParty["Party_Id"]);
+                Title = Convert.ToString(drParty["Title"]);
+                Code = Convert.ToString(drParty["Code"]);
+                OfficeId = Convert.ToInt32(drParty["Office_Id"]);
+                GroupId = Convert.ToInt32(drParty["Group_Id"]);
+                MaintainRef = Convert.ToBoolean(drParty["Maintain_Ref"]);
+                CreditDays = Convert.ToInt32(drParty["CreditDays"]);
+                CreditLimit = Convert.ToInt32(drParty["CreditLimit"]);
+                VariableLimit = Convert.ToDecimal(drParty["VariableLimit"]);
+                FirstName = Convert.ToString(drParty["FirstName"]);
+                MiddleName = Convert.ToString(drParty["MiddleName"]);
+                LastName = Convert.ToString(drParty["LastName"]);
+                Mobile = Convert.ToString(drParty["Mobile"]);
+                Email = Convert.ToString(drParty["Email"]);
+                Gender = Convert.ToString(drParty["Gender"]);
+                Address1 = Convert.ToString(drParty["Address1"]);
+                Address2 = Convert.ToString(drParty["Address2"]);
+                City = Convert.ToString(drParty["City"]);
+                State = Convert.ToString(drParty["State"]);
+                Zip = Convert.ToString(drParty["Zip"]);
+                Country = Convert.ToString(drParty["Country"]);
+                CategoryId = Convert.ToString(drParty["Category_Id"]);
+                OpeningBalance = Convert.ToString(drParty["OpeningBalance"]);
+                Remarks = Convert.ToString(drParty["Remarks"]);
+                return this;
+            }
+            catch (Exception ex)
+            { throw ex; }
+        }
 
         public PartyMaster PartyMaster_Delete(PartyMaster partyMaster)
         {
-            
+
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();

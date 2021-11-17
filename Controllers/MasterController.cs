@@ -707,7 +707,25 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
-
+        [HttpGet]
+        public ActionResult ManagePartyMaster(int partyId = 0, string appToken = "")
+        {
+            PartyMaster partyMaster = new PartyMaster();
+            try
+            {
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                if (partyId > 0)
+                {
+                    partyMaster = partyMaster.GetPartyById(partyId);
+                }
+                partyMaster.AppToken = CommonUtility.URLAppToken(AppToken == null ? appToken : AppToken);
+                partyMaster.AuthMode = CommonUtility.GetAuthMode(AppToken == null ? appToken : AppToken).ToString();
+            }
+            catch (Exception ex)
+            {
+            }
+            return View("~/Views/Admin/Masters/ManagePartyMaster.cshtml", partyMaster);
+        }
         [HttpPost]
         public ActionResult ManagePartyMaster(PartyMaster partyMaster)
         {

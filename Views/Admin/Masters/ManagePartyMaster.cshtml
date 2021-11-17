@@ -1,0 +1,211 @@
+﻿@model IMS.Models.ViewModel.PartyMaster
+@{
+    ViewBag.Title = "Party Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Manage Party Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManagePartyMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "PartyMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.PartyId)
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Group<span class="mandatory">*</span></label>
+                                    @{var groupItems = new List<SelectListItem>{
+                                                                  new SelectListItem { Text = "Select Office", Value="" },
+                                                                  new SelectListItem { Text = "Group-1", Value="1" },
+                                                                  new SelectListItem { Text = "Group-2", Value="2" },
+                                                                   new SelectListItem { Text = "Group-3", Value="3" },
+                                                             };
+                                    }
+                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Maintain Ref<span class="mandatory">*</span></label>
+                                    @Html.CheckBoxFor(m => m.MaintainRef, new { @checked = "checked", @class = "form-control", @id = "MaintainRef" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Credit Days<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.CreditDays, htmlAttributes: new { @placeholder = "Enter Credit Days", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Credit Limit</label>
+                                    @Html.TextBoxFor(m => m.CreditLimit, htmlAttributes: new { @placeholder = "Enter Credit Limit", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Variable Limit<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.VariableLimit, htmlAttributes: new { @placeholder = "Enter Variable Limit", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>FirstName<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.FirstName, htmlAttributes: new { @placeholder = "Enter First Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Middle Name</label>
+                                    @Html.TextBoxFor(m => m.MiddleName, htmlAttributes: new { @placeholder = "Enter Middle Name", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Last Name<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.LastName, htmlAttributes: new { @placeholder = "Enter Last Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Mobile<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Mobile, htmlAttributes: new { @placeholder = "Enter Mobile", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Email<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @placeholder = "Enter Email", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Gender<span class="mandatory">*</span></label>
+                                    @{var genderItems = new List<SelectListItem>{
+                                                                  new SelectListItem { Text = "Select Gender", Value="" },
+                                                                  new SelectListItem { Text = "Male", Value="1" },
+                                                                  new SelectListItem { Text = "Female", Value="2" },
+                                                                   new SelectListItem { Text = "Other", Value="3" },
+                                                             };
+                                    }
+                                    @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-6 form-group">
+                                    <label>Address 1<span class="mandatory">*</span></label>
+                                    @Html.TextAreaFor(m => m.Address1, htmlAttributes: new { @placeholder = "Address 1", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-6 form-group">
+                                    <label>Address 2</label>
+                                    @Html.TextAreaFor(m => m.Address2, htmlAttributes: new { @placeholder = "Address 2", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Country<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Country, htmlAttributes: new { @placeholder = "Enter Country", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>State<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>City<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.City, htmlAttributes: new { @placeholder = "Enter City", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Zip Code<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Zip, htmlAttributes: new { @placeholder = "Zip Code", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#MaintainRef").change(function () {
+            if (this.checked) {
+                $('#MaintainRef').prop('checked', true);
+            } else {
+                $('#MaintainRef').prop('checked', false);
+            }
+        });
+    });
+</script>
