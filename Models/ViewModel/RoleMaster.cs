@@ -24,13 +24,14 @@ namespace IMS.Models.ViewModel
         public bool IsSucceed { get; set; }
         public List<RoleMenuMapping> ObjRoleMenuMapping { get; set; }
         //XML Formate '<RoleMaping><listnode Menu_Id="10001" Auth="3"/><listnode Menu_Id="10002" Auth="1"/></RoleMaping>'
-        public string MenuMapping;
+        public string MenuMapping { get; set; }
 
 
         public RoleMaster()
         {
             ObjRoleMenuMapping = new List<RoleMenuMapping>();
-            MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 AND Menu_Parent_Id is null"), "Id", "Value");
+            //MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 AND Menu_Parent_Id is null"), "Id", "Value");
+            MenuModule = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive=1 "), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
             MenuMapping = string.Empty;
         }
@@ -39,7 +40,6 @@ namespace IMS.Models.ViewModel
         {
             try
             {
-                // Role_Master_Insertupdate 0,'Test Role3','Delhi',null,1--,'<RoleMaping><listnode Menu_Id="10001" Auth="3"/><listnode Menu_Id="10002" Auth="1"/></RoleMaping>'
                 string sString = string.Empty;
                 foreach (var item in ObjRoleMenuMapping)
                 {
@@ -115,6 +115,7 @@ namespace IMS.Models.ViewModel
                 RoleId = Convert.ToInt32(drRole["Role_Id"]);
                 Title = Convert.ToString(drRole["Title"]);
                 Code = Convert.ToString(drRole["Code"]);
+                Remarks = Convert.ToString(drRole["Remarks"]);
                 IsActive = Convert.ToBoolean(drRole["Status"]);
 
                 foreach (DataRow item in ds.Tables[0].AsEnumerable())
@@ -122,8 +123,9 @@ namespace IMS.Models.ViewModel
                     RoleMenuMapping roleMenuMapping = new RoleMenuMapping()
                     {
                         MenuId = Convert.ToInt32(item["Menu_Id"]),
-                        //MenuName = Convert.ToString(item["Menu_Name"]),
+                        MenuName = Convert.ToString(item["Menu_Name"]),
                         Auth = Convert.ToInt32(item["Auth"]),
+                        Status= Convert.ToBoolean(item["Status"])
                     };
                     ObjRoleMenuMapping.Add(roleMenuMapping);
                 }
@@ -152,7 +154,8 @@ namespace IMS.Models.ViewModel
     public class RoleMenuMapping
     {
         public int MenuId { get; set; }
-        //public string MenuName { get; set; }
+        public string MenuName { get; set; }
         public int Auth { get; set; }
+        public bool Status { get; set; }
     }
 }

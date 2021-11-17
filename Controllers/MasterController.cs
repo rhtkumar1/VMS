@@ -571,7 +571,6 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
             try
             {
-                //JArray array = JArray.Parse(itemMaster.ItemMasterValues);
                 roleMaster.ObjRoleMenuMapping = JsonConvert.DeserializeObject<List<RoleMenuMapping>>(roleMaster.MenuMapping);
                 objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
                 roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -628,48 +627,6 @@ namespace IMS.Controllers
                 }
             }
         }
-        //[HttpPost]
-        //public ActionResult ManageRoleMaster(RoleMaster roleMaster)
-        //{
-        //    RoleMaster objRoleMaster = new RoleMaster();
-        //    try
-        //    {
-        //        objRoleMaster = roleMaster.RoleMaster_InsertUpdate(roleMaster);
-        //        AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-        //        roleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-        //        roleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-        //        if (objRoleMaster != null)
-        //        {
-        //            // In case of record successfully added or updated
-        //            if (objRoleMaster.IsSucceed)
-        //            {
-        //                ViewBag.Msg = objRoleMaster.ActionMsg;
-        //            }
-        //            // In case of record already exists
-        //            else if (!objRoleMaster.IsSucceed && objRoleMaster.RoleId != -1)
-        //            {
-        //                ViewBag.Msg = objRoleMaster.ActionMsg;
-        //            }
-        //            // In case of any error occured
-        //            else
-        //            {
-        //                ViewBag.Msg = "Unknown Error Occured !!!";
-
-        //            }
-        //            ModelState.Clear();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.Msg = "some error occurred, please try again..!";
-        //    }
-        //    RoleMaster newRoleMaster = new RoleMaster();
-        //    AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-        //    newRoleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-        //    newRoleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-        //    // to reset fields only in case of added or updated.
-        //    return View("~/Views/Admin/Masters/RoleMaster.cshtml", (objRoleMaster.IsSucceed ? newRoleMaster : roleMaster));
-        //}
         [HttpGet]
         public ActionResult RoleMaster(int iRoleId = 0, string appToken = "", string sMsg = "")
         {
