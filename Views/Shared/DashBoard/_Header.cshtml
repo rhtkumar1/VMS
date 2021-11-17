@@ -67,7 +67,7 @@
                                 @foreach (var subChildMenuList in childMenuList.ChildList)
                                 {
                                     <li>
-                                        <a href="~/@(subChildMenuList.MenuURL+"?AppToken="+subChildMenuList.AppToken)" class="hvr-bounce-to-right"><i class="fa fa-user nav_icon "></i><span class="nav-label">@subChildMenuList.MenuTitle</span></a>
+                                        <a href="~/@(subChildMenuList.MenuURL+"?AppToken="+subChildMenuList.AppToken)" class="hvr-bounce-to-right"><i class="@subChildMenuList.MenuIcon nav_icon"></i><span class="nav-label">@subChildMenuList.MenuTitle</span></a>
                                     </li>
                                 }
                             </ul>
