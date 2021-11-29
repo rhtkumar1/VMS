@@ -168,6 +168,7 @@
     <Compile Include="Models\ViewModel\ItemMaster.cs" />
     <Compile Include="Models\ViewModel\LocationMaster.cs" />
     <Compile Include="Models\CommonModel\Menue_Master.cs" />
+    <Compile Include="Models\ViewModel\MaterialPurchase.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
