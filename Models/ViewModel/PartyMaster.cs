@@ -53,6 +53,8 @@ namespace IMS.Models.ViewModel
         public bool IsMappingChanged { get; set; }
         public string CategoryId { get; set; }
         public string OpeningBalance { get; set; }
+        public List<PartyAndGstMapping> PartyAndGstMapping { get; set; }
+        public List<dynamic> ItemMappingList { get; set; }
 
         public PartyMaster()
         {
@@ -64,12 +66,21 @@ namespace IMS.Models.ViewModel
             GSTNatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=2 And IsActive=1"), "Id", "Value");
 
             Loginid = CommonUtility.GetLoginID();
+            ItemMappingList = new List<dynamic>();
+            PartyAndGstMapping = new List<PartyAndGstMapping>();
         }
 
         public PartyMaster PartyMaster_InsertUpdate(PartyMaster partyMaster)
         {
             try
             {
+                string sString = string.Empty;
+                foreach (var item in PartyAndGstMapping)
+                {
+                    sString += @"<listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" GSTNo=""" + Convert.ToString(item.GSTNo) + @""" GSTType=""" + Convert.ToString(1) + @"""  GSTNature=""" + Convert.ToString(1) + @"""/>";
+                }
+                PartyMapping = "<PartyMaping>" + sString + "</PartyMaping>";
+
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", partyMaster.PartyId));
                 SqlParameters.Add(new SqlParameter("@Title", partyMaster.Title));
@@ -185,7 +196,10 @@ namespace IMS.Models.ViewModel
 
             return partyMaster;
         }
-
-
+    }
+    public class PartyAndGstMapping
+    {
+        public int LocationId { get; set; }
+        public string GSTNo { get; set; }
     }
 }

@@ -732,6 +732,8 @@ namespace IMS.Controllers
             PartyMaster objPartyMaster = new PartyMaster();
             try
             {
+                //JArray array = JArray.Parse(itemMaster.ItemMasterValues);
+                partyMaster.PartyAndGstMapping = JsonConvert.DeserializeObject<List<PartyAndGstMapping>>(partyMaster.PartyMapping);
                 objPartyMaster = partyMaster.PartyMaster_InsertUpdate(partyMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 partyMaster.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -1264,6 +1266,108 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Unit Conversion Master
+        public ActionResult UnitConverson()
+        {
+            UnitConversonFactor unitConversion = new UnitConversonFactor();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            unitConversion.AppToken = CommonUtility.URLAppToken(AppToken);
+            unitConversion.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/UnitConversion.cshtml", unitConversion);
+        }
+
+        [HttpGet]
+        public ActionResult GetUnitConversionMaster(UnitConversonFactor unitConversonFactor, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = unitConversonFactor.UnitConversonFactor_Get();
+                dt.TableName = "UnitConversonLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageUnitConversonMaster(UnitConversonFactor unitConversonFactor)
+        {
+            UnitConversonFactor objUnitConversonFactor = new UnitConversonFactor();
+            try
+            {
+                objUnitConversonFactor = unitConversonFactor.UnitConversonFactor_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                unitConversonFactor.AppToken = CommonUtility.URLAppToken(AppToken);
+                unitConversonFactor.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objUnitConversonFactor != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objUnitConversonFactor.IsSucceed)
+                    {
+                        ViewBag.Msg = objUnitConversonFactor.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objUnitConversonFactor.IsSucceed && objUnitConversonFactor.ConversionId != -1)
+                    {
+                        ViewBag.Msg = objUnitConversonFactor.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            UnitConversonFactor newUnitConversonFactor = new UnitConversonFactor();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newUnitConversonFactor.AppToken = CommonUtility.URLAppToken(AppToken);
+            newUnitConversonFactor.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/UnitConversion.cshtml", (objUnitConversonFactor.IsSucceed ? newUnitConversonFactor : unitConversonFactor));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteUnitConversionMaster(UnitConversonFactor unitConversonFactor, int ConversionId)
+        {
+            try
+            {
+                unitConversonFactor.ConversionId = ConversionId;
+                UnitConversonFactor objUnitConversonFactor = unitConversonFactor.UnitConversonFactor_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                unitConversonFactor.AppToken = CommonUtility.URLAppToken(AppToken);
+                unitConversonFactor.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objUnitConversonFactor != null)
+                {
+                    if (objUnitConversonFactor.ConversionId > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/UnitConversion.cshtml", unitConversonFactor);
+        }
+        #endregion
         #region Group Master
         public ActionResult GroupIndex()
         {

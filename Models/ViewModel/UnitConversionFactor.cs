@@ -15,7 +15,7 @@ namespace IMS.Models.ViewModel
         public int ConversionId { get; set; }
         public int FromUnitId { get; set; }
         public int ToUnitId { get; set; }
-        public int Factor { get; set; }
+        public decimal Factor { get; set; }
         public bool IsActive { get; set; }
         public int Createdby { get; set; }
         public int Loginid { get; set; }
