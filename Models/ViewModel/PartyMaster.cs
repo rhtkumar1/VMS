@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using IMS.Models.CommonModel;
+using System.Dynamic;
 
 namespace IMS.Models.ViewModel
 {
@@ -55,6 +56,9 @@ namespace IMS.Models.ViewModel
         public string OpeningBalance { get; set; }
         public List<PartyAndGstMapping> PartyAndGstMapping { get; set; }
         public List<dynamic> ItemMappingList { get; set; }
+        public int LocationId { get; set; }
+        public int GSTType { get; set; }
+        public int GSTNature { get; set; }
 
         public PartyMaster()
         {
@@ -77,7 +81,7 @@ namespace IMS.Models.ViewModel
                 string sString = string.Empty;
                 foreach (var item in PartyAndGstMapping)
                 {
-                    sString += @"<listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" GSTNo=""" + Convert.ToString(item.GSTNo) + @""" GSTType=""" + Convert.ToString(1) + @"""  GSTNature=""" + Convert.ToString(1) + @"""/>";
+                    sString += @"<listnode Location_Id=""" + Convert.ToString(item.Location_Id) + @""" GSTNo=""" + Convert.ToString(item.GSTNo) + @""" GSTType=""" + Convert.ToString(item.GSTType_Id) + @"""  GSTNature=""" + Convert.ToString(item.GSTNature_Id) + @"""/>";
                 }
                 PartyMapping = "<PartyMaping>" + sString + "</PartyMaping>";
 
@@ -145,6 +149,21 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Party_Id", partyId));
                 DataSet ds = DBManager.ExecuteDataSetWithParameter("Party_Master_Get_By_Id", CommandType.StoredProcedure, SqlParameters);
                 DataRow drParty = ds.Tables[0].Rows[0];
+                DataTable dtItem_Party_Gst_Mapping = ds.Tables[1];
+                foreach (DataRow item in dtItem_Party_Gst_Mapping.AsEnumerable())
+                {
+                    dynamic dGstMapping = new ExpandoObject();
+                    dGstMapping.Party_Id = Convert.ToInt32(item["Party_Id"].ToString());
+                    dGstMapping.Location_Id = Convert.ToInt32(item["Location_Id"].ToString());
+                    dGstMapping.GSTNo = item["GSTNo"].ToString();
+                    dGstMapping.Location = item["Location"].ToString();
+                    dGstMapping.GSTType = item["GSTType"].ToString();
+                    dGstMapping.GSTNature = item["GSTNature"].ToString();
+                    dGstMapping.GSTType_Id = item["GSTType_Id"].ToString();
+                    dGstMapping.GSTNature_Id = item["GSTNature_Id"].ToString();
+                    ItemMappingList.Add(dGstMapping);
+                }
+
                 PartyId = Convert.ToInt32(drParty["Party_Id"]);
                 Title = Convert.ToString(drParty["Title"]);
                 Code = Convert.ToString(drParty["Code"]);
@@ -199,7 +218,9 @@ namespace IMS.Models.ViewModel
     }
     public class PartyAndGstMapping
     {
-        public int LocationId { get; set; }
+        public int GSTType_Id { get; set; }
+        public int Location_Id { get; set; }
+        public int GSTNature_Id { get; set; }
         public string GSTNo { get; set; }
     }
 }
