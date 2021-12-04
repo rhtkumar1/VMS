@@ -1,8 +1,8 @@
 ﻿@model IMS.Models.ViewModel.PartyMaster
 @{
-    ViewBag.Title = "Party Master";
+    ViewBag.Title = "Ledger";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
-    string sBtnName = Model.ItemMappingList.Count > 0 ? "Edit Gst Mapping" : "Add Gst Mapping";
+    string sBtnName = Model.ItemMappingList.Count > 0 ? "Edit GST Mapping" : "Add GST Mapping";
     string sClass = Model.ItemMappingList.Count > 0 ? "btn btn-warning" : "btncustome";
 }
 
@@ -17,7 +17,7 @@
             <h2>
                 <a href="/admin/dashboard">Home</a>
                 <i class="fa fa-angle-right"></i>
-                <span>Manage Party Master</span>
+                <span>Manage Ledger</span>
             </h2>
         </div>
         <!--//banner-->
@@ -104,26 +104,26 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Last Name<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.LastName, htmlAttributes: new { @placeholder = "Enter Last Name", @required = "required", @class = "form-control" })
+                                    <label>Last Name</label>
+                                    @Html.TextBoxFor(m => m.LastName, htmlAttributes: new { @placeholder = "Enter Last Name", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Mobile<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Mobile, htmlAttributes: new { @placeholder = "Enter Mobile", @required = "required", @class = "form-control" })
+                                    <label>Mobile</label>
+                                    @Html.TextBoxFor(m => m.Mobile, htmlAttributes: new { @placeholder = "Enter Mobile", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Email<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @placeholder = "Enter Email", @required = "required", @class = "form-control" })
+                                    <label>Email</label>
+                                    @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @placeholder = "Enter Email", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Gender<span class="mandatory">*</span></label>
+                                    <label>Gender</label>
                                     @{var genderItems = new List<SelectListItem>{
                                                                   new SelectListItem { Text = "Select Gender", Value="" },
                                                                   new SelectListItem { Text = "Male", Value="1" },
@@ -131,7 +131,7 @@
                                                                    new SelectListItem { Text = "Other", Value="3" },
                                                              };
                                     }
-                                    @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control"})
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -189,7 +189,7 @@
                             <div id="divShowPartyAndGstMapping" style=" display:none">
                                 <div class="styled-input">
                                     <div class="col-md-12 form-group">
-                                        <h5>Item Party Gst Mapping</h5>
+                                        <h5></h5>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -230,7 +230,7 @@
                                                     @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "LocationId" })
                                                 </td>
                                                 <td>
-                                                    <label>Gst No<span class="mandatory">*</span></label>
+                                                    <label>GST No<span class="mandatory">*</span></label>
                                                     <input type="text" id="txtGst" name="txtGst" class="form-control" value="" />
                                                 </td>
                                                 <td>
