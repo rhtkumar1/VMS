@@ -17,6 +17,9 @@ namespace IMS.Models.ViewModel
         public int OfficeId { get; set; }
         public string PONo { get; set; }
         public int PartyId { get; set; }
+        public string PartyName { get; set; }
+        public int ItemId { get; set; }
+        public int StateId { get; set; }
         public int SupplyStateId { get; set; }
         public DateTime TransactionDate { get; set; }
         public decimal PurchaseAmount { get; set; }
@@ -28,6 +31,7 @@ namespace IMS.Models.ViewModel
         public bool IsActive { get; set; }
         public SelectList OfficeLists { get; set; }
         public SelectList PartyLists { get; set; }
+        public SelectList StateLists { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
@@ -85,8 +89,7 @@ namespace IMS.Models.ViewModel
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Invoice_No", InvoiceNo));
-                SqlParameters.Add(new SqlParameter("@PartyId", PartyId));
+                SqlParameters.Add(new SqlParameter("@Purchase_Id", PurchaseId));
                 dt = DBManager.ExecuteDataTable("Material_Purchase_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
@@ -94,6 +97,70 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
+        public DataTable MaterialPurchase_GetInvoice()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                SqlParameters.Add(new SqlParameter("@InvoiceNo", InvoiceNo));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetInvoice", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetParty()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party", PartyName));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetParty", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetGST_Detail()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", ItemId));
+                SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
+                SqlParameters.Add(new SqlParameter("@P_State_Id", StateId));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetHSN_Detail", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetGST_State()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetGST_State", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
 
         public MaterialPurchase MaterialPurchase_Delete()
         {
