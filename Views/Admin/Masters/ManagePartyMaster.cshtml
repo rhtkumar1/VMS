@@ -55,11 +55,11 @@
                                 <div class="col-md-3 form-group">
                                     <label>Group<span class="mandatory">*</span></label>
                                     @{var groupItems = new List<SelectListItem>{
-                                                                  new SelectListItem { Text = "Select Office", Value="" },
-                                                                  new SelectListItem { Text = "Group-1", Value="1" },
-                                                                  new SelectListItem { Text = "Group-2", Value="2" },
-                                                                   new SelectListItem { Text = "Group-3", Value="3" },
-                                                             };
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Select Office", Value="" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Group-1", Value="1" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Group-2", Value="2" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           new SelectListItem { Text = "Group-3", Value="3" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     };
                                     }
                                     @Html.DropDownListFor(m => m.GroupId, new SelectList(groupItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
@@ -125,13 +125,13 @@
                                 <div class="col-md-4 form-group">
                                     <label>Gender</label>
                                     @{var genderItems = new List<SelectListItem>{
-                                                                  new SelectListItem { Text = "Select Gender", Value="" },
-                                                                  new SelectListItem { Text = "Male", Value="1" },
-                                                                  new SelectListItem { Text = "Female", Value="2" },
-                                                                   new SelectListItem { Text = "Other", Value="3" },
-                                                             };
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Select Gender", Value="" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Male", Value="1" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Female", Value="2" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           new SelectListItem { Text = "Other", Value="3" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     };
                                     }
-                                    @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control"})
+                                    @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -249,7 +249,13 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-10"></div>
+                            <div class="col-md-8"></div>
+
+                            <div class="col-md-2">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome pull-right">Back To List</button>
+                                </div>
+                            </div>
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
@@ -273,6 +279,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#btnBack").click(function () {
+            window.location.href = "@Url.Action("partyindex", "master")?AppToken=@Model.AppToken";
+        });
         $("#MaintainRef").change(function () {
             if (this.checked) {
                 $('#MaintainRef').prop('checked', true);
@@ -337,7 +346,7 @@
                 $("#txtGst").focus();
                 alert("Please enter gst number !!!", "Enter Gst Number");
             }
-            
+
         });
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
