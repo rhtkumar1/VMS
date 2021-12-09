@@ -171,6 +171,7 @@
     <Compile Include="Models\ViewModel\MaterialPurchase.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
+    <Compile Include="Models\ViewModel\PurchaseOrder.cs" />
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
