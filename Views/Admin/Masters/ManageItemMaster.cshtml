@@ -176,9 +176,9 @@
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-md-1 pull-right">
+                            <div class="col-md-2 pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <a href="/master/ItemIndex?appToken=@Model.AppToken"name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</a>
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</button>
                                 </div>
                             </div>
                         }
@@ -190,7 +190,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function () {
+    $(document).ready(function () {
         $("body").on("click", "#btnAdd", function () {
             var bAdded = true;
             $("#IsMappingChanged").val(bAdded);
@@ -202,9 +202,9 @@ $(document).ready(function () {
                     let location = parseInt(row.find("TD").eq(1).attr('data-location-id'));
                     if ((parseInt($("#PartyId").val()) === party && parseInt($("#LocationId").val()) === location)) {
                         bAdded = false;
-                    } 
+                    }
                 });
-            } 
+            }
 
             if (bAdded) {
                 //Get the reference of the Table's TBODY element.
@@ -246,6 +246,9 @@ $(document).ready(function () {
         });
         $("#btnPartyAndLocationMapping").click(function () {
             $("#divShowPartyAndLocationMapping").toggle();
+        });
+          $("#btnBack").click(function () {
+            window.location.href = "@Url.Action("ItemIndex", "master")?AppToken=@Model.AppToken";
         });
     });
     function Remove(button) {
