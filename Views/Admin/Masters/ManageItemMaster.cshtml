@@ -108,8 +108,40 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
+
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-3 form-group">
+                                    <label>Max Discount</label>
+                                    @Html.TextBoxFor(m => m.MaxDiscount, htmlAttributes: new { @placeholder = "Max Discount", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>DeactivateDate</label>
+                                    @Html.TextBoxFor(m => m.DeactivateDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>MRP<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MRP, htmlAttributes: new { @placeholder = "MRP", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>ListPrice<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ListPrice, htmlAttributes: new { @placeholder = "List Price", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Scheme</label>
+                                    @Html.CheckBoxFor(m => m.Scheme, htmlAttributes: new { @placeholder = "Scheme", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-9 form-group">
                                     <label>Remarks</label>
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
                                 </div>

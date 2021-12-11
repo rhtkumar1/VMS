@@ -54,7 +54,11 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
+        public int MaxDiscount { get; set; }
+        public string DeactivateDate { get; set; }
+        public bool Scheme { get; set; }
+        public decimal MRP { get; set; }
+        public decimal ListPrice { get; set; }
 
         public ItemMaster()
         {
@@ -101,6 +105,12 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                SqlParameters.Add(new SqlParameter("@MaxDiscount", MaxDiscount));
+                if(DeactivateDate != "")
+                    SqlParameters.Add(new SqlParameter("@DeactivateDate", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(DeactivateDate))));
+                SqlParameters.Add(new SqlParameter("@Scheme", Scheme));
+                SqlParameters.Add(new SqlParameter("@MRP", MRP));
+                SqlParameters.Add(new SqlParameter("@ListPrice", ListPrice));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -194,6 +204,15 @@ namespace IMS.Models.ViewModel
                     BaseUnitId = Convert.ToInt32(dr["BaseUnit_Id"]);
                     InwardUnitId = Convert.ToInt32(dr["InwardUnit_Id"]);
                     OutwardUnitId = Convert.ToInt32(dr["OutwardUnit_Id"]);
+                    MaxDiscount=Convert.ToInt32(dr["MaxDiscount"]);
+                    object value = dr["DeactivateDate"];
+                    if (value != DBNull.Value)
+                    {
+                        DeactivateDate = Convert.ToString(dr["DeactivateDate"]);
+                    }   
+                    Scheme=Convert.ToBoolean(dr["Scheme"]);
+                    MRP = Convert.ToDecimal(dr["MRP"]); ; 
+                    ListPrice = Convert.ToDecimal(dr["ListPrice"]); ;
                     //ItemMapping = dr["ItemMapping"].ToString();
                     //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
                     Remarks = dr["Remarks"].ToString();
