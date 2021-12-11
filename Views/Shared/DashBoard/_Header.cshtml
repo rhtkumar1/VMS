@@ -52,10 +52,10 @@
                 <li class="side-menu-ddl">
                     <i class="fa fa-list nav_icon"></i>
                     <select name="cars" id="cars" class="side-menu-ddl-txt">
-                        <option value="volvo">VOLVO</option>
-                        <option value="saab">SAAB</option>
-                        <option value="opel">OPEL</option>
-                        <option value="audi">AUDI</option>
+                        @foreach (var FY in FYYears)
+                        {
+                        <option value="@FY.Value">@FY.Text</option>
+                        }                    
                     </select>
                 </li>
                 @foreach (var parentMenuList in menuLists)
