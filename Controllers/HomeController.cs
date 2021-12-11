@@ -23,6 +23,7 @@ namespace IMS.Controllers
                     Authenticate ObjAuthenticate = new Authenticate().AuthenticateUser(loginid, password, Session.SessionID.ToString());
                     if (ObjAuthenticate.IsAuthenticated)
                     {
+                        Session["FYYears"] = new FinancialMaster().FYList(ObjAuthenticate.CompanyID);
                         Session["Menu_Master_Role_Wise"] = ObjAuthenticate.ObjMenu_Master_Role_Wise;
                         ObjAuthenticate.ObjMenu_Master_Role_Wise = null;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;

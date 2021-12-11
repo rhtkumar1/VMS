@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IMS.Models.CommonModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
 
 namespace IMS.Models.ViewModel
 {
@@ -9,6 +11,7 @@ namespace IMS.Models.ViewModel
     // We are creating Fy at the time of Company Creation
     public class FinancialMaster
     {
+        public SelectList FY { get; set; }
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public int FinancialId { get; set; }
@@ -22,9 +25,14 @@ namespace IMS.Models.ViewModel
 
         public FinancialMaster()
         {
-            Loginid = CommonUtility.GetLoginID();
+            //Loginid = CommonUtility.GetLoginID();
         }
-
+        public SelectList FYList(int CompanyID)
+        {
+            string WhereClouse = "And IsActive=1 and Company_Id =" + CompanyID.ToString();
+            FY = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", WhereClouse), "Id", "Value");
+            return FY;
+        }
         public FinancialMaster FinancialMaster_InsertUpdate(FinancialMaster financialMaster)
         {
             try
