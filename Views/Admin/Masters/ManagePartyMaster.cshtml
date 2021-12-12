@@ -174,7 +174,25 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-4 form-group">
+                                    <label>Opening Balance</label>
+                                    @Html.TextBoxFor(m => m.OpeningBalance, htmlAttributes: new { @placeholder = "Enter Opening Balance", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Sales Man<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.SalesManUserID, new SelectList(Model.SalesManList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Party Category<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.PartyCategory, new SelectList(Model.CategoryList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
                                     <label>Remarks</label>
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
                                 </div>

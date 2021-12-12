@@ -46,7 +46,26 @@ namespace IMS.Models.CommonModel
     }
     public class DDLSELECT
     {
+        public DDLSELECT()
+        { }
+        public DDLSELECT(int PId, string PValue)
+        {
+            Id = PId;
+            Value = PValue;
+        }
         public int Id { get; set; }
+        public string Value { get; set; }
+    }
+    public class DDLSELECTConstant
+    {
+        public DDLSELECTConstant()
+        { }
+        public DDLSELECTConstant(string PId, string PValue)
+        {
+            Id = PId;
+            Value = PValue;
+        }
+        public string Id { get; set; }
         public string Value { get; set; }
     }
 }
