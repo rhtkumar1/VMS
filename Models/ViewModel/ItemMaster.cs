@@ -64,7 +64,7 @@ namespace IMS.Models.ViewModel
         {
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
-            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
+            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "VW_HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
@@ -106,7 +106,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
                 SqlParameters.Add(new SqlParameter("@MaxDiscount", MaxDiscount));
-                if(DeactivateDate != "")
+                if (!string.IsNullOrEmpty(DeactivateDate)) 
                     SqlParameters.Add(new SqlParameter("@DeactivateDate", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(DeactivateDate))));
                 SqlParameters.Add(new SqlParameter("@Scheme", Scheme));
                 SqlParameters.Add(new SqlParameter("@MRP", MRP));
