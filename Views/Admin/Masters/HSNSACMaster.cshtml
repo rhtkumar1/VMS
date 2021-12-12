@@ -61,8 +61,8 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>End Date<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.EndDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                                    <label>End Date<span class="mandatory"></span></label>
+                                    @Html.TextBoxFor(m => m.EndDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="col-md-10">
@@ -102,6 +102,8 @@
                  { name: "Tax_Slab", type: "text", title: "Tax Slab", sorting: true, filtering: false, width: 50 },
                  { name: "CESS", type: "text", title: "CESS", sorting: true, filtering: false, width: 50 },
                  { name: "CESSP", type: "text", title: "CESSP", sorting: true, filtering: false, width: 50 },
+                 { name: "StartDate", type: "text", title: "Start", sorting: true, filtering: false, width: 50 },
+                 { name: "EndDate", type: "text", title: "End", sorting: true, filtering: false, width: 50 },
                  {
                      title: "Action",
                      width: 30,

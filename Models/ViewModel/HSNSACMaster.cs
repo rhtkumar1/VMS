@@ -14,8 +14,8 @@ namespace IMS.Models.ViewModel
         public int HSN_SACID { get; set; }
         public decimal CESS { get; set; }
         public decimal CESSP { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
@@ -35,8 +35,10 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Tax_Slab", Tax_Slab));
                 SqlParameters.Add(new SqlParameter("@CESS", CESS));
                 SqlParameters.Add(new SqlParameter("@CESSP", CESSP));
-                SqlParameters.Add(new SqlParameter("@Start", StartDate));
-                SqlParameters.Add(new SqlParameter("@End", EndDate));
+                if (!string.IsNullOrEmpty(StartDate))
+                        SqlParameters.Add(new SqlParameter("@Start", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(StartDate))));
+                if (!string.IsNullOrEmpty(EndDate))
+                    SqlParameters.Add(new SqlParameter("@End", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(EndDate))));               
                 SqlParameters.Add(new SqlParameter("@UserID", CommonUtility.GetLoginID()));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("HSN_SAC_InsertUpdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
