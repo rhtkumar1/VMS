@@ -286,6 +286,7 @@
     <Content Include="Views\Admin\Masters\ManageRoleMaster.cshtml" />
     <Content Include="Views\Admin\Masters\ManagePartyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\UnitConversion.cshtml" />
+    <Content Include="Views\Admin\Masters\MaterialPurchase.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

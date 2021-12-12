@@ -1,0 +1,702 @@
+﻿@model IMS.Models.ViewModel.MaterialPurchase
+@{
+    ViewBag.Title = "Material Purchase";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-shopping-cart"></i>
+                <span>Material Purchase</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="styled-input">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3 form-group">
+                                <label>Party<span class="mandatory">*</span></label>
+                                @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>Invoice<span class="mandatory">*</span></label>
+                            <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
+                        </div>
+                        <div class="col-md-2 form-group pull-left">
+                            <button type="button" style="margin-top: 18px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="clearfix"></div>
+                        @using (Html.BeginForm("ManageMaterialPurchase", "Master", FormMethod.Post, new { @id = "MaterialPurchase" }))
+                        {
+                            @Html.HiddenFor(m => m.PurchaseId, htmlAttributes: new { @id = "PurchaseId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.IsUpdateMaterialPurchase, htmlAttributes: new { @id = "IsUpdateMaterialPurchase" })
+                            @Html.HiddenFor(m => m.PurchaseLine, htmlAttributes: new { @id = "PurchaseLine" })
+                            @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
+                            @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Invoice Number<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.InvoiceNo, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "InvoiceNo", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Party<span class="mandatory">*</span></label>
+                                    <select id="drpPartyId" name="drpPartyId" class="form-control" required>
+                                        <option value="">Select Party</option>
+                                        @foreach (var item in Model.PartyLists.AsEnumerable())
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>PO No<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Purchase_Ref, htmlAttributes: new { @placeholder = "Purchase Number", @id = "PONo", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>State<span class="mandatory">*</span></label>
+                                    <select id="StateId" name="StateId" class="form-control" required><option value="">Select State</option></select>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div class="styled-input">
+                                    <div class="col-md-12 form-group">
+                                        <h5>Add/Update Matrial Purchase</h5>
+                                        <hr />
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <table id="tblMaterialPurchase" class="table" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>H/S</th>
+                                                <th>Qty</th>
+                                                <th>Unit</th>
+                                                <th>Rate</th>
+                                                <th>Amu</th>
+                                                <th>D1(%)</th>
+                                                <th>D2(%)</th>
+                                                <th>T-Amu</th>
+                                                <th>GST(%)</th>
+                                                <th>CGST(%)</th>
+                                                <th>SGST(%)</th>
+                                                <th>IGST(%)</th>
+                                                <th>Total</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            <tr>
+                                                <content>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                                                        <div class="styled-input">
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Item</label>
+                                                                @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                                                <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>HSN/SAC</label>
+                                                                @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Quantity</label>
+                                                                @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Unit</label>
+                                                                @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Rate</label>
+                                                                @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Amount</label>
+                                                                @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Discount-1</label>
+                                                                @Html.TextBox("Discount_1", "", htmlAttributes: new { @placeholder = "DISC 1 (%)", @id = "Discount_1", @class = "form-control" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Discount-2</label>
+                                                                @Html.TextBox("Discount_2", "", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Taxable-Amu</label>
+                                                                @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>GST</label>
+                                                                @Html.TextBox("GST", "", htmlAttributes: new { @placeholder = "GST (%)", @id = "GST", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>CGST</label>
+                                                                @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>SGST</label>
+                                                                @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>IGST</label>
+                                                                @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
+                                                            </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Total</label>
+                                                                @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
+                                                                <input type="hidden" id="hdnTotalAmount" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </content>
+                                            </tr>
+                                            <tr>
+                                                <content><label id="lblTotalAmount">Total : 0.00</label></content>
+                                                <content class="pull-right">
+                                                    <input type="button" id="btnAdd" name="btnAdd" value="Add" />
+                                                    <input type="button" id="btnReset" name="btnReset" value="Reset" />
+                                                </content>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyid">
+                                            @foreach (var oMapping in Model.MaterialMappingList.AsEnumerable())
+                                            {
+                                                <tr id="trRow_@oMapping.Line_Id">
+                                                    <td data-item-id="@Convert.ToInt32(oMapping.Item_Id)" data-line-Id="@Convert.ToInt32(oMapping.Line_Id)">
+                                                        @oMapping.ItemTitle
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.HSN_SAC
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Quantity
+                                                    </td>
+                                                    <td data-Unit_Id="@Convert.ToInt32(oMapping.Unit_Id)">
+                                                        @oMapping.UnitTitle
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Rate
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Amount
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Discount_1
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Discount_2
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Taxable_Amount
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.GST
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.CGST
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.SGST
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.IGST
+                                                    </td>
+                                                    <td>
+                                                        @oMapping.Total_Amount
+                                                    </td>
+                                                    <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
+                                                        <input type="button" value="Edit" onclick="Edit(this);" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @if (Model.MaterialMappingList.Count > 0)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="pull-right">
+                                                            <label id="lblTotalAmount">Total : 0.00</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#TransactionDate").val("");
+        $("#TransactionDate").attr('placeholder','dd/mm/yyyy');
+        $("#Item_Id").select2();
+        $("#drpParty").select2();
+        $("#drpInvoice").select2();
+
+        $("body").on("click", "#btnReset", function (e) {
+            e.preventDefault();
+            $("#Item_Id").val($("#Item_Id option:first").val());
+            $("#Hsn_Sac").val("");
+            $("#Quantity").val("");
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $("#Rate").val("");
+            $("#Amount").val("");
+            $("#Discount_1").val("");
+            $("#Discount_2").val("");
+            $("#Taxable_Amount").val("");
+            $("#GST").val("");
+            $("#CGST").val("");
+            $("#SGST").val("");
+            $("#IGST").val("");
+            $("#Total").val("");
+            $("#hdnTotalAmount").val("");
+            $("#hdnRowId").val("");
+            $("#btnAdd").val("Add");
+        });
+
+        $("body").on("click", "#btnAdd", function () {
+            let bAdded = true;
+            let amount = 0.0;
+            //Reference the Party and Location ddl.<label id="lblTotalAmount">Total : 0.00</label>
+            if ($("#tblMaterialPurchase TBODY TR").length > 0) {
+                $("#tblMaterialPurchase TBODY TR").each(function () {
+                    var row = $(this);
+                    let td = row.find("TD");
+                    let itemId = parseInt(td.eq(0).attr('data-item-id'));
+                    if (parseInt($("#Item_Id").val()) === itemId) {
+                        bAdded = false;
+                    }
+                });
+            }
+
+            if (bAdded) {
+                var row = null;
+                var tBody = null;
+                if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                    $("#IsUpdateMaterialPurchase").val(true);
+                    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
+                    row = $("#tblMaterialPurchase > TBODY").find(trId);
+                    $(trId).empty();
+                } else {
+                    //Get the reference of the Table's TBODY element.
+                    tBody = $("#tblMaterialPurchase > TBODY")[0];
+                     //Add Row.
+                    row = tBody.insertRow(-1);
+                }
+
+                //Add Item cell.
+                var cell = $(row.insertCell(-1));
+                cell.html($("#Item_Id :selected").text());
+                cell.attr('data-item-id', $("#Item_Id").val());
+                if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                    cell.attr('data-line-Id', parseInt($("#hdnRowId").val()));
+                } else {
+                    cell.attr('data-line-Id', 0);
+                }
+                //Add Hsn_Sac cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Hsn_Sac").val());
+                //Add Quantity cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Quantity").val());
+                //Add Unit cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Unit_Id :selected").text());
+                cell.attr('data-Unit_Id', $("#Unit_Id").val());
+                //Add Rate cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Rate").val());
+                //Add Amount cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Amount").val());
+                //Add Discount_1 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Discount_1").val());
+                //Add Discount_2 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Discount_2").val());
+                //Add Taxable_Amount cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Taxable_Amount").val());
+                //Add GST cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#GST").val());
+                //Add CGST cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#CGST").val());
+                //Add SGST cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#SGST").val());
+                //Add IGST cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#IGST").val());
+                //Add Total_Amount cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#hdnTotalAmount").val());
+                //Add Button cell.
+                if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                    cell = $(row.insertCell(-1));
+                    let btnEdit = $("<input />");
+                    btnEdit.attr("type", "button");
+                    btnEdit.attr("onclick", "Edit(this);");
+                    btnEdit.val("Edit");
+                    cell.append(btnEdit);
+                } else {
+                    cell = $(row.insertCell(-1));
+                    let btnEdit = $("<input />");
+                    btnEdit.attr("type", "button");
+                    btnEdit.attr("onclick", "Remove(this);");
+                    btnEdit.val("Remove");
+                    cell.append(btnEdit);
+                }
+
+
+                //Set Default
+                $("#Item_Id").val($("#Item_Id option:first").val());
+                $("#Hsn_Sac").val("");
+                $("#Quantity").val("");
+                $("#Unit_Id").val($("#Unit_Id option:first").val());
+                $("#Rate").val("");
+                $("#Amount").val("");
+                $("#Discount_1").val("");
+                $("#Discount_2").val("");
+                $("#Taxable_Amount").val("");
+                $("#GST").val("");
+                $("#CGST").val("");
+                $("#SGST").val("");
+                $("#IGST").val("");
+                $("#Total").val("");
+                $("#hdnTotalAmount").val("");
+                $("#hdnRowId").val("");
+
+            } else {
+                alert("Material is already mapped!!!", "Enter Uniq Material");
+            }
+
+            $("#tblMaterialPurchase TBODY TR").each(function () {
+                var row = $(this);
+                let td = row.find("TD");
+                amount += parseFloat(td[13].innerText);
+            });
+            $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+        });
+
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            let PurchaseLineValues = [];
+            if ($("#tblMaterialPurchase TBODY TR").length > 0) {
+                $("#tblMaterialPurchase TBODY TR").each(function () {
+                    let row = $(this).find('td');
+                    let oMapping = {};
+                    oMapping.Line_Id = row.eq(0).attr('data-line-Id');
+                    oMapping.Item_Id = row.eq(0).attr('data-item-id');
+                    oMapping.HSN_SAC = row[1].innerText;
+                    oMapping.Quantity = row[2].innerText;
+                    oMapping.Unit_Id = row.eq(3).attr('data-Unit_Id');
+                    oMapping.UnitTitle = row[3].innerText;
+                    oMapping.Rate = row[4].innerText;
+                    oMapping.Amount = row[5].innerText;
+                    oMapping.Discount_1 = row[6].innerText;
+                    oMapping.Discount_2 = row[7].innerText;
+                    oMapping.Taxable_Amount = row[8].innerText;
+                    oMapping.GST = row[9].innerText;
+                    oMapping.CGST = row[10].innerText;
+                    oMapping.SGST = row[11].innerText;
+                    oMapping.IGST = row[12].innerText;
+                    oMapping.Total_Amount = row[13].innerText;
+                    PurchaseLineValues.push(oMapping);
+                });
+            }
+            $("#PurchaseLine").val(JSON.stringify(PurchaseLineValues));
+        });
+
+        $("#Item_Id").change(function () {
+            let Item_Id = parseInt($(this).val());
+            let Office_Id = parseInt($("#OfficeId").val());
+            let P_State_Id = 0; //parseInt($("#SupplyStateId").val());
+            IMSC.ajaxCall("GET", "/Master/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
+                    $("#Hsn_Sac").val(result[0].HSN_SAC);
+                    $("#GST").val(result[0].GST);
+                    $("#hdnIs_SameState").val(result[0].Is_SameState);
+                } else {
+                    $("#Hsn_Sac").val("");
+                    $("#GST").val("");
+                    $("#hdnIs_SameState").val(0);
+                }
+            });
+        });
+
+        $("#drpPartyId").change(function () {
+            let PartyId = $(".select2 option:selected").text(); parseInt($(this).val());
+            $("#PartyId").val(PartyId);
+            IMSC.ajaxCall("GET", "/Master/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== null) {
+                    $.each(result, function (index, value) {
+                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                    });
+                }
+            });
+        });
+
+        $("#StateId").change(function () {
+            $("#SupplyStateId").val(parseInt($(this).val()));
+        });
+
+        $("#drpParty").change(function () {
+            let Party_Id = parseInt($('#drpParty').val());
+            IMSC.ajaxCall("GET", "/Master/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== null) {
+                    $.each(result, function (index, value) {
+                        $("#drpInvoice").append($("<option></option>").val(value.Purchase_Id).html(value.Invoice_No));
+                    });
+                    $("#drpInvoice").change();
+                }
+            });
+        }).change();
+
+        $("#drpInvoice").change(function () {
+            $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
+        });
+
+        $("#btnSearch").click(function () {
+            let Purchase_Id = parseInt($("#PurchaseId").val());
+            IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== null) {
+                    $("#IsUpdateMaterialPurchase").val(true);
+                    $("#OfficeId").val(result[0].Office_Id);
+                    $("#InvoiceNo").val(result[0].Invoice_No);
+                    $("#drpPartyId").val(result[0].Party_Id);
+                    $("#Purchase_Ref").val(result[0].Purchase_Ref);
+                    $("#TransactionDate").val(result[0].Transaction_Date);
+                    //$("#StateId").val(result[0].SupplyState_Id);
+                    $("#Remarks").val(result[0].Remarks);
+
+                    $("#tbodyid").empty();
+                    let amount = 0;
+                    $.each(result, function (index, value) {
+                        amount += parseFloat(value.Total_Amount);
+                        //Get the reference of the Table's TBODY element.
+                        var tBody = $("#tblMaterialPurchase > TBODY")[0];
+                        //Add Row.
+                        var row = tBody.insertRow(-1);
+                        //Add Item cell.
+                        var cell = $(row.insertCell(-1));
+                        cell.html(value.ItemTitle);
+                        cell.attr('data-item-id', value.Item_Id);
+                        cell.attr('data-line-Id', value.Line_Id);
+                        //Add Hsn_Sac cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.HSN_SAC);
+                        //Add Quantity cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Quantity);
+                        //Add Unit cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.UnitTitle);
+                        cell.attr('data-Unit_Id', value.Unit_Id);
+                        //Add Rate cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Rate);
+                        //Add Amount cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Amount);
+                        //Add Discount_1 cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Discount_1);
+                        //Add Discount_2 cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Discount_2);
+                        //Add Taxable_Amount cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Taxable_Amount);
+                        //Add GST cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.GST);
+                        //Add CGST cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.CGST);
+                        //Add SGST cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.SGST);
+                        //Add IGST cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.IGST);
+                        //Add Total_Amount cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Total_Amount);
+                        //Add Button cell.
+                        cell = $(row.insertCell(-1));
+                        let btnEdit = $("<input />");
+                        btnEdit.attr("type", "button");
+                        btnEdit.attr("onclick", "Edit(this);");
+                        btnEdit.val("Edit");
+                        cell.append(btnEdit);
+                    });
+                    $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+                }
+            });
+        });
+
+        $("#Quantity,#Rate,#Discount_1,#Discount_2").change(function () {
+            Calculate();
+        });
+
+    });
+    function Calculate() {
+        let bIsDiscount = false;
+        let quantity = parseFloat($("#Quantity").val() !== "" ? $("#Quantity").val() : 0);
+        let rate = parseFloat($("#Rate").val() !== "" ? $("#Rate").val() : 0);
+        let amount = 0;
+        let disAmu = 0;
+        let gst = 0;
+        let discount_1 = 0;
+        let discount_2 = 0;
+        let discountAmount = 0;
+        let totalAmount = 0;
+        if (quantity > 0 && rate > 0) {
+            amount = quantity * rate;
+            $("#Amount").val(amount);
+        }
+        if (amount > 0) {
+            discount_1 = parseFloat($("#Discount_1").val() !== "" ? $("#Discount_1").val() : 0);
+            discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
+            if (discount_1 > 0 || discount_2 > 0) {
+                bIsDiscount = true;
+                disAmu = amount * (discount_1 + discount_2) / 100;
+                discountAmount = amount - disAmu;
+                gst = discountAmount * parseFloat($("#GST").val()) / 100;
+            } else {
+                bIsDiscount = false;
+                gst = amount * parseFloat($("#GST").val()) / 100;
+            }
+
+            let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
+            if (is_SameState) {
+                $("#CGST").val(parseFloat(gst / 2).toFixed(2));
+                $("#SGST").val(parseFloat(gst / 2).toFixed(2));
+                $("#IGST").val(parseFloat(0).toFixed(2));
+
+            } else {
+                $("#CGST").val(parseFloat(0).toFixed(2));
+                $("#SGST").val(parseFloat(0).toFixed(2));
+                $("#IGST").val(parseFloat(gst).toFixed(2));
+            }
+            if (bIsDiscount) {
+                totalAmount = discountAmount + gst;
+                $("#Taxable_Amount").val(discountAmount.toFixed(2));
+            } else {
+                totalAmount = amount + gst;
+                $("#Taxable_Amount").val(amount.toFixed(2));
+            }
+            $("#Total").val(totalAmount.toFixed(2));
+            $("#hdnTotalAmount").val(totalAmount.toFixed(2));
+        }
+    }
+    function Edit(button) {
+        //Determine the reference of the Row using the Button.
+        $("#btnAdd").val("Update");
+        $("#IsUpdateMaterialPurchase").val(true);
+        var row = $(button).closest("TR").find('td');
+        $("#Item_Id").select2("val", parseInt(row.eq(0).attr('data-item-id')));
+        $("#Hsn_Sac").val(row[1].innerText);
+        $("#Quantity").val(parseInt(row[2].innerText));
+        $("#Unit_Id").val(parseInt(row.eq(3).attr('data-Unit_Id')));
+        $("#Rate").val(parseFloat(row[4].innerText).toFixed(2));
+        $("#Amount").val(parseFloat(row[5].innerText).toFixed(2));
+        $("#Discount_1").val(parseFloat(row[6].innerText).toFixed(2));
+        $("#Discount_2").val(parseFloat(row[7].innerText).toFixed(2));
+        $("#Taxable_Amount").val(parseFloat(row[8].innerText).toFixed(2));
+        $("#GST").val(parseFloat(row[9].innerText).toFixed(2));
+        $("#CGST").val(parseFloat(row[10].innerText).toFixed(2));
+        $("#SGST").val(parseFloat(row[11].innerText).toFixed(2));
+        $("#IGST").val(parseFloat(row[12].innerText).toFixed(2));
+        $("#Total").val(parseFloat(row[13].innerText).toFixed(2));
+        $("#hdnTotalAmount").val(parseFloat(row[13].innerText).toFixed(2));
+        $("#hdnRowId").val(parseInt(row.eq(14).attr('data-row-Id')));
+        if (parseFloat(row[10].innerText).toFixed(2) > 0 && parseFloat(row[11].innerText).toFixed(2) > 0) {
+            $("#hdnIs_SameState").val("1");
+        } else {
+            $("#hdnIs_SameState").val("0");
+        }
+    };
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        $("#IsUpdateMaterialPurchase").val(true);
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).text();
+        if (confirm("Do you want to remove this purchase.", "Remove")) {
+            //Get the reference of the Table.
+            var table = $("#tblMaterialPurchase")[0];
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+</script>
