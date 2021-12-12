@@ -104,12 +104,43 @@
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>HSN SAC<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Text", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-3 form-group">
+                                    <label>Max Discount</label>
+                                    @Html.TextBoxFor(m => m.MaxDiscount, htmlAttributes: new { @placeholder = "Max Discount", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>DeactivateDate</label>
+                                    @Html.TextBoxFor(m => m.DeactivateDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>MRP<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.MRP, htmlAttributes: new { @placeholder = "MRP", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>ListPrice<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ListPrice, htmlAttributes: new { @placeholder = "List Price", @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Scheme</label>
+                                    @Html.CheckBoxFor(m => m.Scheme, htmlAttributes: new { @placeholder = "Scheme", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-9 form-group">
                                     <label>Remarks</label>
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
                                 </div>
@@ -176,9 +207,9 @@
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-md-1 pull-right">
+                            <div class="col-md-2 pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <a href="/master/ItemIndex?appToken=@Model.AppToken"name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</a>
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</button>
                                 </div>
                             </div>
                         }
@@ -190,7 +221,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function () {
+    $(document).ready(function () {
         $("body").on("click", "#btnAdd", function () {
             var bAdded = true;
             $("#IsMappingChanged").val(bAdded);
@@ -202,9 +233,9 @@ $(document).ready(function () {
                     let location = parseInt(row.find("TD").eq(1).attr('data-location-id'));
                     if ((parseInt($("#PartyId").val()) === party && parseInt($("#LocationId").val()) === location)) {
                         bAdded = false;
-                    } 
+                    }
                 });
-            } 
+            }
 
             if (bAdded) {
                 //Get the reference of the Table's TBODY element.
@@ -246,6 +277,9 @@ $(document).ready(function () {
         });
         $("#btnPartyAndLocationMapping").click(function () {
             $("#divShowPartyAndLocationMapping").toggle();
+        });
+          $("#btnBack").click(function () {
+            window.location.href = "@Url.Action("ItemIndex", "master")?AppToken=@Model.AppToken";
         });
     });
     function Remove(button) {

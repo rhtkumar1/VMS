@@ -44,11 +44,7 @@
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
                 var fields = [
-                    { name: "Party_Id", css: "hidden", },
-                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "CreditDays", title: "CreditDays", sorting: true, filtering: false, width: 80  },
-                    {
+                    { name: "Party_Id", css: "hidden", },{
                             title: "Action",
                             width: 20,
                             itemTemplate: function (value, args) {
@@ -76,6 +72,9 @@
                                 }
                             }
                         },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
+                    { name: "CreditDays", title: "CreditDays", sorting: true, filtering: false, width: 80  },
                 ];
                 var options = {
                     filtering: true,

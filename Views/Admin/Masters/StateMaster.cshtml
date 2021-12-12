@@ -86,18 +86,18 @@
          var StateLists = JSON.parse(d);
          if (StateLists !== "null") {
              var fields = [
-                 { name: "State_Id", css: "hidden" },
-                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
-                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 50 },
-                 { name: "Type_Id", css: "hidden" },
-                 { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 50 },
                  {
                      title: "Action",
                      width: 30,
                      itemTemplate: function (value, args) {
                          return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                      }
-                 }
+                 },
+                 { name: "State_Id", css: "hidden" },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 50 },
+                 { name: "Type_Id", css: "hidden" },
+                 { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 50 },
              ];
              var options = {
                  filtering: true,

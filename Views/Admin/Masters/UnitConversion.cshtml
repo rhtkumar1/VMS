@@ -79,16 +79,16 @@
                     { name: "FromUnit_Id", css: "hidden" },
                     { name: "ToUnit_Id", css: "hidden" },
                     { name: "IsActive", css: "hidden" },
-                    { name: "FromUnit", type: "text", title: "From Unit", sorting: true, filtering: true, width: 40 },
-                    { name: "ToUnit",  title: "To Unit", sorting: true, filtering: true, width: 40 },
-                    { name: "Factor",  title: "Factor", sorting: true, filtering: true, width: 40 },
                     {
                         title: "Action",
                         width: 20,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
-                    }
+                    },
+                    { name: "FromUnit", type: "text", title: "From Unit", sorting: true, filtering: true, width: 40 },
+                    { name: "ToUnit",  title: "To Unit", sorting: true, filtering: true, width: 40 },
+                    { name: "Factor",  title: "Factor", sorting: true, filtering: true, width: 40 },
                 ];
                 var options = {
                     filtering: true,

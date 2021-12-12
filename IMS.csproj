@@ -96,6 +96,8 @@
     <Content Include="assets\admin\css\font-awesome.css" />
     <Content Include="assets\admin\css\jsgrid-theme.min.css" />
     <Content Include="assets\admin\css\jsgrid.min.css" />
+    <Content Include="assets\admin\css\main.css" />
+    <Content Include="assets\admin\css\normalize.css" />
     <Content Include="assets\admin\css\style.css" />
     <Content Include="assets\admin\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\admin\images\logo.png" />
@@ -107,9 +109,12 @@
     <Content Include="assets\admin\js\jquery.metisMenu.js" />
     <Content Include="assets\admin\js\jquery.min.js" />
     <Content Include="assets\admin\js\jquery.nicescroll.js" />
+    <Content Include="assets\admin\js\main.js" />
     <Content Include="assets\admin\js\screenfull.js" />
     <Content Include="assets\admin\js\scripts.js" />
     <Content Include="assets\admin\js\skycons.js" />
+    <Content Include="assets\admin\js\vendor\jquery-1.9.1.min.js" />
+    <Content Include="assets\admin\js\vendor\modernizr-2.6.2.min.js" />
     <Content Include="assets\common.js" />
     <Content Include="assets\home\css\fontawesome-all.css" />
     <Content Include="assets\home\css\style.css" />
@@ -171,6 +176,7 @@
     <Compile Include="Models\ViewModel\MaterialPurchase.cs" />
     <Compile Include="Models\ViewModel\OfficeMaster.cs" />
     <Compile Include="Models\ViewModel\PartyMaster.cs" />
+    <Compile Include="Models\ViewModel\PurchaseOrder.cs" />
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />

@@ -16,6 +16,9 @@ namespace IMS.Models.ViewModel
         public int OfficeId { get; set; }
         public string Purchase_Ref { get; set; }
         public int PartyId { get; set; }
+        public string PartyName { get; set; }
+        public int ItemId { get; set; }
+        public int StateId { get; set; }
         public int SupplyStateId { get; set; }
         public DateTime TransactionDate { get; set; }
         public decimal PurchaseAmount { get; set; }
@@ -113,6 +116,70 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
+        public DataTable MaterialPurchase_GetInvoice()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                SqlParameters.Add(new SqlParameter("@InvoiceNo", InvoiceNo));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetInvoice", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetParty()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party", PartyName));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetParty", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetGST_Detail()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", ItemId));
+                SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
+                SqlParameters.Add(new SqlParameter("@P_State_Id", StateId));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetHSN_Detail", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialPurchase_GetGST_State()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                dt = DBManager.ExecuteDataTable("Material_Purchase_GetGST_State", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
 
         public DataTable GetHSN_Detail(int Item_Id, int Office_Id, int P_State_Id)
         {

@@ -50,9 +50,6 @@
             if (result !== "null" && result !== "") {
                 var fields = [
                     { name: "Role_Id", css: "hidden", },
-                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
-                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
                     {
                             title: "Action",
                             width: 40,
@@ -80,7 +77,11 @@
                                         break;
                                 }
                             }
-                        }
+                        },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 40 },
+                    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 80  },
+
                 ];
                 var options = {
                     filtering: true,

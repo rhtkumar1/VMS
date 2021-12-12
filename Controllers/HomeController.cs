@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using IMS.Models.CBL;
-
+using Newtonsoft.Json;
 
 namespace IMS.Controllers
 {
@@ -23,6 +23,8 @@ namespace IMS.Controllers
                     Authenticate ObjAuthenticate = new Authenticate().AuthenticateUser(loginid, password, Session.SessionID.ToString());
                     if (ObjAuthenticate.IsAuthenticated)
                     {
+                        Session["FYYears"] = new FinancialMaster().FYList(ObjAuthenticate.CompanyID);
+                        Session["OpenFYID"] = 1;
                         Session["Menu_Master_Role_Wise"] = ObjAuthenticate.ObjMenu_Master_Role_Wise;
                         ObjAuthenticate.ObjMenu_Master_Role_Wise = null;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;
@@ -82,6 +84,13 @@ namespace IMS.Controllers
         {
             
             return View("~/Views/Home/Index.cshtml");
+        }
+
+        public ActionResult SetFYID(int FYID)
+        {
+            DataTable dt = new DataTable();
+            Session["OpenFYID"] = FYID;
+            return Content(JsonConvert.SerializeObject(dt));
         }
     }
 }

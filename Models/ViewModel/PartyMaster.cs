@@ -59,6 +59,11 @@ namespace IMS.Models.ViewModel
         public int LocationId { get; set; }
         public int GSTType { get; set; }
         public int GSTNature { get; set; }
+        public int SalesManUserID { get; set; }
+        public SelectList SalesManList { get; set; }
+        public string PartyCategory { get; set; }
+        public SelectList CategoryList { get; set; }
+
 
         public PartyMaster()
         {
@@ -68,12 +73,25 @@ namespace IMS.Models.ViewModel
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             GSTTypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10008 And Sub_Type=1 And IsActive=1"), "Id", "Value");
             GSTNatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=2 And IsActive=1"), "Id", "Value");
-
+            SalesManList = new SelectList(DDLValueFromDB.GETDATAFROMDB("User_Id", "UserName", "User_Master", " And IsActive =1"), "Id", "Value");
+            CategoryList = new SelectList(PartyCategoryList(), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
             ItemMappingList = new List<dynamic>();
             PartyAndGstMapping = new List<PartyAndGstMapping>();
         }
-
+        private IEnumerable<DDLSELECTConstant> PartyCategoryList()
+        {
+            List<DDLSELECTConstant> PC = new List<DDLSELECTConstant>();
+            DDLSELECTConstant T = new DDLSELECTConstant("A", "A");
+            PC.Add(T);
+            T = new DDLSELECTConstant("B", "B");
+            PC.Add(T);
+            T = new DDLSELECTConstant("C", "C");
+            PC.Add(T);
+            T = new DDLSELECTConstant("D", "D");
+            PC.Add(T);
+            return PC;
+        }
         public PartyMaster PartyMaster_InsertUpdate(PartyMaster partyMaster)
         {
             try
@@ -113,6 +131,9 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@OpeningBalance", OpeningBalance));
                 SqlParameters.Add(new SqlParameter("@Remarks", partyMaster.Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", partyMaster.Loginid));
+                SqlParameters.Add(new SqlParameter("@SalesManUserID", partyMaster.SalesManUserID));
+                SqlParameters.Add(new SqlParameter("@PartyCategory", partyMaster.PartyCategory));
+                
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -188,6 +209,8 @@ namespace IMS.Models.ViewModel
                 CategoryId = Convert.ToString(drParty["Category_Id"]);
                 OpeningBalance = Convert.ToString(drParty["OpeningBalance"]);
                 Remarks = Convert.ToString(drParty["Remarks"]);
+                SalesManUserID = Convert.ToInt32(drParty["SalesManUserID"]);
+                PartyCategory = Convert.ToString(drParty["Category"]);
                 return this;
             }
             catch (Exception ex)

@@ -15,6 +15,7 @@ namespace IMS.Models.CBL
         public string UserName;
         public string UserId;
         public string UserType;
+        public int CompanyID;
         public bool IsAuthenticated = false;
         public SyssoftechSession SyssoftechSession;
         public IEnumerable<Menu_Master_Display> Menu_List = new List<Menu_Master_Display>();
@@ -27,6 +28,7 @@ namespace IMS.Models.CBL
                 UserName = SyssoftechSession.UserName;
                 UserId = SyssoftechSession.UserId;
                 UserType = SyssoftechSession.UserType;
+                CompanyID = SyssoftechSession.CompanyID;
                 if (Convert.ToInt32(SyssoftechSession.UserId) > 0)
                 {   
                     Menu_List =new  Menue_Master().GetMinu(Convert.ToInt32(SyssoftechSession.UserId),out ObjMenu_Master_Role_Wise);

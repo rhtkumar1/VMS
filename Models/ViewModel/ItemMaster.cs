@@ -54,13 +54,17 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
+        public int MaxDiscount { get; set; }
+        public string DeactivateDate { get; set; }
+        public bool Scheme { get; set; }
+        public decimal MRP { get; set; }
+        public decimal ListPrice { get; set; }
 
         public ItemMaster()
         {
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
-            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
+            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "VW_HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
@@ -101,6 +105,12 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                SqlParameters.Add(new SqlParameter("@MaxDiscount", MaxDiscount));
+                if (!string.IsNullOrEmpty(DeactivateDate)) 
+                    SqlParameters.Add(new SqlParameter("@DeactivateDate", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(DeactivateDate))));
+                SqlParameters.Add(new SqlParameter("@Scheme", Scheme));
+                SqlParameters.Add(new SqlParameter("@MRP", MRP));
+                SqlParameters.Add(new SqlParameter("@ListPrice", ListPrice));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -194,6 +204,15 @@ namespace IMS.Models.ViewModel
                     BaseUnitId = Convert.ToInt32(dr["BaseUnit_Id"]);
                     InwardUnitId = Convert.ToInt32(dr["InwardUnit_Id"]);
                     OutwardUnitId = Convert.ToInt32(dr["OutwardUnit_Id"]);
+                    MaxDiscount=Convert.ToInt32(dr["MaxDiscount"]);
+                    object value = dr["DeactivateDate"];
+                    if (value != DBNull.Value)
+                    {
+                        DeactivateDate = Convert.ToString(dr["DeactivateDate"]);
+                    }   
+                    Scheme=Convert.ToBoolean(dr["Scheme"]);
+                    MRP = Convert.ToDecimal(dr["MRP"]); ; 
+                    ListPrice = Convert.ToDecimal(dr["ListPrice"]); ;
                     //ItemMapping = dr["ItemMapping"].ToString();
                     //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
                     Remarks = dr["Remarks"].ToString();

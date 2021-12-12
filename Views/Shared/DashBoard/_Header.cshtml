@@ -43,6 +43,7 @@
     </div>
     @{
         IEnumerable<IMS.Models.ViewModel.Menu_Master_Display> menuLists = (IEnumerable<IMS.Models.ViewModel.Menu_Master_Display>)Session["MinuList"];
+        SelectList FYYears = (SelectList)Session["FYYears"];
 
     }
     <div class="navbar-default sidebar" role="navigation">
@@ -51,10 +52,10 @@
                 <li class="side-menu-ddl">
                     <i class="fa fa-list nav_icon"></i>
                     <select name="cars" id="cars" class="side-menu-ddl-txt">
-                        <option value="volvo">VOLVO</option>
-                        <option value="saab">SAAB</option>
-                        <option value="opel">OPEL</option>
-                        <option value="audi">AUDI</option>
+                        @foreach (var FY in FYYears)
+                        {
+                        <option value="@FY.Value">@FY.Text</option>
+                        }                    
                     </select>
                 </li>
                 @foreach (var parentMenuList in menuLists)
@@ -62,7 +63,7 @@
                     foreach (var childMenuList in parentMenuList.ChildList)
                     {
                         <li>
-                            <a href="#" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
+                            <a href="#" id="watting" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 @foreach (var subChildMenuList in childMenuList.ChildList)
                                 {
