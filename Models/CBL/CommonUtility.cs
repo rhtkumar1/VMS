@@ -105,4 +105,28 @@ public static class CommonUtility
         }
         return obj;
     }
+    public static int GetCompanyID()
+    {
+        try
+        {
+            Authenticate ObjAuthenticate = (Authenticate)System.Web.HttpContext.Current.Session["SYSSOFTECHSession"];
+            return Convert.ToInt32(ObjAuthenticate.CompanyID);
+        }
+        catch (Exception Ex)
+        {
+            throw Ex;
+        }
+    }
+    public static int GetFYID()
+    {
+        try
+        {
+            //Authenticate ObjAuthenticate = (Authenticate);
+            return Convert.ToInt32(System.Web.HttpContext.Current.Session["OpenFYID"]);
+        }
+        catch (Exception Ex)
+        {
+            throw Ex;
+        }
+    }
 }
