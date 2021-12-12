@@ -63,7 +63,7 @@
                     foreach (var childMenuList in parentMenuList.ChildList)
                     {
                         <li>
-                            <a href="#" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
+                            <a href="#" id="watting" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 @foreach (var subChildMenuList in childMenuList.ChildList)
                                 {

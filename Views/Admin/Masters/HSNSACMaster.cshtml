@@ -97,6 +97,13 @@
          var HSNSACLists = JSON.parse(d);
          if (HSNSACLists !== "null") {
              var fields = [
+                   {
+                     title: "Action",
+                     width: 30,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 },
                  { name: "HSN_SACID", css: "hidden" },
                  { name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: true, width: 50 },
                  { name: "Tax_Slab", type: "text", title: "Tax Slab", sorting: true, filtering: false, width: 50 },
