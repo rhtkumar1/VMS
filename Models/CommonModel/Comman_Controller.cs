@@ -31,12 +31,10 @@ namespace IMS.Models.CommonModel
                 SqlParameters.Add(new SqlParameter("@WhereCondition", WhereCondition));
                 Record = DBManager.ExecuteDataTableWithParameter("DDLValue_Dynamic", CommandType.StoredProcedure, SqlParameters);
                 List<DDLSELECT> PD = new List<DDLSELECT>();
+                PD.Add(new DDLSELECT(0, "--Select--"));
                 foreach (DataRow DT in Record.Rows)
-                {
-                    DDLSELECT T = new DDLSELECT();
-                    T.Id = Convert.ToInt32(DT["ID"]);
-                    T.Value = Convert.ToString(DT["Value"]);
-                    PD.Add(T);
+                {                   
+                    PD.Add(new DDLSELECT(Convert.ToInt32(DT["ID"]), Convert.ToString(DT["Value"])));
                 }
                 return PD;
             }
