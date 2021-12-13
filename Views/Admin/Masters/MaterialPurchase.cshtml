@@ -509,7 +509,6 @@
         });
 
         $("#StateId").change(function () {
-            debugger;
             $("#SupplyStateId").val(parseInt($(this).val()));
         });
 
@@ -536,7 +535,6 @@
             $.when( IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
-                    debugger;
                     $("#IsUpdateMaterialPurchase").val(0);
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
