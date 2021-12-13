@@ -39,7 +39,7 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-        public bool IsUpdateMaterialPurchase{ get; set; }
+        public int IsUpdateMaterialPurchase{ get; set; }
         public SelectList UnitLists { get; set; }
 
         public MaterialPurchase()

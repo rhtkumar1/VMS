@@ -492,19 +492,24 @@
         });
 
         $("#drpPartyId").change(function () {
-            let PartyId = $(".select2 option:selected").text(); parseInt($(this).val());
+            //let PartyId = $(".select2 option:selected").text(); parseInt($(this).val());
+            let PartyId = parseInt($('#drpPartyId').val());
             $("#PartyId").val(PartyId);
             IMSC.ajaxCall("GET", "/Master/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
+                    $("#StateId").empty();
+                    $("#StateId").append($("<option></option>").val(0).html("Select State"));
                     $.each(result, function (index, value) {
                         $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
                     });
+                    $('#StateId').trigger("chosen:updated");
                 }
             });
         });
 
         $("#StateId").change(function () {
+            debugger;
             $("#SupplyStateId").val(parseInt($(this).val()));
         });
 
@@ -521,22 +526,24 @@
             });
         }).change();
 
+
         $("#drpInvoice").change(function () {
             $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
         });
 
         $("#btnSearch").click(function () {
             let Purchase_Id = parseInt($("#PurchaseId").val());
-            IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            $.when( IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
-                    $("#IsUpdateMaterialPurchase").val(true);
+                    debugger;
+                    $("#IsUpdateMaterialPurchase").val(0);
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
                     $("#drpPartyId").val(result[0].Party_Id);
                     $("#Purchase_Ref").val(result[0].Purchase_Ref);
                     $("#TransactionDate").val(result[0].Transaction_Date);
-                    //$("#StateId").val(result[0].SupplyState_Id);
+                    $("#SupplyStateId").val(result[0].SupplyState_Id);
                     $("#Remarks").val(result[0].Remarks);
 
                     $("#tbodyid").empty();
@@ -602,6 +609,20 @@
                     });
                     $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
                 }
+            })).then(function () {
+                var par = 7;
+                IMSC.ajaxCall("GET", "/Master/GetState?PartyId=" + par + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== null) {
+                    $("#StateId").empty();
+                    $.each(result, function (index, value) {
+                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                    });
+                    $("#StateId").val($("#SupplyStateId").val());
+                    $('#StateId').trigger("chosen:updated");
+                }
+            });
+
             });
         });
 
@@ -663,7 +684,7 @@
     function Edit(button) {
         //Determine the reference of the Row using the Button.
         $("#btnAdd").val("Update");
-        $("#IsUpdateMaterialPurchase").val(true);
+        $("#IsUpdateMaterialPurchase").val(1);
         var row = $(button).closest("TR").find('td');
         $("#Item_Id").select2("val", parseInt(row.eq(0).attr('data-item-id')));
         $("#Hsn_Sac").val(row[1].innerText);
@@ -689,7 +710,7 @@
     };
     function Remove(button) {
         //Determine the reference of the Row using the Button.
-        $("#IsUpdateMaterialPurchase").val(true);
+        $("#IsUpdateMaterialPurchase").val(0);
         var row = $(button).closest("TR");
         var name = $("TD", row).eq(0).text();
         if (confirm("Do you want to remove this purchase.", "Remove")) {
