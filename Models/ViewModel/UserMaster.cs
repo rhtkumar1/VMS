@@ -51,8 +51,8 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
-
+        public int CompanyId { get; set; }
+        public SelectList CompanyLists { get; set; }
         private string _LoginId;
         private bool _Islogin;
         public bool Islogin { get { return _Islogin; } }
@@ -68,6 +68,7 @@ namespace IMS.Models.ViewModel
                 StateLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("State_Id", "Title", "State_Master", "And IsActive=1"), "Id", "Value");
                 LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
                 OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+                CompanyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Company_ID", "Title", "Company_Master", "And IsActive=1"), "Id", "Value");
                 CreatedBy = CommonUtility.GetLoginID();
                 ModifiedBy = CommonUtility.GetLoginID();
             }
@@ -107,6 +108,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
                 SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
                 SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
+                SqlParameters.Add(new SqlParameter("@CompanyId", userMaster.CompanyId));                
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -198,6 +200,8 @@ namespace IMS.Models.ViewModel
                     PrimaryRole = Convert.ToInt32(drUser["PrimaryRole"]),
                     Remarks = drUser["Remarks"].ToString(),
                     Default_OfficeId = Convert.ToInt32(drUser["Default_OfficeId"]),
+                    CompanyId = Convert.ToInt32(drUser["CompanyId"]),
+                 
                     sRoles = dtUserRollMapping.Rows[0]["Roles"].ToString()
                 };
                 return userMaster;
