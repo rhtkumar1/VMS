@@ -66,6 +66,12 @@
                             }
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
+                                    <label>Office</label>
+                                    @Html.DropDownListFor(m => m.Default_OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
                                     <label>First Name<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.FirstName, htmlAttributes: new { @placeholder = "First Name", @required = "required", @class = "form-control" })
                                 </div>
@@ -215,8 +221,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#btnSubmit').click(function () {
-            debugger;
+        $('#btnSubmit').click(function () {            
             var selected = new Array();
             $("input:checkbox[class=chk]:checked").each(function () {
                 selected.push($(this).attr("id"));
