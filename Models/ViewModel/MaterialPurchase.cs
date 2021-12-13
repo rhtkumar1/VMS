@@ -20,7 +20,7 @@ namespace IMS.Models.ViewModel
         public int ItemId { get; set; }
         public int StateId { get; set; }
         public int SupplyStateId { get; set; }
-        public DateTime TransactionDate { get; set; }
+        public string TransactionDate { get; set; }
         public decimal PurchaseAmount { get; set; }
         public int FinId { get; set; }
         public int CompanyId { get; set; }
@@ -79,7 +79,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Purchase_Ref", Purchase_Ref));
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
-                SqlParameters.Add(new SqlParameter("@Transaction_Date", TransactionDate));
+                if (!string.IsNullOrEmpty(TransactionDate))
+                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
                 SqlParameters.Add(new SqlParameter("@Purchase_Amount", PurchaseAmount));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
