@@ -230,19 +230,19 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable GetMatrialPurchase(int Purchase_Id)
+        public DataSet GetMatrialPurchase(int Purchase_Id)
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PurchaseId", Purchase_Id));
-                dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Getdata", CommandType.StoredProcedure, SqlParameters);
+                ds = DBManager.ExecuteDataSetWithParameter("Material_Purchase_Getdata", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return dt;
+            return ds;
         }
 
         //public MaterialPurchase MaterialPurchase_Delete()
