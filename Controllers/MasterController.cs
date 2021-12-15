@@ -1650,17 +1650,17 @@ namespace IMS.Controllers
         [HttpGet]
         public ActionResult GetMatrialPurchase(int Purchase_Id, string AppToken = "")
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 MaterialPurchase materialPurchase = new MaterialPurchase();
-                dt = materialPurchase.GetMatrialPurchase(Purchase_Id);
+                ds = materialPurchase.GetMatrialPurchase(Purchase_Id);
             }
             catch (Exception)
             {
                 throw;
             }
-            return Content(JsonConvert.SerializeObject(dt));
+            return Content(JsonConvert.SerializeObject(ds));
         }
 
         [HttpPost]
