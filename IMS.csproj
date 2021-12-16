@@ -180,6 +180,7 @@
     <Compile Include="Models\ViewModel\RoleMaster.cs" />
     <Compile Include="Models\ViewModel\SelectList.cs" />
     <Compile Include="Models\ViewModel\StateMaster.cs" />
+    <Compile Include="Models\ViewModel\Stationery_Master.cs" />
     <Compile Include="Models\ViewModel\UnitConversionFactor.cs" />
     <Compile Include="Models\ViewModel\UnitMaster.cs" />
     <Compile Include="Models\ViewModel\UserMaster.cs" />

@@ -15,7 +15,7 @@ namespace IMS.Controllers
         // GET: Admin
         public ActionResult DashBoard()
         {
-            return View("~/Views/Shared/DashBoard/DashBoard.cshtml");
+           return View("~/Views/Shared/DashBoard/DashBoard.cshtml");
         }
     }
 }
