@@ -23,7 +23,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageUnitMaster", "Master", FormMethod.Post, new { @id = "UnitMaster" }))
                         {
@@ -75,6 +75,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
         IMSC.ajaxCall("GET", "/Master/GetUnitMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
