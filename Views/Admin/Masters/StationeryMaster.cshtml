@@ -1,0 +1,174 @@
+﻿@model IMS.Models.ViewModel.StationeryMaster
+@{
+    ViewBag.Title = "Stationery Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Unit Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageStationeryMaster", "Master", FormMethod.Post, new { @id = "StationeryMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.Stationery_ID)
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Title<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Stationery For</label>
+                                    @Html.DropDownListFor(m => m.Menu_Id, new SelectList(Model.MenuLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Office</label>
+                                    @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Financial Year</label>
+                                    @Html.DropDownListFor(m => m.Financial_Id, new SelectList(Model.FinancialLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>PreFix<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.PreFix, htmlAttributes: new { @placeholder = "Enter PreFix", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Suffix</label>
+                                    @Html.TextBoxFor(m => m.Suffix, htmlAttributes: new { @placeholder = "Enter Suffix",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>StartPoint<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.StartPoint, htmlAttributes: new { @placeholder = "Enter Start Point", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        IMSC.ajaxCall("GET", "/Master/GetStationeryMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                var fields = [
+                    { name: "Stationery_ID", css: "hidden", }, {
+                        title: "Action",
+                        width: 20,
+                        itemTemplate: function (value, args) {
+                            return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                        }
+                    },
+                    { name: "Menu_Id", css: "hidden" },
+                    { name: "Office_Id", css: "hidden" },
+                    { name: "Company_Id", css: "hidden" },
+                    { name: "Financial_Id", css: "hidden" },
+                    { name: "Title",type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
+                    { name: "PreFix", type: "text", title: "PreFix", sorting: true, filtering: false, width: 80 },
+                    { name: "Suffix", type: "text", title: "Suffix", sorting: true, filtering: false, width: 80 },
+                    { name: "StartPoint", type: "text", title: "StartPoint", sorting: true, filtering: false, width: 40 },
+                ];
+                var options = {
+                    filtering: true,
+                    editing: true,
+                    sorting: true,
+                    paging: true,
+                    autoload: true,
+                    controller: {
+                        UnitLists: result,
+                        loadData: function (filter) {
+                            return $.grep(this.UnitLists, function (UnitList) {
+                                return ((!filter.Title || UnitList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1));
+                            });
+                        }
+                    },
+                    fields: fields
+                };
+                $.extend(options, IMSC.grid_options);
+                $("#listGrid").jsGrid(options);
+                IMSC.filteOnKeyPress("#listGrid");
+            }
+        });
+    });
+
+    var editFormData = function (dilogType, Stationery) {
+        if (Stationery.Stationery_ID > 0) {
+            $("#Stationery_ID").val(Stationery.Stationery_ID);
+            $("#Title").val(Stationery.Title);
+            $("#PreFix").val(Stationery.PreFix);
+            $("#Suffix").val(Stationery.Suffix);
+            $("#StartPoint").val(Stationery.StartPoint);
+            $("#btnSubmit").text("Update")
+        }
+        else {
+            $("#Stationery_ID").val("0");
+            $("#btnSubmit").text("Submit")
+        }
+    };
+
+    var deleteFormData = function (dialogType, Stationery) {
+        var result = confirm("Want to delete?");
+        if (result == true) {
+            IMSC.ajaxCall("POST", "/Master/DeleteStationeryMaster?StationeryId=" + Stationery.Stationery_ID +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+        } else {
+            return false;
+        }
+    };
+</script>

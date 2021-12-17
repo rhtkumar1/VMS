@@ -1573,6 +1573,99 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Stationery Master
+        public ActionResult StationeryIndex()
+        {
+            StationeryMaster StationeryMaster = new StationeryMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            StationeryMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            StationeryMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/StationeryMaster.cshtml", StationeryMaster);
+        }
+
+        [HttpPost]
+        public ActionResult ManageStationeryMaster(StationeryMaster Stationery)
+        {
+            try
+            {
+
+                Stationery.Stationery_Master_InsertUpdate();
+                if (Stationery != null)
+                {
+                    // In case of record successfully added or updated
+                    if (Stationery.IsSucceed)
+                    {
+                        ViewBag.Msg = Stationery.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!Stationery.IsSucceed && Stationery.Stationery_ID != -1)
+                    {
+                        ViewBag.Msg = Stationery.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            StationeryMaster newStationeryMaster = new StationeryMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newStationeryMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newStationeryMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/StationeryMaster.cshtml", (Stationery.IsSucceed ? newStationeryMaster : Stationery));
+        }
+
+
+        [HttpGet]
+        public ActionResult GetStationeryMaster(StationeryMaster StationeryMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = StationeryMaster.StationeryMaster_Get();
+                dt.TableName = "StationeryLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteStationeryMaster(int StationeryId, string appToken)
+        {
+            try
+            {
+                StationeryMaster StationeryMaster = new StationeryMaster();
+                StationeryMaster.AppToken = CommonUtility.URLAppToken(appToken);
+                StationeryMaster.AuthMode = CommonUtility.GetAuthMode(appToken).ToString();
+                bool iStatus = StationeryMaster.StationeryMaster_Delete(StationeryId);
+                if (iStatus)
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Success", Msg = "Deleted sucessfully !" }));
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+            }
+        }
+        #endregion
+
         #region Matrial Purchase Master
         public ActionResult MaterialPurchase()
         {
@@ -1739,6 +1832,17 @@ namespace IMS.Controllers
         //    }
         //    return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
         //}
+        #endregion
+
+        #region Order Creation
+
+        #endregion
+
+        #region Material Sales
+
+        #endregion
+        #region Order Approval 
+
         #endregion
     }
 }
