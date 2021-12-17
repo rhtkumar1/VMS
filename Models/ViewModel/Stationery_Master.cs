@@ -70,7 +70,7 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                dt = DBManager.ExecuteDataTable("Stationery_GetData", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Stationery_Master_GetData", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }

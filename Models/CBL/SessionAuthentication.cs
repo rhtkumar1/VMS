@@ -34,6 +34,11 @@ namespace IMS.Models.CBL
                             if (obj == null)
                             {
                                 filterContext.Result = new HttpUnauthorizedResult();
+                                filterContext.HttpContext.Session["ActiveMenuID"] = "0";
+                            }
+                            else
+                            {
+                                filterContext.HttpContext.Session["ActiveMenuID"] = MenuId;
                             }
                         }
                         catch (Exception ex)
