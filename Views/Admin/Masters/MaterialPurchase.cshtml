@@ -24,18 +24,23 @@
                 <div class="blank-page">
                     <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="heading">
+                            <h4>
+                                Search Purchase Material
+                            </h4>
+                        </div>
+                        <br />
                         <div class="styled-input">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 form-group">
+                            <div class="col-md-4 form-group">
                                 <label>Party<span class="mandatory">*</span></label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
                         </div>
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label>Invoice<span class="mandatory">*</span></label>
                             <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
                         </div>
-                        <div class="col-md-2 form-group pull-left">
+                        <div class="col-md-4 form-group pull-left">
                             <button type="button" style="margin-top: 18px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
                         <div class="col-md-2"></div>
@@ -48,6 +53,12 @@
                             @Html.HiddenFor(m => m.PurchaseLine, htmlAttributes: new { @id = "PurchaseLine" })
                             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
                             @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+                            <div class="heading">
+                                <h4>
+                                    Purchase Material Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Office<span class="mandatory">*</span></label>
@@ -91,175 +102,170 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div>
-                                <div class="styled-input">
-                                    <div class="col-md-12 form-group">
-                                        <h5>Add/Update Matrial Purchase</h5>
-                                        <hr />
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table id="tblMaterialPurchase" class="table" cellpadding="0" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Item</th>
-                                                <th>H/S</th>
-                                                <th>Qty</th>
-                                                <th>Unit</th>
-                                                <th>Rate</th>
-                                                <th>Amu</th>
-                                                <th>D1(%)</th>
-                                                <th>D2(%)</th>
-                                                <th>T-Amu</th>
-                                                <th>GST(%)</th>
-                                                <th>CGST(%)</th>
-                                                <th>SGST(%)</th>
-                                                <th>IGST(%)</th>
-                                                <th>Total</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            <tr>
-                                                <content>
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                                                        <div class="styled-input">
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Item</label>
-                                                                @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                                                <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>HSN/SAC</label>
-                                                                @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Quantity</label>
-                                                                @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Unit</label>
-                                                                @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Rate</label>
-                                                                @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Amount</label>
-                                                                @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Discount-1</label>
-                                                                @Html.TextBox("Discount_1", "", htmlAttributes: new { @placeholder = "DISC 1 (%)", @id = "Discount_1", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Discount-2</label>
-                                                                @Html.TextBox("Discount_2", "", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Taxable-Amu</label>
-                                                                @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>GST</label>
-                                                                @Html.TextBox("GST", "", htmlAttributes: new { @placeholder = "GST (%)", @id = "GST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>CGST</label>
-                                                                @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>SGST</label>
-                                                                @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>IGST</label>
-                                                                @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Total</label>
-                                                                @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
-                                                                <input type="hidden" id="hdnTotalAmount" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </content>
-                                            </tr>
-                                            <tr>
-                                                <content><label id="lblTotalAmount">Total : 0.00</label></content>
-                                                <content class="pull-right">
-                                                    <input type="button" id="btnAdd" name="btnAdd" value="Add" />
-                                                    <input type="button" id="btnReset" name="btnReset" value="Reset" />
-                                                </content>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbodyid">
-                                            @foreach (var oMapping in Model.MaterialMappingList.AsEnumerable())
-                                            {
-                                                <tr id="trRow_@oMapping.Line_Id">
-                                                    <td data-item-id="@Convert.ToInt32(oMapping.Item_Id)" data-line-Id="@Convert.ToInt32(oMapping.Line_Id)">
-                                                        @oMapping.ItemTitle
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.HSN_SAC
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Quantity
-                                                    </td>
-                                                    <td data-Unit_Id="@Convert.ToInt32(oMapping.Unit_Id)">
-                                                        @oMapping.UnitTitle
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Rate
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Amount
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Discount_1
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Discount_2
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Taxable_Amount
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.GST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.CGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.SGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.IGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Total_Amount
-                                                    </td>
-                                                    <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
-                                                        <input type="button" value="Edit" onclick="Edit(this);" />
-                                                    </td>
-                                                </tr>
-                                            }
-                                            @if (Model.MaterialMappingList.Count > 0)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <div class="pull-right">
-                                                            <label id="lblTotalAmount">Total : 0.00</label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="clearfix"></div>
-                                <br />
-                                <br />
+                            <div class="heading">
+                                <h4>
+                                    Add/Update Matrial Purchase
+                                </h4>
                             </div>
+                            <br />
+                            <div class="clearfix"></div>
+                            <table id="tblMaterialPurchase" class="table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>H/S</th>
+                                        <th>Qty</th>
+                                        <th>Unit</th>
+                                        <th>Rate</th>
+                                        <th>Amu</th>
+                                        <th>D1(%)</th>
+                                        <th>D2(%)</th>
+                                        <th>T-Amu</th>
+                                        <th>GST(%)</th>
+                                        <th>CGST(%)</th>
+                                        <th>SGST(%)</th>
+                                        <th>IGST(%)</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <tr>
+                                        <content>
+                                            <div class="styled-input">
+                                                <div class="col-md-2 form-group">
+                                                    <label>Item</label>
+                                                    @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                                    <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>HSN/SAC</label>
+                                                    @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Quantity</label>
+                                                    @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Unit</label>
+                                                    @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Rate</label>
+                                                    @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Amount</label>
+                                                    @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Discount-1</label>
+                                                    @Html.TextBox("Discount_1", "", htmlAttributes: new { @placeholder = "DISC 1 (%)", @id = "Discount_1", @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Discount-2</label>
+                                                    @Html.TextBox("Discount_2", "", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Taxable-Amu</label>
+                                                    @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>GST</label>
+                                                    @Html.TextBox("GST", "", htmlAttributes: new { @placeholder = "GST (%)", @id = "GST", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>CGST</label>
+                                                    @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>SGST</label>
+                                                    @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>IGST</label>
+                                                    @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <label>Total</label>
+                                                    @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
+                                                    <input type="hidden" id="hdnTotalAmount" />
+                                                </div>
+                                            </div>
+                                        </content>
+                                    </tr>
+                                    <tr>
+                                        <content><label id="lblTotalAmount">Total : 0.00</label></content>
+                                        <content class="pull-right">
+                                            <button type="button" id="btnAdd" class="btncustome" name="btnAdd">Add</button>
+                                            <button type="button" id="btnReset" class="btncustome" name="btnReset">Reset</button>
+                                        </content>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyid">
+                                    @foreach (var oMapping in Model.MaterialMappingList.AsEnumerable())
+                                    {
+                                        <tr id="trRow_@oMapping.Line_Id">
+                                            <td data-item-id="@Convert.ToInt32(oMapping.Item_Id)" data-line-Id="@Convert.ToInt32(oMapping.Line_Id)">
+                                                @oMapping.ItemTitle
+                                            </td>
+                                            <td>
+                                                @oMapping.HSN_SAC
+                                            </td>
+                                            <td>
+                                                @oMapping.Quantity
+                                            </td>
+                                            <td data-Unit_Id="@Convert.ToInt32(oMapping.Unit_Id)">
+                                                @oMapping.UnitTitle
+                                            </td>
+                                            <td>
+                                                @oMapping.Rate
+                                            </td>
+                                            <td>
+                                                @oMapping.Amount
+                                            </td>
+                                            <td>
+                                                @oMapping.Discount_1
+                                            </td>
+                                            <td>
+                                                @oMapping.Discount_2
+                                            </td>
+                                            <td>
+                                                @oMapping.Taxable_Amount
+                                            </td>
+                                            <td>
+                                                @oMapping.GST
+                                            </td>
+                                            <td>
+                                                @oMapping.CGST
+                                            </td>
+                                            <td>
+                                                @oMapping.SGST
+                                            </td>
+                                            <td>
+                                                @oMapping.IGST
+                                            </td>
+                                            <td>
+                                                @oMapping.Total_Amount
+                                            </td>
+                                            <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
+                                                <input type="button" value="Edit" onclick="Edit(this);" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.MaterialMappingList.Count > 0)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="pull-right">
+                                                    <label id="lblTotalAmount">Total : 0.00</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="clearfix"></div>
+                            <br />
+                            <br />
                             <div class="clearfix"></div>
                             <div class="col-md-10"></div>
                             <div class="col-md-1">

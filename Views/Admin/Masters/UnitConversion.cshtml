@@ -28,7 +28,8 @@
                         @using (Html.BeginForm("ManageUnitConversonMaster", "Master", FormMethod.Post, new { @id = "UnitConversonMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
-                            @Html.HiddenFor(m => m.ConversionId) <div class="heading">
+                            @Html.HiddenFor(m => m.ConversionId)
+                            <div class="heading">
                                 <h4>
                                     Unit Conversion
                                 </h4>

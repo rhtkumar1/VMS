@@ -29,27 +29,33 @@
                         {
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.Stationery_ID)
+                            <div class="heading">
+                                <h4>
+                                    Unit Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Stationery For</label>
                                     @Html.DropDownListFor(m => m.Menu_Id, new SelectList(Model.MenuLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Office</label>
                                     @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Financial Year</label>
                                     @Html.DropDownListFor(m => m.Financial_Id, new SelectList(Model.FinancialLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
@@ -63,9 +69,10 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Suffix</label>
-                                    @Html.TextBoxFor(m => m.Suffix, htmlAttributes: new { @placeholder = "Enter Suffix",  @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Suffix, htmlAttributes: new { @placeholder = "Enter Suffix", @class = "form-control" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>StartPoint<span class="mandatory">*</span></label>

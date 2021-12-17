@@ -10,8 +10,10 @@
         <h1> <a class="navbar-brand" href="/admin/dashboard">IMS</a></h1>
     </div>
     @{
-        IEnumerable<IMS.Models.ViewModel.Menu_Master_Display> menuLists = (IEnumerable<IMS.Models.ViewModel.Menu_Master_Display>)Session["MinuList"];
-        SelectList FYYears = (SelectList)Session["FYYears"];
+                    /**/
+
+                    IEnumerable<IMS.Models.ViewModel.Menu_Master_Display> menuLists = (IEnumerable<IMS.Models.ViewModel.Menu_Master_Display>)Session["MinuList"];
+                    SelectList FYYears = (SelectList)Session["FYYears"];
 
     }
     <div class=" border-bottom">
@@ -22,19 +24,19 @@
             <form class=" navbar-left-right">
                 <select name="SelectedFYYear" id="SelectedFYYear" class="side-menu-ddl-FY">
                     @foreach (var FY in FYYears)
-                        {
-                    <option value="@FY.Value">@FY.Text</option>
-                        }
+                    {
+                        <option value="@FY.Value">@FY.Text</option>
+                    }
                 </select>
                 <input type="text" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
-        <input type="submit" value="" class="fa fa-search">
-        
-    @*<ul>
-        <li class="side-menu-ddl">
+                <input type="submit" value="" class="fa fa-search">
+
+                @*<ul>
+                    <li class="side-menu-ddl">
 
 
-                    </li>
-                </ul>*@
+                                </li>
+                            </ul>*@
 
             </form>
             <div class="clearfix"> </div>
@@ -77,17 +79,17 @@
                 {
                     foreach (var childMenuList in parentMenuList.ChildList)
                     {
-                <li>
-                    <a href="#" id="watting" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        @foreach (var subChildMenuList in childMenuList.ChildList)
-                                {
                         <li>
-                            <a href="~/@(subChildMenuList.MenuURL+"?AppToken="+subChildMenuList.AppToken)" class="hvr-bounce-to-right"><i class="@subChildMenuList.MenuIcon nav_icon"></i><span class="nav-label">@subChildMenuList.MenuTitle</span></a>
-                        </li>
+                            <a href="#" id="watting" class="hvr-bounce-to-right"><i class="fa fa-list nav_icon"></i> <span class="nav-label">@childMenuList.MenuTitle</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                @foreach (var subChildMenuList in childMenuList.ChildList)
+                                {
+                                    <li>
+                                        <a href="~/@(subChildMenuList.MenuURL+"?AppToken="+subChildMenuList.AppToken)" class="hvr-bounce-to-right"><i class="@subChildMenuList.MenuIcon nav_icon"></i><span class="nav-label">@subChildMenuList.MenuTitle</span></a>
+                                    </li>
                                 }
-                    </ul>
-                </li>
+                            </ul>
+                        </li>
                     }
                 }
             </ul>

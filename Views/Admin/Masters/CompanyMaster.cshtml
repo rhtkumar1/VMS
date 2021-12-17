@@ -23,7 +23,27 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    <!-- Alert Modal -->
+                    <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="alertModalLabel">Message Box</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <span id="msg"></span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>*@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageCompanyMaster", "Master", FormMethod.Post, new { @id = "CompanyMaster" }))
                         {
@@ -119,6 +139,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
         IMSC.ajaxCall("GET", "/Master/GetCompanyMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result !== "null" && result !== "") {
@@ -138,7 +162,7 @@
                     { name: "Financial_Id", css: "hidden", },
                     { name: "StartDate", title: "Start Date", sorting: true, filtering: true, width: 20 },
                     { name: "OpeningBalance", title: "Opening Balance", sorting: true, filtering: true, width: 20 },
-                    
+
                 ];
                 var options = {
                     filtering: true,
