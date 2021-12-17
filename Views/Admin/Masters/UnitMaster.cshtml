@@ -28,7 +28,12 @@
                         @using (Html.BeginForm("ManageUnitMaster", "Master", FormMethod.Post, new { @id = "UnitMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
-                            @Html.HiddenFor(m => m.UnitId)
+                            @Html.HiddenFor(m => m.UnitId) <div class="heading">
+                                <h4>
+                                    Unit Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>

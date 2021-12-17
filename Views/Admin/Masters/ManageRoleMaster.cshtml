@@ -33,6 +33,12 @@
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.RoleId)
                             @Html.HiddenFor(m => m.MenuMapping, htmlAttributes: new { @id = "MenuMapping" })
+                            <div class="heading">
+                                <h4>
+                                    Roles
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
@@ -95,11 +101,11 @@
                                                     </td>
                                                     <td>
                                                         @{var permission = new List<SelectListItem>{
-                                                              new SelectListItem { Text = "Select Permission", Value="0" },
-                                                              new SelectListItem { Text = "Add", Value="1" },
-                                                              new SelectListItem { Text = "Edit", Value="2" },
-                                                               new SelectListItem { Text = "Delete", Value="3" },
-                                                         };
+                                                                                                      new SelectListItem { Text = "Select Permission", Value="0" },
+                                                                                                      new SelectListItem { Text = "Add", Value="1" },
+                                                                                                      new SelectListItem { Text = "Edit", Value="2" },
+                                                                                                       new SelectListItem { Text = "Delete", Value="3" },
+                                                                                                 };
                                                         }
                                                         @Html.DropDownList("ddlPermission_" + index, new SelectList(permission, "Value", "Text", selectedValue: iSelectedValue), htmlAttributes: new { @id = "ddlPermission_" + index, @class = "form -control clsPermission", sSdisabled })
                                                     </td>

@@ -28,6 +28,12 @@
                         {
                             @Html.HiddenFor(m => m.GroupId, htmlAttributes: new { @id = "GroupId" })
                             @Html.HiddenFor(m => m.AppToken)
+                            <div class="heading">
+                                <h4>
+                                    Group Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
@@ -39,9 +45,9 @@
                                     <label>Under Group<span class="mandatory">*</span></label>
                                     @{
                                         var underGroup = new List<SelectListItem>{
-                                               new SelectListItem { Text = "Sundry Debtors", Value="1" },
-                                               new SelectListItem { Text = "Sundry Creditor", Value="2" },
-                                              };
+                                                                                                                       new SelectListItem { Text = "Sundry Debtors", Value="1" },
+                                                                                                                       new SelectListItem { Text = "Sundry Creditor", Value="2" },
+                                                                                                                      };
                                     }
                                     @Html.DropDownListFor(m => m.UnderGroupId, new SelectList(underGroup, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Under Group", @required = "required", @class = "form-control" })
                                 </div>
@@ -49,9 +55,9 @@
                             <div class="styled-input">
                                 @{
                                     var reportGroup = new List<SelectListItem>{
-                                    new SelectListItem { Text = "Assets", Value="1" },
-                                    new SelectListItem { Text = "libilites", Value="2" },
-                                   };
+                                                                                                new SelectListItem { Text = "Assets", Value="1" },
+                                                                                                new SelectListItem { Text = "libilites", Value="2" },
+                                                                                               };
                                 }
                                 <div class="col-md-4 form-group">
                                     <label>Report Group<span class="mandatory">*</span></label>

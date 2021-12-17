@@ -28,7 +28,12 @@
                         @using (Html.BeginForm("ManageUnitConversonMaster", "Master", FormMethod.Post, new { @id = "UnitConversonMaster" }))
                         {
                             @Html.HiddenFor(m => m.AppToken)
-                            @Html.HiddenFor(m => m.ConversionId)
+                            @Html.HiddenFor(m => m.ConversionId) <div class="heading">
+                                <h4>
+                                    Unit Conversion
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-3 form-group">
                                     <label>From Unit<span class="mandatory">*</span></label><br />
@@ -38,11 +43,11 @@
                                     <label>To Unit</label><br />
                                     @Html.DropDownListFor(m => m.ToUnitId, new SelectList(Model.ToUnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-3 form-group">
                                     <label>Conversion Rate</label><br />
                                     @Html.TextBoxFor(m => m.Factor, htmlAttributes: new { @placeholder = "Enter Conversion Rate", @tp_type = "numeric", @required = "required", @class = "form-control" })
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="appointment-btn text-lg-right">
                                         <br />
                                         <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
