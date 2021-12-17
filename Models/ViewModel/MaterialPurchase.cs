@@ -245,26 +245,26 @@ namespace IMS.Models.ViewModel
             return ds;
         }
 
-        //public MaterialPurchase MaterialPurchase_Delete()
-        //{
-        //    try
-        //    {
-        //        List<SqlParameter> SqlParameters = new List<SqlParameter>();
-        //        SqlParameters.Add(new SqlParameter("@Purchase_Id", PurchaseId));
-        //        SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-        //        DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Delete", CommandType.StoredProcedure, SqlParameters);
-        //        foreach (DataRow dr in dt.Rows)
-        //        {
-        //            PurchaseId = Convert.ToInt32(dr[0]);
-        //            IsSucceed = Convert.ToBoolean(dr[1]);
-        //            ActionMsg = dr[2].ToString();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    { throw ex; }
+        public MaterialPurchase MaterialPurchase_Delete(int Purchase_Id)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Purchase_Id", Purchase_Id));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    PurchaseId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
 
-        //    return this;
-        //}
+            return this;
+        }
 
     }
 
