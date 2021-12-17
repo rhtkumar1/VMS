@@ -42,7 +42,7 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
+        public int MENU_Id { get; set; }
 
 
 
@@ -50,6 +50,7 @@ namespace IMS.Models.ViewModel
         public PurchaseOrder()
         {
             Loginid = CommonUtility.GetLoginID();
+            MENU_Id = CommonUtility.GetActiveMenuID();
         }
 
 
@@ -72,6 +73,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Purchase_Line", PurchaseLine));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
+                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
+                SqlParameters.Add(new SqlParameter("@Office_Id", "1"));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Purchase_Order_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)

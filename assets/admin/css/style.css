@@ -14,6 +14,17 @@ h1, h2, h3 {
     color: red;
 }
 
+.heading {
+    box-shadow: 3px 3px #ff5722;
+    padding: 8px;
+    background-color: #0c67ae;
+    color: white;
+}
+
+.checkboxcss {
+    height: 22px;
+    width: 22px;
+}
 .btncustome {
     background: #0C67AE;
     color: #fff;

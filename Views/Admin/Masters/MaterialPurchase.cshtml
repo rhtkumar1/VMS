@@ -22,20 +22,25 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="heading">
+                            <h4>
+                                Search Purchase Material
+                            </h4>
+                        </div>
+                        <br />
                         <div class="styled-input">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 form-group">
+                            <div class="col-md-4 form-group">
                                 <label>Party<span class="mandatory">*</span></label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
                         </div>
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label>Invoice<span class="mandatory">*</span></label>
                             <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
                         </div>
-                        <div class="col-md-2 form-group pull-left">
+                        <div class="col-md-4 form-group pull-left">
                             <button type="button" style="margin-top: 18px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
                         <div class="col-md-2"></div>
@@ -48,6 +53,12 @@
                             @Html.HiddenFor(m => m.PurchaseLine, htmlAttributes: new { @id = "PurchaseLine" })
                             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
                             @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+                            <div class="heading">
+                                <h4>
+                                    Purchase Material Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Office<span class="mandatory">*</span></label>

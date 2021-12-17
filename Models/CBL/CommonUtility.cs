@@ -129,4 +129,17 @@ public static class CommonUtility
             throw Ex;
         }
     }
+    public static int GetActiveMenuID()
+    {
+        try
+        {
+            //Authenticate ObjAuthenticate = (Authenticate);
+            return Convert.ToInt32(System.Web.HttpContext.Current.Session["ActiveMenuID"]);
+        }
+        catch (Exception Ex)
+        {
+            throw Ex;
+        }
+    }
+    
 }

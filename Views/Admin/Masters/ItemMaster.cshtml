@@ -21,7 +21,7 @@
         <!--content-->
         <div id="modelForm">
             <div class="blank">
-                <input type="hidden" id="hdnmsg" value="@ViewBag.Msg" />
+                @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                 <div class="col-lg-12"><p id="pMessage" style="color:forestgreen;text-align:center"></p></div>
                 <div class="blank-page">
                     <div class="col-md-12" style="margin-bottom:10px; padding:0px">
@@ -40,7 +40,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        if ($("#hdnmsg").val() !== null && $("#hdnmsg").val() !=="") { IMSC.message($("#hdnmsg").val(), 'Success');}
+         if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
         IMSC.ajaxCall("GET", "/Master/GetItemMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
          var ItemLists = JSON.parse(d);
          if (ItemLists !== "null") {

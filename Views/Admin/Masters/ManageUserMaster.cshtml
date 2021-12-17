@@ -24,8 +24,7 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:forestgreen;text-align:center">@ViewBag.Msg</p></div>
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Err</p></div>
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageUserMaster", "Master", FormMethod.Post, new { @id = "UserMaster" }))
                         {
@@ -33,141 +32,83 @@
                             @Html.HiddenFor(m => m.AuthMode)
                             @Html.HiddenFor(m => m.User_Id)
                             @Html.HiddenFor(m => m.sRoles, htmlAttributes: new { @id = "hdnRoles" })
-                            if (Model.User_Id == 0)
-                            {
-                                <div class="styled-input">
-                                    <div class="col-md-3 form-group">
-                                        <label>User Name<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.UserName, htmlAttributes: new { @placeholder = "User Name", @required = "required", @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="styled-input">
-                                    <div class="col-md-3 form-group">
-                                        <label>Password<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.Password, htmlAttributes: new { @placeholder = "Password", @required = "required", @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="styled-input">
-                                    <div class="col-md-3 form-group">
-                                        <label>Confirm Password<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.ConfirmPassword, htmlAttributes: new { @placeholder = "Confirm Password", @required = "required", @class = "form-control" })
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="styled-input">
-                                    <div class="col-md-3 form-group">
-                                        <label>User Name<span class="mandatory">*</span></label>
-                                        @Html.TextBoxFor(m => m.UserName, htmlAttributes: new { @placeholder = "User Name", @required = "required", @class = "form-control", @disabled = "disabled" })
-                                        @Html.HiddenFor(m => m.UserName)
-                                    </div>
-                                </div>
-                            }
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Office</label>
-                                    @Html.DropDownListFor(m => m.Default_OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                </div>
+                            <div class="heading">
+                                <h4>
+                                    General Information
+                                </h4>
                             </div>
+                            <br />
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>First Name<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.FirstName, htmlAttributes: new { @placeholder = "First Name", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Middle Name</label>
                                     @Html.TextBoxFor(m => m.MiddleName, htmlAttributes: new { @placeholder = "Middle Name", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Last Name<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.LastName, htmlAttributes: new { @placeholder = "Last Name", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Mobile<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Mobile, htmlAttributes: new { @placeholder = "Mobile", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Email<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @placeholder = "Email", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Gender<span class="mandatory">*</span></label>
                                     @{var genderItems = new List<SelectListItem>{
-                                          new SelectListItem { Text = "Select Gender", Value="" },
-                                          new SelectListItem { Text = "Male", Value="1" },
-                                          new SelectListItem { Text = "Female", Value="2" },
-                                           new SelectListItem { Text = "Other", Value="3" },
-                                     };
+                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Select Gender", Value="" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Male", Value="1" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Female", Value="2" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                           new SelectListItem { Text = "Other", Value="3" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                     };
                                     }
                                     @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>DOB<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.DOB, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>DOJ<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.DOJ, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>State</label>
-                                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Primary Role</label>
-                                    @Html.DropDownListFor(m => m.PrimaryRole, new SelectList(Model.RoleLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Location</label>
-                                    @Html.DropDownListFor(m => m.City, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Relegion<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Relegion, htmlAttributes: new { @placeholder = "Relegion", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Remarks</label>
-                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                <div class="col-md-4 form-group">
+                                    <label>DOB<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.DOB, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Pin code</label>
-                                    @Html.TextBoxFor(m => m.Pincode, htmlAttributes: new { @placeholder = "Pincode", @class = "form-control" })
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-3 form-group">
-                                    <label>Company</label>
-                                    @Html.DropDownListFor(m => m.CompanyId, new SelectList(Model.CompanyLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                <div class="col-md-4 form-group">
+                                    <label>DOJ<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.DOJ, htmlAttributes: new { @placeholder = "DD/MM/YYY", @required = "required", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Address
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-6 form-group">
                                     <label>Address 1<span class="mandatory">*</span></label>
@@ -182,9 +123,96 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
-                                <h3>Rols</h3>
+                                <div class="col-md-4 form-group">
+                                    <label>State</label>
+                                    @Html.DropDownListFor(m => m.State, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Location</label>
+                                    @Html.DropDownListFor(m => m.City, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Pin code</label>
+                                    @Html.TextBoxFor(m => m.Pincode, htmlAttributes: new { @placeholder = "Pincode", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Other Information
+                                </h4>
+                            </div>
+                            <br />
+                            if (Model.User_Id == 0)
+                            {
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>User Name<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.UserName, htmlAttributes: new { @placeholder = "User Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>Password<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.Password, htmlAttributes: new { @placeholder = "Password", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>Confirm Password<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.ConfirmPassword, htmlAttributes: new { @placeholder = "Confirm Password", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="styled-input">
+                                    <div class="col-md-4 form-group">
+                                        <label>User Name<span class="mandatory">*</span></label>
+                                        @Html.TextBoxFor(m => m.UserName, htmlAttributes: new { @placeholder = "User Name", @required = "required", @class = "form-control", @disabled = "disabled" })
+                                        @Html.HiddenFor(m => m.UserName)
+                                    </div>
+                                </div>
+                            }
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office</label>
+                                    @Html.DropDownListFor(m => m.Default_OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Primary Role</label>
+                                    @Html.DropDownListFor(m => m.PrimaryRole, new SelectList(Model.RoleLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Company</label>
+                                    @Html.DropDownListFor(m => m.CompanyId, new SelectList(Model.CompanyLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="heading">
+                                    <h4>
+                                        Manage Roles
+                                    </h4>
+                                </div>
+                                <br />
                                 <div class="clearfix"></div>
-                                <hr />
                                 @foreach (var item in Model.RoleLists)
                                 {
                                     if (Model.sRoles != null && Model.sRoles != "")
@@ -201,9 +229,9 @@
                                 }
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-10"></div>
+                            <div class="col-md-8"></div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="appointment-btn text-lg-right">
                                     <a href="/master/UserIndex?AppToken=@AppToken" class="btncustome pull-right">Back To List</a>
                                 </div>
@@ -227,7 +255,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#btnSubmit').click(function () {            
+         if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        $('#btnSubmit').click(function () {
             var selected = new Array();
             $("input:checkbox[class=chk]:checked").each(function () {
                 selected.push($(this).attr("id"));
