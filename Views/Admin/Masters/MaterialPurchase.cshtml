@@ -22,25 +22,30 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div class="col-lg-12"><p id="msg" style="color:#ef0f44;text-align:center">@ViewBag.Msg</p></div>
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="heading">
+                            <h4>
+                                Search Purchase Material
+                            </h4>
+                        </div>
+                        <br />
                         <div class="styled-input">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 form-group">
+                            <div class="col-md-4 form-group">
                                 <label>Party<span class="mandatory">*</span></label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
                         </div>
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label>Invoice<span class="mandatory">*</span></label>
                             <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
                         </div>
-                        <div class="col-md-2 form-group pull-left">
+                        <div class="col-md-4 form-group pull-left">
                             <button type="button" style="margin-top: 18px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
                         <div class="col-md-2"></div>
                         <div class="clearfix"></div>
-                        @using (Html.BeginForm("ManageMaterialPurchase", "Master", FormMethod.Post, new { @id = "MaterialPurchase" }))
+                        @using (Html.BeginForm("ManageMaterialPurchase", "Material", FormMethod.Post, new { @id = "MaterialPurchase" }))
                         {
                             @Html.HiddenFor(m => m.PurchaseId, htmlAttributes: new { @id = "PurchaseId" })
                             @Html.HiddenFor(m => m.AppToken)
@@ -48,6 +53,12 @@
                             @Html.HiddenFor(m => m.PurchaseLine, htmlAttributes: new { @id = "PurchaseLine" })
                             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
                             @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+                            <div class="heading">
+                                <h4>
+                                    Purchase Material Detail
+                                </h4>
+                            </div>
+                            <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Office<span class="mandatory">*</span></label>
@@ -102,6 +113,7 @@
                                     <table id="tblMaterialPurchase" class="table" cellpadding="0" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Action</th>
                                                 <th>Item</th>
                                                 <th>H/S</th>
                                                 <th>Qty</th>
@@ -116,7 +128,6 @@
                                                 <th>SGST(%)</th>
                                                 <th>IGST(%)</th>
                                                 <th>Total</th>
-                                                <th>Action</th>
                                             </tr>
                                             <tr>
                                                 <content>
@@ -196,6 +207,9 @@
                                             @foreach (var oMapping in Model.MaterialMappingList.AsEnumerable())
                                             {
                                                 <tr id="trRow_@oMapping.Line_Id">
+                                                    <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
+                                                        <input type="button" value="Edit" onclick="Edit(this);" />
+                                                    </td>
                                                     <td data-item-id="@Convert.ToInt32(oMapping.Item_Id)" data-line-Id="@Convert.ToInt32(oMapping.Line_Id)">
                                                         @oMapping.ItemTitle
                                                     </td>
@@ -238,9 +252,6 @@
                                                     <td>
                                                         @oMapping.Total_Amount
                                                     </td>
-                                                    <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
-                                                        <input type="button" value="Edit" onclick="Edit(this);" />
-                                                    </td>
                                                 </tr>
                                             }
                                             @if (Model.MaterialMappingList.Count > 0)
@@ -261,7 +272,12 @@
                                 <br />
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-10"></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-2">
+                                <div style="display:none" id="divDeleteMatrial">
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete Matrial</button>
+                                </div>
+                            </div>
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <input type="hidden" id="hdnItemId" name="hdnItemId" value="" />
@@ -272,7 +288,7 @@
                             </div>
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome pull-right">Reset</button>
                                 </div>
                             </div>
                         }
@@ -291,18 +307,22 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#TransactionDate").val("");
-        $("#TransactionDate").attr('placeholder','dd/mm/yyyy');
+        //IMSM.matrialPurchase();
         $("#Item_Id").select2();
         $("#drpParty").select2();
         $("#drpInvoice").select2();
+        $("#TransactionDate").val("");
+
+        $("#TransactionDate").attr('placeholder', 'dd/mm/yyyy');
 
         $("body").on("click", "#btnReset", function (e) {
             e.preventDefault();
             $("#Item_Id").val($("#Item_Id option:first").val());
+            $('#Item_Id').select2().trigger('change');
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("");
@@ -326,7 +346,7 @@
                 $("#tblMaterialPurchase TBODY TR").each(function () {
                     var row = $(this);
                     let td = row.find("TD");
-                    let itemId = parseInt(td.eq(0).attr('data-item-id'));
+                    let itemId = parseInt(td.eq(1).attr('data-item-id'));
                     if (parseInt($("#Item_Id").val()) === itemId) {
                         bAdded = false;
                     }
@@ -342,28 +362,35 @@
                 if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
                     let trId = "#trRow_" + parseInt($("#hdnRowId").val());
                     var row = $(trId).closest("TR").find('td');
-                    row[0].textContent = $("#Item_Id :selected").text();
-                    row[0].setAttribute('data-item-id', $("#Item_Id").val());
-                    row[0].setAttribute('data-line-Id', 0);
-                    row[1].textContent=$("#Hsn_Sac").val();
-                    row[2].textContent =$("#Quantity").val();
-                    row[3].textContent =$("#Unit_Id :selected").text();
-                    row[3].setAttribute('data-Unit_Id', $("#Unit_Id").val());
-                    row[4].textContent =$("#Rate").val();
-                    row[5].textContent =$("#Amount").val();
-                    row[6].textContent =$("#Discount_1").val();
-                    row[7].textContent =($("#Discount_2").val());
-                    row[8].textContent =($("#Taxable_Amount").val());
-                    row[9].textContent =($("#GST").val());
-                    row[10].textContent =($("#CGST").val());
-                    row[11].textContent =($("#SGST").val());
-                    row[12].textContent =($("#IGST").val());
-                    row[13].textContent = ($("#hdnTotalAmount").val());
+                    row[1].textContent = $("#Item_Id :selected").text();
+                    row[1].setAttribute('data-item-id', $("#Item_Id").val());
+                    row[1].setAttribute('data-line-Id', 0);
+                    row[2].textContent=$("#Hsn_Sac").val();
+                    row[3].textContent =$("#Quantity").val();
+                    row[4].textContent =$("#Unit_Id :selected").text();
+                    row[4].setAttribute('data-Unit_Id', $("#Unit_Id").val());
+                    row[5].textContent =$("#Rate").val();
+                    row[6].textContent =$("#Amount").val();
+                    row[7].textContent =$("#Discount_1").val();
+                    row[8].textContent =($("#Discount_2").val());
+                    row[9].textContent =($("#Taxable_Amount").val());
+                    row[10].textContent =($("#GST").val());
+                    row[11].textContent =($("#CGST").val());
+                    row[12].textContent =($("#SGST").val());
+                    row[13].textContent =($("#IGST").val());
+                    row[14].textContent = ($("#hdnTotalAmount").val());
                     $("#hdnItemId").val("");
                 } else {
                     var tBody = $("#tblMaterialPurchase > TBODY")[0];
                     //Add Row.
                     var row = tBody.insertRow(-1);
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    let btnEdit = $("<input />");
+                    btnEdit.attr("type", "button");
+                    btnEdit.attr("onclick", "Remove(this);");
+                    btnEdit.val("Remove");
+                    cell.append(btnEdit);
                     //Add Item cell.
                     var cell = $(row.insertCell(-1));
                     cell.html($("#Item_Id :selected").text());
@@ -410,13 +437,6 @@
                     //Add Total_Amount cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#hdnTotalAmount").val());
-                    //Add Button cell.
-                    cell = $(row.insertCell(-1));
-                    let btnEdit = $("<input />");
-                    btnEdit.attr("type", "button");
-                    btnEdit.attr("onclick", "Remove(this);");
-                    btnEdit.val("Remove");
-                    cell.append(btnEdit);
                 }
 
                 //Set Default
@@ -456,22 +476,22 @@
                 $("#tblMaterialPurchase TBODY TR").each(function () {
                     let row = $(this).find('td');
                     let oMapping = {};
-                    oMapping.Line_Id = row.eq(0).attr('data-line-Id');
-                    oMapping.Item_Id = row.eq(0).attr('data-item-id');
-                    oMapping.HSN_SAC = row[1].innerText;
-                    oMapping.Quantity = row[2].innerText;
-                    oMapping.Unit_Id = row.eq(3).attr('data-Unit_Id');
-                    oMapping.UnitTitle = row[3].innerText;
-                    oMapping.Rate = row[4].innerText;
-                    oMapping.Amount = row[5].innerText;
-                    oMapping.Discount_1 = row[6].innerText;
-                    oMapping.Discount_2 = row[7].innerText;
-                    oMapping.Taxable_Amount = row[8].innerText;
-                    oMapping.GST = row[9].innerText;
-                    oMapping.CGST = row[10].innerText;
-                    oMapping.SGST = row[11].innerText;
-                    oMapping.IGST = row[12].innerText;
-                    oMapping.Total_Amount = row[13].innerText;
+                    oMapping.Line_Id = row.eq(1).attr('data-line-Id');
+                    oMapping.Item_Id = row.eq(1).attr('data-item-id');
+                    oMapping.HSN_SAC = row[2].innerText;
+                    oMapping.Quantity = row[3].innerText;
+                    oMapping.Unit_Id = row.eq(4).attr('data-Unit_Id');
+                    oMapping.UnitTitle = row[4].innerText;
+                    oMapping.Rate = row[5].innerText;
+                    oMapping.Amount = row[6].innerText;
+                    oMapping.Discount_1 = row[7].innerText;
+                    oMapping.Discount_2 = row[8].innerText;
+                    oMapping.Taxable_Amount = row[9].innerText;
+                    oMapping.GST = row[10].innerText;
+                    oMapping.CGST = row[11].innerText;
+                    oMapping.SGST = row[12].innerText;
+                    oMapping.IGST = row[13].innerText;
+                    oMapping.Total_Amount = row[14].innerText;
                     PurchaseLineValues.push(oMapping);
                 });
             }
@@ -483,12 +503,13 @@
             let Office_Id = parseInt($("#OfficeId").val());
             let P_State_Id = 0; //parseInt($("#SupplyStateId").val());
             if (Item_Id >0) {
-                IMSC.ajaxCall("GET", "/Master/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
                     if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
                         $("#Hsn_Sac").val(result[0].HSN_SAC);
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
+                        $("#GST").change();
                     } else {
                         $("#Hsn_Sac").val("");
                         $("#GST").val("");
@@ -502,7 +523,7 @@
             //let PartyId = $(".select2 option:selected").text(); parseInt($(this).val());
             let PartyId = parseInt($('#drpPartyId').val());
             $("#PartyId").val(PartyId);
-            IMSC.ajaxCall("GET", "/Master/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
                     $("#StateId").empty();
@@ -521,25 +542,31 @@
 
         $("#drpParty").change(function () {
             let Party_Id = parseInt($('#drpParty').val());
-            IMSC.ajaxCall("GET", "/Master/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            IMSC.ajaxCall("GET", "/Material/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
-                if (result !== null) {
-                    $.each(result, function (index, value) {
-                        $("#drpInvoice").append($("<option></option>").val(value.Purchase_Id).html(value.Invoice_No));
-                    });
-                    $("#drpInvoice").change();
+                if (result.length > 0) {
+                    if (result !== null) {
+                        $.each(result, function (index, value) {
+                            $("#drpInvoice").append($("<option></option>").val(value.Purchase_Id).html(value.Invoice_No));
+                        });
+                        $("#drpInvoice").change();
+                    }
+                } else {
+                    $("#drpInvoice").empty();
+                    $("#PurchaseId").val(0);
                 }
             });
-        }).change();
+        });
 
         $("#drpInvoice").change(function () {
             $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
         });
 
-        $("#btnSearch").click(function () {
+        $("#btnSearch").click(function (e) {
+            e.preventDefault();
             let Purchase_Id = parseInt($("#PurchaseId").val());
-
-            IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            if (Purchase_Id > 0) {
+                   IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
                 if (res !== null) {
                     var result = res.Table;
@@ -566,7 +593,15 @@
                         var tBody = $("#tblMaterialPurchase > TBODY")[0];
                         //Add Row.
                         var row = tBody.insertRow(-1);
-                        $(row).attr('id', 'trRow_'+value.Line_Id);
+                        $(row).attr('id', 'trRow_' + value.Line_Id);
+                        //Add Button cell.
+                        cell = $(row.insertCell(-1));
+                        cell.attr('data-row-Id', value.Line_Id);
+                        let btnEdit = $("<input />");
+                        btnEdit.attr("type", "button");
+                        btnEdit.attr("onclick", "Edit(this);");
+                        btnEdit.val("Edit");
+                        cell.append(btnEdit);
                         //Add Item cell.
                         var cell = $(row.insertCell(-1));
                         cell.html(value.ItemTitle);
@@ -612,19 +647,15 @@
                         //Add Total_Amount cell.
                         cell = $(row.insertCell(-1));
                         cell.html(value.Total_Amount);
-                        //Add Button cell.
-                        cell = $(row.insertCell(-1));
-                        cell.attr('data-row-Id', value.Line_Id);
-                        let btnEdit = $("<input />");
-                        btnEdit.attr("type", "button");
-                        btnEdit.attr("onclick", "Edit(this);");
-                        btnEdit.val("Edit");
-                        cell.append(btnEdit);
+
                     });
                     $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+                    $("#divDeleteMatrial").css('display', 'block');
                 }
             });
-            @*$.when( IMSC.ajaxCall("GET", "/Master/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+           }
+
+            @*$.when( IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
                     $("#IsUpdateMaterialPurchase").val(0);
@@ -701,7 +732,7 @@
                 }
             })).then(function () {
                 var par = 7;
-                IMSC.ajaxCall("GET", "/Master/GetState?PartyId=" + par + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + par + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== null) {
                     $("#StateId").empty();
@@ -715,10 +746,68 @@
             });*@
         });
 
-        $("#Quantity,#Rate,#Discount_1,#Discount_2, #Item_Id").change(function () {
+        $("#Quantity,#Rate,#Discount_1,#Discount_2,#GST").change(function () {
             Calculate();
         });
 
+        $("#btnResetForm").click(function (e) {
+            e.preventDefault();
+            $("#drpParty").val($("#drpParty option:first").val());
+            $('#drpParty').select2().trigger('change');
+            $("#drpInvoice").select2({
+                placeholder: "Select Invoice",
+                allowClear: true
+            });
+            $("#PurchaseId").val(0);
+            $("#IsUpdateMaterialPurchase").val(false);
+            $("#PurchaseLine").val("");
+            $("#SupplyStateId").val("");
+            $("#PartyId").val("");
+            $("#OfficeId").val($("#drpPartyId option:first").val());
+            $("#InvoiceNo").val("");
+            $("#drpPartyId").val($("#drpPartyId option:first").val());
+            $("#Purchase_Ref").val("");
+            $("#TransactionDate").val("");
+            $("#StateId").empty();
+            $("#Item_Id").val($("#Item_Id option:first").val());
+            $('#Item_Id').select2().trigger('change');
+            $("#Hsn_Sac").val("");
+            $("#Quantity").val("");
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
+            $("#Rate").val("");
+            $("#Amount").val("");
+            $("#Discount_1").val("");
+            $("#Discount_2").val("");
+            $("#Taxable_Amount").val("");
+            $("#GST").val("");
+            $("#CGST").val("");
+            $("#SGST").val("");
+            $("#IGST").val("");
+            $("#Total").val("");
+            $("#hdnTotalAmount").val("");
+            $("#hdnRowId").val("");
+            $("#btnAdd").val("Add");
+            $("#tblMaterialPurchase TBODY").empty();
+            $("#divDeleteMatrial").css('display', 'none');
+        });
+
+        $("#btnDelete").click(function (e) {
+            e.preventDefault();
+            let Purchase_Id = parseInt($("#PurchaseId").val());
+            if (Purchase_Id > 0) {
+                IMSC.ajaxCall("POST", "/Material/DeleteMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var res = JSON.parse(d);
+                    if (res !== null) {
+                        $("#msg").text(res.ActionMsg);
+                        setTimeout(function () {
+                            $('#msg').text("");
+                            $('#msg').css('display','none');
+                        }, 5);
+                    }
+             });
+           }
+        });
     });
     function Calculate() {
         let bIsDiscount = false;
@@ -775,26 +864,26 @@
         $("#btnAdd").val("Update");
         $("#IsUpdateMaterialPurchase").val(1);
         var row = $(button).closest("TR").find('td');
-        $("#Item_Id").val(parseInt(row.eq(0).attr('data-item-id')));
+        $("#Item_Id").val(parseInt(row.eq(1).attr('data-item-id')));
         $('#Item_Id').select2().trigger('change');
-        $("#hdnItemId").val(parseInt(row.eq(0).attr('data-item-id')))
-        $("#Hsn_Sac").val(row[1].innerText);
-        $("#Quantity").val(parseInt(row[2].innerText));
-        $("#Unit_Id").val(parseInt(row.eq(3).attr('data-Unit_Id')));
-        $("#Rate").val(parseFloat(row[4].innerText).toFixed(2));
-        $("#Amount").val(parseFloat(row[5].innerText).toFixed(2));
-        $("#Discount_1").val(parseFloat(row[6].innerText).toFixed(2));
-        $("#Discount_2").val(parseFloat(row[7].innerText).toFixed(2));
-        $("#Taxable_Amount").val(parseFloat(row[8].innerText).toFixed(2));
-        $("#GST").val(parseFloat(row[9].innerText).toFixed(2));
-        $("#CGST").val(parseFloat(row[10].innerText).toFixed(2));
-        $("#SGST").val(parseFloat(row[11].innerText).toFixed(2));
-        $("#IGST").val(parseFloat(row[12].innerText).toFixed(2));
-        $("#Total").val(parseFloat(row[13].innerText).toFixed(2));
-        $("#hdnTotalAmount").val(parseFloat(row[13].innerText).toFixed(2));
-        $("#hdnRowId").val(parseInt(row.eq(14).attr('data-row-Id')));
+        $("#hdnItemId").val(parseInt(row.eq(1).attr('data-item-id')))
+        $("#Hsn_Sac").val(row[2].innerText);
+        $("#Quantity").val(parseInt(row[3].innerText));
+        $("#Unit_Id").val(parseInt(row.eq(4).attr('data-Unit_Id')));
+        $("#Rate").val(parseFloat(row[5].innerText).toFixed(2));
+        $("#Amount").val(parseFloat(row[6].innerText).toFixed(2));
+        $("#Discount_1").val(parseFloat(row[7].innerText).toFixed(2));
+        $("#Discount_2").val(parseFloat(row[8].innerText).toFixed(2));
+        $("#Taxable_Amount").val(parseFloat(row[9].innerText).toFixed(2));
+        $("#GST").val(parseFloat(row[10].innerText).toFixed(2));
+        $("#CGST").val(parseFloat(row[11].innerText).toFixed(2));
+        $("#SGST").val(parseFloat(row[12].innerText).toFixed(2));
+        $("#IGST").val(parseFloat(row[13].innerText).toFixed(2));
+        $("#Total").val(parseFloat(row[14].innerText).toFixed(2));
+        $("#hdnTotalAmount").val(parseFloat(row[15].innerText).toFixed(2));
+        $("#hdnRowId").val(parseInt(row.eq(16).attr('data-row-Id')));
         $("#hdnEditRow").val(button);
-        if (parseFloat(row[10].innerText).toFixed(2) > 0 && parseFloat(row[11].innerText).toFixed(2) > 0) {
+        if (parseFloat(row[11].innerText).toFixed(2) > 0 && parseFloat(row[12].innerText).toFixed(2) > 0) {
             $("#hdnIs_SameState").val("1");
         } else {
             $("#hdnIs_SameState").val("0");
