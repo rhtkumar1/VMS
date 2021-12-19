@@ -204,7 +204,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party Category<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.PartyCategory, new SelectList(Model.CategoryList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoryList, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
