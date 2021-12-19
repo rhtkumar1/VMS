@@ -25,7 +25,7 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"].ToString();
             materialPurchase.AppToken = CommonUtility.URLAppToken(AppToken);
             materialPurchase.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/MaterialPurchase.cshtml", materialPurchase);
+            return View("~/Views/Admin/Material/MaterialPurchase.cshtml", materialPurchase);
         }
 
         [HttpGet]
@@ -147,7 +147,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objMaterialPurchase.IsSucceed)
                     {
-                        ViewBag.Msg = objMaterialPurchase.ActionMsg;
+                        ViewBag.Success = objMaterialPurchase.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!objMaterialPurchase.IsSucceed && objMaterialPurchase.PurchaseId != -1)
@@ -172,41 +172,151 @@ namespace IMS.Controllers
             newMaterialPurchase.AppToken = CommonUtility.URLAppToken(AppToken);
             newMaterialPurchase.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Masters/MaterialPurchase.cshtml", (objMaterialPurchase.IsSucceed ? newMaterialPurchase : materialPurchase));
+            return View("~/Views/Admin/Material/MaterialPurchase.cshtml", (objMaterialPurchase.IsSucceed ? newMaterialPurchase : materialPurchase));
         }
 
-        //[HttpPost]
-        //public ActionResult DeleteHSNSACMaster(HSN_SAC_Master hSN_SAC_Master, int HSNSACId)
-        //{
-        //    try
-        //    {
-        //        hSN_SAC_Master.HSN_SACID = HSNSACId;
-        //        HSN_SAC_Master objHSNSACMaster = hSN_SAC_Master.HSN_SAC_Delete();
-        //        AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-        //        hSN_SAC_Master.AppToken = CommonUtility.URLAppToken(AppToken);
-        //        hSN_SAC_Master.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-        //        if (objHSNSACMaster != null)
-        //        {
-        //            if (objHSNSACMaster.HSN_SACID > 0)
-        //            {
-        //                return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
-        //            }
-        //            else
-        //            {
-        //                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.Msg = "some error occurred, please try again..!";
-        //    }
-        //    return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
-        //}
+        #endregion
+
+        #region Material Sales
+        public ActionResult MaterialSales()
+        {
+            MaterialSales materialSales = new MaterialSales();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            materialSales.AppToken = CommonUtility.URLAppToken(AppToken);
+            materialSales.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/MaterialSales.cshtml", materialSales);
+        }
+
+        [HttpGet]
+        public ActionResult GetStateSales(int PartyId,int OfficeId, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                MaterialSales materialSales = new MaterialSales();
+                ds = materialSales.MaterialSales_GetGST_State(PartyId, OfficeId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(ds));
+        }
+
+        [HttpGet]
+        public ActionResult GetPOData(int POId, int Office_Id, int SupplyState_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                MaterialSales materialSales = new MaterialSales();
+                dt = materialSales.MaterialSales_GetPOData(POId, Office_Id, SupplyState_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult GetInvoiceSales(int Party_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                MaterialSales materialSales = new MaterialSales();
+                dt = materialSales.MaterialSales_GetInvoice(Party_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult GetMatrialSales(int SaleId, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                MaterialSales materialSales = new MaterialSales();
+                ds = materialSales.MaterialSales_Get(SaleId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(ds));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteMatrialSales(int SaleId, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                MaterialSales materialSales = new MaterialSales();
+                materialSales = materialSales.MaterialSales_Delete(SaleId);
+                if (materialSales.SaleId > 0 && Convert.ToBoolean(materialSales.IsSucceed))
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = materialSales.ActionMsg }));
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ManageMateriaSales(MaterialSales materialSales)
+        {
+            MaterialSales objMaterialSales = new MaterialSales();
+            try
+            {
+                materialSales.MaterialSalesMappings = JsonConvert.DeserializeObject<List<MaterialSalesMapping>>(materialSales.SaleLine);
+                objMaterialSales = materialSales.MaterialSales_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                materialSales.AppToken = CommonUtility.URLAppToken(AppToken);
+                materialSales.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objMaterialSales != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objMaterialSales.IsSucceed)
+                    {
+                        ViewBag.Success = objMaterialSales.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objMaterialSales.IsSucceed && objMaterialSales.SaleId != -1)
+                    {
+                        ViewBag.Msg = objMaterialSales.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            MaterialSales newMaterialSales = new MaterialSales();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newMaterialSales.AppToken = CommonUtility.URLAppToken(AppToken);
+            newMaterialSales.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/MaterialSales.cshtml", (objMaterialSales.IsSucceed ? newMaterialSales : materialSales));
+        }
         #endregion
     }
 }

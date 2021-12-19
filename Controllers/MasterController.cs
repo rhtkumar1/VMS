@@ -1670,9 +1670,6 @@ namespace IMS.Controllers
 
         #endregion
 
-        #region Material Sales
-
-        #endregion
         #region Order Approval 
 
         #endregion
