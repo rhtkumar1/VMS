@@ -298,6 +298,7 @@
     <Content Include="Views\Admin\Masters\MaterialPurchase.cshtml" />
     <Content Include="Views\Admin\Masters\StationeryMaster.cshtml" />
     <Content Include="Views\Shared\_MessageBox.cshtml" />
+    <Content Include="Views\Admin\Masters\OrderApproval.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -208,5 +208,33 @@ namespace IMS.Controllers
         //    return View("~/Views/Admin/Masters/HSNSACMaster.cshtml", hSN_SAC_Master);
         //}
         #endregion
+
+
+        #region Purchase Order Approval
+        public ActionResult PurchaseOrderIndex()
+        {
+            PurchaseOrder purchaseOrder = new PurchaseOrder();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            purchaseOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+            purchaseOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/OrderApproval.cshtml", purchaseOrder);
+        }
+
+        [HttpGet]
+        public ActionResult GetOrderDetail(string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                PurchaseOrder purchaseOrder = new PurchaseOrder();
+                dt = purchaseOrder.PurchaseOrder_GetApproval();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        #endregion
     }
 }

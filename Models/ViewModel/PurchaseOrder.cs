@@ -151,6 +151,19 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
+        public DataTable PurchaseOrder_GetApproval()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = DBManager.ExecuteDataTable("Purchase_Order_GetApproval", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
 
 
         public PurchaseOrder PurchaseOrder_Delete()
