@@ -321,23 +321,23 @@ namespace IMS.Controllers
 
 
         #region Purchase Order Approval
-        public ActionResult PurchaseOrderIndex()
+        public ActionResult MaterialOrderIndex()
         {
-            PurchaseOrder purchaseOrder = new PurchaseOrder();
+            MaterialOrder materialOrder = new MaterialOrder();
             AppToken = Request.QueryString["AppToken"].ToString();
-            purchaseOrder.AppToken = CommonUtility.URLAppToken(AppToken);
-            purchaseOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/OrderApproval.cshtml", purchaseOrder);
+            materialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+            materialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/OrderApproval.cshtml", materialOrder);
         }
 
         [HttpGet]
-        public ActionResult GetOrderDetail(string AppToken = "")
+        public ActionResult MaterialOrder_GetPendingOrder(string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
-                PurchaseOrder purchaseOrder = new PurchaseOrder();
-                dt = purchaseOrder.PurchaseOrder_GetApproval();
+                MaterialOrder purchaseOrder = new MaterialOrder();
+                dt = purchaseOrder.MaterialOrder_GetPendingOrder();
             }
             catch (Exception)
             {
