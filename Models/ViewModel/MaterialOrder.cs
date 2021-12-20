@@ -9,7 +9,7 @@ using IMS.Models.CommonModel;
 
 namespace IMS.Models.ViewModel
 {
-    public class PurchaseOrder
+    public class MaterialOrder
     {
 
         public int POId { get; set; }
@@ -36,7 +36,7 @@ namespace IMS.Models.ViewModel
         public int CompanyId { get; set; }
         public int Loginid { get; set; }
         public string Remarks { get; set; }
-        public string PurchaseLine { get; set; }
+        public string MaterialLine { get; set; }
         public bool IsActive { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
@@ -47,7 +47,7 @@ namespace IMS.Models.ViewModel
 
 
 
-        public PurchaseOrder()
+        public MaterialOrder()
         {
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
@@ -55,7 +55,7 @@ namespace IMS.Models.ViewModel
 
 
 
-        public PurchaseOrder PurchaseOrder_InsertUpdate()
+        public MaterialOrder MaterialOrder_InsertUpdate()
         {
             try
             {
@@ -71,12 +71,12 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
                 SqlParameters.Add(new SqlParameter("@PO_Status", POStatus));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
-                SqlParameters.Add(new SqlParameter("@Purchase_Line", PurchaseLine));
+                SqlParameters.Add(new SqlParameter("@Material_Line", MaterialLine));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
                 SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
                 SqlParameters.Add(new SqlParameter("@Office_Id", "1"));
 
-                DataTable dt = DBManager.ExecuteDataTableWithParameter("Purchase_Order_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     POId = Convert.ToInt32(dr[0]);
@@ -90,14 +90,14 @@ namespace IMS.Models.ViewModel
             return this;
         }
 
-        public DataTable PurchaseOrder_Get()
+        public DataTable MaterialOrder_Get()
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PO_Id", POId));
-                dt = DBManager.ExecuteDataTable("Purchase_Order_Getdata", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Material_Order_Getdata", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
@@ -105,7 +105,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable PurchaseOrder_GetPO()
+        public DataTable MaterialOrder_GetOrderNo()
         {
             DataTable dt = new DataTable();
             try
@@ -113,7 +113,7 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@PO_No", PONo));
-                dt = DBManager.ExecuteDataTable("Purchase_Order_GetPurchaseOrder", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Material_Order_GetOrder", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
@@ -121,14 +121,14 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable PurchaseOrder_GetParty()
+        public DataTable MaterialOrder_GetParty()
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party", PartyName));
-                dt = DBManager.ExecuteDataTable("Material_Purchase_GetParty", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Material_Material_GetParty", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
@@ -136,14 +136,27 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable PurchaseOrder_GetPartyDetail()
+        public DataTable MaterialOrder_GetPartyDetail()
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
-                dt = DBManager.ExecuteDataTable("Purchase_Order_GetPartyDetail", CommandType.StoredProcedure);
+                dt = DBManager.ExecuteDataTable("Material_Order_GetPartyDetail", CommandType.StoredProcedure);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataTable MaterialOrder_GetPendingOrder()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = DBManager.ExecuteDataTable("Material_Order_GetPendingOrder", CommandType.StoredProcedure);
             }
             catch (Exception ex)
             { throw ex; }
@@ -153,14 +166,14 @@ namespace IMS.Models.ViewModel
 
 
 
-        public PurchaseOrder PurchaseOrder_Delete()
+        public MaterialOrder MaterialOrder_Delete()
         {
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PO_Id", POId));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-                DataTable dt = DBManager.ExecuteDataTableWithParameter("Purchase_Order_Delete", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Delete", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     POId = Convert.ToInt32(dr[0]);

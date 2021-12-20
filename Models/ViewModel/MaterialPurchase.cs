@@ -50,6 +50,8 @@ namespace IMS.Models.ViewModel
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
+            FinId = CommonUtility.GetFYID();
+            CompanyId = CommonUtility.GetCompanyID();
             MaterialPurchaseMappings = new List<MaterialPurchaseMapping>();
             MaterialMappingList = new List<MaterialPurchaseMapping>();
         }
@@ -80,7 +82,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
                 if (!string.IsNullOrEmpty(TransactionDate))
-                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
+                    SqlParameters.Add(new SqlParameter("@Transaction_Date", CommonUtility.GetDateDDMMYYYY(TransactionDate)));
                 SqlParameters.Add(new SqlParameter("@Purchase_Amount", PurchaseAmount));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
@@ -181,7 +183,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-
         public DataTable GetHSN_Detail(int Item_Id, int Office_Id, int P_State_Id)
         {
             DataTable dt = new DataTable();
@@ -245,26 +246,26 @@ namespace IMS.Models.ViewModel
             return ds;
         }
 
-        //public MaterialPurchase MaterialPurchase_Delete()
-        //{
-        //    try
-        //    {
-        //        List<SqlParameter> SqlParameters = new List<SqlParameter>();
-        //        SqlParameters.Add(new SqlParameter("@Purchase_Id", PurchaseId));
-        //        SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-        //        DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Delete", CommandType.StoredProcedure, SqlParameters);
-        //        foreach (DataRow dr in dt.Rows)
-        //        {
-        //            PurchaseId = Convert.ToInt32(dr[0]);
-        //            IsSucceed = Convert.ToBoolean(dr[1]);
-        //            ActionMsg = dr[2].ToString();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    { throw ex; }
+        public MaterialPurchase MaterialPurchase_Delete(int Purchase_Id)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Purchase_Id", Purchase_Id));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    PurchaseId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
 
-        //    return this;
-        //}
+            return this;
+        }
 
     }
 

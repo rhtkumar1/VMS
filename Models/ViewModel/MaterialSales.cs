@@ -44,7 +44,7 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public int IsUpdateMaterialSales { get; set; }
-        
+
 
         public MaterialSales()
         {
@@ -63,15 +63,15 @@ namespace IMS.Models.ViewModel
                 var sb = new System.Text.StringBuilder();
                 foreach (var item in MaterialSalesMappings)
                 {
-                    //sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
-                    //                Quantity=""" + Convert.ToString(item.Quantity) + @""" Hsn_Sac=""" + Convert.ToString(item.HSN_SAC) + @"""   
-                    //                Rate=""" + Convert.ToString(item.Rate) + @""" Amount=""" + Convert.ToString(item.Amount) + @"""   
-                    //                Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
-                    //                Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
-                    //                CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
-                    //                IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @""" 
-                    //                IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" Unit_Id=""" + Convert.ToString(item.Unit_Id) + @"""
-                    //             />");
+                    sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
+                                    PO_Id=""" + Convert.ToString(item.PO_Id) + @""" POLine_Id=""" + Convert.ToString(item.POLine_Id) + @"""
+                                    Quantity=""" + Convert.ToString(item.Quantity) + @""" HSN_SAC=""" + Convert.ToString(item.HSN_SAC) + @"""   
+                                    Rate=""" + Convert.ToString(item.Rate) + @""" Amount=""" + Convert.ToString(item.Amount) + @"""   
+                                    Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
+                                    IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
+                                    CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
+                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @""" 
+                                 />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
@@ -106,30 +106,31 @@ namespace IMS.Models.ViewModel
             return this;
         }
 
-        public DataTable MaterialSales_Get()
+        public DataSet MaterialSales_Get(int SaleId)
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@SaleId", SaleId));
-                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Getdata", CommandType.StoredProcedure, SqlParameters);
+                ds = DBManager.ExecuteDataSetWithParameter("Material_Sale_Getdata", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return dt;
+            return ds;
         }
 
-        public DataTable MaterialSales_GetInvoice()
+        public DataTable MaterialSales_GetPOData(int POId, int Office_Id, int SupplyState_Id)
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
-                SqlParameters.Add(new SqlParameter("@InvoiceNo", InvoiceNo));
-                dt = DBManager.ExecuteDataTable("Material_Sale_GetInvoice", CommandType.StoredProcedure);
+                SqlParameters.Add(new SqlParameter("@PO_Id", POId));
+                SqlParameters.Add(new SqlParameter("@Office_Id", Office_Id));
+                SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyState_Id));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetPODetail", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
@@ -137,6 +138,20 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
+        public DataTable MaterialSales_GetInvoice(int Party_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetInvoice", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
 
         public DataTable MaterialSales_GetPO_Detail()
         {
@@ -155,25 +170,23 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable MaterialSales_GetGST_State()
+        public DataSet MaterialSales_GetGST_State(int PartyId , int OfficeId)
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
-                dt = DBManager.ExecuteDataTable("Material_Purchase_GetGST_State", CommandType.StoredProcedure);
+                ds = DBManager.ExecuteDataSetWithParameter("Material_Sale_GetGST_State_OrderNo", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return dt;
+            return ds;
         }
 
-
-
-
-        public MaterialSales MaterialSales_Delete()
+        public MaterialSales MaterialSales_Delete(int SaleId)
         {
             try
             {
@@ -199,17 +212,15 @@ namespace IMS.Models.ViewModel
     public class MaterialSalesMapping
     {
         public string Line_Id { get; set; }
-        public string Unit_Id { get; set; }
-        public string UnitTitle { get; set; }
         public string Item_Id { get; set; }
-        public string ItemTitle { get; set; }
-        public string HSN_SAC { get; set; }
         public string Quantity { get; set; }
+        public string HSN_SAC { get; set; }
+        public string PO_Id { get; set; }
+        public string POLine_Id { get; set; }
         public string Rate { get; set; }
         public string Amount { get; set; }
         public string Discount_1 { get; set; }
         public string Discount_2 { get; set; }
-        public string Taxable_Amount { get; set; }
         public string GST { get; set; }
         public string CGST { get; set; }
         public string SGST { get; set; }
