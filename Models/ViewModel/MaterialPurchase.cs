@@ -181,7 +181,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-
         public DataTable GetHSN_Detail(int Item_Id, int Office_Id, int P_State_Id)
         {
             DataTable dt = new DataTable();

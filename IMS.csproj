@@ -295,10 +295,10 @@
     <Content Include="Views\Admin\Masters\ManageRoleMaster.cshtml" />
     <Content Include="Views\Admin\Masters\ManagePartyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\UnitConversion.cshtml" />
-    <Content Include="Views\Admin\Masters\MaterialPurchase.cshtml" />
+    <Content Include="Views\Admin\Material\MaterialPurchase.cshtml" />
     <Content Include="Views\Admin\Masters\StationeryMaster.cshtml" />
     <Content Include="Views\Shared\_MessageBox.cshtml" />
-    <Content Include="Views\Admin\Masters\OrderApproval.cshtml" />
+    <Content Include="Views\Admin\Material\MaterialSales.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

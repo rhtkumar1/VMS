@@ -24,6 +24,8 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <h3 style="color:lightgreen;" id="msg">@ViewBag.Success</h3>
+                        <h3 style="color:indianred;">@ViewBag.Msg</h3>
                         <div class="heading">
                             <h4>
                                 Search Purchase Material
@@ -204,66 +206,6 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbodyid">
-                                            @foreach (var oMapping in Model.MaterialMappingList.AsEnumerable())
-                                            {
-                                                <tr id="trRow_@oMapping.Line_Id">
-                                                    <td data-row-Id="@Convert.ToInt32(oMapping.Line_Id)">
-                                                        <input type="button" value="Edit" onclick="Edit(this);" />
-                                                    </td>
-                                                    <td data-item-id="@Convert.ToInt32(oMapping.Item_Id)" data-line-Id="@Convert.ToInt32(oMapping.Line_Id)">
-                                                        @oMapping.ItemTitle
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.HSN_SAC
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Quantity
-                                                    </td>
-                                                    <td data-Unit_Id="@Convert.ToInt32(oMapping.Unit_Id)">
-                                                        @oMapping.UnitTitle
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Rate
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Amount
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Discount_1
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Discount_2
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Taxable_Amount
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.GST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.CGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.SGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.IGST
-                                                    </td>
-                                                    <td>
-                                                        @oMapping.Total_Amount
-                                                    </td>
-                                                </tr>
-                                            }
-                                            @if (Model.MaterialMappingList.Count > 0)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <div class="pull-right">
-                                                            <label id="lblTotalAmount">Total : 0.00</label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -525,13 +467,14 @@
             $("#PartyId").val(PartyId);
             IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
-                if (result !== null) {
-                    $("#StateId").empty();
-                    $("#StateId").append($("<option></option>").val(0).html("Select State"));
+                $("#StateId").empty();
+                if (result !== null && result.length > 0) {
+                    $("#StateId").append($("<option></option>").val("").html("Select State"));
                     $.each(result, function (index, value) {
                         $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
                     });
-                    $('#StateId').trigger("chosen:updated");
+                } else {
+                    $("#StateId").append($("<option></option>").val("").html("Select State"));
                 }
             });
         });
@@ -576,7 +519,7 @@
                         $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
                     });
                     $("#StateId").val(result[0].SupplyState_Id);
-                    $("#IsUpdateMaterialPurchase").val(0);
+                    $("#IsUpdateMaterialPurchase").val(1);
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
                     $("#drpPartyId").val(result[0].Party_Id);
@@ -596,7 +539,6 @@
                         $(row).attr('id', 'trRow_' + value.Line_Id);
                         //Add Button cell.
                         cell = $(row.insertCell(-1));
-                        cell.attr('data-row-Id', value.Line_Id);
                         let btnEdit = $("<input />");
                         btnEdit.attr("type", "button");
                         btnEdit.attr("onclick", "Edit(this);");
@@ -646,104 +588,14 @@
                         cell.html(value.IGST);
                         //Add Total_Amount cell.
                         cell = $(row.insertCell(-1));
+                        cell.attr('data-row-Id', value.Line_Id);
                         cell.html(value.Total_Amount);
-
                     });
                     $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
                     $("#divDeleteMatrial").css('display', 'block');
                 }
             });
            }
-
-            @*$.when( IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                var result = JSON.parse(d);
-                if (result !== null) {
-                    $("#IsUpdateMaterialPurchase").val(0);
-                    $("#OfficeId").val(result[0].Office_Id);
-                    $("#InvoiceNo").val(result[0].Invoice_No);
-                    $("#drpPartyId").val(result[0].Party_Id);
-                    $("#Purchase_Ref").val(result[0].Purchase_Ref);
-                    $("#TransactionDate").val(result[0].Transaction_Date);
-                    $("#SupplyStateId").val(result[0].SupplyState_Id);
-                    $("#Remarks").val(result[0].Remarks);
-
-                    $("#tbodyid").empty();
-                    let amount = 0;
-                    $.each(result, function (index, value) {
-                        amount += parseFloat(value.Total_Amount);
-                        //Get the reference of the Table's TBODY element.
-                        var tBody = $("#tblMaterialPurchase > TBODY")[0];
-                        //Add Row.
-                        var row = tBody.insertRow(-1);
-                        //Add Item cell.
-                        var cell = $(row.insertCell(-1));
-                        cell.html(value.ItemTitle);
-                        cell.attr('data-item-id', value.Item_Id);
-                        cell.attr('data-line-Id', value.Line_Id);
-                        //Add Hsn_Sac cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.HSN_SAC);
-                        //Add Quantity cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Quantity);
-                        //Add Unit cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.UnitTitle);
-                        cell.attr('data-Unit_Id', value.Unit_Id);
-                        //Add Rate cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Rate);
-                        //Add Amount cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Amount);
-                        //Add Discount_1 cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Discount_1);
-                        //Add Discount_2 cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Discount_2);
-                        //Add Taxable_Amount cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Taxable_Amount);
-                        //Add GST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.GST);
-                        //Add CGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.CGST);
-                        //Add SGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.SGST);
-                        //Add IGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.IGST);
-                        //Add Total_Amount cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.Total_Amount);
-                        //Add Button cell.
-                        cell = $(row.insertCell(-1));
-                        let btnEdit = $("<input />");
-                        btnEdit.attr("type", "button");
-                        btnEdit.attr("onclick", "Edit(this);");
-                        btnEdit.val("Edit");
-                        cell.append(btnEdit);
-                    });
-                    $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
-                }
-            })).then(function () {
-                var par = 7;
-                IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + par + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                var result = JSON.parse(d);
-                if (result !== null) {
-                    $("#StateId").empty();
-                    $.each(result, function (index, value) {
-                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                    });
-                    $("#StateId").val($("#SupplyStateId").val());
-                    $('#StateId').trigger("chosen:updated");
-                }
-             });
-            });*@
         });
 
         $("#Quantity,#Rate,#Discount_1,#Discount_2,#GST").change(function () {
@@ -880,8 +732,8 @@
         $("#SGST").val(parseFloat(row[12].innerText).toFixed(2));
         $("#IGST").val(parseFloat(row[13].innerText).toFixed(2));
         $("#Total").val(parseFloat(row[14].innerText).toFixed(2));
-        $("#hdnTotalAmount").val(parseFloat(row[15].innerText).toFixed(2));
-        $("#hdnRowId").val(parseInt(row.eq(16).attr('data-row-Id')));
+        $("#hdnTotalAmount").val(parseFloat(row[14].innerText).toFixed(2));
+        $("#hdnRowId").val(parseInt(row.eq(14).attr('data-row-Id')));
         $("#hdnEditRow").val(button);
         if (parseFloat(row[11].innerText).toFixed(2) > 0 && parseFloat(row[12].innerText).toFixed(2) > 0) {
             $("#hdnIs_SameState").val("1");
@@ -900,5 +752,12 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
         }
+        let sumOfTotal = 0;
+        $("#tblMaterialPurchase TBODY TR").each(function () {
+            var row = $(this);
+            let td = row.find("TD");
+            sumOfTotal += parseFloat(td[13].innerText);
+        });
+        $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     };
 </script>
