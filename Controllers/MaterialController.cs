@@ -327,7 +327,7 @@ namespace IMS.Controllers
             AppToken = Request.QueryString["AppToken"].ToString();
             materialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
             materialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-            return View("~/Views/Admin/Masters/OrderApproval.cshtml", materialOrder);
+            return View("~/Views/Admin/Material/MaterialOrder.cshtml", materialOrder);
         }
 
         [HttpGet]
@@ -336,8 +336,8 @@ namespace IMS.Controllers
             DataTable dt = new DataTable();
             try
             {
-                MaterialOrder purchaseOrder = new MaterialOrder();
-                dt = purchaseOrder.MaterialOrder_GetPendingOrder();
+                MaterialOrder materialOrder = new MaterialOrder();
+                dt = materialOrder.MaterialOrder_GetPendingOrder();
             }
             catch (Exception)
             {
