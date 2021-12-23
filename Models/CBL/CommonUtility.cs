@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Web.Mvc.Filters;
 
@@ -153,6 +154,30 @@ public static class CommonUtility
             return true;
         }
         catch(Exception Ex)
+        {
+            return false;
+        }
+    }
+    public static bool GenerateQrcode(string Data, string Location)
+    {
+        try
+        {
+            QRCode qrcode = new QRCode();
+            qrcode.Data = Data;
+            qrcode.DataMode = QRCodeDataMode.Byte;
+            qrcode.UOM = UnitOfMeasure.PIXEL;
+            qrcode.X = 3;
+            qrcode.LeftMargin = 0;
+            qrcode.RightMargin = 0;
+            qrcode.TopMargin = 0;
+            qrcode.BottomMargin = 0;
+            qrcode.Resolution = 72;
+            qrcode.Rotate = Rotate.Rotate0;
+            qrcode.ImageFormat = ImageFormat.Gif;
+            qrcode.drawBarcode(Location);
+            return true;
+        }
+        catch (Exception Ex)
         {
             return false;
         }
