@@ -85,7 +85,7 @@ namespace IMS.Models.ViewModel
                     SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
                 SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
                 SqlParameters.Add(new SqlParameter("@Marka", Marka));
-                SqlParameters.Add(new SqlParameter("@Transporter", Transporter));
+                SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
@@ -170,7 +170,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataSet MaterialSales_GetGST_State(int PartyId , int OfficeId)
+        public DataSet MaterialSales_GetGST_State(int PartyId, int OfficeId)
         {
             DataSet ds = new DataSet();
             try
