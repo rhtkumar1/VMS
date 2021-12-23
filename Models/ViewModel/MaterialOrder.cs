@@ -49,6 +49,9 @@ namespace IMS.Models.ViewModel
         public int Office_Id { get; set; }
         public SelectList OfficeLists { get; set; }
 
+        public string POIds { get; set; }
+        public string Status { get; set; }
+
 
 
         public MaterialOrder()
@@ -184,6 +187,28 @@ namespace IMS.Models.ViewModel
                 foreach (DataRow dr in dt.Rows)
                 {
                     POId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
+
+
+        public MaterialOrder MaterialOrder_StatusUpdate()
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@PO_Ids", POIds));
+                SqlParameters.Add(new SqlParameter("@Status", Status));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_StatusUpdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    POIds = Convert.ToString(dr[0]);
                     IsSucceed = Convert.ToBoolean(dr[1]);
                     ActionMsg = dr[2].ToString();
                 }

@@ -31,19 +31,22 @@
                                 Search Material
                             </h4>
                         </div>
+                        <div class="col-md-12">
+                            <p style="color: red;display:none" id="pMsgSearch"></p>
+                        </div>
                         <br />
                         <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Party<span class="mandatory">*</span></label>
+                            <div class="col-md-3 form-group">
+                                <label>Party</label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-3 form-group">
                             <label>Invoice<span class="mandatory">*</span></label>
                             <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
                         </div>
-                        <div class="col-md-4 form-group pull-left">
-                            <button type="button" style="margin-top: 18px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
+                        <div class="col-md-1 form-group pull-left">
+                            <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
                         <div class="col-md-2"></div>
                         <div class="clearfix"></div>
@@ -56,28 +59,32 @@
                             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
                             @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
                             @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
+                            @Html.HiddenFor(m => m.SaleAmount, htmlAttributes: new { @id = "SaleAmount" })
                             <div class="heading">
                                 <h4>
-                                    Purchase Sales Detail
+                                    Material Sales Detail
                                 </h4>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="color: red;display:none" id="pMsgForm"></p>
                             </div>
                             <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Office<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "OfficeId", @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "OfficeId", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Invoice Number<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.InvoiceNo, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "InvoiceNo", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.InvoiceNo, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "InvoiceNo", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party<span class="mandatory">*</span></label>
-                                    <select id="drpPartyId" name="drpPartyId" class="form-control" required>
+                                    <select id="drpPartyId" name="drpPartyId" class="form-control">
                                         @foreach (var item in Model.PartyLists.AsEnumerable())
                                         {
                                             <option value="@item.Value">@item.Text</option>
@@ -89,38 +96,38 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Order No<span class="mandatory">*</span></label>
-                                    <select id="drpOrderNo" name="drpOrderNo" class="form-control" required></select>
+                                    <select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>State<span class="mandatory">*</span></label>
-                                    <select id="StateId" name="StateId" class="form-control" required></select>
+                                    <select id="StateId" name="StateId" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Date<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Remarks<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Enter Remarks", @id = "Remarks", @class = "form-control", @required = "required" })
+                                    <label>Remarks</label>
+                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Enter Remarks", @id = "Remarks", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Despatched Remark<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Marka, htmlAttributes: new { @placeholder = "Enter Marka", @id = "Marka", @class = "form-control", @required = "required" })
+                                    <label>Marka<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Marka, htmlAttributes: new { @placeholder = "Enter Marka", @id = "Marka", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Transporter<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Transporter, htmlAttributes: new { @placeholder = "Enter Transporter", @id = "Transporter", @class = "form-control", @required = "required" })
+                                    <label>Transporter</label>
+                                    @Html.TextBoxFor(m => m.Transporter, htmlAttributes: new { @placeholder = "Enter Transporter", @id = "Transporter", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -164,6 +171,9 @@
                                 <br />
                             </div>
                             <div class="clearfix"></div>
+                            <div class="col-md-12 pull-right">
+                                <p style="color: red;display:none" class="pull-right" id="pMsgSubmit"></p>
+                            </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-2">
                                 <div style="display:none" id="divDeleteMatrial">
@@ -206,14 +216,13 @@
         $("#TransactionDate").attr('placeholder', 'dd/mm/yyyy');
 
         $("body").on("click", "#btnSubmit", function () {
-            //Loop through the Table rows and build a JSON array.
             let PurchaseLineValues = [];
+            let isValid = true;
             if ($("#tblMaterialSales TBODY TR").length > 0) {
                 $("#tblMaterialSales TBODY TR").each(function () {
                     let row = $(this).find('td');
                     let oMapping = {};
                     let index = parseInt(row[3].firstElementChild.getAttribute('data-index'));
-                    
                     oMapping.Line_Id = $("#hdnLineId_" + index).val();
                     oMapping.Item_Id = $("#hdnItemId_" + index).val();
                     oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
@@ -233,17 +242,61 @@
                     oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
                     PurchaseLineValues.push(oMapping);
                 });
+                $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
+            } else {
+                $("#pMsgSubmit").text("Please select order number.");
+                $('#pMsgSubmit').css('display', 'block');
+                setTimeout(function () {
+                    $('#pMsgSubmit').text("");
+                    $('#pMsgSubmit').css('display', 'none');
+                }, 10000);
+                isValid = false;
+                return false;
             }
-            $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
+            
+
+
+            if (parseInt($("#OfficeId").val()) === 0 || $("#InvoiceNo").val() === "" || parseInt($("#drpPartyId").val()) === 0
+                || $("#Purchase_Ref").val() === "" || $("#TransactionDate").val() === "" || parseInt($("#StateId").val()) === 0) {
+                $("#pMsgForm").text("Please fill all mandatory fields.");
+                $('#pMsgForm').css('display', 'block');
+                setTimeout(function () {
+                    $('#pMsgForm').text("");
+                    $('#pMsgForm').css('display', 'none');
+                }, 10000);
+                isValid = false;
+                return false;
+            }
+
+
             $("#tblMaterialSales TBODY TR").each(function () {
                 let row = $(this).find('td');
                 let index = parseInt(row[3].firstElementChild.getAttribute('data-index'));
-                if (parseInt($("#txtOrder_Qty_" + index).val()) <= parseInt($("#lblAvailable_Qty_" + index).text())) {
+                let Qty = parseInt($("#txtOrder_Qty_" + index).val());
+                let aQty = parseInt($("#lblAvailable_Qty_" + index).text());
+                if (Qty !== NaN && Qty > 0) {
+                    isValid = true;
                     return true;
                 } else {
+                    isValid = false;
                     return false;
                 }
+                if (Qty <= aQty) {
+                    isValid = true;
+                    return true;
+                } else {
+                    isValid = false;
+                    return false;
+                }
+                return isValid;
             });
+
+            if (isValid) {
+                return true;
+            } else {
+                alert("Please check quantity");
+                return false;
+            }
         });
 
         $("#drpPartyId").change(function () {
@@ -257,29 +310,32 @@
                         $("#drpOrderNo").empty();
                         $("#StateId").empty();
                         if (result.Table.length > 0) {
-                            $("#StateId").append($("<option></option>").val("").html("Select State"));
+                            $("#StateId").append($("<option></option>").val("0").html("Select State"));
                             $.each(result.Table, function (index, value) {
                                 $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
                             });
                         } else {
-                            $("#StateId").append($("<option></option>").val("").html("Select State"));
+                            $("#StateId").append($("<option></option>").val("0").html("Select State"));
                         }
                         if (result.Table1.length > 0) {
-                            $("#drpOrderNo").append($("<option></option>").val("").html("Select Order"));
+                            $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
                             $.each(result.Table1, function (index, value) {
                                 $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
                             });
                         } else {
-                            $("#drpOrderNo").append($("<option></option>").val("").html("Select Order"));
+                            $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
                         }
                     }
                 });
             } else {
                 $("#drpOrderNo").empty();
+                $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
                 $("#StateId").empty();
+                $("#StateId").append($("<option></option>").val("0").html("Select State"));
                 $("#tbodyid").empty();
                 $("#lblTotalAmount").text("Total : 0.00");
                 $("#IsUpdateMaterialSales").val(0);
+                $("#SaleAmount").val("0");
             }
         });
 
@@ -289,27 +345,18 @@
 
         $("#drpParty").change(function () {
             let Party_Id = parseInt($('#drpParty').val());
-            if (Party_Id > 0) {
-                 IMSC.ajaxCall("GET", "/Material/GetInvoiceSales?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            $('#PartyId').val(Party_Id);
+            IMSC.ajaxCall("GET", "/Material/GetInvoiceSales?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                      var result = JSON.parse(d);
                      $("#drpInvoice").empty();
-                     $("#drpInvoice").append($("<option></option>").val("").html("Select Invoice"));
+                     $("#drpInvoice").append($("<option></option>").val("0").html("Select Invoice"));
                     if (result.length > 0) {
-                        if (result !== null) {
-                            $.each(result, function (index, value) {
-                                $("#drpInvoice").append($("<option></option>").val(value.Sale_Id).html(value.Invoice_No));
-                            });
-                            $("#drpInvoice").val($("#drpInvoice option:first").val());
-                            $('#drpInvoice').select2().trigger('change');
-                        }
-                    } else {
-                        $("#drpInvoice").val($("#drpInvoice option:first").val());
-                        $('#drpInvoice').select2().trigger('change');
-                        $("#SaleId").val(0);
+                        $.each(result, function (index, value) {
+                            $("#drpInvoice").append($("<option></option>").val(value.Sale_Id).html(value.Invoice_No));
+                        });
                     }
             });
-          }
-        });
+        }).change();
 
         $("#drpInvoice").change(function () {
             $("#SaleId").val(parseInt($("#drpInvoice").val() !== "" ? $("#drpInvoice").val():"0"));
@@ -325,20 +372,22 @@
                     var result = JSON.parse(d);
                     if (result.length > 0) {
                         $("#tbodyid").empty();
+                        $("#SaleAmount").val("0");
                         BindGrid(result);
                     }
-            });
+                 });
             } else {
                 $("#tbodyid").empty();
+                $("#SaleAmount").val("0");
                 $("#divDeleteMatrial").css('display', 'none');
                 $("#lblTotalAmount").text("Total : 0.00");
-                $("#IsUpdateMaterialSales").val(0);
             }
         });
 
         $("#btnSearch").click(function (e) {
             e.preventDefault();
             let SaleId = parseInt($("#SaleId").val());
+            $("#SaleId").val(SaleId);
             if (SaleId > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
@@ -347,7 +396,7 @@
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
                     $("#drpPartyId").val(result[0].Party_Id);
-
+                    $('#PartyId').val(result[0].Party_Id);
                     $("#StateId").empty();
                     $("#StateId").append($("<option></option>").val(0).html("Select State"));
                     $.each(res.Table1, function (index, value) {
@@ -356,9 +405,9 @@
                     $("#StateId").val(result[0].SupplyState_Id);
                     $("#SupplyStateId").val(result[0].SupplyState_Id);
 
-                    if (result.Table2.length>0) {
+                    if (res.Table2.length>0) {
                         $("#drpOrderNo").empty();
-                        $.each(result.Table2, function (index, value) {
+                        $.each(res.Table2, function (index, value) {
                             $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
                         });
                         $("#drpOrderNo").val(result[0].PO_Id);
@@ -371,10 +420,18 @@
                     $("#Marka").val(result[0].Marka);
                     $("#hdnIs_SameState").val(result[0].Is_SameState === undefined ? "0" : result[0].Is_SameState);
                     $("#tbodyid").empty();
+                    $("#SaleAmount").val("0");
                     BindGrid(result);
                 }
             });
-           }
+            } else {
+                $("#pMsgSearch").text("Please select inovice.");
+                $('#pMsgSearch').css('display', 'block');
+                setTimeout(function () {
+                    $('#pMsgSearch').text("");
+                    $('#pMsgSearch').css('display', 'none');
+                }, 10000);
+            }
         });
 
         $("#btnResetForm").click(function (e) {
@@ -382,6 +439,7 @@
             $("#drpParty").val($("#drpParty option:first").val());
             $('#drpParty').select2().trigger('change');
             $("#drpInvoice").empty();
+            $("#drpOrderNo").empty();
             $('#drpInvoice').select2().trigger('change');
             $("#SaleId").val(0);
             $("#IsUpdateMaterialSales").val(false);
@@ -489,6 +547,7 @@
                 let td = row.find("TD");
                 sumOfTotal += parseFloat(td[14].innerText);
             });
+            $("#SaleAmount").val(sumOfTotal.toFixed(2));
             $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
         }
     }
@@ -616,6 +675,7 @@
             cell.append(lblTotal_Amount);
 
         });
+        $("#SaleAmount").val(totalAmount.toFixed(2));
         $("#lblTotalAmount").text("Total : " + totalAmount.toFixed(2));
         $("#divDeleteMatrial").css('display', 'block');
     };

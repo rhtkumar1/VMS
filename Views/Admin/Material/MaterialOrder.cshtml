@@ -11,6 +11,7 @@
     <div class="content-main">
         <!--banner-->
         <div class="banner">
+            
             <h2>
                 <a href="/admin/dashboard">Home</a>
                 <i class="fa fa-angle-right"></i>
@@ -22,30 +23,76 @@
         <div id="modelForm">
             <div class="blank">
                 <div class="blank-page">
-                    <div id="listGrid"></div>
-                </div>
-            </div>
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageMaterialOrder", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MaterialOrder" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.POIds, htmlAttributes: new { @id = "POIds" })
+                            @Html.HiddenFor(m => m.Status, htmlAttributes: new { @id = "Status" })
+                            <div id="listGrid"></div>
+                            <div class="col-md-10">
+                            </div>
+                            <div>
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnApprove" id="btnApprove" class="btncustome pull-right">Approve</button>
+                                </div>
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnReject" id="btnReject" class="btncustome pull-right">Reject</button>
+                                </div>
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnHold" id="btnHold" class="btncustome pull-right">Hold</button>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                        
+                    </div>
             <div class="clearfix"> </div>
+            
+            
         </div>
     </div>
     <!--//content-->
     <!---->
 </div>
+</div>
 
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        $("body").on("click", "#btnApprove", function () {
+            $("#POIds").val(selectedItems[0]);
+            $("#Status").val("A");
+        });
+        $("body").on("click", "#btnReject", function () {
+
+            $("#POIds").val(selectedItems[0]);
+            $("#Status").val("R");
+        });
+        $("body").on("click", "#btnHold", function () {
+
+            $("#POIds").val(selectedItems[0]);
+            $("#Status").val("H");
+        });
+
+
         if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
         IMSC.ajaxCall("GET", "/Material/MaterialOrder_GetPendingOrder?AppToken="+'@Model.AppToken', {}, "text", function (d) {
-            var result = JSON.parse(d);
+            
+            var dtsrc = JSON.parse(d);
+            var result = [...new Map(dtsrc.map(item =>[item["PO_Id"], item])).values()];
             if (result !== "null" && result !== "") {
                 var fields = [
                     {
-                        title: "Action",
-                        width: 40,
+                        
+                        width: 25,
                         sorting: false,
                         headerTemplate: function () {
                             return $("<input>").attr("type", "checkbox").attr("id", "selectAllCheckbox").attr("name", "Action").on("change", function () { checkedAll($(this)); });
@@ -60,17 +107,24 @@
 
                     },
                     { name: "PO_Id", css: "hidden", },
-                    { name: "PO_No",type:"text", title: "OrderNo", sorting: true, filtering: true, width: 40 },
-                    { name: "SalesMan", type: "text", title: "SalesMan", sorting: true, filtering: true, width: 40 },
-                    { name: "PartyName", type: "text", title: "Party", sorting: true, filtering: true, width: 40 },
-                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true, width: 40 },
-                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: true, width: 40 },
-                    { name: "Status", type: "text", title: "Status", sorting: true, filtering: true, width: 40 },
-                    { name: "LedgerBalance", type: "text", title: "LedgerBal.", sorting: true, filtering: false, width: 30 },
-                    { name: "CashBalance", type: "text", title: "CashBal.", sorting: true, filtering: false, width: 30 },
-                    { name: "OverdueAmount", type: "text", title: "OverdueAmt.", sorting: true, filtering: false, width: 30 },
+                    { name: "PO_No",type:"text", title: "OrderNo", sorting: true, filtering: true },
+                    { name: "SalesMan", type: "text", title: "SalesMan", sorting: true, filtering: true },
+                    { name: "PartyName", type: "text", title: "Party", sorting: true, filtering: true},
+                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true},
+                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: true},
+                    { name: "Status", type: "text", title: "Status", sorting: true, filtering: true},
+                    { name: "LedgerBalance", type: "text", title: "LedgerBal.", sorting: true, filtering: false},
+                    { name: "CashBalance", type: "text", title: "CashBal.", sorting: true, filtering: false},
+                    { name: "OverdueAmount", type: "text", title: "OverdueAmt.", sorting: true, filtering: false}
 
                 ];
+                //var rohit = [{ name: "Item", type: "text", title: "Item", sorting: true, filtering: false, width: 40 },
+                //    { name: "Order_Qty", type: "text", title: "Qty", sorting: true, filtering: false, width: 40 },
+                //    { name: "Order_Rate", type: "text", title: "Rate", sorting: true, filtering: true, width: 40 },
+                //    { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: true, width: 40 },
+                //    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: true, width: 40 },
+                    
+                //];
                 var options = {
                     filtering: true,
                     editing: true,
@@ -78,6 +132,26 @@
                     paging: true,
                     autoload: true,
                     multiselect: true,
+                    //rowRenderer: function (item) {
+                    //    var row = $("<tr>");
+                    //    var addressesGrid = $('<tr>').hide();
+                    //    addressesGrid.jsGrid({
+                    //        data: result,
+                    //        fields: rohit
+                    //    })
+                        
+                    //    items = Object.keys(item)
+                    //    items.forEach(function (key) {
+                    //        if (key != items[items.length - 1]) {
+                    //            var cell = $("<td>").addClass("jsgrid-cell").append(item[key])
+                    //            row.append(cell)
+                    //        }
+                    //    })
+                    //    row.click(function () {
+                    //        addressesGrid.toggle();
+                    //    })
+                    //    return row.add(addressesGrid);
+                    //},
                     controller: {
                         OrderLists: result,
                         loadData: function (filter) {
@@ -127,23 +201,6 @@
             }
         };
 
-        $("#selectAllCheckbox").click(function (item) {
-            selectedItems = [];
-            if (item[0].checked) { // check select status
-                $('.singleCheckbox').each(function () {
-                    this.checked = true;
-                    selectItem($(this).parent().next().text());
-                });
-            } else {
-
-                $('.singleCheckbox').each(function () {
-                    this.checked = false;
-                    unselectItem(item);
-                });
-                selectedItems = [];
-            }
-        });
-
         var checkedAll = function (item) {
             selectedItems = [];
             if (item[0].checked) { // check select status
@@ -160,6 +217,9 @@
                 selectedItems = [];
             }
         }
+
+        
+
 
     });
 
