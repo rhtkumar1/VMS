@@ -345,6 +345,49 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+
+        [HttpPost]
+        public ActionResult ManageMaterialOrder(MaterialOrder materialOrder)
+        {
+            MaterialOrder objMaterialOrder = new MaterialOrder();
+            try
+            {
+                objMaterialOrder = materialOrder.MaterialOrder_StatusUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                materialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+                materialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objMaterialOrder != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objMaterialOrder.IsSucceed)
+                    {
+                        ViewBag.Success = objMaterialOrder.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objMaterialOrder.IsSucceed)
+                    {
+                        ViewBag.Msg = objMaterialOrder.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            MaterialOrder omaterialOrder = new MaterialOrder();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            omaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+            omaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/MaterialOrder.cshtml", (objMaterialOrder.IsSucceed ? omaterialOrder : materialOrder));
+        }
         #endregion
     }
 }
