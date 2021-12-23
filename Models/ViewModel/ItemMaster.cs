@@ -59,6 +59,8 @@ namespace IMS.Models.ViewModel
         public bool Scheme { get; set; }
         public decimal MRP { get; set; }
         public decimal ListPrice { get; set; }
+        public string BarCodeLocation { get; set; }
+        public bool IsNewEntery;
 
         public ItemMaster()
         {
@@ -74,12 +76,20 @@ namespace IMS.Models.ViewModel
             Loginid = CommonUtility.GetLoginID();
             ItemMappingList = new List<dynamic>();
             PartyAndLocationMapping = new List<PartyAndLocationMapping>();
+            IsNewEntery = true;
+            
         }
+        
 
         public ItemMaster ItemMaster_InsertUpdate()
         {
             try
             {
+                if (ItemId > 0)
+                    IsNewEntery = false;
+                else
+                    IsNewEntery = true;
+
                 string sString = string.Empty;
                 foreach (var item in PartyAndLocationMapping)
                 {
@@ -118,12 +128,18 @@ namespace IMS.Models.ViewModel
                     IsSucceed = Convert.ToBoolean(dr[1]);
                     ActionMsg = dr[2].ToString();
                 }
+                if(ItemId>0)
+                {
+                    CommonUtility.GenerateBarCode(Convert.ToString(ItemId), BarCodeLocation +Convert.ToString(ItemId)+ ".gif");
+                }
             }
             catch (Exception ex)
             { throw ex; }
 
             return this;
         }
+
+        
 
         public DataTable ItemMaster_Get()
         {

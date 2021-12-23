@@ -1,6 +1,7 @@
 ﻿using IMS.Models;
 using IMS.Models.CBL;
 using IMS.Models.ViewModel;
+using OnBarcode.Barcode;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -141,5 +142,19 @@ public static class CommonUtility
             throw Ex;
         }
     }
-    
+    public static bool GenerateBarCode(string Data, string Location)
+    {
+        try
+        {
+            Linear barcode = new Linear();
+            barcode.Type = BarcodeType.CODE39;
+            barcode.Data = Data;
+            barcode.drawBarcode(Location);
+            return true;
+        }
+        catch(Exception Ex)
+        {
+            return false;
+        }
+    }
 }

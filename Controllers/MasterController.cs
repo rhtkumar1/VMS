@@ -969,6 +969,7 @@ namespace IMS.Controllers
             try
             {
                 itemMaster.PartyAndLocationMapping = JsonConvert.DeserializeObject<List<PartyAndLocationMapping>>(itemMaster.ItemMapping);
+                itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
                 objItemMaster = itemMaster.ItemMaster_InsertUpdate();
                 itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
