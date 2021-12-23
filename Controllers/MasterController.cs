@@ -918,6 +918,7 @@ namespace IMS.Controllers
         {
             if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
             ItemMaster itemMaster = new ItemMaster();
+            itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
             AppToken = Request.QueryString["AppToken"].ToString();
             itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
@@ -946,6 +947,7 @@ namespace IMS.Controllers
             {
                 if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
                 ItemMaster itemMaster = new ItemMaster();
+                itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
                 if (item_Id > 0)
                 {
                     itemMaster = itemMaster.ItemMaster_Get_By_Id(item_Id);
@@ -1032,6 +1034,7 @@ namespace IMS.Controllers
             try
             {
                 itemMaster.ItemId = itemId;
+                itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
                 ItemMaster objItemMaster = itemMaster.ItemMaster_Delete();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 itemMaster.AppToken = CommonUtility.URLAppToken(AppToken);
