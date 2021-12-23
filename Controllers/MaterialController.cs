@@ -177,6 +177,111 @@ namespace IMS.Controllers
 
         #endregion
 
+        #region Order Creation
+
+        public ActionResult OrderCreation()
+        {
+            MaterialOrder ObjMaterialOrder = new MaterialOrder();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+            ObjMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/OrderCreation.cshtml", ObjMaterialOrder);
+        }
+       
+
+        [HttpGet]
+        public ActionResult GetOrder(MaterialOrder objMaterialOrder, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = objMaterialOrder.MaterialOrder_Get();
+                dt.TableName = "MaterialOrderLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageOrder(MaterialOrder ObjMaterialOrder)
+        {
+            MaterialOrder objMaterialOrder = new MaterialOrder();
+            try
+            {
+                objMaterialOrder = ObjMaterialOrder.MaterialOrder_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+                ObjMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objMaterialOrder != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objMaterialOrder.IsSucceed)
+                    {
+                        ViewBag.Msg = objMaterialOrder.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objMaterialOrder.IsSucceed && objMaterialOrder.CompanyId != -1)
+                    {
+                        ViewBag.Msg = objMaterialOrder.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            MaterialOrder newMaterialOrder = new MaterialOrder();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+            newMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/OrderCreation.cshtml", (objMaterialOrder.IsSucceed ? newMaterialOrder : ObjMaterialOrder));
+
+        }
+
+        [HttpPost]
+        public ActionResult DeleteOrder(MaterialOrder ObjMaterialOrder, int companyId)
+        {
+            try
+            {
+                ObjMaterialOrder.CompanyId = companyId;
+                MaterialOrder objMaterialOrder = ObjMaterialOrder.MaterialOrder_Delete();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+                ObjMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objMaterialOrder != null)
+                {
+                    if (objMaterialOrder.IsSucceed)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = objMaterialOrder.ActionMsg }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
+            }
+        }
+        #endregion
+
         #region Material Sales
         public ActionResult MaterialSales()
         {

@@ -299,6 +299,7 @@
     <Content Include="Views\Shared\_MessageBox.cshtml" />
     <Content Include="Views\Admin\Material\MaterialSales.cshtml" />
     <Content Include="Views\Admin\Material\MaterialOrder.cshtml" />
+    <Content Include="Views\Admin\Material\OrderCreation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -14,6 +14,7 @@ namespace IMS.Models.ViewModel
 
         public int POId { get; set; }
         public string PONo { get; set; }
+        public string PODate { get; set; }
         public int PartyId { get; set; }
         public SelectList PartyLists { get; set; }
         public decimal LedgerBalance { get; set; }
