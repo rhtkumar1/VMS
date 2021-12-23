@@ -15,6 +15,7 @@ namespace IMS.Models.ViewModel
         public int POId { get; set; }
         public string PONo { get; set; }
         public int PartyId { get; set; }
+        public SelectList PartyLists { get; set; }
         public decimal LedgerBalance { get; set; }
         public decimal CashBalance { get; set; }
         public decimal OverdueAmount { get; set; }
@@ -23,6 +24,7 @@ namespace IMS.Models.ViewModel
         public string POStatus { get; set; }
         public int LineId { get; set; }
         public int ItemId { get; set; }
+        public SelectList Item_Lists { get; set; }
         public int AvailableQty { get; set; }
         public decimal LastRate { get; set; }
         public decimal LastDiscount { get; set; }
@@ -43,14 +45,21 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public int MENU_Id { get; set; }
+        public int Office_Id { get; set; }
+        public SelectList OfficeLists { get; set; }
 
         public string POIds { get; set; }
         public string Status { get; set; }
+
+
 
         public MaterialOrder()
         {
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
+            OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
+            Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
         }
 
 

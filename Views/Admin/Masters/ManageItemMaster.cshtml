@@ -39,6 +39,7 @@
                                 </h4>
                             </div>
                             <br />
+
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
@@ -151,6 +152,13 @@
                                 <div class="col-md-4 form-group">
                                     <label>Remarks</label>
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>BarCode</label>
+                                    <img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".gif" )" alt="" />
+
                                 </div>
                             </div>
                             <div class="clearfix"></div>
