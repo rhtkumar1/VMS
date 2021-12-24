@@ -53,6 +53,8 @@ namespace IMS.Models.ViewModel
             //POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
 
             Loginid = CommonUtility.GetLoginID();
+            FinId = CommonUtility.GetFYID();
+            CompanyId = CommonUtility.GetCompanyID();
             MaterialSalesMappings = new List<MaterialSalesMapping>();
             MaterialMappingList = new List<MaterialSalesMapping>();
         }
@@ -186,12 +188,12 @@ namespace IMS.Models.ViewModel
             return ds;
         }
 
-        public MaterialSales MaterialSales_Delete(int SaleId)
+        public MaterialSales MaterialSales_Delete(int saleId)
         {
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
+                SqlParameters.Add(new SqlParameter("@Sale_Id", saleId));
                 SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Delete", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)

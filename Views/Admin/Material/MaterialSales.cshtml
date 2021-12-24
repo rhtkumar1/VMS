@@ -120,7 +120,7 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Marka<span class="mandatory">*</span></label>
+                                    <label>Marka</label>
                                     @Html.TextBoxFor(m => m.Marka, htmlAttributes: new { @placeholder = "Enter Marka", @id = "Marka", @class = "form-control" })
                                 </div>
                             </div>
@@ -177,7 +177,7 @@
                             <div class="col-md-8"></div>
                             <div class="col-md-2">
                                 <div style="display:none" id="divDeleteMatrial">
-                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete Matrial</button>
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete</button>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -218,8 +218,10 @@
         $("body").on("click", "#btnSubmit", function () {
             let PurchaseLineValues = [];
             let isValid = true;
+            
             if ($("#tblMaterialSales TBODY TR").length > 0) {
                 $("#tblMaterialSales TBODY TR").each(function () {
+                    
                     let row = $(this).find('td');
                     let oMapping = {};
                     let index = parseInt(row[3].firstElementChild.getAttribute('data-index'));
@@ -244,7 +246,7 @@
                 });
                 $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
             } else {
-                $("#pMsgSubmit").text("Please select order number.");
+                $("#pMsgSubmit").text("Please add any item in the grid.");
                 $('#pMsgSubmit').css('display', 'block');
                 setTimeout(function () {
                     $('#pMsgSubmit').text("");
@@ -373,7 +375,7 @@
                     if (result.length > 0) {
                         $("#tbodyid").empty();
                         $("#SaleAmount").val("0");
-                        BindGrid(result);
+                        BindGrid(result,0);
                     }
                  });
             } else {
@@ -421,7 +423,7 @@
                     $("#hdnIs_SameState").val(result[0].Is_SameState === undefined ? "0" : result[0].Is_SameState);
                     $("#tbodyid").empty();
                     $("#SaleAmount").val("0");
-                    BindGrid(result);
+                    BindGrid(result,1);
                 }
             });
             } else {
@@ -469,6 +471,7 @@
             $("#IGST").val("");
             $("#Total").val("");
             $("#hdnRowId").val("");
+            $("#lblTotalAmount").text("Total : 0.00");
             $("#tblMaterialSales TBODY").empty();
             $("#divDeleteMatrial").css('display', 'none');
         });
@@ -571,13 +574,14 @@
         $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
         $("#IsUpdateMaterialSales").val(1);
     };
-    function BindGrid(result) {
+    function BindGrid(result,isqtydisabled) {
         let totalAmount = 0;
         $.each(result, function (index, value) {
             let quantity = parseFloat(value.Order_Qty);
             let rate = parseFloat(value.Order_Rate);
             let gst = parseFloat(value.GST !== "" ? value.GST : "0");
             let amount = 0;
+            let tamount = 0;
             let gstAmount = 0;
             let cgst = 0;
             let sgst = 0;
@@ -600,9 +604,11 @@
                     igst = parseFloat(gstAmount).toFixed(2);
                 }
                 totalAmount += amount + gstAmount;
-                Texable_Amount = amount + gstAmount;
+                Texable_Amount = amount;
+                tamount = amount + gstAmount;
 
             }
+            
             //Get the reference of the Table's TBODY element.
             var tBody = $("#tblMaterialSales > TBODY")[0];
             //Add Row.
@@ -616,7 +622,7 @@
             let lblItem = `<label id="lblItem_${index}">${value.ItemName}</label>
                             <input type="hidden" id="hdnItemId_${index}" name="hdnItemId_${index}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${index}" name="hdnLineId_${index}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
-                             <input type="hidden" id="hdnPOLineId_${index}" name="hdnPOLineId_${index}" value="${value.PO_Line_Id}" />
+                             <input type="hidden" id="hdnPOLineId_${index}" name="hdnPOLineId_${index}" value="${value.POLine_Id}" />
                              <input type="hidden" id="hdnPOId_${index}" name="hdnLineId_${index}" value="${value.PO_Id}" />
                             `;
             cell = $(row.insertCell(-1));
@@ -625,8 +631,9 @@
             let lblHSN_SAC = `<label id="lblHSN_SAC_${index}">${value.HSN_SAC}</label>`;
             cell = $(row.insertCell(-1));
             cell.append(lblHSN_SAC);
+            
             //Add Quantity cell.
-            let htmlOrder_Qty = `<input type="text" id="txtOrder_Qty_${index}" data-index="${index}" style="background-color: ${value.Order_Qty <= value.Available_Qty ? 'lightgreen' : 'indianred'};width:40px;" name="txtOrder_Qty_${index}" onchange="Calculate(this);" value="${quantity}"  tp-type="numeric" />`;
+            let htmlOrder_Qty = `<input type="text" id="txtOrder_Qty_${index}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${index}" style="background-color: ${value.Order_Qty <= value.Available_Qty ? 'lightgreen' : 'indianred'};width:40px;" name="txtOrder_Qty_${index}" onchange="Calculate(this);" value="${quantity}"  tp-type="numeric" />`;
             cell = $(row.insertCell(-1));
             cell.append(htmlOrder_Qty);
             //Add Available_Qty cell.
@@ -670,7 +677,7 @@
             cell = $(row.insertCell(-1));
             cell.append(lblIGST);
             //Add Total_Amount cell.
-            let lblTotal_Amount = `<label id="lblTotal_Amount_Row_${index}">${Texable_Amount}</label>`;
+            let lblTotal_Amount = `<label id="lblTotal_Amount_Row_${index}">${tamount}</label>`;
             cell = $(row.insertCell(-1));
             cell.append(lblTotal_Amount);
 
