@@ -356,27 +356,45 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(ds));
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult DeleteMatrialSales(int SaleId, string AppToken = "")
         {
             DataSet ds = new DataSet();
+            MaterialSales materialSales = new MaterialSales();
             try
             {
-                MaterialSales materialSales = new MaterialSales();
                 materialSales = materialSales.MaterialSales_Delete(SaleId);
-                if (materialSales.SaleId > 0 && Convert.ToBoolean(materialSales.IsSucceed))
+                if (materialSales != null)
                 {
-                    return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = materialSales.ActionMsg }));
-                }
-                else
-                {
-                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    // In case of record successfully added or updated
+                    if (materialSales.IsSucceed)
+                    {
+                        ViewBag.Success = materialSales.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!materialSales.IsSucceed && materialSales.SaleId != -1)
+                    {
+                        ViewBag.Msg = materialSales.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
                 }
             }
             catch (Exception)
             {
-                throw;
+                ViewBag.Msg = "Unknown Error Occured !!!";
             }
+            MaterialSales newMaterialSales = new MaterialSales();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newMaterialSales.AppToken = CommonUtility.URLAppToken(AppToken);
+            newMaterialSales.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/MaterialSales.cshtml", (materialSales.IsSucceed ? newMaterialSales : materialSales));
         }
 
         [HttpPost]
