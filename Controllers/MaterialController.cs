@@ -457,29 +457,37 @@ namespace IMS.Controllers
             MaterialOrder objMaterialOrder = new MaterialOrder();
             try
             {
-                objMaterialOrder = materialOrder.MaterialOrder_StatusUpdate();
-                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                materialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
-                materialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
-                if (objMaterialOrder != null)
+                if (!string.IsNullOrEmpty(materialOrder.POIds))
                 {
-                    // In case of record successfully added or updated
-                    if (objMaterialOrder.IsSucceed)
+                    objMaterialOrder = materialOrder.MaterialOrder_StatusUpdate();
+                    AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                    materialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
+                    materialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                    if (objMaterialOrder != null)
                     {
-                        ViewBag.Success = objMaterialOrder.ActionMsg;
-                    }
-                    // In case of record already exists
-                    else if (!objMaterialOrder.IsSucceed)
-                    {
-                        ViewBag.Msg = objMaterialOrder.ActionMsg;
-                    }
-                    // In case of any error occured
-                    else
-                    {
-                        ViewBag.Msg = "Unknown Error Occured !!!";
+                        // In case of record successfully added or updated
+                        if (objMaterialOrder.IsSucceed)
+                        {
+                            ViewBag.Success = objMaterialOrder.ActionMsg;
+                        }
+                        // In case of record already exists
+                        else if (!objMaterialOrder.IsSucceed)
+                        {
+                            ViewBag.Msg = objMaterialOrder.ActionMsg;
+                        }
+                        // In case of any error occured
+                        else
+                        {
+                            ViewBag.Msg = "Unknown Error Occured !!!";
 
+                        }
+                        ModelState.Clear();
                     }
-                    ModelState.Clear();
+                }
+                else
+                {
+                    ViewBag.Msg = "Please checked at least single item !!!";
+
                 }
             }
             catch (Exception ex)

@@ -11,7 +11,7 @@
     <div class="content-main">
         <!--banner-->
         <div class="banner">
-            
+
             <h2>
                 <a href="/admin/dashboard">Home</a>
                 <i class="fa fa-angle-right"></i>
@@ -30,6 +30,7 @@
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.POIds, htmlAttributes: new { @id = "POIds" })
                             @Html.HiddenFor(m => m.Status, htmlAttributes: new { @id = "Status" })
+                            @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
                             <div id="listGrid"></div>
                             <div class="col-md-10">
                             </div>
@@ -48,33 +49,99 @@
                         }
 
                     </div>
-                        
+
+                    <div class="modal fade transfom" id="myModal" role="dialog">
+                        <div class="modal-dialog modal-lg ">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Item Detail</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="itemGrid"></div>                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-            <div class="clearfix"> </div>
+
+                </div>
+                <div class="clearfix"> </div>
+
+
+            </div>
+
             
-            
+
         </div>
+        
+        <!--//content-->
+        <!---->
     </div>
-    <!--//content-->
-    <!---->
-</div>
 </div>
 
 <script type="text/javascript">
 
     $(document).ready(function () {
 
+        function showDetailDialog(value) {
+            var objret = $.grep(dtsrc, function (n, i) {
+                return n.PO_No = value;
+            });
+
+            var fields = [
+                { name: "PO_No", type: "text", title: "PO_No", sorting: true, filtering: false},
+                { name: "Item", type: "text", title: "Item", sorting: true, filtering: false },
+                { name: "Order_Qty", type: "text", title: "Qty", sorting: true, filtering: false },
+                { name: "Order_Rate", type: "text", title: "Rate", sorting: true, filtering: false },
+                { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false },
+                { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false }
+            ];
+            var options = {
+                filtering: true,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                multiselect: true,
+                controller: {
+                    ItemLists: objret,
+                    loadData: function (filter) {
+                        return $.grep(this.ItemLists, function (ItemList) {
+                            return ((!filter.Item || ItemList.Item.toLowerCase().indexOf(filter.Item.toLowerCase()) > -1)
+                                && (!filter.Order_Qty || ItemList.Order_Qty.toLowerCase().indexOf(filter.Order_Qty.toLowerCase()) > -1)
+                                && (!filter.Order_Rate || ItemList.Order_Rate.toLowerCase().indexOf(filter.Order_Rate.toLowerCase()) > -1)
+                                && (!filter.Amount || ItemList.Amount.toLowerCase().indexOf(filter.Amount.toLowerCase()) > -1)
+                                && (!filter.Remarks || ItemList.Remarks.toLowerCase().indexOf(filter.Remarks.toLowerCase()) > -1));
+                                
+
+                        });
+                    }
+                },
+                fields: fields
+            };
+            $.extend(options, IMSC.grid_options);
+            $("#itemGrid").jsGrid(options);
+
+
+            $("#myModal").modal();
+        }
+
+
         $("body").on("click", "#btnApprove", function () {
             $("#POIds").val(selectedItems[0]);
             $("#Status").val("A");
         });
         $("body").on("click", "#btnReject", function () {
-
             $("#POIds").val(selectedItems[0]);
             $("#Status").val("R");
         });
         $("body").on("click", "#btnHold", function () {
-
             $("#POIds").val(selectedItems[0]);
             $("#Status").val("H");
         });
@@ -84,9 +151,9 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
+        var dtsrc;
         IMSC.ajaxCall("GET", "/Material/MaterialOrder_GetPendingOrder?AppToken="+'@Model.AppToken', {}, "text", function (d) {
-            
-            var dtsrc = JSON.parse(d);
+            dtsrc = JSON.parse(d);
             var result = [...new Map(dtsrc.map(item =>[item["PO_Id"], item])).values()];
             if (result !== "null" && result !== "") {
                 var fields = [
@@ -107,7 +174,12 @@
 
                     },
                     { name: "PO_Id", css: "hidden", },
-                    { name: "PO_No",type:"text", title: "OrderNo", sorting: true, filtering: true },
+                    {
+                        name: "PO_No",
+                        itemTemplate: function (value) {
+                            return $("<a>").text(value).on("click", function () { showDetailDialog(value)});
+                        }, title: "OrderNo", sorting: true, filtering: true
+                    },
                     { name: "SalesMan", type: "text", title: "SalesMan", sorting: true, filtering: true },
                     { name: "PartyName", type: "text", title: "Party", sorting: true, filtering: true},
                     { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true},
@@ -118,13 +190,6 @@
                     { name: "OverdueAmount", type: "text", title: "OverdueAmt.", sorting: true, filtering: false}
 
                 ];
-                //var rohit = [{ name: "Item", type: "text", title: "Item", sorting: true, filtering: false, width: 40 },
-                //    { name: "Order_Qty", type: "text", title: "Qty", sorting: true, filtering: false, width: 40 },
-                //    { name: "Order_Rate", type: "text", title: "Rate", sorting: true, filtering: true, width: 40 },
-                //    { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: true, width: 40 },
-                //    { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: true, width: 40 },
-                    
-                //];
                 var options = {
                     filtering: true,
                     editing: true,
@@ -132,26 +197,6 @@
                     paging: true,
                     autoload: true,
                     multiselect: true,
-                    //rowRenderer: function (item) {
-                    //    var row = $("<tr>");
-                    //    var addressesGrid = $('<tr>').hide();
-                    //    addressesGrid.jsGrid({
-                    //        data: result,
-                    //        fields: rohit
-                    //    })
-                        
-                    //    items = Object.keys(item)
-                    //    items.forEach(function (key) {
-                    //        if (key != items[items.length - 1]) {
-                    //            var cell = $("<td>").addClass("jsgrid-cell").append(item[key])
-                    //            row.append(cell)
-                    //        }
-                    //    })
-                    //    row.click(function () {
-                    //        addressesGrid.toggle();
-                    //    })
-                    //    return row.add(addressesGrid);
-                    //},
                     controller: {
                         OrderLists: result,
                         loadData: function (filter) {
