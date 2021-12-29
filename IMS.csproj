@@ -102,6 +102,7 @@
     <Content Include="assets\admin\css\normalize.css" />
     <Content Include="assets\admin\css\style.css" />
     <Content Include="assets\admin\fonts\fontawesome-webfont.svg" />
+    <Content Include="assets\admin\images\loading-square.gif" />
     <Content Include="assets\admin\images\logo.png" />
     <Content Include="assets\admin\images\search.png" />
     <Content Include="assets\admin\images\status.gif" />

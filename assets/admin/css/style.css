@@ -9,26 +9,29 @@ h1, h2, h3 {
     margin: 0;
 }
 
-#preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #0c67aeba;
-    z-index: 99999;
-}
-#status {
-    width: 200px;
-    height: 200px;
+#tpAlertOverlayContainer {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    background-image: url('../images/status.gif');
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: -100px 0 0 -100px;
+    left: 0;
+    top: 0;
+    background: #000;
+    z-index: 9999;
+    height: 100%;
+    width: 100%;
+    opacity: .75 !important;
 }
+
+#tpProgressContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+    color: #FFF;
+}
+
+#tpProgressContainer {
+    transform: translate(-50%,-50%);
+}
+
 .mandatory {
     color: red;
 }
@@ -44,6 +47,7 @@ h1, h2, h3 {
     height: 22px;
     width: 22px;
 }
+
 .btncustome {
     background: #0C67AE;
     color: #fff;
@@ -440,13 +444,14 @@ ul.nav.navbar-nav.navbar-right {
     width: 76%;
     padding: 12px;
 }
+
 .side-menu-ddl-FY {
     border: none;
     color: #000000;
     font-size: 14px;
     position: absolute;
-   
 }
+
 .nav > li.side-menu-ddl {
     color: #999;
     font-weight: 500;

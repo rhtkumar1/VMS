@@ -1,6 +1,26 @@
 ﻿var IMSC = (function (scope) {
+    scope.containers = {};
+    scope.containers.alert = "#tpAlertContainer";
+    scope.containers.alertOverlay = "#tpAlertOverlayContainer";
+
+    scope.waitToggle = function () {
+        var waitDiv = $(scope.containers.alert);
+
+        if (waitDiv.css("display") == "none") {
+            waitDiv.css("display", "block");
+            $(scope.containers.alertOverlay).css({ "display": "block", opacity: 0.7, "width": $(document).width(), "height": $(document).height() });
+        }
+        else {
+            waitDiv.css("display", "none");
+            $(scope.containers.alertOverlay).css("display", "none");
+        }
+    };
+
     scope.listItems = [];
-    scope.ajaxCall = function (method, url, data, dataType, f, headers = null, asyncHit = true) {
+    scope.ajaxCall = function (method, url, data, dataType, f, headers = null, asyncHit = true, showWaiting = true) {
+        if (showWaiting) {
+            scope.waitToggle();
+        }
         $.ajax({
             type: method,
             url: url,
@@ -9,9 +29,15 @@
             dataType: dataType,
             async: asyncHit,
             success: function (d) {
+                if (showWaiting) {
+                    scope.waitToggle();
+                }
                 f(d);
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                if (showWaiting) {
+                    scope.waitToggle();
+                }
                 f("");
             }
         });
@@ -118,7 +144,7 @@
         validRegExp = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
         return validRegExp.test(strEmail);
     };
-    scope.genrateDynamicButtons = function (value,args,AuthMode) {
+    scope.genrateDynamicButtons = function (value, args, AuthMode) {
         switch (AuthMode) {
             case 0:
                 break;
@@ -196,7 +222,6 @@ $(function () {
 
         return bReturn;
     });
-
     var date_input = $('.clsDate'); //our date input has the name "date"
     var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
     var options = {
