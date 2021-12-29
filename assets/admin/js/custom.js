@@ -34,21 +34,3 @@ $(function () {
         element.addClass('active');
     }
 });
-
-//$(function () {
-//    $("#homepage").click(function () {
-//        if ($(this).is(":checked")) {
-//            $("#dvImagesForHomePage").show();
-//        } else {
-//            $("#dvImagesForHomePage").hide();
-//        }
-//    });
-//});
-jQuery(window).load(function () { // makes sure the whole site is loaded
-    $('#status').delay(2000).fadeOut; // will first fade out the loading animation
-    $('#status').delay(2000).fadeOut("slow"); // will first fade out the loading animation
-    $('#preloader').delay(2000).fadeOut('slow'); // will fade out the white DIV that covers the website.
-    $('body').delay(2000).css({
-        'overflow': 'visible'
-    });
-})
