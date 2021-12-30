@@ -1,10 +1,27 @@
 ﻿<script>
-    window.addEventListener("click", () => {
+    window.addEventListener("click", event => {
         //console.log("You knocked?");
         //$('#alertModal').modal('show');
         //alert("You knocked?");
-        IMSC.waitToggle();
+        if ((event.target.nodeName == "BUTTON") && ((event.target.type == "submit") || (event.target.type == "button")) ) {
+            IMSC.waitToggle();
+        }
+        
+        
     });
+    //let button = document.querySelector("button");
+    //button.addEventListener("click", () => {
+    //    alert("You knocked?");
+    //    IMSC.waitToggle();
+    //});
+    //window.onload = function () {
+    //    let link = document.querySelector("a");
+    //    link.addEventListener("click", () => {
+    //        console.log("Nope.");
+    //        alert("You knocked?");
+    //        //event.preventDefault();
+    //    });
+    //}
 </script>
 <nav class="navbar-default navbar-static-top" role="navigation">
     <div class="navbar-header">
