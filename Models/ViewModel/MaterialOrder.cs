@@ -48,7 +48,7 @@ namespace IMS.Models.ViewModel
         public int MENU_Id { get; set; }
         public int Office_Id { get; set; }
         public SelectList OfficeLists { get; set; }
-
+        public List<MaterialOrderLine> MaterialOrderLines { get; set; }
         public string POIds { get; set; }
         public string Status { get; set; }
 
@@ -61,6 +61,7 @@ namespace IMS.Models.ViewModel
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
+            MaterialOrderLines = new List<MaterialOrderLine>();
         }
 
 
@@ -69,6 +70,18 @@ namespace IMS.Models.ViewModel
         {
             try
             {
+                var sb = new System.Text.StringBuilder();
+                foreach (var item in MaterialOrderLines)
+                {
+                    sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
+                                    Available_Qty=""" + Convert.ToString(item.Available_Qty) + @""" Last_Rate=""" + Convert.ToString(item.Last_Rate) + @"""
+                                    Last_Discount=""" + Convert.ToString(item.Last_Discount) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
+                                    Order_Qty=""" + Convert.ToString(item.Order_Qty) + @""" Order_Rate=""" + Convert.ToString(item.Order_Rate) + @"""   
+                                    Amount=""" + Convert.ToString(item.Amount) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @"""  
+                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @"""  />");
+                }
+                MaterialLine = "<Line>" + sb + "</Line>";
+
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PO_Id", POId));
                 SqlParameters.Add(new SqlParameter("@PO_No", PONo));
@@ -114,7 +127,34 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+        public DataTable GetParty(int PartyId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetPartyDetail", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
 
+            return dt;
+        }
+        public DataTable GetItemDetail(int Item_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetItemDetail", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
         public DataTable MaterialOrder_GetOrderNo()
         {
             DataTable dt = new DataTable();
@@ -174,8 +214,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-
-
         public MaterialOrder MaterialOrder_Delete()
         {
             try
@@ -196,7 +234,6 @@ namespace IMS.Models.ViewModel
 
             return this;
         }
-
 
         public MaterialOrder MaterialOrder_StatusUpdate()
         {
@@ -219,5 +256,19 @@ namespace IMS.Models.ViewModel
             return this;
         }
 
+    }
+    public class MaterialOrderLine
+    {
+        public string Line_Id { get; set; }
+        public string Item_Id { get; set; }
+        public string Available_Qty { get; set; }
+        public string Last_Rate { get; set; }
+        public string Last_Discount { get; set; }
+        public string Last_Price { get; set; }
+        public string Order_Qty { get; set; }
+        public string Order_Rate { get; set; }
+        public string Amount { get; set; }
+        public string Remarks { get; set; }
+        public string IsUpdate { get; set; }
     }
 }

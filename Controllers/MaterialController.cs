@@ -207,7 +207,6 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/OrderCreation.cshtml", ObjMaterialOrder);
         }
        
-
         [HttpGet]
         public ActionResult GetOrder(MaterialOrder objMaterialOrder, string AppToken = "")
         {
@@ -223,13 +222,43 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
-
+        [HttpGet]
+        public ActionResult GetParty(int PartyId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            MaterialOrder materialOrder = new MaterialOrder();
+            try
+            {
+                dt = materialOrder.GetParty(PartyId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult GetItemDetail(int Item_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            MaterialOrder materialOrder = new MaterialOrder();
+            try
+            {
+                dt = materialOrder.GetItemDetail(Item_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
         [HttpPost]
         public ActionResult ManageOrder(MaterialOrder ObjMaterialOrder)
         {
             MaterialOrder objMaterialOrder = new MaterialOrder();
             try
             {
+                objMaterialOrder.MaterialOrderLines = JsonConvert.DeserializeObject<List<MaterialOrderLine>>(objMaterialOrder.MaterialLine);
                 objMaterialOrder = ObjMaterialOrder.MaterialOrder_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -460,7 +489,6 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialSales.cshtml", (objMaterialSales.IsSucceed ? newMaterialSales : materialSales));
         }
         #endregion
-
 
         #region Purchase Order Approval
         public ActionResult MaterialOrderIndex()
