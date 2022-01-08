@@ -19,7 +19,9 @@
     scope.listItems = [];
     scope.ajaxCall = function (method, url, data, dataType, f, headers = null, asyncHit = true, showWaiting = true) {
         if (showWaiting) {
-            scope.waitToggle();
+            if ($(scope.containers.alert).css("display") == "none") {
+                scope.waitToggle();
+            }
         }
         $.ajax({
             type: method,
