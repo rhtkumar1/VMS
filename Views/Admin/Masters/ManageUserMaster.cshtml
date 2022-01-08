@@ -6,6 +6,7 @@
 }
 
 @{
+    int index = 0;
     var AppToken = Convert.ToString(Model.AppToken);
 }
 
@@ -74,11 +75,11 @@
                                 <div class="col-md-4 form-group">
                                     <label>Gender<span class="mandatory">*</span></label>
                                     @{var genderItems = new List<SelectListItem>{
-                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Select Gender", Value="" },
-                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Male", Value="1" },
-                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Female", Value="2" },
-                                                                                                                                                                                                                                                                                                                                                                                                                                           new SelectListItem { Text = "Other", Value="3" },
-                                                                                                                                                                                                                                                                                                                                                                                                                                     };
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Select Gender", Value="" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Male", Value="1" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          new SelectListItem { Text = "Female", Value="2" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           new SelectListItem { Text = "Other", Value="3" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     };
                                     }
                                     @Html.DropDownListFor(m => m.Gender, new SelectList(genderItems, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
@@ -213,33 +214,41 @@
                                 </div>
                                 <br />
                                 <div class="clearfix"></div>
-                                @foreach (var item in Model.RoleLists)
-                                {
-                                    if (Model.sRoles != null && Model.sRoles != "")
+                                <div class="menu-strip">
+                                    @foreach (var item in Model.RoleLists)
                                     {
-                                        string[] sRoles = Model.sRoles.Split(',');
-                                        checkeds = sRoles.Where(x => Convert.ToInt32(x) == Convert.ToInt32(item.Value)).FirstOrDefault() != null ? "checked" : "";
+                                        if (index > 0)
+                                        {
+                                            if (Model.sRoles != null && Model.sRoles != "")
+                                            {
+                                                string[] sRoles = Model.sRoles.Split(',');
+                                                checkeds = sRoles.Where(x => Convert.ToInt32(x) == Convert.ToInt32(item.Value)).FirstOrDefault() != null ? "checked" : "";
+                                            }
+                                            <div class="col-md-2 form-group">
+                                                <label for="@item.Value">@item.Text</label>
+                                                <input class="chk" type="checkbox" @checkeds id="@item.Value">
+                                            </div>
+                                        }
+                                        index = index + 1;
                                     }
-                                    <div class="col-md-2 form-group">
-                                        <label for="@item.Value">@item.Text</label>
-                                    </div>
-                                    <div class="col-md-1 form-group">
-                                        <input class="chk" type="checkbox" @checkeds id="@item.Value">
-                                    </div>
-                                }
+                                </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
-
-                            <div class="col-md-2">
-                                <div class="appointment-btn text-lg-right">
-                                    <a href="/master/UserIndex?AppToken=@AppToken" class="btncustome pull-right">Back To List</a>
-                                </div>
-                            </div>
-
+                            <div class="col-md-1"></div>
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome pull-right">Return</button>
                                 </div>
                             </div>
                         }
@@ -259,6 +268,9 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
+        $("#btnBack").click(function () {
+            window.location.href = "@Url.Action("userindex", "master")?AppToken=@Model.AppToken";
+        });
         $('#btnSubmit').click(function () {
             var selected = new Array();
             $("input:checkbox[class=chk]:checked").each(function () {

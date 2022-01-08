@@ -18,7 +18,7 @@
             <h2>
                 <a href="/admin/dashboard">Home</a>
                 <i class="fa fa-angle-right"></i>
-                <span>Item Master</span>
+                <span>Role Master</span>
             </h2>
         </div>
         <!--//banner-->
@@ -59,57 +59,60 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-12 form-group">
-                                    <button type="button" id="btnRoleAndMenuMapping" class="btn btn-warning" name="btnRoleAndMenuMapping">View Role & Menu Mapping</button>
+                                    <button type="button" id="btnRoleAndMenuMapping" class="btncustome" name="btnRoleAndMenuMapping">View Role & Menu Mapping</button>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div id="divShowRoleAndMenuMapping" style=" display:none">
-                                <div class="styled-input">
-                                    <div class="col-md-12 form-group">
-                                        <h5>Role Menu Priority Mapping</h5>
-                                    </div>
+                                <div class="heading">
+                                    <h4>
+                                        Role Menu Priority Mapping
+                                    </h4>
                                 </div>
-                                <div class="col-md-12">
-                                    <table id="tblRole" class="table" cellpadding="0" cellspacing="0">
+                                <br />
+                                <div class="col-md-12 table-responsive">
+                                    <table id="tblRole" class="table table-striped" cellpadding="0" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Form</th>
-                                                <th>Action</th>
-                                                <th>Permission</th>
+                                                <th class="tbl-heading text-center">Objects</th>
+                                                <th class="tbl-heading text-center">Permission</th>
+                                                <th class="tbl-heading text-center">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-center">
                                             @foreach (var oRole in Model.MenuModule)
                                             {
-                                                var menu = Model.ObjRoleMenuMapping.Where(x => Convert.ToInt32(x.MenuId) == Convert.ToInt32(oRole.Value)).FirstOrDefault();
-                                                if (menu != null)
+                                                if (index > 0)
                                                 {
-                                                    iSelectedValue = menu.Auth != 0 ? menu.Auth : 0;
-                                                    sChecked = menu.Auth != 0 ? "checked" : "";
-                                                    sSdisabled = Convert.ToString(menu.Auth) == "0" ? "disabled" : "";
+                                                    var menu = Model.ObjRoleMenuMapping.Where(x => Convert.ToInt32(x.MenuId) == Convert.ToInt32(oRole.Value)).FirstOrDefault();
+                                                    if (menu != null)
+                                                    {
+                                                        iSelectedValue = menu.Auth != 0 ? menu.Auth : 0;
+                                                        sChecked = menu.Auth != 0 ? "checked" : "";
+                                                        sSdisabled = Convert.ToString(menu.Auth) == "0" ? "disabled" : "";
+                                                    }
+                                                    <tr>
+                                                        <td class="tbl-css">
+                                                            <span>@(oRole.Text == "--Select--" ? "" : oRole.Text)</span>
+                                                        </td>
+                                                        <td class="tbl-css">
+                                                            <input type="hidden" id="hdnIndex" data-index="@index" />
+                                                            <input type="checkbox" id="chkMenu_@index" @sChecked data-index="@index" class="checkboxcss clsChekPermission" data-menu-id="@Convert.ToInt32(oRole.Value)" />
+                                                        </td>
+                                                        <td class="tbl-css">
+                                                            @{var permission = new List<SelectListItem>{
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            new SelectListItem { Text = "Select Permission", Value="0" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            new SelectListItem { Text = "Add", Value="1" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            new SelectListItem { Text = "Edit", Value="2" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            new SelectListItem { Text = "Delete", Value="3" },
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       };
+                                                            }
+                                                            @Html.DropDownList("ddlPermission_" + index, new SelectList(permission, "Value", "Text", selectedValue: iSelectedValue), htmlAttributes: new { @id = "ddlPermission_" + index, @class = "form-control clsPermission", sSdisabled })
+                                                        </td>
+                                                    </tr>
                                                 }
-                                                <tr>
-                                                    <td>
-                                                        @oRole.Text
-                                                    </td>
-                                                    <td>
-                                                        <input type="hidden" id="hdnIndex" data-index="@index" />
-                                                        <input type="checkbox" id="chkMenu_@index" @sChecked data-index="@index" class="form-control clsChekPermission" data-menu-id="@Convert.ToInt32(oRole.Value)" />
-                                                    </td>
-                                                    <td>
-                                                        @{var permission = new List<SelectListItem>{
-                                                                                                                                              new SelectListItem { Text = "Select Permission", Value="0" },
-                                                                                                                                              new SelectListItem { Text = "Add", Value="1" },
-                                                                                                                                              new SelectListItem { Text = "Edit", Value="2" },
-                                                                                                                                               new SelectListItem { Text = "Delete", Value="3" },
-                                                                                                                                         };
-                                                        }
-                                                        @Html.DropDownList("ddlPermission_" + index, new SelectList(permission, "Value", "Text", selectedValue: iSelectedValue), htmlAttributes: new { @id = "ddlPermission_" + index, @class = "form -control clsPermission", sSdisabled })
-                                                    </td>
-                                                </tr>
                                                 index = index + 1;
                                             }
                                         </tbody>
@@ -118,15 +121,21 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-6"></div>
-                            <div class="col-md-3">
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Save</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
-                                    <a href="/master/RoleIndex?appToken=@Model.AppToken" name="btnBack" id="btnBack" class="btncustome pull-right">Back To Item List</a>
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome pull-right">Return</button>
                                 </div>
                             </div>
                         }
@@ -143,12 +152,15 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
+         $("#btnBack").click(function () {
+            window.location.href = "@Url.Action("roleindex", "master")?AppToken=@Model.AppToken";
+        });
         $("[id*=hdnIndex]").each(function () {
             let i = $(this).attr('data-index');
             let ddlPermission = "#ddlPermission_" + i;
             if ($(ddlPermission).val() === "0") {
                 $(ddlPermission).prop('required', false).prop("disabled", true);
-            } 
+            }
         });
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
