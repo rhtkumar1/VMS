@@ -1,26 +1,53 @@
 ﻿<script>
-    window.addEventListener("click", event => {
-        //console.log("You knocked?");
-        //$('#alertModal').modal('show');
-        //alert("You knocked?");
-        if ((event.target.nodeName == "BUTTON") && ((event.target.type == "submit") || (event.target.type == "button")) ) {
-            IMSC.waitToggle();
-        }
+    //window.addEventListener("click", event => {
+    //    //console.log("You knocked?");
+    //    //$('#alertModal').modal('show');
+    //    //alert("You knocked?");
+    //    if ((event.target.nodeName == "BUTTON") && ((event.target.type == "submit") || (event.target.type == "button")) ) {
+    //        IMSC.waitToggle();
+            
+    //    }
         
         
-    });
+    //});
     //let button = document.querySelector("button");
     //button.addEventListener("click", () => {
     //    alert("You knocked?");
     //    IMSC.waitToggle();
     //});
-    //window.onload = function () {
-    //    let link = document.querySelector("a");
-    //    link.addEventListener("click", () => {
-    //        console.log("Nope.");
-    //        alert("You knocked?");
-    //        //event.preventDefault();
+
+    //let Form = document.querySelectorAll("form");
+    //for (i = 0; i < Form.length; i++) {
+    //    Form[i].addEventListener("onsubmit", () => {
+    //        alert(Form[i].toString());
+    //        IMSC.waitToggle();
+
     //    });
+    //}
+    let FormMain = document.querySelector(".Mani_TransactionForm");
+    FormMain.addEventListener("onsubmit", event => {
+        alert("Wellcome");
+        IMSC.waitToggle();
+    });
+    //window.onload = function () {
+
+        
+
+
+
+
+        //window.addEventListener("click", event => {
+        ////console.log("You knocked?");
+        ////$('#alertModal').modal('show');
+        ////alert("You knocked?");
+        //if ((event.target.nodeName == "BUTTON") && ((event.target.type == "submit") || (event.target.type == "button")) ) {
+        //    IMSC.waitToggle();
+        //}});
+        //let button = document.querySelectorAll("button");
+        //button.addEventListener("click", () => {
+        //    alert("You knocked?");
+        //    IMSC.waitToggle();
+        //});
     //}
 </script>
 <nav class="navbar-default navbar-static-top" role="navigation">
