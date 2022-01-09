@@ -24,11 +24,9 @@
             <div class="blank">
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
-                </div>
-                <div class="blank-page">
                     <div class="col-md-12">
                         <div class="appointment-btn" style="margin-right: -18px !important;margin-bottom: 50px !important;">
-                            <a href="/master/RoleMaster?appToken=@Model.AppToken" name="AddRole" id="AddRole" class="btn btn-success pull-right">Add Role</a>
+                            <a href="/master/RoleMaster?appToken=@Model.AppToken" title="Add Role" name="AddRole" id="AddRole" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <div id="listGrid"></div>
