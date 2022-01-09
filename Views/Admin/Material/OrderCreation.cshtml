@@ -28,7 +28,7 @@
                         <h3 style="color:indianred;">@ViewBag.Msg</h3>
                         <div class="heading">
                             <h4>
-                                Search Purchase Material
+                                Order Material
                             </h4>
                         </div>
                         <br />
@@ -54,6 +54,8 @@
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.IsUpdate, htmlAttributes: new { @id = "IsUpdate" })
                             @Html.HiddenFor(m => m.MaterialLine, htmlAttributes: new { @id = "MaterialLine" })
+                            @Html.HiddenFor(m => m.TotalAmount, htmlAttributes: new { @id = "TotalAmount" })
+
                             <div class="heading">
                                 <h4>
                                     Material Order
@@ -106,7 +108,7 @@
                             <div>
                                 <div class="styled-input">
                                     <div class="col-md-12 form-group">
-                                        <h5>Add/Update Matrial Purchase</h5>
+                                        <h5>Add/Update Matrial Order</h5>
                                         <hr />
                                     </div>
                                 </div>
@@ -123,6 +125,7 @@
                                                 <th>List Price(MRP)</th>
                                                 <th>Order Qty</th>
                                                 <th>Order Rate</th>
+                                                <th>Amount</th>
                                                 <th>Remark</th>
                                             </tr>
                                             <tr>
@@ -196,7 +199,7 @@
                             <div class="col-md-1">
                                 <div class="appointment-btn text-lg-right">
                                     <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
-                                    <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
+                                    <input type="hidden" id="hdnLineId" name="hdnLineId" value="" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
                                 </div>
                             </div>
@@ -246,98 +249,114 @@
         });
 
         $("body").on("click", "#btnAdd", function () {
+            $("#IsUpdate").val(1);
             let bAdded = true;
             let msg = "";
-            //let amount = 0.0;
-
-            //Reference the Party and Location ddl.
-            if ($("#tblOrderCreation TBODY TR").length > 0) {
-                $("#tblOrderCreation TBODY TR").each(function () {
-                    var row = $(this);
-                    let td = row.find("TD");
-                    let itemId = parseInt(td.eq(1).attr('data-item-id'));
-                    if (parseInt($("#Item_Id").val()) === itemId) {
-                        msg = "Material is already mapped!!!";
-                        bAdded = false;
-                    }
-                    if ($("#hdnItemId").val() !== "" && parseInt($("#hdnItemId").val()) > 0) {
-                        if (itemId === parseInt($("#hdnItemId").val())) {
-                            bAdded = true;
-                        }
-                    }
-                });
-            }
+            let totalAmount = 0.0;
             if (bAdded) {
-                if (parseInt($("#Item_Id").val()) === 0 || $("#txtOrderQty").val() === "" || $("#txtOrderRate").val() === "") {
+                if (parseInt($("#Item_Id").val()) === 0 || $("#txtOrderQty").val() === "" || $("#txtOrderRate").val() === ""
+                    || $("#txtRemark").val() === "") {
                     msg = "Please select all mandatory fields to add material in list.";
                     bAdded = false;
                 }
             }
-            if (parseInt($("#txtOrderQty").val()) <= parseInt($("#lblAvailableQty").text())) {
-                bAdded = true;
-            } else {
-                msg = "Order qty grater then available qty!!!";
-                bAdded = false;
+            if (bAdded) {
+                if (parseInt($("#txtOrderQty").val()) <= parseInt($("#lblAvailableQty").text())) {
+                    bAdded = true;
+                } else {
+                    msg = "Order qty grater then available qty!!!";
+                    bAdded = false;
+                }
+            }
+            if (bAdded) {
+                //Reference the Party and Location ddl.
+                if ($("#tblOrderCreation TBODY TR").length > 0) {
+                    $("#tblOrderCreation TBODY TR").each(function () {
+                        var td = $(this).closest("TR").find('td');
+                        let itemId = parseInt(td[1].attributes["data-item-id"].value);
+                        if (parseInt($("#Item_Id").val()) === itemId) {
+                            msg = "Order is already mapped!!!";
+                            bAdded = false;
+                        }
+                        if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                            if (itemId === parseInt($("#hdnRowId").val())) {
+                                bAdded = true;
+                            }
+                        }
+                    });
+                }
             }
             if (bAdded) {
                 if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
-                    let index = parseInt($("#hdnRowId").val());
-                    $("#lblItem_" + index).text($("#Item_Id").text());
-                    $("#lblAvailableQty_" + index).text($("#lblAvailableQty").text());
-                    $("#lblLastRate_" + index).text($("#lblLastRate").text());
-                    $("#lblLastDist1_" + index).text($("#lblLastDist1").text());
-                    $("#lblLastDist2_" + index).text($("#lblLastDist2").text());
-                    $("#lblListPrice_" + index).text($("#lblListPrice").text());
-                    $("#txtOrderQty_" + index).text($("#txtOrderQty").text());
-                    $("#txtOrderRate_" + index).text($("#txtOrderRate").text());
-                    $("#txtRemark_" + index).text($("#txtRemark").text());
+                    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
+                    var row = $(trId).closest("TR").find('td');
+                    row[1].textContent = $("#Item_Id option:selected").text();
+                    row[1].setAttribute('data-item-id', $("#Item_Id").val());
+                    row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
+                    row[1].setAttribute('data-index', $("#Item_Id").val());
+                    row[2].textContent = $("#lblAvailableQty").text();
+                    row[3].textContent = $("#lblLastRate").text();
+                    row[4].textContent = $("#lblLastDist1").text();
+                    row[5].textContent = $("#lblLastDist2").text();
+                    row[6].textContent = $("#lblListPrice").text();
+                    row[7].textContent = $("#txtOrderQty").val();
+                    row[8].textContent = $("#txtOrderRate").val();
+                    row[9].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
+                    row[10].textContent = $("#txtRemark").val();
+                    $("#hdnRowId").val("");
+                    $("#hdnLineId").val("");
+                    $("#btnAdd").val("Add");
                 } else {
                     //Get the reference of the Table's TBODY element.
                     var tBody = $("#tblOrderCreation > TBODY")[0];
                     //Add Row.
                     var row = tBody.insertRow(-1);
-                    $(row).attr('id', 'trRow_' + parseInt($("#Item_Id").val())).attr('data-index', parseInt($("#Item_Id").val()));
-                    //Add Button cell.
-                    let htmlEditBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
+                    //Edit Button cell.
+                    let htmlRemoveBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(htmlEditBtn);
+                    cell.append(htmlRemoveBtn);
                     //Add Item cell.
-                    let lblItem = `<label id="lblItem_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#Item_Id").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(lblItem);
+                    cell.html($("#Item_Id option:selected").text());
+                    cell.attr('data-item-id', $("#Item_Id").val());
+                    cell.attr('data-line-id', 0);
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add AvailableQty.
-                    let htmlAvailableQty = `<label id="lblAvailableQty_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#lblAvailableQty").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(htmlAvailableQty);
-
+                    cell.html($("#lblAvailableQty").text());
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add Last Rate.
-                    let htmlLastRate = `<label id="lblLastRate_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#lblLastRate").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(htmlLastRate);
+                    cell.html($("#lblLastRate").text());
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add LastDist1 cell.
-                    let lblLastDist1 = `<label id="lblLastDist1_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#lblLastDist1").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(lblLastDist1);
+                    cell.html($("#lblLastDist1").text());
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add LastDist2 cell.
-                    let lblLastDist2 = `<label id="lblLastDist2_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#lblLastDist2").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(lblLastDist2);
+                    cell.html($("#lblLastDist2").text());
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add ListPrice cell.
-                    let lblListPrice = `<label id="lblListPrice_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#lblListPrice").text()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(lblListPrice);
+                    cell.html($("#lblListPrice").text() !== "" ? $("#lblListPrice").text() : 0);
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add txtOrderQty cell.
-                    let txtOrderQty = `<label id="txtOrderQty_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#txtOrderQty").val()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(txtOrderQty);
+                    cell.html($("#txtOrderQty").val());
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add txtOrderRate cell.
-                    let txtOrderRate = `<label id="txtOrderRate_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#txtOrderRate").val()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(txtOrderRate);
+                    cell.html($("#txtOrderRate").val());
+                    cell.attr('data-index', $("#Item_Id").val());
+                    //Add amount cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2));
+                    cell.attr('data-index', $("#Item_Id").val());
                     //Add txtRemark cell.
-                    let txtRemark = `<label id="txtRemark_${parseInt($("#Item_Id").val())}" data-index="${parseInt($("#Item_Id").val())}">${$("#txtRemark").val()}</label>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(txtRemark);
+                    cell.html($("#txtRemark").val());
+                    cell.attr('data-index', $("#Item_Id").val());
                 }
 
                 //Set Default
@@ -350,14 +369,13 @@
                 $("#lblListPrice").text("");
                 $("#txtOrderQty").val("");
                 $("#txtOrderRate").val("");
+                $("#txtRemark").val("");
                 $("#hdnRowId").val("");
-                //$("#tblOrderCreation TBODY TR").each(function () {
-                //    var row = $(this);
-                //    let index = parseInt($(row).attr('data-index'));
-                //    amount += parseFloat(td[14].innerText);
-                //});
-                //$("#PurchaseAmount").val(amount.toFixed(2));
-                //$("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+                $("#tblOrderCreation TBODY TR").each(function () {
+                    totalAmount += parseFloat($(this).find('td')[9].innerText);
+                });
+                $("#TotalAmount").val(totalAmount.toFixed(2));
+                $("#lblTotalAmount").text("Total : " + totalAmount.toFixed(2));
             }
 
             if (bAdded) {
@@ -372,28 +390,31 @@
             //Loop through the Table rows and build a JSON array.
             let OrderLineValues = [];
             let isValid = true;
+            totalAmount = 0.0;
             let msg = "";
             if ($("#tblOrderCreation TBODY TR").length > 0) {
                 $("#tblOrderCreation TBODY TR").each(function () {
-                    //let row = $(this).find('td');
-                    let index = parseInt($(this).attr('data-index'));
+                    let row = $(this).find('td');
                     let oMapping = {};
-                    oMapping.Line_Id = $("#lblLIneId_" + index).text();
-                    oMapping.Item_Id = $("#lblItem_" + index).text();
-                    oMapping.Available_Qty = $("#lblAvailableQty_" + index).text();
-                    oMapping.Last_Rate = $("#lblLastRate_" + index).text();
-                    oMapping.Last_Discount = parseInt($("#lblLastDist1_" + index).text()) + parseInt($("#lblLastDist2_" + index).text());
-                    oMapping.Last_Price = $("#lblListPrice_" + index).text();
-                    oMapping.Order_Qty = $("#txtOrderQty_" + index).val();
-                    oMapping.Order_Rate = $("#txtOrderRate_" + index).val();
-                    oMapping.Amount = parseInt($("#txtOrderQty_" + index).val()) * parseInt($("#txtOrderRate_" + index).val());
-                    oMapping.Remarks = $("#txtRemark" + index).val();
+                    oMapping.Line_Id = row.eq(1).attr('data-line-Id');
+                    oMapping.Item_Id = row.eq(1).attr('data-item-id');
+                    oMapping.Available_Qty = row[2].innerText;
+                    oMapping.Last_Rate = row[3].innerText;
+                    oMapping.Last_Discount_1 = row[4].innerText;
+                    oMapping.Last_Discount_2 = row[5].innerText;
+                    oMapping.Last_Price = row[6].innerText;
+                    oMapping.Order_Qty = row[7].innerText;
+                    oMapping.Order_Rate = row[8].innerText;
+                    oMapping.Amount = parseFloat(row[7].innerText) * parseFloat(row[8].innerText);
+                    totalAmount += parseFloat(row[7].innerText) * parseFloat(row[8].innerText);
+                    oMapping.Remarks = row[10].innerText
                     oMapping.IsUpdate = $("#IsUpdate").val();
                     OrderLineValues.push(oMapping);
                 });
+                $("#TotalAmount").val(totalAmount.toFixed(2));
                 $("#MaterialLine").val(JSON.stringify(OrderLineValues));
             } else {
-                msg = "Please add at least 1 matrial purchase.";
+                msg = "Please add at least 1 matrial order.";
                 isValid = false;
             }
             if (parseInt($("#PartyId").val()) === 0 ) {
@@ -419,7 +440,7 @@
                         $("#lblLastRate").text(result[0].Last_Rate);
                         $("#lblLastDist1").text(result[0].Last_Disc_1);
                         $("#lblLastDist2").text(result[0].Last_Disc_2);
-                        $("#lblListPrice").text(result[0].ListPrice);
+                        $("#lblListPrice").text(result[0].List_Price);
                     }
                 });
             }
@@ -435,7 +456,7 @@
                         $("#lblOverDueAmount").text(result[0].OverdueAmount);
                         $("#lblCashBalance").text(result[0].CashBalance);
                         $("#lblLedgerBalance").text(result[0].LedgerBalance);
-                        $("#lblPartyCategory").text(result[0].Category);
+                        $("#lblPartyCategory").text(result[0].Category === null ? "" : result[0].Category);
                         $("#lblAddress").text(result[0].Address);
                     }
                 });
@@ -450,116 +471,107 @@
         });
 
         $("#drpParty").change(function () {
-            let Party_Id = parseInt($('#drpParty').val());
+            let Party_Id = 9//parseInt($('#drpParty').val());
+            let PO_No = $('#PONo').val();
             $("#PartyId").val(Party_Id);
-            IMSC.ajaxCall("GET", "/Material/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            IMSC.ajaxCall("GET", "/Material/GetOrderInvoice?Party_Id=" + Party_Id + "&PO_No=" + PO_No+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
-                if (result.length > 0) {
-                    if (result !== null) {
-                        $.each(result, function (index, value) {
-                            $("#drpInvoice").append($("<option></option>").val(value.Purchase_Id).html(value.Invoice_No));
-                        });
-                        $("#drpInvoice").change();
-                    }
+                $("#drpOrder").empty();
+                $("#drpOrder").append($("<option></option>").val("").html("Select Invoice"));
+                if (result !== null) {
+                    $.each(result, function (index, value) {
+                        $("#drpOrder").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
+                    });
                 } else {
-                    $("#drpInvoice").empty();
-                    $("#PurchaseId").val(0);
+                    $("#POId").val(0);
+                    $("#PONo").val("");
                 }
             });
         }).change();
 
-        $("#drpInvoice").change(function () {
-            $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
+        $("#drpOrder").change(function () {
+            $("#POId").val(parseInt($("#drpOrder").val()));
+            $("#PO_No").val(parseInt($("#drpOrder").text()));
         });
 
         $("#btnSearch").click(function (e) {
             e.preventDefault();
-            let Purchase_Id = parseInt($("#PurchaseId").val());
-            if (Purchase_Id > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            let PO_Id = parseInt($("#POId").val());
+            if (PO_Id > 0) {
+                IMSC.ajaxCall("GET", "/Material/SearchInvoice?PO_Id=" + PO_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
                 if (res !== null) {
                     var result = res.Table;
-                    $("#StateId").empty();
-                    $("#StateId").append($("<option></option>").val(0).html("Select State"));
-                    $.each(res.Table1, function (index, value) {
-                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                    });
+                    let totalAmount = 0.0;
+                    $("#POId").val(result[0].PO_Id);
+                    $("#PONo").val(result[0].PO_No);
                     $("#PartyId").val(result[0].Party_Id);
-                    $("#StateId").val(result[0].SupplyState_Id);
-                    $("#IsUpdateMaterialPurchase").val(1);
-                    $("#OfficeId").val(result[0].Office_Id);
-                    $("#InvoiceNo").val(result[0].Invoice_No);
-                    $("#drpPartyId").val(result[0].Party_Id);
-                    $("#Purchase_Ref").val(result[0].Purchase_Ref);
-                    $("#TransactionDate").val(result[0].Transaction_Date);
-                    $("#SupplyStateId").val(result[0].SupplyState_Id);
-                    $("#Remarks").val(result[0].Remarks);
-                    $("#PurchaseId").val(result[0].Purchase_Id)
-                    $("#tbodyid").empty(Purchase_Id);
-                    let amount = 0;
-                    $.each(result, function (index, value) {
-                        amount += parseFloat(value.Total_Amount);
+                    $("#PartyId").select2().trigger('change');
+                    $("#lblLedgerBalance").text(res.Table1[0].LedgerBalance);
+                    $("#lblCashBalance").text(res.Table1[0].CashBalance);
+                    $("#lblOverDueAmount").text(res.Table1[0].OverdueAmount);
+                    $("#lblPartyCategory").text(res.Table1[0].Category === null ? "" : res.Table1[0].Category);
+                    $("#lblAddress").text(res.Table1[0].Address);
+                    $("#lblContactNo").text(res.Table1[0].ContactNo);
+                    $("#tbodyid").empty();
+                    $.each(res.Table, function (index, value) {
+
                         //Get the reference of the Table's TBODY element.
                         var tBody = $("#tblOrderCreation > TBODY")[0];
                         //Add Row.
                         var row = tBody.insertRow(-1);
-                        $(row).attr('id', 'trRow_' + value.Line_Id);
-                        //Add Button cell.
+                        $(row).attr('id', 'trRow_' + value.Item_Id);
+                        //Edit Button cell.
+                        let htmlEditBtn = `<input type="button" onclick="Edit(this);" value="Edit"/>`;
+                        let htmlRemovBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
                         cell = $(row.insertCell(-1));
-                        let btnEdit = $("<input />");
-                        btnEdit.attr("type", "button");
-                        btnEdit.attr("onclick", "Edit(this);");
-                        btnEdit.val("Edit");
-                        cell.append(btnEdit);
+                        cell.append(htmlEditBtn).append(htmlRemovBtn);
                         //Add Item cell.
-                        var cell = $(row.insertCell(-1));
-                        cell.html(value.ItemTitle);
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.ItemName);
                         cell.attr('data-item-id', value.Item_Id);
-                        cell.attr('data-line-Id', value.Line_Id);
-                        //Add Hsn_Sac cell.
+                        cell.attr('data-line-id', value.Line_Id);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add AvailableQty.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.HSN_SAC);
-                        //Add Quantity cell.
+                        cell.html(value.Available_Qty);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add Last Rate.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Quantity);
-                        //Add Unit cell.
+                        cell.html(value.Last_Rate);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add LastDist1 cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.UnitTitle);
-                        cell.attr('data-Unit_Id', value.Unit_Id);
-                        //Add Rate cell.
+                        cell.html(value.Last_Discount_1);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add LastDist2 cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Rate);
-                        //Add Amount cell.
+                        cell.html(value.Last_Discount_2);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add ListPrice cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Amount);
-                        //Add Discount_1 cell.
+                        cell.html(value.List_Price !== undefined ? value.List_Price : 0);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add txtOrderQty cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Discount_1);
-                        //Add Discount_2 cell.
+                        cell.html(value.Order_Qty);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add txtOrderRate cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Discount_2);
-                        //Add Taxable_Amount cell.
+                        cell.html(value.Order_Rate);
+                        cell.attr('data-index', value.Item_Id);
+                        //Add amount cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Taxable_Amount);
-                        //Add GST cell.
+                        cell.html(parseFloat(value.Amount).toFixed(2));
+                        cell.attr('data-index', value.Item_Id);
+                        totalAmount += value.Amount;
+                        //Add txtRemark cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.GST);
-                        //Add CGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.CGST);
-                        //Add SGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.SGST);
-                        //Add IGST cell.
-                        cell = $(row.insertCell(-1));
-                        cell.html(value.IGST);
-                        //Add Total_Amount cell.
-                        cell = $(row.insertCell(-1));
-                        cell.attr('data-row-Id', value.Line_Id);
-                        cell.html(value.Total_Amount);
+                        cell.html(value.Remarks);
+                        cell.attr('data-index', value.Item_Id);
                     });
-                    $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+
+                    $("#lblTotalAmount").text("Total : " + parseFloat(totalAmount).toFixed(2));
                     $("#divDeleteMatrial").css('display', 'block');
                 }
             });
@@ -595,9 +607,9 @@
         });
 
         $("#btnDelete").click(function () {
-            let Purchase_Id = parseInt($("#PurchaseId").val());
-            if (Purchase_Id > 0) {
-                window.location.href = "/Material/DeleteMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken';
+            let PO_Id = parseInt($("#POId").val());
+            if (PO_Id > 0) {
+                window.location.href = "/Material/DeleteOrder?PO_Id=" + PO_Id + "&AppToken=" + '@Model.AppToken';
             } else {
                 alert("Please select invoice.");
             }
@@ -607,23 +619,19 @@
         //Determine the reference of the Row using the Button.
         $("#btnAdd").val("Update");
         $("#IsUpdate").val(1);
-        let index = parseInt($(button).attr('data-index'));
-        //var row = $(button).closest("TR").find('td');
-        $("#Item_Id").val(parseInt($("#lblItem_" + index).text()));
+        var row = $(button).closest("TR").find('td');
+        $("#Item_Id").val(parseInt(row.eq(1).attr('data-item-id')));
         $('#Item_Id').select2().trigger('change');
-        $("#txtOrderQty").val($("#txtOrderQty_" + index).text());
-        $("#txtOrderRate").val($("#txtOrderRate_" + index).text());
-        $("#Hsn_Sac").val($("#txtRemark_" + index).text());
-        $("#hdnRowId").val(index);
-        //if (parseFloat(row[11].innerText).toFixed(2) > 0 && parseFloat(row[12].innerText).toFixed(2) > 0) {
-        //    $("#hdnIs_SameState").val("1");
-        //} else {
-        //    $("#hdnIs_SameState").val("0");
-        //}
+        $("#txtOrderQty").val(row[7].innerText);
+        $("#txtOrderRate").val(row[8].innerText);
+        $("#txtRemark").val(row[10].innerText);
+        $("#hdnRowId").val(parseInt(row.eq(1).attr('data-item-id')));
+        $("#hdnLineId").val(parseInt(row.eq(1).attr('data-line-id')));
+
     };
     function Remove(button) {
         //Determine the reference of the Row using the Button.
-        $("#IsUpdate").val(0);
+        $("#IsUpdate").val(1);
         var row = $(button).closest("TR");
         //var name = $("TD", row).eq(0).text();
         if (confirm("Do you want to remove this purchase.", "Remove")) {
@@ -632,13 +640,11 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
         }
-        //let sumOfTotal = 0;
-        //$("#tblOrderCreation TBODY TR").each(function () {
-        //    var row = $(this);
-        //    let td = row.find("TD");
-        //    sumOfTotal += parseFloat(td[13].innerText);
-        //});
-        //$("#PurchaseAmount").val(sumOfTotal.toFixed(2));
-        //$("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
+        let sumOfTotal = 0;
+        $("#tblOrderCreation TBODY TR").each(function () {
+            sumOfTotal += parseFloat($(this).find('td')[9].innerText);
+        });
+        $("#TotalAmount").val(sumOfTotal.toFixed(2));
+        $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     };
 </script>

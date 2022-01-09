@@ -206,22 +206,6 @@ namespace IMS.Controllers
             ObjMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Material/OrderCreation.cshtml", ObjMaterialOrder);
         }
-       
-        [HttpGet]
-        public ActionResult GetOrder(MaterialOrder objMaterialOrder, string AppToken = "")
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                dt = objMaterialOrder.MaterialOrder_Get();
-                dt.TableName = "MaterialOrderLists";
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return Content(JsonConvert.SerializeObject(dt));
-        }
         [HttpGet]
         public ActionResult GetParty(int PartyId, string AppToken = "")
         {
@@ -258,7 +242,7 @@ namespace IMS.Controllers
             MaterialOrder objMaterialOrder = new MaterialOrder();
             try
             {
-                objMaterialOrder.MaterialOrderLines = JsonConvert.DeserializeObject<List<MaterialOrderLine>>(objMaterialOrder.MaterialLine);
+                ObjMaterialOrder.MaterialOrderLines = JsonConvert.DeserializeObject<List<MaterialOrderLine>>(ObjMaterialOrder.MaterialLine);
                 objMaterialOrder = ObjMaterialOrder.MaterialOrder_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -296,14 +280,13 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/OrderCreation.cshtml", (objMaterialOrder.IsSucceed ? newMaterialOrder : ObjMaterialOrder));
 
         }
-
-        [HttpPost]
-        public ActionResult DeleteOrder(MaterialOrder ObjMaterialOrder, int companyId)
+        [HttpGet]
+        public ActionResult DeleteOrder(int PO_Id)
         {
+            MaterialOrder ObjMaterialOrder = new MaterialOrder();
             try
             {
-                ObjMaterialOrder.CompanyId = companyId;
-                MaterialOrder objMaterialOrder = ObjMaterialOrder.MaterialOrder_Delete();
+                MaterialOrder objMaterialOrder = ObjMaterialOrder.MaterialOrder_Delete(PO_Id);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 ObjMaterialOrder.AppToken = CommonUtility.URLAppToken(AppToken);
                 ObjMaterialOrder.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
@@ -327,6 +310,36 @@ namespace IMS.Controllers
             {
                 return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
             }
+        }
+        [HttpGet]
+        public ActionResult GetOrderInvoice(int Party_Id, string PO_No, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                MaterialOrder materialOrder = new MaterialOrder();
+                dt = materialOrder.GetOrderInvoice(Party_Id, PO_No);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchInvoice(int PO_Id, string PO_No, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                MaterialOrder materialOrder = new MaterialOrder();
+                ds = materialOrder.MaterialOrder_Get(PO_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(ds));
         }
         #endregion
 

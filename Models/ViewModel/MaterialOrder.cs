@@ -75,10 +75,10 @@ namespace IMS.Models.ViewModel
                 {
                     sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
                                     Available_Qty=""" + Convert.ToString(item.Available_Qty) + @""" Last_Rate=""" + Convert.ToString(item.Last_Rate) + @"""
-                                    Last_Discount=""" + Convert.ToString(item.Last_Discount) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
+                                    Last_Discount_1=""" + Convert.ToString(item.Last_Discount_1) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
                                     Order_Qty=""" + Convert.ToString(item.Order_Qty) + @""" Order_Rate=""" + Convert.ToString(item.Order_Rate) + @"""   
                                     Amount=""" + Convert.ToString(item.Amount) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @"""  
-                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @"""  />");
+                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + Convert.ToString(item.Last_Discount_2) + @""" />");
                 }
                 MaterialLine = "<Line>" + sb + "</Line>";
 
@@ -113,20 +113,6 @@ namespace IMS.Models.ViewModel
             return this;
         }
 
-        public DataTable MaterialOrder_Get()
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@PO_Id", POId));
-                dt = DBManager.ExecuteDataTable("Material_Order_Getdata", CommandType.StoredProcedure);
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            return dt;
-        }
         public DataTable GetParty(int PartyId)
         {
             DataTable dt = new DataTable();
@@ -141,6 +127,7 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
         public DataTable GetItemDetail(int Item_Id)
         {
             DataTable dt = new DataTable();
@@ -155,6 +142,59 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
+        public MaterialOrder MaterialOrder_Delete(int POId)
+        {
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@PO_Id", POId));
+                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Delete", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    POId = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
+
+        public DataTable GetOrderInvoice(int PartyId, string PO_No)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                SqlParameters.Add(new SqlParameter("@PO_No", PO_No));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetOrder", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
+        public DataSet MaterialOrder_Get(int PO_Id)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@PO_Id", PO_Id));
+                ds = DBManager.ExecuteDataSetWithParameter("Material_Order_Getdata", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return ds;
+        }
+       
         public DataTable MaterialOrder_GetOrderNo()
         {
             DataTable dt = new DataTable();
@@ -214,27 +254,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public MaterialOrder MaterialOrder_Delete()
-        {
-            try
-            {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@PO_Id", POId));
-                SqlParameters.Add(new SqlParameter("@Loginid", Loginid));
-                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Delete", CommandType.StoredProcedure, SqlParameters);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    POId = Convert.ToInt32(dr[0]);
-                    IsSucceed = Convert.ToBoolean(dr[1]);
-                    ActionMsg = dr[2].ToString();
-                }
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            return this;
-        }
-
         public MaterialOrder MaterialOrder_StatusUpdate()
         {
             try
@@ -263,7 +282,8 @@ namespace IMS.Models.ViewModel
         public string Item_Id { get; set; }
         public string Available_Qty { get; set; }
         public string Last_Rate { get; set; }
-        public string Last_Discount { get; set; }
+        public string Last_Discount_1 { get; set; }
+        public string Last_Discount_2 { get; set; }
         public string Last_Price { get; set; }
         public string Order_Qty { get; set; }
         public string Order_Rate { get; set; }
