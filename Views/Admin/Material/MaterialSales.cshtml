@@ -575,7 +575,8 @@
             var row = tBody.insertRow(-1);
             $(row).attr('id', 'trRow_' + value.Line_Id);
             //Add Button cell.
-            let htmlEditBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
+            //let htmlEditBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
+            let htmlEditBtn = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlEditBtn);
             //Add Item cell.
