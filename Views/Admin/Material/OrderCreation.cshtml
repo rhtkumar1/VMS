@@ -105,90 +105,91 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div>
-                                <div class="styled-input">
-                                    <div class="col-md-12 form-group">
-                                        <h5>Add/Update Matrial Order</h5>
-                                        <hr />
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <table id="tblOrderCreation" class="table" cellpadding="0" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Action</th>
-                                                <th>Item</th>
-                                                <th>Available Qty</th>
-                                                <th>Last Rate</th>
-                                                <th>Last Dist-1(%)</th>
-                                                <th>Last Dist-2(%)</th>
-                                                <th>List Price(MRP)</th>
-                                                <th>Order Qty</th>
-                                                <th>Order Rate</th>
-                                                <th>Amount</th>
-                                                <th>Remark</th>
-                                            </tr>
-                                            <tr>
-                                                <content>
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                                                        <div class="styled-input">
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Item<span class="mandatory">*</span></label>
-                                                                @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Available Qty</label>
-                                                                <label id="lblAvailableQty" class="form-control"></label>
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Last Rate</label>
-                                                                <label id="lblLastRate" class="form-control"></label>
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Last Dist-1(%)</label>
-                                                                <label id="lblLastDist1" class="form-control"></label>
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Last Dist-2(%)</label>
-                                                                <label id="lblLastDist2" class="form-control"></label>
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>List Price</label>
-                                                                <label id="lblListPrice" class="form-control"></label>
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Order Qty<span class="mandatory">*</span></label>
-                                                                <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
-                                                            </div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Order Rate<span class="mandatory">*</span></label>
-                                                                <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
-                                                            </div>
-                                                            <div class="clearfix"></div>
-                                                            <div class="col-md-3 form-group">
-                                                                <label>Remark<span class="mandatory">*</span></label>
-                                                                <input id="txtRemark" name="txtRemark" class="form-control" />
-                                                            </div>
+                            <div class="heading">
+                                <h4>
+                                    Add/Update Matrial Order
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="col-md-12 table-responsive">
+                                <table id="tblOrderCreation" class="table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Action</th>
+                                            <th class="tbl-heading">Item</th>
+                                            <th class="tbl-heading">Available Qty</th>
+                                            <th class="tbl-heading">Last Rate</th>
+                                            <th class="tbl-heading">Last Dist-1(%)</th>
+                                            <th class="tbl-heading">Last Dist-2(%)</th>
+                                            <th class="tbl-heading">List Price(MRP)</th>
+                                            <th class="tbl-heading">Order Qty</th>
+                                            <th class="tbl-heading">Order Rate</th>
+                                            <th class="tbl-heading">Amount</th>
+                                            <th class="tbl-heading">Remark</th>
+                                        </tr>
+                                        <tr>
+                                            <content>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                                                    <div class="styled-input">
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Item<span class="mandatory">*</span></label>
+                                                            @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Available Qty</label>
+                                                            <label id="lblAvailableQty" class="form-control"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Last Rate</label>
+                                                            <label id="lblLastRate" class="form-control"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Last Dist-1(%)</label>
+                                                            <label id="lblLastDist1" class="form-control"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Last Dist-2(%)</label>
+                                                            <label id="lblLastDist2" class="form-control"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>List Price</label>
+                                                            <label id="lblListPrice" class="form-control"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Order Qty<span class="mandatory">*</span></label>
+                                                            <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Order Rate<span class="mandatory">*</span></label>
+                                                            <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Remark<span class="mandatory">*</span></label>
+                                                            <input id="txtRemark" name="txtRemark" class="form-control" />
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label>Action</label>
+                                                            <br />
+                                                            <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                                            <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                                            @*<input type="button" id="btnAdd" class="btn btn-primary" name="btnAdd" value="Add" />
+                                                                <input type="button" id="btnReset" class="btn btn-primary" name="btnReset" value="Reset" />*@
                                                         </div>
                                                     </div>
-                                                </content>
-                                            </tr>
-                                            <tr>
-                                                <content><label id="lblTotalAmount">Total : 0.00</label></content>
-                                                <content class="pull-right">
-                                                    <input type="button" id="btnAdd" name="btnAdd" value="Add" />
-                                                    <input type="button" id="btnReset" name="btnReset" value="Reset" />
-                                                </content>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbodyid">
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="clearfix"></div>
-                                <br />
-                                <br />
+                                                </div>
+                                            </content>
+                                        </tr>
+                                        <tr>
+                                            <content><label id="lblTotalAmount">Total : 0.00</label></content>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid"></tbody>
+                                </table>
                             </div>
+                            <div class="clearfix"></div>
+                            <br />
+                            <br />
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
                             <div class="col-md-2">

@@ -77,7 +77,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party<span class="mandatory">*</span></label>
-                                    <select id="drpPartyId" name="drpPartyId" class="form-control" >
+                                    <select id="drpPartyId" name="drpPartyId" class="form-control">
                                         @foreach (var item in Model.PartyLists.AsEnumerable())
                                         {
                                             <option value="@item.Value">@item.Text</option>
@@ -95,7 +95,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Date<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy",  @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -109,30 +109,32 @@
                             <div class="clearfix"></div>
                             <div>
                                 <div class="styled-input">
-                                    <div class="col-md-12 form-group">
-                                        <h5>Add/Update Matrial Purchase</h5>
-                                        <hr />
+                                    <div class="heading">
+                                        <h4>
+                                            Add/Update Matrial Purchase
+                                        </h4>
                                     </div>
+                                    <br />
                                 </div>
                                 <div class="col-md-12">
-                                    <table id="tblMaterialPurchase" class="table" cellpadding="0" cellspacing="0">
+                                    <table id="tblMaterialPurchase" class="table table-striped" cellpadding="0" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Action</th>
-                                                <th>Item</th>
-                                                <th>H/S</th>
-                                                <th>Qty</th>
-                                                <th>Unit</th>
-                                                <th>Rate</th>
-                                                <th>Amu</th>
-                                                <th>D1(%)</th>
-                                                <th>D2(%)</th>
-                                                <th>T-Amu</th>
-                                                <th>GST(%)</th>
-                                                <th>CGST(%)</th>
-                                                <th>SGST(%)</th>
-                                                <th>IGST(%)</th>
-                                                <th>Total</th>
+                                                <th class="tbl-heading">Action</th>
+                                                <th class="tbl-heading">Item</th>
+                                                <th class="tbl-heading">H/S</th>
+                                                <th class="tbl-heading">Qty</th>
+                                                <th class="tbl-heading">Unit</th>
+                                                <th class="tbl-heading">Rate</th>
+                                                <th class="tbl-heading">Amount</th>
+                                                <th class="tbl-heading">D1(%)</th>
+                                                <th class="tbl-heading">D2(%)</th>
+                                                <th class="tbl-heading">T-Amount</th>
+                                                <th class="tbl-heading">GST(%)</th>
+                                                <th class="tbl-heading">CGST(%)</th>
+                                                <th class="tbl-heading">SGST(%)</th>
+                                                <th class="tbl-heading">IGST(%)</th>
+                                                <th class="tbl-heading">Total</th>
                                             </tr>
                                             <tr>
                                                 <content>
@@ -157,7 +159,7 @@
                                                             </div>
                                                             <div class="col-md-2 form-group">
                                                                 <label>Rate<span class="mandatory">*</span></label>
-                                                                @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control"})
+                                                                @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
                                                             </div>
                                                             <div class="col-md-2 form-group">
                                                                 <label>Amount</label>
@@ -172,7 +174,7 @@
                                                                 @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
                                                             </div>
                                                             <div class="col-md-2 form-group">
-                                                                <label>Taxable-Amu</label>
+                                                                <label>Taxable-Amount</label>
                                                                 @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
                                                             </div>
                                                             <div class="col-md-2 form-group">
@@ -196,20 +198,23 @@
                                                                 @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
                                                                 <input type="hidden" id="hdnTotalAmount" />
                                                             </div>
+                                                            <div class="col-md-2 form-group">
+                                                                <label>Action</label>
+                                                                <br />
+                                                                <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                                                <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                                                @*<input type="button" id="btnAdd" class="btn btn-primary" name="btnAdd" value="Add" />
+                                                                <input type="button" id="btnReset" class="btn btn-primary" name="btnReset" value="Reset" />*@
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </content>
                                             </tr>
                                             <tr>
                                                 <content><label id="lblTotalAmount">Total : 0.00</label></content>
-                                                <content class="pull-right">
-                                                    <input type="button" id="btnAdd" name="btnAdd" value="Add" />
-                                                    <input type="button" id="btnReset" name="btnReset" value="Reset" />
-                                                </content>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbodyid">
-                                        </tbody>
+                                        <tbody id="tbodyid"></tbody>
                                     </table>
                                 </div>
                                 <div class="clearfix"></div>

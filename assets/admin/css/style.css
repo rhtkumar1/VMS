@@ -2088,7 +2088,7 @@ div#home {
 }
 
 .table td, .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
-    padding: 15px;
+    padding: 10px;
     font-size: 0.85em;
     border-top: none !important;
 }
