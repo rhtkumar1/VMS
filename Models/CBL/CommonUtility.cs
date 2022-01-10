@@ -119,6 +119,19 @@ public static class CommonUtility
             throw Ex;
         }
     }
+    public static int GetDefault_OfficeID()
+    {
+        try
+        {
+            Authenticate ObjAuthenticate = (Authenticate)System.Web.HttpContext.Current.Session["SYSSOFTECHSession"];
+            return Convert.ToInt32(ObjAuthenticate.Default_OfficeId);
+        }
+        catch (Exception Ex)
+        {
+            throw Ex;
+        }
+    }
+    
     public static int GetFYID()
     {
         try

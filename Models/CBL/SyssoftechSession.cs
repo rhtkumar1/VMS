@@ -13,6 +13,7 @@ namespace IMS.Models.CBL
         private string _UserType;
         private string _SessionID;
         private int _CompanyID;
+        private int _Default_OfficeId;
         private DateTime _SessionStartDateTime;
         //private List<SysSoftechMenuAuthentication> _MenuAuthenticationList = new List<SysSoftechMenuAuthentication>();
         public SyssoftechSession(string sessionID, DataSet loginAuth)
@@ -23,6 +24,15 @@ namespace IMS.Models.CBL
                 {
                     _UserName = Dr["UserName"].ToString();
                     _UserId = Dr["User_Id"].ToString();
+                    object OfficeId = Dr["Default_OfficeId"];
+                    if (OfficeId != DBNull.Value)
+                    {
+                        _Default_OfficeId = Convert.ToInt32(OfficeId);
+                    }
+                    else
+                    {
+                        _Default_OfficeId = 1;
+                    }
                     object PrimaryRole = Dr["PrimaryRole"];
                     if (PrimaryRole != DBNull.Value)
                     {
@@ -59,6 +69,7 @@ namespace IMS.Models.CBL
         public string UserId { get { return _UserId; } }
         public string UserType { get { return _UserType; } }
         public int CompanyID { get { return _CompanyID; } }
+        public int Default_OfficeId { get { return _Default_OfficeId; } }
         public string SessionID { get { return _SessionID; } }
 
     }

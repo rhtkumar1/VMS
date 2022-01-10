@@ -90,14 +90,14 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@CashBalance", CashBalance));
                 SqlParameters.Add(new SqlParameter("@OverdueAmount", OverdueAmount));
                 SqlParameters.Add(new SqlParameter("@TotalAmount", TotalAmount));
-                SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
-                SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
+                SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
+                SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
                 SqlParameters.Add(new SqlParameter("@PO_Status", POStatus));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Material_Line", MaterialLine));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
                 SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
-                SqlParameters.Add(new SqlParameter("@Office_Id", "1"));
+                SqlParameters.Add(new SqlParameter("@Office_Id", CommonUtility.GetDefault_OfficeID()));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
