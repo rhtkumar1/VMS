@@ -313,9 +313,9 @@
                     //Add Row.
                     var row = tBody.insertRow(-1);
                     //Edit Button cell.
-                    let htmlRemoveBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
                     cell = $(row.insertCell(-1));
-                    cell.append(htmlRemoveBtn);
+                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                    cell.append(btnRemove);
                     //Add Item cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#Item_Id option:selected").text());
@@ -445,6 +445,7 @@
                         $("#lblLastDist1").text(result[0].Last_Disc_1);
                         $("#lblLastDist2").text(result[0].Last_Disc_2);
                         $("#lblListPrice").text(result[0].List_Price);
+                        $("#hdnRowId").val("");
                     }
                 });
             }
@@ -526,10 +527,10 @@
                         var row = tBody.insertRow(-1);
                         $(row).attr('id', 'trRow_' + value.Item_Id);
                         //Edit Button cell.
-                        let htmlEditBtn = `<input type="button" onclick="Edit(this);" value="Edit"/>`;
-                        let htmlRemovBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
                         cell = $(row.insertCell(-1));
-                        cell.append(htmlEditBtn).append(htmlRemovBtn);
+                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
+                        let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                        cell.append(btnEdit).append(btnRemove);
                         //Add Item cell.
                         cell = $(row.insertCell(-1));
                         cell.html(value.ItemName);

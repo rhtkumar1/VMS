@@ -303,10 +303,10 @@
                         msg = "Material is already mapped!!!";
                         bAdded = false;
                     }
-                    if ($("#hdnItemId").val() !== "" && parseInt($("#hdnItemId").val()) > 0) {
-                        if (itemId === parseInt($("#hdnItemId").val())) {
+                    if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                        if (itemId === parseInt($("#hdnRowId").val())) {
                             bAdded = true;
-                        }
+                        } 
                     }
                 });
             }
@@ -345,11 +345,9 @@
                     var row = tBody.insertRow(-1);
                     //Add Button cell.
                     cell = $(row.insertCell(-1));
-                    let btnEdit = $("<input />");
-                    btnEdit.attr("type", "button");
-                    btnEdit.attr("onclick", "Remove(this);");
-                    btnEdit.val("Remove");
-                    cell.append(btnEdit);
+                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                    cell.append(btnRemove);
+
                     //Add Item cell.
                     var cell = $(row.insertCell(-1));
                     cell.html($("#Item_Id :selected").text());
@@ -494,6 +492,7 @@
                         $("#Hsn_Sac").val(result[0].HSN_SAC);
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
+                        $("#hdnRowId").val("")
                         $("#GST").change();
                     } else {
                         $("#Hsn_Sac").val("");
@@ -584,10 +583,7 @@
                         $(row).attr('id', 'trRow_' + value.Line_Id);
                         //Add Button cell.
                         cell = $(row.insertCell(-1));
-                        let btnEdit = $("<input />");
-                        btnEdit.attr("type", "button");
-                        btnEdit.attr("onclick", "Edit(this);");
-                        btnEdit.val("Edit");
+                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
                         cell.append(btnEdit);
                         //Add Item cell.
                         var cell = $(row.insertCell(-1));
