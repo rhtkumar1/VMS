@@ -422,6 +422,9 @@
                     let td = row.find("TD");
                     amount += parseFloat(td[14].innerText);
                 });
+                $("td").each(function () {
+                    $(this).addClass("tbl-css");
+                });
                 $("#PurchaseAmount").val(amount.toFixed(2));
                 $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
             }
@@ -635,6 +638,9 @@
                     });
                     $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
                     $("#divDeleteMatrial").css('display', 'block');
+                    $("td").each(function () {
+                        $(this).addClass("tbl-css");
+                    });
                 }
             });
             } else {

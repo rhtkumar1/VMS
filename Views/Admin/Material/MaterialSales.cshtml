@@ -338,7 +338,10 @@
                     if (result.length > 0) {
                         $("#tbodyid").empty();
                         $("#SaleAmount").val("0");
-                        BindGrid(result,0);
+                        BindGrid(result, 0);
+                        $("td").each(function () {
+                            $(this).addClass("tbl-css");
+                        });
                     }
                  });
             } else {
@@ -386,7 +389,10 @@
                     $("#hdnIs_SameState").val(result[0].Is_SameState === undefined ? "0" : result[0].Is_SameState);
                     $("#tbodyid").empty();
                     $("#SaleAmount").val("0");
-                    BindGrid(result,1);
+                    BindGrid(result, 1);
+                    $("td").each(function () {
+                        $(this).addClass("tbl-css");
+                    });
                 }
             });
             } else {

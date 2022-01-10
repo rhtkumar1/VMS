@@ -375,6 +375,9 @@
                 $("#tblOrderCreation TBODY TR").each(function () {
                     totalAmount += parseFloat($(this).find('td')[9].innerText);
                 });
+                $("td").each(function () {
+                    $(this).addClass("tbl-css");
+                });
                 $("#TotalAmount").val(totalAmount.toFixed(2));
                 $("#lblTotalAmount").text("Total : " + totalAmount.toFixed(2));
             }
@@ -574,6 +577,9 @@
 
                     $("#lblTotalAmount").text("Total : " + parseFloat(totalAmount).toFixed(2));
                     $("#divDeleteMatrial").css('display', 'block');
+                    $("td").each(function () {
+                        $(this).addClass("tbl-css");
+                    });
                 }
             });
             } else {
