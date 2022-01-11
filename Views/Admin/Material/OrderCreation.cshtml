@@ -24,8 +24,6 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        <h3 style="color:lightgreen;" id="msg">@ViewBag.Success</h3>
-                        <h3 style="color:indianred;">@ViewBag.Msg</h3>
                         <div class="heading">
                             <h4>
                                 Order Material
@@ -111,7 +109,7 @@
                                 </h4>
                             </div>
                             <br />
-                            <div class="col-md-12 table-responsive">
+                            <div class="table-responsive">
                                 <table id="tblOrderCreation" class="table table-striped" cellpadding="0" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -129,53 +127,49 @@
                                         </tr>
                                         <tr>
                                             <content>
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                                                    <div class="styled-input">
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Item<span class="mandatory">*</span></label>
-                                                            @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Available Qty</label>
-                                                            <label id="lblAvailableQty" class="form-control"></label>
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Last Rate</label>
-                                                            <label id="lblLastRate" class="form-control"></label>
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Last Dist-1(%)</label>
-                                                            <label id="lblLastDist1" class="form-control"></label>
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Last Dist-2(%)</label>
-                                                            <label id="lblLastDist2" class="form-control"></label>
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>List Price</label>
-                                                            <label id="lblListPrice" class="form-control"></label>
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Order Qty<span class="mandatory">*</span></label>
-                                                            <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Order Rate<span class="mandatory">*</span></label>
-                                                            <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Remark<span class="mandatory">*</span></label>
-                                                            <input id="txtRemark" name="txtRemark" class="form-control" />
-                                                        </div>
-                                                        <div class="col-md-3 form-group">
-                                                            <label>Action</label>
-                                                            <br />
-                                                            <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                                                            <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
-                                                            @*<input type="button" id="btnAdd" class="btn btn-primary" name="btnAdd" value="Add" />
-                                                                <input type="button" id="btnReset" class="btn btn-primary" name="btnReset" value="Reset" />*@
-                                                        </div>
+                                                <div class="styled-input">
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Item<span class="mandatory">*</span></label>
+                                                        @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Available Qty</label>
+                                                        <label id="lblAvailableQty" class="form-control"></label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Last Rate</label>
+                                                        <label id="lblLastRate" class="form-control"></label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Last Dist-1(%)</label>
+                                                        <label id="lblLastDist1" class="form-control"></label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Last Dist-2(%)</label>
+                                                        <label id="lblLastDist2" class="form-control"></label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>List Price</label>
+                                                        <label id="lblListPrice" class="form-control"></label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Order Qty<span class="mandatory">*</span></label>
+                                                        <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Order Rate<span class="mandatory">*</span></label>
+                                                        <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Remark<span class="mandatory">*</span></label>
+                                                        <input id="txtRemark" name="txtRemark" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>Action</label>
+                                                        <br />
+                                                        <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                                        <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
                                                     </div>
                                                 </div>
                                             </content>
@@ -192,21 +186,22 @@
                             <br />
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
-                            <div class="col-md-2">
-                                <div style="display:none" id="divDeleteMatrial">
-                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete Order</button>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
                                     <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
                                     <input type="hidden" id="hdnLineId" name="hdnLineId" value="" />
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
-                                <div class="appointment-btn text-lg-right">
-                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome pull-right">Reset</button>
+                            <div class="col-md-1 form-group pull-right">
+                                <div style="display:none" id="divDeleteMatrial">
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome">Delete</button>
                                 </div>
                             </div>
                         }
@@ -385,7 +380,8 @@
             if (bAdded) {
                 return true;
             } else {
-                alert(msg);
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
                 return false;
             }
         });
@@ -429,7 +425,8 @@
             if (isValid) {
                 return true;
             } else {
-                alert(msg);
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
                 return false;
             }
         });
@@ -584,7 +581,8 @@
                 }
             });
             } else {
-                alert("Please select inovice.");
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
             }
         });
 
@@ -619,7 +617,8 @@
             if (PO_Id > 0) {
                 window.location.href = "/Material/DeleteOrder?PO_Id=" + PO_Id + "&AppToken=" + '@Model.AppToken';
             } else {
-                alert("Please select invoice.");
+                   $('#alertModal').modal('show');
+                   $('#msg').html("Please select invoice.");
             }
         });
     });

@@ -380,11 +380,13 @@
                     btnRemove.val("Remove");
                     cell.append(btnRemove);
                 } else {
-                    alert("Party is already mapped with enter gst number !!!", "Enter Gst Number");
+                    $('#alertModal').modal('show');
+                    $('#msg').html("Party is already mapped with enter gst number !!!", "Enter Gst Number");
                 }
             } else {
                 $("#txtGst").focus();
-                alert("Please enter gst number !!!", "Enter Gst Number");
+                $('#alertModal').modal('show');
+                $('#msg').html("Please enter gst number !!!", "Enter Gst Number");
             }
 
         });

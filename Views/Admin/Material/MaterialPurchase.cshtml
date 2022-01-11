@@ -24,8 +24,6 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        <h3 style="color:lightgreen;" id="msg">@ViewBag.Success</h3>
-                        <h3 style="color:indianred;">@ViewBag.Msg</h3>
                         <div class="heading">
                             <h4>
                                 Search Purchase Material
@@ -116,7 +114,7 @@
                                     </div>
                                     <br />
                                 </div>
-                                <div class="col-md-12">
+                                <div class="table-responsive">
                                     <table id="tblMaterialPurchase" class="table table-striped" cellpadding="0" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -138,74 +136,70 @@
                                             </tr>
                                             <tr>
                                                 <content>
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                                                        <div class="styled-input">
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Item<span class="mandatory">*</span></label>
-                                                                @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                                                <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>HSN/SAC</label>
-                                                                @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Quantity<span class="mandatory">*</span></label>
-                                                                @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Unit<span class="mandatory">*</span></label>
-                                                                @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Rate<span class="mandatory">*</span></label>
-                                                                @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Amount</label>
-                                                                @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Discount-1</label>
-                                                                @Html.TextBox("Discount_1", "0", htmlAttributes: new { @placeholder = "DISC 1 (%)", @id = "Discount_1", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Discount-2</label>
-                                                                @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Taxable-Amount</label>
-                                                                @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>GST</label>
-                                                                @Html.TextBox("GST", "", htmlAttributes: new { @placeholder = "GST (%)", @id = "GST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>CGST</label>
-                                                                @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>SGST</label>
-                                                                @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>IGST</label>
-                                                                @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Total</label>
-                                                                @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
-                                                                <input type="hidden" id="hdnTotalAmount" />
-                                                            </div>
-                                                            <div class="col-md-2 form-group">
-                                                                <label>Action</label>
-                                                                <br />
-                                                                <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                                                                <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
-                                                                @*<input type="button" id="btnAdd" class="btn btn-primary" name="btnAdd" value="Add" />
-                                                                <input type="button" id="btnReset" class="btn btn-primary" name="btnReset" value="Reset" />*@
-                                                            </div>
+                                                    <div class="styled-input">
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Item<span class="mandatory">*</span></label>
+                                                            @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                                            <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>HSN/SAC</label>
+                                                            @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Quantity<span class="mandatory">*</span></label>
+                                                            @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Unit<span class="mandatory">*</span></label>
+                                                            @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Rate<span class="mandatory">*</span></label>
+                                                            @Html.TextBox("Rate", "", htmlAttributes: new { @placeholder = "Rate", @id = "Rate", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Amount</label>
+                                                            @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Discount-1</label>
+                                                            @Html.TextBox("Discount_1", "0", htmlAttributes: new { @placeholder = "DISC 1 (%)", @id = "Discount_1", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Discount-2</label>
+                                                            @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Taxable</label>
+                                                            @Html.TextBox("Taxable_Amount", "", htmlAttributes: new { @placeholder = "Taxable Amount", @id = "Taxable_Amount", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>GST</label>
+                                                            @Html.TextBox("GST", "", htmlAttributes: new { @placeholder = "GST (%)", @id = "GST", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>CGST</label>
+                                                            @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>SGST</label>
+                                                            @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>IGST</label>
+                                                            @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Total</label>
+                                                            @Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control", @readonly = "readonly" })
+                                                            <input type="hidden" id="hdnTotalAmount" />
+                                                        </div>
+                                                        <div class="col-md-2 form-group">
+                                                            <label>Action</label>
+                                                            <br />
+                                                            <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                                            <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
                                                         </div>
                                                     </div>
                                                 </content>
@@ -223,22 +217,22 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
-                            <div class="col-md-2">
-                                <div style="display:none" id="divDeleteMatrial">
-                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete Matrial</button>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
                                     <input type="hidden" id="hdnItemId" name="hdnItemId" value="" />
                                     <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
                                     <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
-                                <div class="appointment-btn text-lg-right">
-                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome pull-right">Reset</button>
+                            <div class="col-md-1 form-group pull-right">
+                                <div style="display:none" id="divDeleteMatrial">
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete</button>
                                 </div>
                             </div>
                         }
@@ -257,6 +251,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+          if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
         //IMSM.matrialPurchase();
         $("#Item_Id").select2();
         $("#drpParty").select2();
@@ -306,7 +304,7 @@
                     if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
                         if (itemId === parseInt($("#hdnRowId").val())) {
                             bAdded = true;
-                        } 
+                        }
                     }
                 });
             }
@@ -430,7 +428,8 @@
             if (bAdded) {
                 return true;
             } else {
-                alert(msg);
+                 $('#alertModal').modal('show');
+                 $('#msg').html(msg);
                 return false;
             }
         });
@@ -476,7 +475,8 @@
             if (isValid) {
                 return true;
             } else {
-                alert(msg);
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
                 return false;
             }
         });
@@ -640,7 +640,8 @@
                 }
             });
             } else {
-                alert("Please select inovice.");
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
             }
         });
 
@@ -695,7 +696,8 @@
             if (Purchase_Id > 0) {
                 window.location.href = "/Material/DeleteMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + '@Model.AppToken';
             } else {
-                alert("Please select invoice.");
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
             }
         });
     });
