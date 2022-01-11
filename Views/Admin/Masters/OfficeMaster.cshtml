@@ -117,14 +117,14 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-10"></div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
                         }
@@ -153,19 +153,19 @@
                 var fields = [
                     {
                         title: "Action",
-                        width: 30,
+                        width: 80,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
                     },
                     { name: "Office_Id", css: "hidden", },
-                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 40 },
-                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 30 },
-                    { name: "GSTNo", type: "text", title: "GSTNo", sorting: true, filtering: false, width: 20 },
-                    { name: "PanNo", type: "text",title: "PanNo", sorting: true, filtering: false, width: 20 },
-                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: false, width: 20 },
-                    { name: "ContactPerson", type: "text", title: "POC", sorting: true, filtering: false, width: 30 },
-                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: false, width: 30 },
+                    { name: "Title", type:"text", title: "Title", sorting: true, filtering: true, width: 150 },
+                    { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 100 },
+                    { name: "GSTNo", type: "text", title: "GSTNo", sorting: true, filtering: false, width: 100 },
+                    { name: "PanNo", type: "text",title: "PanNo", sorting: true, filtering: false, width: 100 },
+                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: false, width: 100 },
+                    { name: "ContactPerson", type: "text", title: "POC", sorting: true, filtering: false, width: 100 },
+                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: false, width: 200 },
                 ];
                 var options = {
                     filtering: true,

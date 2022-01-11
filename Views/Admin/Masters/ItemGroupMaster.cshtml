@@ -48,16 +48,15 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-10">
-                            </div>
-                            <div class="col-md-1">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1 pull-right form-group">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 pull-right form-group">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
                         }
@@ -86,14 +85,14 @@
              var fields = [
                    {
                      title: "Action",
-                     width: 30,
+                     width: 80,
                      itemTemplate: function (value, args) {
                          return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                      }
                  },
                  { name: "Group_Id", css: "hidden" },
-                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 50 },
-                 { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 50},
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 150 },
+                 { name: "Remarks", type: "text", title: "Remarks", sorting: true, filtering: false, width: 200},
              ];
              var options = {
                  filtering: true,

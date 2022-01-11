@@ -73,14 +73,14 @@
                             </div>
                             <div class="col-md-10">
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
                         }
@@ -109,25 +109,18 @@
              var fields = [
                    {
                      title: "Action",
-                     width: 30,
+                     width: 80,
                      itemTemplate: function (value, args) {
                          return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                      }
                  },
                  { name: "HSN_SACID", css: "hidden" },
-                 { name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: true, width: 50 },
-                 { name: "Tax_Slab", type: "text", title: "Tax Slab", sorting: true, filtering: false, width: 50 },
+                 { name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: true, width: 100 },
+                 { name: "Tax_Slab", type: "text", title: "Tax Slab", sorting: true, filtering: false, width: 100 },
                  { name: "CESS", type: "text", title: "CESS", sorting: true, filtering: false, width: 50 },
                  { name: "CESSP", type: "text", title: "CESSP", sorting: true, filtering: false, width: 50 },
-                 { name: "StartDate", type: "text", title: "Start", sorting: true, filtering: false, width: 50 },
-                 { name: "EndDate", type: "text", title: "End", sorting: true, filtering: false, width: 50 },
-                 {
-                     title: "Action",
-                     width: 30,
-                     HSNSACTemplate: function (value, args) {
-                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
-                     }
-                 }
+                 { name: "StartDate", type: "text", title: "Start", sorting: true, filtering: false, width: 150 },
+                 { name: "EndDate", type: "text", title: "End", sorting: true, filtering: false, width: 150 },
              ];
              var options = {
                  filtering: true,

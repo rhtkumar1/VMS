@@ -21,7 +21,7 @@
             <div class="blank">
                 <div class="blank-page">
                     <div class="col-md-12">
-                        <div class="appointment-btn" style="margin-right: -18px !important;margin-bottom: 50px !important;">
+                        <div class="appointment-btn" style="margin-right: -18px !important;padding-bottom: 50px !important;">
                             <a href="/master/manageusermaster?AppToken=@Model.AppToken" title="Add User" name="AddUser" id="AddUser" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     var fields = [
                         {
                             title: "Action",
-                            width: 20,
+                            width: 80,
                             itemTemplate: function (value, args) {
                                 switch (@Model.AuthMode) {
                                     case 0:
@@ -69,11 +69,11 @@
                             }
                         },
                         { name: "User_Id", css: "hidden", },
-                        { name: "UserName", type: "text", title: "User Name", sorting: true, filtering: true, width: 50 },
-                        { name: "FullName", type: "text", title: "Name", sorting: true, filtering: true, width: 50 },
-                        { name: "Mobile", type: "text",title: "Mobile", sorting: true, filtering: false, width: 30 },
-                        { name: "Email", type: "text",title: "Email", sorting: true, filtering: false, width: 60 },
-                        { name: "PrimaryRoleName", title: "Role", sorting: true, filtering: false, width: 50 }
+                        { name: "UserName", type: "text", title: "User Name", sorting: true, filtering: true, width: 150 },
+                        { name: "FullName", type: "text", title: "Name", sorting: true, filtering: true, width: 200 },
+                        { name: "Mobile", type: "text",title: "Mobile", sorting: true, filtering: false, width: 100 },
+                        { name: "Email", type: "text",title: "Email", sorting: true, filtering: false, width: 250 },
+                        { name: "PrimaryRoleName", title: "Role", sorting: true, filtering: false, width: 100 }
                     ];
                     var options = {
                         filtering: true,

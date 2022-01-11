@@ -2751,6 +2751,10 @@ div#home {
         margin-bottom: 1em;
     }
 
+    .jsgrid-cell .btn {
+        margin-bottom: 0em;
+    }
+
     .modal-dialog {
         width: 390px;
     }

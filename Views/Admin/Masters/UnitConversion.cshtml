@@ -48,16 +48,16 @@
                                     <label>Conversion Rate</label><br />
                                     @Html.TextBoxFor(m => m.Factor, htmlAttributes: new { @placeholder = "Enter Conversion Rate", @tp_type = "numeric", @required = "required", @class = "form-control" })
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1 form-group pull-right">
                                     <div class="appointment-btn text-lg-right">
                                         <br />
-                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome pull-right">Submit</button>
+                                        <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
                                     </div>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-1 form-group pull-right">
                                     <div class="appointment-btn text-lg-right">
                                         <br />
-                                        <button type="reset" name="btnReset" id="btnReset" class="btncustome pull-right">Reset</button>
+                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -91,14 +91,14 @@
                     { name: "IsActive", css: "hidden" },
                     {
                         title: "Action",
-                        width: 20,
+                        width: 80,
                         itemTemplate: function (value, args) {
                             return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
                         }
                     },
-                    { name: "FromUnit", type: "text", title: "From Unit", sorting: true, filtering: true, width: 40 },
-                    { name: "ToUnit",  title: "To Unit", sorting: true, filtering: true, width: 40 },
-                    { name: "Factor",  title: "Factor", sorting: true, filtering: true, width: 40 },
+                    { name: "FromUnit", type: "text", title: "From Unit", sorting: true, filtering: true, width: 150 },
+                    { name: "ToUnit",  title: "To Unit", sorting: true, filtering: true, width: 150 },
+                    { name: "Factor",  title: "Factor", sorting: true, filtering: true, width: 150 },
                 ];
                 var options = {
                     filtering: true,
