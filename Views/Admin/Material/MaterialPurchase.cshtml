@@ -530,6 +530,8 @@
             $("#PartyId").val(Party_Id);
             IMSC.ajaxCall("GET", "/Material/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var result = JSON.parse(d);
+                $("#drpInvoice").empty();
+                $("#PurchaseId").val(0);
                 if (result.length > 0) {
                     if (result !== null) {
                         $.each(result, function (index, value) {
