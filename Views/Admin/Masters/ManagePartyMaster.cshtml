@@ -393,14 +393,18 @@
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
             var ItemMasterValues = [];
+            var RowNumber = 0;
             $("#tblGstMapping TBODY TR").each(function () {
                 var row = $(this);
-                var oMapping = {};
-                oMapping.Location_Id = parseInt(row.find("TD").eq(0).attr('data-location-id'));
-                oMapping.GSTType_Id = parseInt(row.find("TD").eq(2).attr('data-GSTType-Id'));
-                oMapping.GSTNature_Id = parseInt(row.find("TD").eq(3).attr('data-GSTNature-Id'));
-                oMapping.GSTNo = row.find("TD").eq(1).attr('data-GSTNature');
-                ItemMasterValues.push(oMapping);
+                RowNumber = 1 + RowNumber;
+                if (RowNumber > 1) {
+                    var oMapping = {};
+                    oMapping.Location_Id = parseInt(row.find("TD").eq(0).attr('data-location-id'));
+                    oMapping.GSTType_Id = parseInt(row.find("TD").eq(2).attr('data-GSTType-Id'));
+                    oMapping.GSTNature_Id = parseInt(row.find("TD").eq(3).attr('data-GSTNature-Id'));
+                    oMapping.GSTNo = row.find("TD").eq(1).attr('data-GSTNature');
+                    ItemMasterValues.push(oMapping);
+                }
             });
             $("#PartyMapping").val(JSON.stringify(ItemMasterValues));
         });
