@@ -109,6 +109,56 @@
                                 </h4>
                             </div>
                             <br />
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Item<span class="mandatory">*</span></label>
+                                    @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Available Qty</label>
+                                    <label id="lblAvailableQty" class="form-control"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Last Rate</label>
+                                    <label id="lblLastRate" class="form-control"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Last Dist-1(%)</label>
+                                    <label id="lblLastDist1" class="form-control"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Last Dist-2(%)</label>
+                                    <label id="lblLastDist2" class="form-control"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>List Price</label>
+                                    <label id="lblListPrice" class="form-control"></label>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Order Qty<span class="mandatory">*</span></label>
+                                    <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Order Rate<span class="mandatory">*</span></label>
+                                    <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-3 form-group">
+                                    <label>Remark<span class="mandatory">*</span></label>
+                                    <input id="txtRemark" name="txtRemark" class="form-control" />
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Action</label>
+                                    <br />
+                                    <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                    <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <label id="lblTotalAmount">Total : 0.00</label>
+                            </div>
+                            <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <table id="tblOrderCreation" class="table table-striped" cellpadding="0" cellspacing="0">
                                     <thead>
@@ -124,58 +174,6 @@
                                             <th class="tbl-heading">Order Rate</th>
                                             <th class="tbl-heading">Amount</th>
                                             <th class="tbl-heading">Remark</th>
-                                        </tr>
-                                        <tr>
-                                            <content>
-                                                <div class="styled-input">
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Item<span class="mandatory">*</span></label>
-                                                        @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Available Qty</label>
-                                                        <label id="lblAvailableQty" class="form-control"></label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Last Rate</label>
-                                                        <label id="lblLastRate" class="form-control"></label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Last Dist-1(%)</label>
-                                                        <label id="lblLastDist1" class="form-control"></label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Last Dist-2(%)</label>
-                                                        <label id="lblLastDist2" class="form-control"></label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>List Price</label>
-                                                        <label id="lblListPrice" class="form-control"></label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Order Qty<span class="mandatory">*</span></label>
-                                                        <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Order Rate<span class="mandatory">*</span></label>
-                                                        <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Remark<span class="mandatory">*</span></label>
-                                                        <input id="txtRemark" name="txtRemark" class="form-control" />
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>Action</label>
-                                                        <br />
-                                                        <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                                                        <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
-                                                    </div>
-                                                </div>
-                                            </content>
-                                        </tr>
-                                        <tr>
-                                            <content><label id="lblTotalAmount">Total : 0.00</label></content>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodyid"></tbody>
@@ -244,7 +242,8 @@
             $("#btnAdd").val("Add");
         });
 
-        $("body").on("click", "#btnAdd", function () {
+        $("#btnAdd").click(function (e) {
+            e.preventDefault();
             $("#IsUpdate").val(1);
             let bAdded = true;
             let msg = "";
