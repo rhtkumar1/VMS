@@ -43,25 +43,14 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Under Group<span class="mandatory">*</span></label>
-                                    @{
-                                        var underGroup = new List<SelectListItem>{
-                                                                                                                                               new SelectListItem { Text = "Sundry Debtors", Value="1" },
-                                                                                                                                               new SelectListItem { Text = "Sundry Creditor", Value="2" },
-                                                                                                                                              };
-                                    }
-                                    @Html.DropDownListFor(m => m.UnderGroupId, new SelectList(underGroup, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Under Group", @required = "required", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.UnderGroupId, new SelectList(Model.underGrouplist, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Under Group", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                @{
-                                    var reportGroup = new List<SelectListItem>{
-                                                                                                                    new SelectListItem { Text = "Assets", Value="1" },
-                                                                                                                    new SelectListItem { Text = "libilites", Value="2" },
-                                                                                                                   };
-                                }
                                 <div class="col-md-4 form-group">
                                     <label>Report Group<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.ReportGroupId, new SelectList(reportGroup, "Value", "Text"), htmlAttributes: new { @placeholder = "Select Reporting Group", @required = "required", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.ReportGroupId, new SelectList(Model.reportGrouplist, "Value", "Text"), htmlAttributes: new
+                               { @placeholder = "Select Reporting Group", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>

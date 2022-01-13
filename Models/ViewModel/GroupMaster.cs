@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.Mvc;
+using IMS.Models.CommonModel;
 
 namespace IMS.Models.ViewModel
 {
@@ -20,11 +24,15 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
+        public SelectList underGrouplist { get; set; }
+        public SelectList reportGrouplist { get; set; }
 
         public GroupMaster()
         {
             Loginid = CommonUtility.GetLoginID();
+            underGrouplist = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10007 And Sub_Type=1 And IsActive=1"), "Id", "Value");
+            reportGrouplist = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10007 And Sub_Type=2 And IsActive=1"), "Id", "Value");
+            
         }
         public GroupMaster GroupMaster_InsertUpdate()
         {
