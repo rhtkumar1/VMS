@@ -126,45 +126,42 @@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <div>
-                                <div class="heading">
-                                    <h4>
-                                        Add/Update Matrial Purchase
-                                    </h4>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="styled-input">
-                                    <label id="lblTotalAmount">Total : 0.00</label>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-12 table-responsive">
-                                    <table id="tblMaterialSales" class="table table table-striped" cellpadding="0" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th class="tbl-heading">Action</th>
-                                                <th class="tbl-heading">Item</th>
-                                                <th class="tbl-heading">H/S</th>
-                                                <th class="tbl-heading">O-Qty</th>
-                                                <th class="tbl-heading">A-Qty</th>
-                                                <th class="tbl-heading">Rate</th>
-                                                <th class="tbl-heading">Amount</th>
-                                                <th class="tbl-heading">D1(%)</th>
-                                                <th class="tbl-heading">D2(%)</th>
-                                                <th class="tbl-heading">T-Amount</th>
-                                                <th class="tbl-heading">GST(%)</th>
-                                                <th class="tbl-heading">CGST(%)</th>
-                                                <th class="tbl-heading">SGST(%)</th>
-                                                <th class="tbl-heading">IGST(%)</th>
-                                                <th class="tbl-heading">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbodyid"></tbody>
-                                    </table>
-                                </div>
-                                <div class="clearfix"></div>
-                                <br />
-                                <br />
+                            <div class="heading">
+                                <h4>
+                                    Add/Update Matrial Purchase
+                                </h4>
                             </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <br />
+                                <label id="lblTotalAmount">Total : 0.00</label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="tblMaterialSales" class="table table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Action</th>
+                                            <th class="tbl-heading">Item</th>
+                                            <th class="tbl-heading">H/S</th>
+                                            <th class="tbl-heading">O-Qty</th>
+                                            <th class="tbl-heading">A-Qty</th>
+                                            <th class="tbl-heading">Rate</th>
+                                            <th class="tbl-heading">Amount</th>
+                                            <th class="tbl-heading">D1(%)</th>
+                                            <th class="tbl-heading">D2(%)</th>
+                                            <th class="tbl-heading">T-Amount</th>
+                                            <th class="tbl-heading">GST(%)</th>
+                                            <th class="tbl-heading">CGST(%)</th>
+                                            <th class="tbl-heading">SGST(%)</th>
+                                            <th class="tbl-heading">IGST(%)</th>
+                                            <th class="tbl-heading">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid"></tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
                             <div class="col-md-1 form-group pull-right">
@@ -582,7 +579,7 @@
             $(row).attr('id', 'trRow_' + value.Line_Id);
             //Add Button cell.
             //let htmlEditBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
-            let htmlEditBtn = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+            let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlEditBtn);
             //Add Item cell.

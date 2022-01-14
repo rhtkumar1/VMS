@@ -210,8 +210,6 @@
                                     </table>
                                 </div>
                                 <div class="clearfix"></div>
-                                <br />
-                                <br />
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
@@ -583,7 +581,7 @@
                         $(row).attr('id', 'trRow_' + value.Line_Id);
                         //Add Button cell.
                         cell = $(row.insertCell(-1));
-                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
+                        let btnEdit = `<a class="btn btn-success" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
                         cell.append(btnEdit);
                         //Add Item cell.
                         var cell = $(row.insertCell(-1));

@@ -69,37 +69,37 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Contact No</label>
-                                    <label id="lblContactNo" class="form-control"></label>
+                                    <label id="lblContactNo" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Address</label>
-                                    <label id="lblAddress" class="form-control"></label>
+                                    <label id="lblAddress" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party Category</label>
-                                    <label id="lblPartyCategory" class="form-control"></label>
+                                    <label id="lblPartyCategory" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Ledger Balance (Due amount)</label>
-                                    <label id="lblLedgerBalance" class="form-control"></label>
+                                    <label id="lblLedgerBalance" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Cash Balance</label>
-                                    <label id="lblCashBalance" class="form-control"></label>
+                                    <label id="lblCashBalance" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Over Due Amount</label>
-                                    <label id="lblOverDueAmount" class="form-control"></label>
+                                    <label id="lblOverDueAmount" class="form-control" readonly></label>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -116,23 +116,23 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Available Qty</label>
-                                    <label id="lblAvailableQty" class="form-control"></label>
+                                    <label id="lblAvailableQty" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Last Rate</label>
-                                    <label id="lblLastRate" class="form-control"></label>
+                                    <label id="lblLastRate" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Last Dist-1(%)</label>
-                                    <label id="lblLastDist1" class="form-control"></label>
+                                    <label id="lblLastDist1" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Last Dist-2(%)</label>
-                                    <label id="lblLastDist2" class="form-control"></label>
+                                    <label id="lblLastDist2" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>List Price</label>
-                                    <label id="lblListPrice" class="form-control"></label>
+                                    <label id="lblListPrice" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Order Qty<span class="mandatory">*</span></label>
@@ -179,9 +179,6 @@
                                     <tbody id="tbodyid"></tbody>
                                 </table>
                             </div>
-                            <div class="clearfix"></div>
-                            <br />
-                            <br />
                             <div class="clearfix"></div>
                             <div class="col-md-8"></div>
                             <div class="col-md-1 form-group pull-right">
@@ -308,7 +305,7 @@
                     var row = tBody.insertRow(-1);
                     //Edit Button cell.
                     cell = $(row.insertCell(-1));
-                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                    let btnRemove = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
                     cell.append(btnRemove);
                     //Add Item cell.
                     cell = $(row.insertCell(-1));
@@ -524,8 +521,8 @@
                         $(row).attr('id', 'trRow_' + value.Item_Id);
                         //Edit Button cell.
                         cell = $(row.insertCell(-1));
-                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
-                        let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" style="padding: 2px 5px 2px 5px; margin-bottom:0px;margin-right: 5px;" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
+                        let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" style="padding: 2px 5px 2px 5px; margin-bottom:0px" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
                         cell.append(btnEdit).append(btnRemove);
                         //Add Item cell.
                         cell = $(row.insertCell(-1));

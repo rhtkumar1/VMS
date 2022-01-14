@@ -32,21 +32,23 @@
                             @Html.HiddenFor(m => m.Status, htmlAttributes: new { @id = "Status" })
                             @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
                             <div id="listGrid"></div>
+                            <div class="clearfix"> <br /> </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-1"></div>
-                            <div class="col-md-1">
+
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnApprove" id="btnApprove" class="btncustome pull-right">Approve</button>
+                                    <button type="submit" name="btnHold" id="btnHold" class="btncustome">Hold</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnReject" id="btnReject" class="btncustome pull-right">Reject</button>
+                                    <button type="submit" name="btnReject" id="btnReject" class="btncustome">Reject</button>
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="submit" name="btnHold" id="btnHold" class="btncustome pull-right">Hold</button>
+                                    <button type="submit" name="btnApprove" id="btnApprove" class="btncustome">Approve</button>
                                 </div>
                             </div>
 
@@ -163,13 +165,13 @@
                 var fields = [
                     {
 
-                        width: 25,
+                        width: 50,
                         sorting: false,
                         headerTemplate: function () {
-                            return $("<input>").attr("type", "checkbox").attr("id", "selectAllCheckbox").attr("name", "Action").on("change", function () { checkedAll($(this)); });
+                            return $("<input>").attr("type", "checkbox").attr("class", "singleCheckbox checkboxcss").attr("id", "selectAllCheckbox").attr("name", "Action").on("change", function () { checkedAll($(this)); });
                         },
                         itemTemplate: function (_, item) {
-                            return $("<input>").attr("type", "checkbox").attr("class", "singleCheckbox")
+                            return $("<input>").attr("type", "checkbox").attr("class", "singleCheckbox checkboxcss")
                                 .prop("checked", $.inArray(item.PO_No, selectedItems) > -1)
                                 .on("change", function () {
                                     $(this).is(":checked") ? selectItem($(this).parent().next().text()) : unselectItem($(this).parent().next().text());
@@ -179,19 +181,20 @@
                     },
                     { name: "PO_Id", css: "hidden", },
                     {
+                        width: 100,
                         name: "PO_No",
                         itemTemplate: function (value) {
                             return $("<a>").text(value).on("click", function () { showDetailDialog(value)});
                         }, title: "OrderNo", sorting: true, filtering: true
                     },
-                    { name: "SalesMan", type: "text", title: "SalesMan", sorting: true, filtering: true },
-                    { name: "PartyName", type: "text", title: "Party", sorting: true, filtering: true},
-                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true},
-                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: true},
-                    { name: "Status", type: "text", title: "Status", sorting: true, filtering: true},
-                    { name: "LedgerBalance", type: "text", title: "LedgerBal.", sorting: true, filtering: false},
-                    { name: "CashBalance", type: "text", title: "CashBal.", sorting: true, filtering: false},
-                    { name: "OverdueAmount", type: "text", title: "OverdueAmt.", sorting: true, filtering: false}
+                    { name: "SalesMan", type: "text", title: "SalesMan", sorting: true, filtering: true, width: 100, },
+                    { name: "PartyName", type: "text", title: "Party", sorting: true, filtering: true, width: 100,},
+                    { name: "ContactNo", type: "text", title: "ContactNo", sorting: true, filtering: true, width: 100,},
+                    { name: "Address1", type: "text", title: "Address", sorting: true, filtering: true, width: 250,},
+                    { name: "Status", type: "text", title: "Status", sorting: true, filtering: true, width: 100,},
+                    { name: "LedgerBalance", type: "text", title: "LedgerBal.", sorting: true, filtering: false, width: 100,},
+                    { name: "CashBalance", type: "text", title: "CashBal.", sorting: true, filtering: false, width: 100,},
+                    { name: "OverdueAmount", type: "text", title: "OverdueAmt.", sorting: true, filtering: false, width: 100,}
 
                 ];
                 var options = {
