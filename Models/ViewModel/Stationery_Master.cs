@@ -11,7 +11,7 @@ namespace IMS.Models.ViewModel
 {
     public class StationeryMaster
     {
-        public int Stationery_ID;
+        public int Stationery_ID { get; set; }
         public string Title { get; set; }
         public int Menu_Id { get; set; }
         public SelectList MenuLists { get; set; }
