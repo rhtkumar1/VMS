@@ -56,10 +56,12 @@ namespace IMS.Models.ViewModel
 
         public MaterialOrder()
         {
+            Office_Id = CommonUtility.GetDefault_OfficeID();
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
-            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
+            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + Office_Id.ToString();
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             MaterialOrderLines = new List<MaterialOrderLine>();
         }

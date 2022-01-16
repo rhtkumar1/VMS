@@ -66,4 +66,36 @@ namespace IMS.Models.CommonModel
         public string Id { get; set; }
         public string Value { get; set; }
     }
+    public static class CommonModuleClass
+    {
+        public static DataSet PartyByOfficeID(int OfficeId)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Office_id", OfficeId));
+                ds = DBManager.ExecuteDataSetWithParameter("Party_Master_GetPartyByOfficeId", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return ds;
+        }
+        public static DataSet MaterialSales_GetGST_State(int PartyId, int OfficeId)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                ds = DBManager.ExecuteDataSetWithParameter("Material_Sale_GetGST_State_OrderNo", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return ds;
+        }
+    }
 }

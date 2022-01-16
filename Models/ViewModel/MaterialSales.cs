@@ -44,14 +44,17 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public int IsUpdateMaterialSales { get; set; }
+        public int MENU_Id { get; set; }
 
 
         public MaterialSales()
         {
+            OfficeId = CommonUtility.GetDefault_OfficeID();
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
-            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
+            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
             //POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
-
+            MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
             CompanyId = CommonUtility.GetCompanyID();
@@ -172,21 +175,7 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataSet MaterialSales_GetGST_State(int PartyId, int OfficeId)
-        {
-            DataSet ds = new DataSet();
-            try
-            {
-                List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
-                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
-                ds = DBManager.ExecuteDataSetWithParameter("Material_Sale_GetGST_State_OrderNo", CommandType.StoredProcedure, SqlParameters);
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            return ds;
-        }
+        
 
         public MaterialSales MaterialSales_Delete(int saleId)
         {

@@ -1,5 +1,6 @@
 ﻿using IMS.Models;
 using IMS.Models.CBL;
+using IMS.Models.CommonModel;
 using IMS.Models.ViewModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -359,8 +360,15 @@ namespace IMS.Controllers
             DataSet ds = new DataSet();
             try
             {
-                MaterialSales materialSales = new MaterialSales();
-                ds = materialSales.MaterialSales_GetGST_State(PartyId, OfficeId);
+                if (PartyId > 0) // for Party and office basis
+                {
+                    ds = CommonModuleClass.MaterialSales_GetGST_State(PartyId, OfficeId);
+                }
+                else if (PartyId == 0  && OfficeId>0)
+                {
+                    ds = CommonModuleClass.PartyByOfficeID(OfficeId); 
+                }
+
             }
             catch (Exception)
             {

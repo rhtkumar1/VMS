@@ -72,7 +72,7 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Invoice Number<span class="mandatory">*</span></label>
+                                    <label>Invoice Number@*<span class="mandatory">*</span>*@</label>
                                     @Html.TextBoxFor(m => m.InvoiceNo, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "InvoiceNo", @class = "form-control" })
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                             <div class="clearfix"></div>
                             <div class="heading">
                                 <h4>
-                                    Add/Update Matrial Purchase
+                                    Add/Update Material Purchase
                                 </h4>
                             </div>
                             <div class="clearfix"></div>
@@ -250,7 +250,7 @@
                 msg = "At least 1 invoice required!!!";
             }
 
-            if (parseInt($("#OfficeId").val()) === 0 || $("#InvoiceNo").val() === "" || parseInt($("#drpPartyId").val()) === 0
+            if (parseInt($("#OfficeId").val()) === 0 || parseInt($("#drpPartyId").val()) === 0
                 || $("#Purchase_Ref").val() === "" || $("#TransactionDate").val() === "" || parseInt($("#StateId").val()) === 0){
                 isValid = false;
                 msg = "Please fill all mandatory fields!!!";
@@ -265,6 +265,39 @@
             }
         });
 
+        $("#OfficeId").change(function () {
+           let OfficeId = parseInt($('#OfficeId').val());
+            ResetFromOfficeChange();
+            if (OfficeId > 0) {
+                IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + 0 + "&OfficeId=" + OfficeId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== null) {
+                       if (result.Table.length > 0) {
+                           $.each(result.Table, function (index, value) {
+                                $("#drpPartyId").append($("<option></option>").val(value.Party_Id).html(value.Title));
+                            });
+                        } else {
+                          // $("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
+                        }
+                    }
+                });
+            }
+        });
+        
+       function ResetFromOfficeChange()
+       {
+           
+           $("#drpPartyId").empty();
+           $("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
+           $("#drpOrderNo").empty();
+           $("#drpOrderNo").append($("<option></option>").val("0").html("--Select--"));
+           $("#StateId").empty();
+           $("#StateId").append($("<option></option>").val("0").html("--Select--"));
+           $("#tbodyid").empty();
+            $("#lblTotalAmount").text("Total : 0.00");
+            $("#IsUpdateMaterialSales").val(0);
+            $("#SaleAmount").val("0");
+        }
         $("#drpPartyId").change(function () {
             let PartyId = parseInt($('#drpPartyId').val());
             let OfficeId = parseInt($('#OfficeId').val());
