@@ -29,6 +29,7 @@ namespace IMS.Models.ViewModel
 
         public StationeryMaster()
         {
+            Office_Id = CommonUtility.GetDefault_OfficeID();
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             MenuLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Menu_Id", "Menu_Name", "Menu_Master", "And IsActive = 1 AND IsStationery=1"), "Id", "Value");
             string FYWhereClouse = "And M.IsActive = 1 and M.Company_Id= " + CommonUtility.GetCompanyID().ToString();

@@ -96,6 +96,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Sale_Line", SaleLine));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
+                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
