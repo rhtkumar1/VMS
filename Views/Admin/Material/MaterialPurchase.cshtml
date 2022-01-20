@@ -220,7 +220,6 @@
                             </div>
                             <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <input type="hidden" id="hdnItemId" name="hdnItemId" value="" />
                                     <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
                                     <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
@@ -281,6 +280,7 @@
             $("#hdnRowId").val("");
             $("#btnAdd").val("Add");
         });
+
         $("#btnAdd").click(function (e) {
             e.preventDefault();
             let bAdded = true;
@@ -297,11 +297,6 @@
                         msg = "Material is already mapped!!!";
                         bAdded = false;
                     }
-                    if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
-                        if (itemId === parseInt($("#hdnRowId").val())) {
-                            bAdded = true;
-                        }
-                    }
                 });
             }
             if (bAdded) {
@@ -312,28 +307,6 @@
             }
 
             if (bAdded) {
-                if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
-                    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
-                    var row = $(trId).closest("TR").find('td');
-                    row[1].textContent = $("#Item_Id :selected").text();
-                    row[1].setAttribute('data-item-id', $("#Item_Id").val());
-                    row[1].setAttribute('data-line-Id', 0);
-                    row[2].textContent = $("#Hsn_Sac").val();
-                    row[3].textContent = $("#Quantity").val();
-                    row[4].textContent = $("#Unit_Id :selected").text();
-                    row[4].setAttribute('data-Unit_Id', $("#Unit_Id").val());
-                    row[5].textContent = $("#Rate").val();
-                    row[6].textContent = $("#Amount").val();
-                    row[7].textContent = $("#Discount_1").val();
-                    row[8].textContent = ($("#Discount_2").val());
-                    row[9].textContent = ($("#Taxable_Amount").val());
-                    row[10].textContent = ($("#GST").val());
-                    row[11].textContent = ($("#CGST").val());
-                    row[12].textContent = ($("#SGST").val());
-                    row[13].textContent = ($("#IGST").val());
-                    row[14].textContent = ($("#hdnTotalAmount").val());
-                    $("#hdnItemId").val("");
-                } else {
                     var tBody = $("#tblMaterialPurchase > TBODY")[0];
                     //Add Row.
                     var row = tBody.insertRow(-1);
@@ -388,7 +361,7 @@
                     //Add Total_Amount cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#hdnTotalAmount").val());
-                }
+                //}
 
                 //Set Default
                 $("#Item_Id").val($("#Item_Id option:first").val());
@@ -488,7 +461,6 @@
                         $("#Hsn_Sac").val(result[0].HSN_SAC);
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
-                        $("#hdnRowId").val("")
                         $("#GST").change();
                     } else {
                         $("#Hsn_Sac").val("");
@@ -581,8 +553,8 @@
                         $(row).attr('id', 'trRow_' + value.Line_Id);
                         //Add Button cell.
                         cell = $(row.insertCell(-1));
-                        let btnEdit = `<a class="btn btn-success" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Edit(this);" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
-                        cell.append(btnEdit);
+                        let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                        cell.append(btnRemove);
                         //Add Item cell.
                         var cell = $(row.insertCell(-1));
                         cell.html(value.ItemTitle);
@@ -749,36 +721,6 @@
             $("#hdnTotalAmount").val(totalAmount.toFixed(2));
         }
     }
-    function Edit(button) {
-        //Determine the reference of the Row using the Button.
-        $("#btnAdd").val("Update");
-        $("#IsUpdateMaterialPurchase").val(1);
-        var row = $(button).closest("TR").find('td');
-        $("#Item_Id").val(parseInt(row.eq(1).attr('data-item-id')));
-        $('#Item_Id').select2().trigger('change');
-        $("#hdnItemId").val(parseInt(row.eq(1).attr('data-item-id')))
-        $("#Hsn_Sac").val(row[2].innerText);
-        $("#Quantity").val(parseInt(row[3].innerText));
-        $("#Unit_Id").val(parseInt(row.eq(4).attr('data-Unit_Id')));
-        $("#Rate").val(parseFloat(row[5].innerText).toFixed(2));
-        $("#Amount").val(parseFloat(row[6].innerText).toFixed(2));
-        $("#Discount_1").val(parseFloat(row[7].innerText).toFixed(2));
-        $("#Discount_2").val(parseFloat(row[8].innerText).toFixed(2));
-        $("#Taxable_Amount").val(parseFloat(row[9].innerText).toFixed(2));
-        $("#GST").val(parseFloat(row[10].innerText).toFixed(2));
-        $("#CGST").val(parseFloat(row[11].innerText).toFixed(2));
-        $("#SGST").val(parseFloat(row[12].innerText).toFixed(2));
-        $("#IGST").val(parseFloat(row[13].innerText).toFixed(2));
-        $("#Total").val(parseFloat(row[14].innerText).toFixed(2));
-        $("#hdnTotalAmount").val(parseFloat(row[14].innerText).toFixed(2));
-        $("#hdnRowId").val(parseInt(row.eq(14).attr('data-row-Id')));
-        $("#hdnEditRow").val(button);
-        if (parseFloat(row[11].innerText).toFixed(2) > 0 && parseFloat(row[12].innerText).toFixed(2) > 0) {
-            $("#hdnIs_SameState").val("1");
-        } else {
-            $("#hdnIs_SameState").val("0");
-        }
-    };
     function Remove(button) {
         //Determine the reference of the Row using the Button.
         $("#IsUpdateMaterialPurchase").val(0);
