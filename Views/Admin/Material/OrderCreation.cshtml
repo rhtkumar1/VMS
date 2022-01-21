@@ -469,7 +469,7 @@
         });
 
         $("#drpParty").change(function () {
-            let Party_Id = 9//parseInt($('#drpParty').val());
+            let Party_Id = parseInt($('#drpParty').val());
             let PO_No = $('#PONo').val();
             $("#PartyId").val(Party_Id);
             IMSC.ajaxCall("GET", "/Material/GetOrderInvoice?Party_Id=" + Party_Id + "&PO_No=" + PO_No+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
