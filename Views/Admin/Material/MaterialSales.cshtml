@@ -90,7 +90,7 @@
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Order No<span class="mandatory">*</span></label>
+                                    <label>Order No</label>
                                     <select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>
                                 </div>
                             </div>
@@ -128,9 +128,10 @@
                             <div class="clearfix"></div>
                             <div class="heading">
                                 <h4>
-                                    Add/Update Material Purchase
+                                    Add/Update Material Sale
                                 </h4>
                             </div>
+                            <br />
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-2 form-group">
@@ -164,7 +165,7 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Discount-2</label>
-                                    @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control",@value="0" })
+                                    @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control", @value = "0" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Taxable</label>
@@ -713,6 +714,8 @@
             $("#Purchase_Ref").val("");
             $("#TransactionDate").val("");
             $("#Remarks").val("");
+            $("#Marka").val("");
+            $("#Transporter").val("");
             $("#StateId").empty();
             $("#Item_Id").val($("#Item_Id option:first").val());
             $('#Item_Id').select2().trigger('change');

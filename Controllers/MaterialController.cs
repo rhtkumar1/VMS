@@ -185,7 +185,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialPurchase newMaterialPurchase = new MaterialPurchase();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -271,7 +271,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialOrder newMaterialOrder = new MaterialOrder();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -309,7 +309,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = ex.Message.ToString()}));
             }
         }
         [HttpGet]
@@ -500,7 +500,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialSales newMaterialSales = new MaterialSales();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -578,7 +578,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialOrder omaterialOrder = new MaterialOrder();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
