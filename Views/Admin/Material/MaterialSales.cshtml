@@ -143,6 +143,10 @@
                                     @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
+                                    <label>Ava-Quantity</label>
+                                    @Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <div class="col-md-2 form-group">
                                     <label>Quantity<span class="mandatory">*</span></label>
                                     @Html.TextBox("Quantity", "", htmlAttributes: new { @placeholder = "Quantity", @id = "Quantity", @class = "form-control" })
                                 </div>
@@ -242,6 +246,7 @@
                                     <input type="hidden" id="hdnAvailable_Qty" name="hdnAvailable_Qty" value="" />
                                     <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
                                     <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
+                                    <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
@@ -304,10 +309,33 @@
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
                         let qty = parseInt($("#txtOrder_Qty_" + index).val());
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
+                        let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
                         if (poLineId === 0) {
+                            if (isItemType === 16) {
+                                isValid = true;
+                            } else {
+                                if (qty !== NaN && qty > 0 && qty <= availableQty) {
+                                    msg = "Please check available quantity!!!";
+                                    isValid = false;
+                                    return false;
+                                } 
+                            }
+                        } else {
+                            if (isItemType === 16) {
+                                isValid = true;
+                            } else {
+                                if (qty !== NaN && qty > 0 && qty <= availableQty) {
+                                    msg = "Please check available quantity!!!";
+                                    isValid = false;
+                                    return false;
+                                } 
+                            }
+                        }
+                        if (isValid) {
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
                             oMapping.UnitTitle = $("#blUnit_" + index).text();
+                            oMapping.Available_Qty = availableQty;
                             oMapping.Item_Id = $("#hdnItemId_" + index).val();
                             oMapping.ItemTitle = $("#lblItem_" + index).text();
                             oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
@@ -327,37 +355,7 @@
                             oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
                             PurchaseLineValues.push(oMapping);
                             isValid = true;
-                        } else {
-                            if (qty !== NaN && qty > 0 && qty <= availableQty) {
-                                oMapping.Line_Id = $("#hdnLineId_" + index).val();
-                                oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
-                                oMapping.UnitTitle = $("#blUnit_" + index).text();
-                                oMapping.Item_Id = $("#hdnItemId_" + index).val();
-                                oMapping.ItemTitle = $("#lblItem_" + index).text();
-                                oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
-                                oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
-                                oMapping.Rate = $("#txtRate_" + index).val();
-                                oMapping.Amount = $("#lblAmount_" + index).text();
-                                oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
-                                oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
-                                oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
-                                oMapping.GST = $("#lblGST_" + index).text();
-                                oMapping.CGST = $("#lblCGST_" + index).text();
-                                oMapping.SGST = $("#lblSGST_" + index).text();
-                                oMapping.IGST = $("#lblIGST_" + index).text();
-                                oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
-                                oMapping.PO_Id = $("#hdnPOId_" + index).val();
-                                oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
-                                oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
-                                PurchaseLineValues.push(oMapping);
-                                isValid = true;
-                            } else {
-                                msg = "Please check available quantity!!!";
-                                isValid = false;
-                                return false;
-                            }
                         }
-
                     });
                     $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
                 } else {
@@ -365,7 +363,7 @@
                     msg = "At least 1 invoice required!!!";
                 }
             }
-            
+
 
             if (isValid) {
                 return true;
@@ -415,7 +413,14 @@
             }else if ($("#Rate").val() === "") {
                 msg = "Please Please enter rate.";
                 bAdded = false;
-            } 
+            } else if ($("#Rate").val() === "") {
+                msg = "Please Please enter rate.";
+                bAdded = false;
+            }
+            if (parseInt($("#hdnItemType").val()) === 15) {
+                msg = "Please check available quantity!!!";
+                bAdded = false;
+            }
 
             //Reference the Party and Location ddl.
             if (bAdded) {
@@ -436,6 +441,7 @@
                 //Add Row.
                 var row = tBody.insertRow(-1);
                 let itemId = $("#Item_Id").val();
+                let itemType = $("#hdnItemType").val();
                 let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
                 cell = $(row.insertCell(-1));
                 cell.append(htmlEditBtn);
@@ -445,7 +451,8 @@
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
-                              <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${("#hdnIs_SameState").val()}" />
+                              <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
+                              <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
                             `;
                 cell = $(row.insertCell(-1));
                 cell.append(lblItem);
@@ -458,7 +465,7 @@
                 cell = $(row.insertCell(-1));
                 cell.append(htmlOrder_Qty);
                 //Add Available_Qty cell.
-                let lblAvailable_Qty = `<label id="lblAvailable_Qty_${itemId}">0</label>`;
+                let lblAvailable_Qty = `<label id="lblAvailable_Qty_${itemId}">${$("#AvailableQuantity").val()}</label>`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblAvailable_Qty);
                 //Add Unit cell.
@@ -575,6 +582,8 @@
                         $("#Hsn_Sac").val(result[0].HSN_SAC);
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
+                        $("#hdnItemType").val(result[0].ItemNature);
+                        $("#AvailableQuantity").val(result[0].Available_Qty);
                         $("#GST").change();
                     } else {
                         $("#Hsn_Sac").val("");
@@ -987,6 +996,7 @@
                             <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
                             <input type="hidden" id="hdnPOLineId_${value.Item_Id}" name="hdnPOLineId_${value.Item_Id}" value="${value.POLine_Id}" />
                             <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
+                            <input type="hidden" id="hdnItemTypeGrid_${value.Item_Id}" name="hdnItemTypeGrid_${value.Item_Id}" value="${value.ItemNature}" />
                             <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
                           `;
             cell = $(row.insertCell(-1));

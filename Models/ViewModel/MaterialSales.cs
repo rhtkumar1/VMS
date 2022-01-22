@@ -78,7 +78,7 @@ namespace IMS.Models.ViewModel
                                     IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
                                     CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
                                     IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @""" 
-                                 />");
+                                     />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
@@ -177,8 +177,6 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
-
-        
 
         public MaterialSales MaterialSales_Delete(int saleId)
         {
