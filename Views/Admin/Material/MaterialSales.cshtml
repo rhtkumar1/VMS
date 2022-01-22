@@ -137,7 +137,6 @@
                                 <div class="col-md-2 form-group">
                                     <label>Item<span class="mandatory">*</span></label>
                                     @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
-                                    <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>HSN/SAC</label>
@@ -280,38 +279,32 @@
             let PurchaseLineValues = [];
             let isValid = true;
             let msg = "";
-            if ($("#tblMaterialSales TBODY TR").length > 0) {
-                $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-                    let oMapping = {};
-                    let index = parseInt($("#" + $(this).context.id).val());
-                    let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
-                    let qty = parseInt($("#txtOrder_Qty_" + index).val());
-                    let lineId = parseInt($("#hdnLineId_" + index).val());
-                    if (lineId===0) {
-                        oMapping.Line_Id = $("#hdnLineId_" + index).val();
-                        oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
-                        oMapping.UnitTitle = $("#blUnit_" + index).text();
-                        oMapping.Item_Id = $("#hdnItemId_" + index).val();
-                        oMapping.ItemTitle = $("#lblItem_" + index).text();
-                        oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
-                        oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
-                        oMapping.Rate = $("#txtRate_" + index).val();
-                        oMapping.Amount = $("#lblAmount_" + index).text();
-                        oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
-                        oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
-                        oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
-                        oMapping.GST = $("#lblGST_" + index).text();
-                        oMapping.CGST = $("#lblCGST_" + index).text();
-                        oMapping.SGST = $("#lblSGST_" + index).text();
-                        oMapping.IGST = $("#lblIGST_" + index).text();
-                        oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
-                        oMapping.PO_Id = $("#hdnPOId_" + index).val();
-                        oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
-                        oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
-                        PurchaseLineValues.push(oMapping);
-                        isValid = true; 
-                    } else {
-                        if (qty !== NaN && qty > 0 && qty <= availableQty) {
+
+            if (parseInt($("#OfficeId").val()) === 0) {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            } else if (parseInt($("#drpPartyId").val()) === 0) {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            } else if ($("#Purchase_Ref").val() ==="") {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            } else if ($("#TransactionDate").val() === "") {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            } else if (parseInt($("#StateId").val()) === 0) {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            }
+            if (isValid) {
+                if ($("#tblMaterialSales TBODY TR").length > 0) {
+                    $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
+                        let oMapping = {};
+                        let index = parseInt($("#" + $(this).context.id).val());
+                        let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
+                        let qty = parseInt($("#txtOrder_Qty_" + index).val());
+                        let poLineId = parseInt($("#hdnPOLineId_" + index).val());
+                        if (poLineId === 0) {
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
                             oMapping.UnitTitle = $("#blUnit_" + index).text();
@@ -335,23 +328,44 @@
                             PurchaseLineValues.push(oMapping);
                             isValid = true;
                         } else {
-                            msg = "Please check available quantity!!!";
-                            isValid = false;
+                            if (qty !== NaN && qty > 0 && qty <= availableQty) {
+                                oMapping.Line_Id = $("#hdnLineId_" + index).val();
+                                oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
+                                oMapping.UnitTitle = $("#blUnit_" + index).text();
+                                oMapping.Item_Id = $("#hdnItemId_" + index).val();
+                                oMapping.ItemTitle = $("#lblItem_" + index).text();
+                                oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
+                                oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
+                                oMapping.Rate = $("#txtRate_" + index).val();
+                                oMapping.Amount = $("#lblAmount_" + index).text();
+                                oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
+                                oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
+                                oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
+                                oMapping.GST = $("#lblGST_" + index).text();
+                                oMapping.CGST = $("#lblCGST_" + index).text();
+                                oMapping.SGST = $("#lblSGST_" + index).text();
+                                oMapping.IGST = $("#lblIGST_" + index).text();
+                                oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
+                                oMapping.PO_Id = $("#hdnPOId_" + index).val();
+                                oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
+                                oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
+                                PurchaseLineValues.push(oMapping);
+                                isValid = true;
+                            } else {
+                                msg = "Please check available quantity!!!";
+                                isValid = false;
+                                return false;
+                            }
                         }
-                    }
-                    
-                });
-                $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
-            } else {
-                isValid = false;
-                msg = "At least 1 invoice required!!!";
-            }
 
-            if (parseInt($("#OfficeId").val()) === 0 || parseInt($("#drpPartyId").val()) === 0
-                || $("#Purchase_Ref").val() === "" || $("#TransactionDate").val() === "" || parseInt($("#StateId").val()) === 0){
-                isValid = false;
-                msg = "Please fill all mandatory fields!!!";
+                    });
+                    $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
+                } else {
+                    isValid = false;
+                    msg = "At least 1 invoice required!!!";
+                }
             }
+            
 
             if (isValid) {
                 return true;
@@ -362,26 +376,57 @@
             }
         });
 
+        $("#btnReset").click(function (e) {
+            e.preventDefault();
+            $("#Item_Id").val($("#Item_Id option:first").val());
+            $('#Item_Id').select2().trigger('change');
+            $("#Hsn_Sac").val("");
+            $("#Quantity").val("");
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
+            $("#Rate").val("");
+            $("#Amount").val("");
+            $("#Discount_1").val("0");
+            $("#Discount_2").val("0");
+            $("#Taxable_Amount").val("");
+            $("#GST").val("0");
+            $("#CGST").val("");
+            $("#SGST").val("");
+            $("#IGST").val("");
+            $("#Total").val("");
+            $("#hdnTotalAmount").val("");
+        });
+
         $("#btnAdd").click(function (e) {
             e.preventDefault();
             let bAdded = true;
             let msg = "";
             let amount = 0.0;
 
+            if (parseInt($("#Item_Id").val()) === 0) {
+                msg = "Please select item.";
+                bAdded = false;
+            } else if ($("#Quantity").val() === "") {
+                msg = "Please enter quantity.";
+                bAdded = false;
+            } else if (parseInt($("#Unit_Id").val()) === 0) {
+                msg = "Please select unit.";
+                bAdded = false;
+            }else if ($("#Rate").val() === "") {
+                msg = "Please Please enter rate.";
+                bAdded = false;
+            } 
+
             //Reference the Party and Location ddl.
-            if ($("#tblMaterialSales TBODY TR").length > 0) {
-                $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-                    let itemId = parseInt($("#" + $(this).context.id).val());
-                    if (parseInt($("#Item_Id").val()) === itemId) {
-                        msg = "Material is already mapped!!!";
-                        bAdded = false;
-                    }
-                });
-            }
             if (bAdded) {
-                if (parseInt($("#Item_Id").val()) === 0 || $("#Quantity").val() === "" || $("#Rate").val() === "" || parseInt($("#Unit_Id").val()) === 0) {
-                    msg = "Please select all mandatory fields to add material in list.";
-                    bAdded = false;
+                if ($("#tblMaterialSales TBODY TR").length > 0) {
+                    $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
+                        let itemId = parseInt($("#" + $(this).context.id).val());
+                        if (parseInt($("#Item_Id").val()) === itemId) {
+                            msg = "Material is already mapped!!!";
+                            bAdded = false;
+                        }
+                    });
                 }
             }
 
@@ -400,6 +445,7 @@
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
+                              <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${("#hdnIs_SameState").val()}" />
                             `;
                 cell = $(row.insertCell(-1));
                 cell.append(lblItem);
@@ -533,7 +579,7 @@
                     } else {
                         $("#Hsn_Sac").val("");
                         $("#GST").val("0");
-                        $("#hdnIs_SameState").val(0);
+                        $("#hdnIs_SameState").val("0");
                         $("#GST").change();
                     }
                 });
@@ -681,7 +727,6 @@
                     $("#Remarks").val(result[0].Remarks);
                     $("#Transporter").val(result[0].Transporter);
                     $("#Marka").val(result[0].Marka);
-                    $("#hdnIs_SameState").val(result[0].Is_SameState === undefined ? "0" : result[0].Is_SameState);
                     $("#tbodyid").empty();
                     $("#SaleAmount").val("0");
                     BindGrid(result, 1);
@@ -802,12 +847,12 @@
         let bIsDiscount = false;
         let quantity = parseFloat($("#txtOrder_Qty_" + index).val() !== "" ? $("#txtOrder_Qty_" + index).val() : 0);
         let aQuantity = parseFloat(parseInt($("#lblAvailable_Qty_" + index).text()));
-        let lineId = parseFloat(parseInt($("#hdnLineId_" + index).val()));
-        if (lineId===0) {
-            setCaluValuew(index, bIsDiscount, quantity, lineId);
+        let poLineId = parseInt($("#hdnPOLineId_" + index).val());
+        if (poLineId === 0) {
+            setCaluValuew(index, bIsDiscount, quantity, poLineId);
         } else {
             if (quantity <= aQuantity) {
-                setCaluValuew(index, bIsDiscount, quantity, lineId);
+                setCaluValuew(index, bIsDiscount, quantity, poLineId);
             }
             else {
                 $('#alertModal').modal('show');
@@ -815,7 +860,7 @@
             }
         }
     }
-    function setCaluValuew(index, bIsDiscount, quantity, lineId)
+    function setCaluValuew(index, bIsDiscount, quantity, poLineId)
     {
         let rate = parseFloat($("#txtRate_" + index).val() !== "" ? $("#txtRate_" + index).val() : 0);
         let amount = 0;
@@ -843,7 +888,7 @@
                 gst = amount * parseFloat($("#lblGST_" + index).text()) / 100;
             }
 
-            let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
+            let is_SameState = $("#hdnIs_SameStateGrid_" + index).val() === "1" ? true : false;
             if (is_SameState) {
                 $("#lblCGST_" + index).text(parseFloat(gst / 2).toFixed(2));
                 $("#lblSGST_" + index).text(parseFloat(gst / 2).toFixed(2));
@@ -862,7 +907,7 @@
                 $("#lblTaxable_Amount_" + index).text(amount.toFixed(2));
             }
             $("#lblTotal_Amount_Row_" + index).text(totalAmount.toFixed(2));
-            if (lineId > 0) {
+            if (poLineId > 0) {
                 $("#txtOrder_Qty_" + index).css('background-color', parseInt($("#txtOrder_Qty_" + index).val()) <= parseInt($("#lblAvailable_Qty_" + index).text()) ? "lightgreen" : "indianred");
             }
             $("[id^='lblTotal_Amount_Row_']").each(function () {
@@ -941,9 +986,10 @@
             let lblItem = `<label id="lblItem_${value.Item_Id}">${value.ItemName}</label>
                             <input type="hidden" id="hdnItemId_${value.Item_Id}" name="hdnItemId_${value.Item_Id}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
-                             <input type="hidden" id="hdnPOLineId_${value.Item_Id}" name="hdnPOLineId_${value.Item_Id}" value="${value.POLine_Id}" />
-                             <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
-                            `;
+                            <input type="hidden" id="hdnPOLineId_${value.Item_Id}" name="hdnPOLineId_${value.Item_Id}" value="${value.POLine_Id}" />
+                            <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
+                            <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
+                          `;
             cell = $(row.insertCell(-1));
             cell.append(lblItem);
             //Add Hsn_Sac cell.
@@ -956,7 +1002,7 @@
             cell = $(row.insertCell(-1));
             cell.append(htmlOrder_Qty);
             //Add Available_Qty cell.
-            let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.Item_Id}" style="background-color: lightgreen;">${value.Available_Qty}</label>`;
+            let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.Item_Id}" style="background-color: lightgreen;">${value.Available_Qty === null ? "0" : value.Available_Qty}</label>`;
             cell = $(row.insertCell(-1));
             cell.append(lblAvailable_Qty);
             //Add Unit cell.
