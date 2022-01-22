@@ -1,5 +1,7 @@
 ﻿@model IMS.Models.ViewModel.MaterialPurchase
 @{
+    /**/
+
     ViewBag.Title = "Material Purchase";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
@@ -246,7 +248,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-          if ('@ViewBag.Msg' != "") {
+        if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
@@ -299,7 +301,7 @@
             } else if ($("#Rate").val() === "") {
                 msg = "Please Please enter rate.";
                 bAdded = false;
-            } 
+            }
             //Reference the Party and Location ddl.
             if (bAdded) {
                 if ($("#tblMaterialPurchase TBODY TR").length > 0) {
@@ -411,7 +413,7 @@
                 return false;
             }
         });
-  
+
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
             let PurchaseLineValues = [];

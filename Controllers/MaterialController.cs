@@ -122,7 +122,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (materialPurchase.IsSucceed)
                     {
-                        ViewBag.Success = materialPurchase.ActionMsg;
+                        ViewBag.Msg = materialPurchase.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!materialPurchase.IsSucceed && materialPurchase.PurchaseId != -1)
@@ -167,7 +167,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objMaterialPurchase.IsSucceed)
                     {
-                        ViewBag.Success = objMaterialPurchase.ActionMsg;
+                        ViewBag.Msg = objMaterialPurchase.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!objMaterialPurchase.IsSucceed && objMaterialPurchase.PurchaseId != -1)
@@ -438,7 +438,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (materialSales.IsSucceed)
                     {
-                        ViewBag.Success = materialSales.ActionMsg;
+                        ViewBag.Msg = materialSales.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!materialSales.IsSucceed && materialSales.SaleId != -1)
@@ -482,7 +482,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objMaterialSales.IsSucceed)
                     {
-                        ViewBag.Success = objMaterialSales.ActionMsg;
+                        ViewBag.Msg = objMaterialSales.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!objMaterialSales.IsSucceed && objMaterialSales.SaleId != -1)
@@ -554,7 +554,7 @@ namespace IMS.Controllers
                         // In case of record successfully added or updated
                         if (objMaterialOrder.IsSucceed)
                         {
-                            ViewBag.Success = objMaterialOrder.ActionMsg;
+                            ViewBag.Msg = objMaterialOrder.ActionMsg;
                         }
                         // In case of record already exists
                         else if (!objMaterialOrder.IsSucceed)
