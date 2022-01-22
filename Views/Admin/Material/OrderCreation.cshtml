@@ -246,8 +246,7 @@
             let msg = "";
             let totalAmount = 0.0;
             if (bAdded) {
-                if (parseInt($("#Item_Id").val()) === 0 || $("#txtOrderQty").val() === "" || $("#txtOrderRate").val() === ""
-                    || $("#txtRemark").val() === "") {
+                if (parseInt($("#Item_Id").val()) === 0 || $("#txtOrderQty").val() === "" || $("#txtOrderRate").val() === "") {
                     msg = "Please select all mandatory fields to add material in list.";
                     bAdded = false;
                 }

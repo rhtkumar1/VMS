@@ -90,14 +90,14 @@
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Order No</label>
-                                    <select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>
+                                    <label>State<span class="mandatory">*</span></label>
+                                    <select id="StateId" name="StateId" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>State<span class="mandatory">*</span></label>
-                                    <select id="StateId" name="StateId" class="form-control"></select>
+                                    <label>Order No</label>
+                                    <select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -176,15 +176,15 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>CGST</label>
-                                    @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST (%)", @id = "CGST", @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST", @id = "CGST", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>SGST</label>
-                                    @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST (%)", @id = "SGST", @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST", @id = "SGST", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>IGST</label>
-                                    @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST (%)", @id = "IGST", @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST", @id = "IGST", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Total</label>
@@ -220,9 +220,9 @@
                                             <th class="tbl-heading">D2(%)</th>
                                             <th class="tbl-heading">T-Amount</th>
                                             <th class="tbl-heading">GST(%)</th>
-                                            <th class="tbl-heading">CGST(%)</th>
-                                            <th class="tbl-heading">SGST(%)</th>
-                                            <th class="tbl-heading">IGST(%)</th>
+                                            <th class="tbl-heading">CGST</th>
+                                            <th class="tbl-heading">SGST</th>
+                                            <th class="tbl-heading">IGST</th>
                                             <th class="tbl-heading">Total</th>
                                         </tr>
                                     </thead>
@@ -567,7 +567,7 @@
         $("#Item_Id").change(function () {
             let Item_Id = parseInt($("#Item_Id").val());
             let Office_Id = parseInt($("#OfficeId").val());
-            let P_State_Id = 0; //parseInt($("#SupplyStateId").val());
+            let P_State_Id = parseInt($("#SupplyStateId").val());
             if (Item_Id >0) {
                 IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
@@ -955,8 +955,7 @@
             }
             if (amount > 0) {
                 gstAmount = amount * gst / 100;
-
-                let is_SameState = value.Is_SameState === "1" ? true : false;
+                let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
                 if (is_SameState) {
                     cgst = parseFloat(gstAmount / 2).toFixed(2)
                     sgst = parseFloat(gstAmount / 2).toFixed(2)
