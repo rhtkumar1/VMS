@@ -91,14 +91,14 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>State<span class="mandatory">*</span></label>
-                                    <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select first party</span>
+                                    <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select party first</span>
                                     <select id="StateId" name="StateId" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Order No</label>
-                                    <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select first party</span>
+                                    <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select party first</span>
                                     <select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>
                                 </div>
                             </div>
@@ -388,8 +388,7 @@
             $('#Item_Id').select2().trigger('change');
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
-            $("#Unit_Id").val($("#Unit_Id option:first").val());
-            $('#Unit_Id').select2().trigger('change');
+            $("#Unit_Id").val("");
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("0");
@@ -707,14 +706,14 @@
                         });
                         
                         if (isValid) {
-                            $("#tbodyid").empty();
+                            //$("#tbodyid").empty();
                             BindGrid(result, 0, 1);
                             $("td").each(function () {
                                 $(this).addClass("tbl-css");
                             });
                         } else {
                             $('#alertModal').modal('show');
-                            $('#msg').html("Item alredy mapped!!!");
+                            $('#msg').html("One of the Item is already mapped in the grid. Please remove that first !!!");
                         }
                     }
                  });
@@ -747,10 +746,10 @@
                     $("#StateId").val(result[0].SupplyState_Id);
                     $("#SupplyStateId").val(result[0].SupplyState_Id);
 
-                    if (res.Table2.length>0) {
+                    if (res.Table.length>0) {
                         $("#drpOrderNo").empty();
                         $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                        $.each(res.Table2, function (index, value) {
+                        $.each(res.Table, function (index, value) {
                             $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
                         });
                         $("#drpOrderNo").val(result[0].PO_Id);
@@ -990,6 +989,8 @@
             let sgst = 0;
             let igst = 0;
             let Texable_Amount = 0;
+            let discount_1 = 0;
+            let discount_2 = 0;
             if (quantity > 0 && rate > 0) {
                 amount = quantity * rate;
             }
@@ -1007,15 +1008,21 @@
                         sgst = parseFloat(0).toFixed(2)
                         igst = parseFloat(gstAmount).toFixed(2);
                     }
-                    //totalAmount += amount + gstAmount;
+                    Texable_Amount = amount;
+                    tamount = amount + gstAmount;
                 }
                 else {
                     cgst = value.CGST;
                     sgst = value.SGST;;
                     igst = value.IGST;;
+                    discount_1 = parseInt(value.Discount_1);
+                    discount_2 = parseInt(value.Discount_2);
+                    amount = value.Amount;
+                    let disamt = amount * (discount_1 + discount_2) / 100;
+                    Texable_Amount = amount - disamt;
+                    tamount = value.TotalAmount;
                 }
-                Texable_Amount = amount;
-                tamount = amount + gstAmount;
+                
 
             }
 
@@ -1069,11 +1076,11 @@
             cell = $(row.insertCell(-1));
             cell.append(lblAmount);
             //Add Discount_1 cell.
-            let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : value.Discount_1}"  tp-type="numeric" style="width:30px;"/>`;
+            let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : discount_1}"  tp-type="numeric" style="width:30px;"/>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlDiscount1);
             //Add Discount_2 cell.
-            let htmlDiscount2 = `<input type="text" id="txtDiscount2_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount2_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : value.Discount_1}"  tp-type="numeric" style="width:30px;"/>`;
+            let htmlDiscount2 = `<input type="text" id="txtDiscount2_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount2_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : discount_2}"  tp-type="numeric" style="width:30px;"/>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlDiscount2);
             //Add Taxable_Amount cell.
