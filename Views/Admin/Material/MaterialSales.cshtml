@@ -304,7 +304,7 @@
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-                        debugger;
+                        
                         let oMapping = {};
                         let index = parseInt($("#" + $(this).context.id).val());
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
@@ -685,7 +685,7 @@
             if (POId > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetPOData?POId=" + POId + "&Office_Id=" + Office_Id + "&SupplyState_Id=" + SupplyState_Id+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
-                    debugger;
+                    
                     if (result.length > 0) {
                         $("#tbodyid").empty();
                         $("#SaleAmount").val("0");
@@ -756,8 +756,8 @@
             $("#drpParty").val($("#drpParty option:first").val());
             $('#drpParty').select2().trigger('change');
             $("#drpInvoice").empty();
-            $("#drpOrderNo").empty();
             $('#drpInvoice').select2().trigger('change');
+            $("#drpOrderNo").empty();
             $("#SaleId").val(0);
             $("#IsUpdateMaterialSales").val(false);
             $("#SaleLine").val("");
@@ -950,7 +950,7 @@
     function BindGrid(result,isqtydisabled,sourceid) {
         let totalAmount = 0;
         $.each(result, function (index, value) {
-            debugger;
+            
             let quantity = parseFloat(value.Order_Qty);
             let rate = parseFloat(value.Order_Rate);
             let gst = parseFloat(value.GST !== "" ? value.GST : "0");
@@ -1003,7 +1003,7 @@
             cell = $(row.insertCell(-1));
             cell.append(htmlEditBtn);
             //Add Item cell.
-            debugger;
+            
             let lblItem = `<label id="lblItem_${value.Item_Id}">${value.ItemName}</label>
                             <input type="hidden" id="hdnItemId_${value.Item_Id}" name="hdnItemId_${value.Item_Id}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
@@ -1032,7 +1032,7 @@
             cell = $(row.insertCell(-1));
             cell.append(lblUnit);
             //Add Rate cell.
-            let htmlRate = `<input type="text" id="txtRate_${value.Item_Id}" data-index="${value.Item_Id}" name="txtRate_${value.Item_Id}" onchange="Calculate(this);" value="${rate}"  tp-type="numeric" style="width:40px;"/>`;
+            let htmlRate = `<input type="text" id="txtRate_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtRate_${value.Item_Id}" onchange="Calculate(this);" value="${rate}"  tp-type="numeric" style="width:40px;"/>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlRate);
             //Add Amount cell.
@@ -1040,11 +1040,11 @@
             cell = $(row.insertCell(-1));
             cell.append(lblAmount);
             //Add Discount_1 cell.
-            let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="0"  tp-type="numeric" style="width:30px;"/>`;
+            let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${value.Discount_1}"  tp-type="numeric" style="width:30px;"/>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlDiscount1);
             //Add Discount_2 cell.
-            let htmlDiscount2 = `<input type="text" id="txtDiscount2_${value.Item_Id}" data-index="${value.Item_Id}" name="txtDiscount2_${value.Item_Id}" onchange="Calculate(this);" value="0"  tp-type="numeric" style="width:30px;"/>`;
+            let htmlDiscount2 = `<input type="text" id="txtDiscount2_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount2_${value.Item_Id}" onchange="Calculate(this);" value="${value.Discount_2}"  tp-type="numeric" style="width:30px;"/>`;
             cell = $(row.insertCell(-1));
             cell.append(htmlDiscount2);
             //Add Taxable_Amount cell.
