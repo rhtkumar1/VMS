@@ -747,7 +747,6 @@
                     $("#SupplyStateId").val(result[0].SupplyState_Id);
 
                     if (res.Table.length>0) {
-                        $("#drpOrderNo").empty();
                         $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
                         $.each(res.Table, function (index, value) {
                             $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
