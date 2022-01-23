@@ -110,44 +110,48 @@
                             </div>
                             <br />
                             <div class="styled-input">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Item<span class="mandatory">*</span></label>
                                     @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
+                                    <label>Unit<span class="mandatory">*</span></label>
+                                    @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                </div>
+                                <div class="col-md-2 form-group">
                                     <label>Available Qty</label>
                                     <label id="lblAvailableQty" class="form-control" readonly></label>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Last Rate</label>
                                     <label id="lblLastRate" class="form-control" readonly></label>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Last Dist-1(%)</label>
                                     <label id="lblLastDist1" class="form-control" readonly></label>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Last Dist-2(%)</label>
                                     <label id="lblLastDist2" class="form-control" readonly></label>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>List Price</label>
                                     <label id="lblListPrice" class="form-control" readonly></label>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Order Qty<span class="mandatory">*</span></label>
                                     <input id="txtOrderQty" name="txtOrderQty" class="form-control" />
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Order Rate<span class="mandatory">*</span></label>
                                     <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-3 form-group">
+                                
+                                <div class="col-md-4 form-group">
                                     <label>Remark</label>
                                     <input id="txtRemark" name="txtRemark" class="form-control" />
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Action</label>
                                     <br />
                                     <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
@@ -165,6 +169,7 @@
                                         <tr>
                                             <th class="tbl-heading">Action</th>
                                             <th class="tbl-heading">Item</th>
+                                            <th class="tbl-heading">Unit</th>
                                             <th class="tbl-heading">Available Qty</th>
                                             <th class="tbl-heading">Last Rate</th>
                                             <th class="tbl-heading">Last Dist-1(%)</th>
@@ -228,6 +233,8 @@
             e.preventDefault();
             $("#Item_Id").val($("#Item_Id option:first").val());
             $('#Item_Id').select2().trigger('change');
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
             $("#lblAvailableQty").text("");
             $("#lblLastRate").text("");
             $("#lblLastDist1").text("");
@@ -277,6 +284,7 @@
                     });
                 }
             }
+            
             if (bAdded) {
                 if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
                     let trId = "#trRow_" + parseInt($("#hdnRowId").val());
@@ -285,15 +293,16 @@
                     row[1].setAttribute('data-item-id', $("#Item_Id").val());
                     row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
                     row[1].setAttribute('data-index', $("#Item_Id").val());
-                    row[2].textContent = $("#lblAvailableQty").text();
-                    row[3].textContent = $("#lblLastRate").text();
-                    row[4].textContent = $("#lblLastDist1").text();
-                    row[5].textContent = $("#lblLastDist2").text();
-                    row[6].textContent = $("#lblListPrice").text();
-                    row[7].textContent = $("#txtOrderQty").val();
-                    row[8].textContent = $("#txtOrderRate").val();
-                    row[9].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
-                    row[10].textContent = $("#txtRemark").val();
+                    row[2].textContent = $("#Unit_Id").val();
+                    row[3].textContent = $("#lblAvailableQty").text();
+                    row[4].textContent = $("#lblLastRate").text();
+                    row[5].textContent = $("#lblLastDist1").text();
+                    row[6].textContent = $("#lblLastDist2").text();
+                    row[7].textContent = $("#lblListPrice").text();
+                    row[8].textContent = $("#txtOrderQty").val();
+                    row[9].textContent = $("#txtOrderRate").val();
+                    row[10].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
+                    row[11].textContent = $("#txtRemark").val();
                     $("#hdnRowId").val("");
                     $("#hdnLineId").val("");
                     $("#btnAdd").val("Add");
@@ -311,6 +320,11 @@
                     cell.html($("#Item_Id option:selected").text());
                     cell.attr('data-item-id', $("#Item_Id").val());
                     cell.attr('data-line-id', 0);
+                    cell.attr('data-index', $("#Item_Id").val());
+                    //Add Unit.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Unit_Id option:selected").text());
+                    cell.attr('data-unit-id', $("#Unit_Id").val());
                     cell.attr('data-index', $("#Item_Id").val());
                     //Add AvailableQty.
                     cell = $(row.insertCell(-1));
@@ -353,6 +367,8 @@
                 //Set Default
                 $("#Item_Id").val($("#Item_Id option:first").val());
                 $('#Item_Id').select2().trigger('change');
+                $("#Unit_Id").val($("#Unit_Id option:first").val());
+                $('#Unit_Id').select2().trigger('change');
                 $("#lblAvailableQty").text("");
                 $("#lblLastRate").text("");
                 $("#lblLastDist1").text("");
@@ -391,18 +407,20 @@
                 $("#tblOrderCreation TBODY TR").each(function () {
                     let row = $(this).find('td');
                     let oMapping = {};
+                    
                     oMapping.Line_Id = row.eq(1).attr('data-line-Id');
                     oMapping.Item_Id = row.eq(1).attr('data-item-id');
-                    oMapping.Available_Qty = row[2].innerText;
-                    oMapping.Last_Rate = row[3].innerText;
-                    oMapping.Last_Discount_1 = row[4].innerText;
-                    oMapping.Last_Discount_2 = row[5].innerText;
-                    oMapping.Last_Price = row[6].innerText;
-                    oMapping.Order_Qty = row[7].innerText;
-                    oMapping.Order_Rate = row[8].innerText;
-                    oMapping.Amount = parseFloat(row[7].innerText) * parseFloat(row[8].innerText);
-                    totalAmount += parseFloat(row[7].innerText) * parseFloat(row[8].innerText);
-                    oMapping.Remarks = row[10].innerText
+                    oMapping.UnitId = row.eq(2).attr('data-unit-id');
+                    oMapping.Available_Qty = row[3].innerText;
+                    oMapping.Last_Rate = row[4].innerText;
+                    oMapping.Last_Discount_1 = row[5].innerText;
+                    oMapping.Last_Discount_2 = row[6].innerText;
+                    oMapping.Last_Price = row[7].innerText;
+                    oMapping.Order_Qty = row[8].innerText;
+                    oMapping.Order_Rate = row[9].innerText;
+                    oMapping.Amount = parseFloat(row[8].innerText) * parseFloat(row[9].innerText);
+                    totalAmount += parseFloat(row[8].innerText) * parseFloat(row[9].innerText);
+                    oMapping.Remarks = row[11].innerText
                     oMapping.IsUpdate = $("#IsUpdate").val();
                     OrderLineValues.push(oMapping);
                 });
@@ -437,6 +455,7 @@
                         $("#lblLastDist1").text(result[0].Last_Disc_1);
                         $("#lblLastDist2").text(result[0].Last_Disc_2);
                         $("#lblListPrice").text(result[0].List_Price);
+                        $("#Unit_Id").val(result[0].UnitId);
                         $("#hdnRowId").val("");
                     }
                 });
@@ -520,7 +539,7 @@
                         $(row).attr('id', 'trRow_' + value.Item_Id);
                         //Edit Button cell.
                         cell = $(row.insertCell(-1));
-                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" style="padding: 2px 5px 2px 5px; margin-bottom:0px;margin-right: 5px;" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
+                        let btnEdit = `<a class="btn btn-success" onclick="Edit(this);" style="visibility: hidden;padding: 2px 5px 2px 5px; margin-bottom:0px;margin-right: 5px;" href="javascript:void(0)"><i class="fa fa-edit"></i></a>`;
                         let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" style="padding: 2px 5px 2px 5px; margin-bottom:0px" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
                         cell.append(btnEdit).append(btnRemove);
                         //Add Item cell.
@@ -529,6 +548,11 @@
                         cell.attr('data-item-id', value.Item_Id);
                         cell.attr('data-line-id', value.Line_Id);
                         cell.attr('data-index', value.Item_Id);
+                        //Add Unit
+                        cell = $(row.insertCell(-1));
+                        cell.html(value.Unit);
+                        cell.attr('data-unit-id', value.UnitId);
+                        cell.attr('data-index', value.UnitId);
                         //Add AvailableQty.
                         cell = $(row.insertCell(-1));
                         cell.html(value.Available_Qty);
@@ -564,7 +588,7 @@
                         totalAmount += value.Amount;
                         //Add txtRemark cell.
                         cell = $(row.insertCell(-1));
-                        cell.html(value.Remarks);
+                        cell.html(value.LineRemarks);
                         cell.attr('data-index', value.Item_Id);
                     });
 
@@ -585,6 +609,8 @@
             e.preventDefault();
             $("#Item_Id").val($("#Item_Id option:first").val());
             $('#Item_Id').select2().trigger('change');
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
             $("#lblAvailableQty").text("");
             $("#lblLastRate").text("");
             $("#lblLastDist1").text("");
@@ -605,6 +631,9 @@
             $("#btnAdd").val("Add");
             $("#tblOrderCreation TBODY").empty();
             $("#divDeleteMatrial").css('display', 'none');
+            $("#lblTotalAmount").text("Total : 0.00");
+            $("#drpOrder").val($("#drpOrder option:first").val());
+            $('#drpOrder').select2().trigger('change');
         });
 
         $("#btnDelete").click(function () {
@@ -624,9 +653,11 @@
         var row = $(button).closest("TR").find('td');
         $("#Item_Id").val(parseInt(row.eq(1).attr('data-item-id')));
         $('#Item_Id').select2().trigger('change');
-        $("#txtOrderQty").val(row[7].innerText);
-        $("#txtOrderRate").val(row[8].innerText);
-        $("#txtRemark").val(row[10].innerText);
+        $("#Unit_Id").val(parseInt(row.eq(2).attr('data-unit-id')));
+        $('#Unit_Id').select2().trigger('change');
+        $("#txtOrderQty").val(row[8].innerText);
+        $("#txtOrderRate").val(row[9].innerText);
+        $("#txtRemark").val(row[11].innerText);
         $("#hdnRowId").val(parseInt(row.eq(1).attr('data-item-id')));
         $("#hdnLineId").val(parseInt(row.eq(1).attr('data-line-id')));
 

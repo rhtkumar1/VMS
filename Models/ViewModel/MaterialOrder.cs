@@ -51,7 +51,7 @@ namespace IMS.Models.ViewModel
         public List<MaterialOrderLine> MaterialOrderLines { get; set; }
         public string POIds { get; set; }
         public string Status { get; set; }
-
+        public SelectList UnitLists { get; set; }
 
 
         public MaterialOrder()
@@ -63,6 +63,7 @@ namespace IMS.Models.ViewModel
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + Office_Id.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
+            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MaterialOrderLines = new List<MaterialOrderLine>();
         }
 
@@ -80,7 +81,7 @@ namespace IMS.Models.ViewModel
                                     Last_Discount_1=""" + Convert.ToString(item.Last_Discount_1) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
                                     Order_Qty=""" + Convert.ToString(item.Order_Qty) + @""" Order_Rate=""" + Convert.ToString(item.Order_Rate) + @"""   
                                     Amount=""" + Convert.ToString(item.Amount) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @"""  
-                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + Convert.ToString(item.Last_Discount_2) + @""" />");
+                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + Convert.ToString(item.Last_Discount_2) + @""" UnitId = """+ Convert.ToString(item.UnitId)+@""" />");
                 }
                 MaterialLine = "<Line>" + sb + "</Line>";
 
@@ -289,6 +290,7 @@ namespace IMS.Models.ViewModel
         public string Last_Price { get; set; }
         public string Order_Qty { get; set; }
         public string Order_Rate { get; set; }
+        public string UnitId { get; set; }
         public string Amount { get; set; }
         public string Remarks { get; set; }
         public string IsUpdate { get; set; }

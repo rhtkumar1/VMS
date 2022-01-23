@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Unit<span class="mandatory">*</span></label>
-                                        @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                        @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control",@disabled="disabled" })
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Rate<span class="mandatory">*</span></label>
@@ -267,7 +267,7 @@
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
-            $('#Unit_Id').select2().trigger('change');
+            //$('#Unit_Id').select2().trigger('change');
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("0");
@@ -427,7 +427,7 @@
                     oMapping.Item_Id = row.eq(1).attr('data-item-id');
                     oMapping.HSN_SAC = row[2].innerText;
                     oMapping.Quantity = row[3].innerText;
-                    oMapping.Unit_Id = row.eq(4).attr('data-Unit_Id');
+                    oMapping.Unit_Id = row.eq(4).attr('data-unit-id');
                     oMapping.UnitTitle = row[4].innerText;
                     oMapping.Rate = row[5].innerText;
                     oMapping.Amount = row[6].innerText;
@@ -473,6 +473,8 @@
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
                         $("#GST").change();
+                        $("#Unit_Id").val(result[0].UnitId);
+                        
                     } else {
                         $("#Hsn_Sac").val("");
                         $("#GST").val("0");
@@ -654,7 +656,7 @@
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
-            $('#Unit_Id').select2().trigger('change');
+            //$('#Unit_Id').select2().trigger('change');
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("0");

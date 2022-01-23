@@ -143,7 +143,7 @@
                                     @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
-                                    <label>Ava-Quantity</label>
+                                    <label>Available Quantity</label>
                                     @Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
-                                    @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control",@disabled="disabled" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Rate<span class="mandatory">*</span></label>
@@ -304,18 +304,20 @@
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
+                        debugger;
                         let oMapping = {};
                         let index = parseInt($("#" + $(this).context.id).val());
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
                         let qty = parseInt($("#txtOrder_Qty_" + index).val());
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
                         let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
+                        let itemname = $("#lblItem_" + index)[0].innerText
                         if (poLineId === 0) {
                             if (isItemType === 16) {
                                 isValid = true;
                             } else {
-                                if (qty !== NaN && qty > 0 && qty <= availableQty) {
-                                    msg = "Please check available quantity!!!";
+                                if (qty !== NaN && qty > 0 && qty > availableQty) {
+                                    msg = "Please check the quantity for Item: "+itemname +"!!!";
                                     isValid = false;
                                     return false;
                                 } 
@@ -324,8 +326,8 @@
                             if (isItemType === 16) {
                                 isValid = true;
                             } else {
-                                if (qty !== NaN && qty > 0 && qty <= availableQty) {
-                                    msg = "Please check available quantity!!!";
+                                if (qty !== NaN && qty > 0 && qty > availableQty) {
+                                    msg = "Please check the quantity for Item: " + itemname + "!!!";
                                     isValid = false;
                                     return false;
                                 } 
@@ -333,8 +335,8 @@
                         }
                         if (isValid) {
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
-                            oMapping.Unit_Id = $("#blUnit_" + index).attr("data-Unit_Id");
-                            oMapping.UnitTitle = $("#blUnit_" + index).text();
+                            oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
+                            oMapping.UnitTitle = $("#lblUnit_" + index).text();
                             oMapping.Available_Qty = availableQty;
                             oMapping.Item_Id = $("#hdnItemId_" + index).val();
                             oMapping.ItemTitle = $("#lblItem_" + index).text();
@@ -360,7 +362,7 @@
                     $("#SaleLine").val(JSON.stringify(PurchaseLineValues));
                 } else {
                     isValid = false;
-                    msg = "At least 1 invoice required!!!";
+                    msg = "Please at least one sale material!!!";
                 }
             }
 
@@ -410,15 +412,12 @@
             } else if (parseInt($("#Unit_Id").val()) === 0) {
                 msg = "Please select unit.";
                 bAdded = false;
-            }else if ($("#Rate").val() === "") {
-                msg = "Please Please enter rate.";
-                bAdded = false;
             } else if ($("#Rate").val() === "") {
-                msg = "Please Please enter rate.";
+                msg = "Please enter rate.";
                 bAdded = false;
             }
-            if (parseInt($("#hdnItemType").val()) === 15) {
-                msg = "Please check available quantity!!!";
+            else if (parseInt($("#hdnItemType").val()) === 15 && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
+                msg = "Please correct quantity that must not be greater than Available Quantity!!!";
                 bAdded = false;
             }
 
@@ -584,6 +583,7 @@
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
                         $("#hdnItemType").val(result[0].ItemNature);
                         $("#AvailableQuantity").val(result[0].Available_Qty);
+                        $("#Unit_Id").val(result[0].UnitId);
                         $("#GST").change();
                     } else {
                         $("#Hsn_Sac").val("");
@@ -685,10 +685,11 @@
             if (POId > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetPOData?POId=" + POId + "&Office_Id=" + Office_Id + "&SupplyState_Id=" + SupplyState_Id+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
+                    debugger;
                     if (result.length > 0) {
                         $("#tbodyid").empty();
                         $("#SaleAmount").val("0");
-                        BindGrid(result, 0);
+                        BindGrid(result, 0,1);
                         $("td").each(function () {
                             $(this).addClass("tbl-css");
                         });
@@ -738,7 +739,7 @@
                     $("#Marka").val(result[0].Marka);
                     $("#tbodyid").empty();
                     $("#SaleAmount").val("0");
-                    BindGrid(result, 1);
+                    BindGrid(result, 1,0);
                     $("td").each(function () {
                         $(this).addClass("tbl-css");
                     });
@@ -946,9 +947,10 @@
         $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
         $("#IsUpdateMaterialSales").val(1);
     };
-    function BindGrid(result,isqtydisabled) {
+    function BindGrid(result,isqtydisabled,sourceid) {
         let totalAmount = 0;
         $.each(result, function (index, value) {
+            debugger;
             let quantity = parseFloat(value.Order_Qty);
             let rate = parseFloat(value.Order_Rate);
             let gst = parseFloat(value.GST !== "" ? value.GST : "0");
@@ -962,23 +964,33 @@
             if (quantity > 0 && rate > 0) {
                 amount = quantity * rate;
             }
+            
             if (amount > 0) {
                 gstAmount = amount * gst / 100;
-                let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
-                if (is_SameState) {
-                    cgst = parseFloat(gstAmount / 2).toFixed(2)
-                    sgst = parseFloat(gstAmount / 2).toFixed(2)
-                    igst = parseFloat(0).toFixed(2);
-                } else {
-                    cgst = parseFloat(0).toFixed(2)
-                    sgst = parseFloat(0).toFixed(2)
-                    igst = parseFloat(gstAmount).toFixed(2);
+                if (sourceid === 1) {
+                    let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
+                    if (is_SameState) {
+                        cgst = parseFloat(gstAmount / 2).toFixed(2)
+                        sgst = parseFloat(gstAmount / 2).toFixed(2)
+                        igst = parseFloat(0).toFixed(2);
+                    } else {
+                        cgst = parseFloat(0).toFixed(2)
+                        sgst = parseFloat(0).toFixed(2)
+                        igst = parseFloat(gstAmount).toFixed(2);
+                    }
+                    //totalAmount += amount + gstAmount;
                 }
-                //totalAmount += amount + gstAmount;
+                else {
+                    cgst = value.CGST;
+                    sgst = value.SGST;;
+                    igst = value.IGST;;
+                }
                 Texable_Amount = amount;
                 tamount = amount + gstAmount;
 
             }
+            
+            
 
             //Get the reference of the Table's TBODY element.
             var tBody = $("#tblMaterialSales > TBODY")[0];
@@ -991,6 +1003,7 @@
             cell = $(row.insertCell(-1));
             cell.append(htmlEditBtn);
             //Add Item cell.
+            debugger;
             let lblItem = `<label id="lblItem_${value.Item_Id}">${value.ItemName}</label>
                             <input type="hidden" id="hdnItemId_${value.Item_Id}" name="hdnItemId_${value.Item_Id}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
@@ -1015,7 +1028,7 @@
             cell = $(row.insertCell(-1));
             cell.append(lblAvailable_Qty);
             //Add Unit cell.
-            let lblUnit = `<label id="lblUnit_${value.Item_Id}" data-Unit_Id="0" data-index="${value.Item_Id}" >0</label>`;
+            let lblUnit = `<label id="lblUnit_${value.Item_Id}" data-Unit_Id="${value.UnitId}" data-index="${value.Item_Id}" >${value.Unit}</label>`;
             cell = $(row.insertCell(-1));
             cell.append(lblUnit);
             //Add Rate cell.
