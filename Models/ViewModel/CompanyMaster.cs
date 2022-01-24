@@ -32,6 +32,7 @@ namespace IMS.Models.ViewModel
 
         public CompanyMaster()
         {
+            StartDate = DateTime.Now.ToString("dd/MM/yyyy");
             //FinancialLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Financial_Id", "Cast(YEAR([From_date]) AS nvarchar)+'-'+Cast(YEAR([To_date]) AS nvarchar)", "Financial_Master", "And IsActive=1"), "Id", "Value");
             TypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10004 And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
