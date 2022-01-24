@@ -301,6 +301,7 @@
     <Content Include="Views\Admin\Material\MaterialSales.cshtml" />
     <Content Include="Views\Admin\Material\MaterialOrder.cshtml" />
     <Content Include="Views\Admin\Material\OrderCreation.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

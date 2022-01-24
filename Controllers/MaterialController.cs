@@ -122,7 +122,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (materialPurchase.IsSucceed)
                     {
-                        ViewBag.Success = materialPurchase.ActionMsg;
+                        ViewBag.Msg = materialPurchase.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!materialPurchase.IsSucceed && materialPurchase.PurchaseId != -1)
@@ -167,7 +167,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objMaterialPurchase.IsSucceed)
                     {
-                        ViewBag.Success = objMaterialPurchase.ActionMsg;
+                        ViewBag.Msg = objMaterialPurchase.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!objMaterialPurchase.IsSucceed && objMaterialPurchase.PurchaseId != -1)
@@ -185,7 +185,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialPurchase newMaterialPurchase = new MaterialPurchase();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -271,7 +271,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialOrder newMaterialOrder = new MaterialOrder();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -309,7 +309,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Unknown Error Occured !!!" }));
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = ex.Message.ToString()}));
             }
         }
         [HttpGet]
@@ -438,7 +438,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (materialSales.IsSucceed)
                     {
-                        ViewBag.Success = materialSales.ActionMsg;
+                        ViewBag.Msg = materialSales.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!materialSales.IsSucceed && materialSales.SaleId != -1)
@@ -482,7 +482,7 @@ namespace IMS.Controllers
                     // In case of record successfully added or updated
                     if (objMaterialSales.IsSucceed)
                     {
-                        ViewBag.Success = objMaterialSales.ActionMsg;
+                        ViewBag.Msg = objMaterialSales.ActionMsg;
                     }
                     // In case of record already exists
                     else if (!objMaterialSales.IsSucceed && objMaterialSales.SaleId != -1)
@@ -500,7 +500,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialSales newMaterialSales = new MaterialSales();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
@@ -554,7 +554,7 @@ namespace IMS.Controllers
                         // In case of record successfully added or updated
                         if (objMaterialOrder.IsSucceed)
                         {
-                            ViewBag.Success = objMaterialOrder.ActionMsg;
+                            ViewBag.Msg = objMaterialOrder.ActionMsg;
                         }
                         // In case of record already exists
                         else if (!objMaterialOrder.IsSucceed)
@@ -578,7 +578,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Msg = "Unknown Error Occured !!!";
+                ViewBag.Msg = ex.Message.ToString();
             }
             MaterialOrder omaterialOrder = new MaterialOrder();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];

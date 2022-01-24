@@ -45,7 +45,7 @@ namespace IMS.Models.ViewModel
         public bool IsSucceed { get; set; }
         public int IsUpdateMaterialSales { get; set; }
         public int MENU_Id { get; set; }
-
+        public SelectList UnitLists { get; set; }
 
         public MaterialSales()
         {
@@ -54,6 +54,8 @@ namespace IMS.Models.ViewModel
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
             //POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
+            Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
+            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
@@ -75,8 +77,8 @@ namespace IMS.Models.ViewModel
                                     Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
                                     IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
                                     CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
-                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @""" 
-                                 />");
+                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  UnitId="""+ Convert.ToString(item.Unit_Id) + @"""
+                                    />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
@@ -176,8 +178,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        
-
         public MaterialSales MaterialSales_Delete(int saleId)
         {
             try
@@ -204,20 +204,25 @@ namespace IMS.Models.ViewModel
     public class MaterialSalesMapping
     {
         public string Line_Id { get; set; }
+        public string Unit_Id { get; set; }
+        public string UnitTitle { get; set; }
         public string Item_Id { get; set; }
-        public string Quantity { get; set; }
-        public string HSN_SAC { get; set; }
         public string PO_Id { get; set; }
         public string POLine_Id { get; set; }
+        public string ItemTitle { get; set; }
+        public string HSN_SAC { get; set; }
+        public string Quantity { get; set; }
         public string Rate { get; set; }
         public string Amount { get; set; }
         public string Discount_1 { get; set; }
         public string Discount_2 { get; set; }
+        public string Taxable_Amount { get; set; }
         public string GST { get; set; }
         public string CGST { get; set; }
         public string SGST { get; set; }
         public string IGST { get; set; }
         public string Total_Amount { get; set; }
         public string IsUpdate { get; set; }
+ 
     }
 }

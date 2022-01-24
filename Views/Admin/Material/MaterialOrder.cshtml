@@ -94,7 +94,10 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+         if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
         function showDetailDialog(value) {
             var objret = $.grep(dtsrc, function (n, i) {
                 return n.PO_No = value;
@@ -152,11 +155,6 @@
             $("#Status").val("H");
         });
 
-
-        if ('@ViewBag.Msg' != "") {
-            $('#alertModal').modal('show');
-            $('#msg').html("@ViewBag.Msg");
-        }
         var dtsrc;
         IMSC.ajaxCall("GET", "/Material/MaterialOrder_GetPendingOrder?AppToken="+'@Model.AppToken', {}, "text", function (d) {
             dtsrc = JSON.parse(d);
