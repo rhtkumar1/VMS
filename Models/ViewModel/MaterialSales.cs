@@ -77,8 +77,8 @@ namespace IMS.Models.ViewModel
                                     Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
                                     IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
                                     CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
-                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @""" 
-                                 />");
+                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  UnitId="""+ Convert.ToString(item.Unit_Id) + @"""
+                                    />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
@@ -178,8 +178,6 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        
-
         public MaterialSales MaterialSales_Delete(int saleId)
         {
             try
@@ -225,5 +223,6 @@ namespace IMS.Models.ViewModel
         public string IGST { get; set; }
         public string Total_Amount { get; set; }
         public string IsUpdate { get; set; }
+ 
     }
 }
