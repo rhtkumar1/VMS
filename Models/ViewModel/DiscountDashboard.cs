@@ -29,19 +29,43 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
+        public SelectList OrderList { get; set; }
+        public SelectList PartyLists { get; set; }
+        public List<Sale_Discount> Sale_Discounts { get; set; }
+        public string DisDash { get; set; }
+        public int OrderId { get; set; }
 
-
+        public DiscountDashboard()
+        {
+            OfficeId = CommonUtility.GetDefault_OfficeID();
+            OrderList = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
+            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
+            Loginid = CommonUtility.GetLoginID();
+            FinId = CommonUtility.GetFYID();
+            CompanyId = CommonUtility.GetCompanyID();
+            Sale_Discounts = new List<Sale_Discount>();
+        }
 
         public DiscountDashboard DiscountDashboard_InsertUpdate()
         {
             try
             {
-                
+                var sb = new System.Text.StringBuilder();
+                foreach (var item in Sale_Discounts)
+                {
+                    sb.AppendLine(@"<listnode Sale_Id=""" + Convert.ToString(item.Sale_Id) + @""" Invoice_No=""" + Convert.ToString(item.Invoice_No) + @"""   
+                              Office_Id=""" + Convert.ToString(item.Office_Id) + @""" Party_Id=""" + Convert.ToString(item.Party_Id) + @"""
+                              Transaction_Date=""" + Convert.ToString(item.Transaction_Date) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
+                              BalAmount=""" + Convert.ToString(item.BalAmount) + @""" Fin_Id=""" + Convert.ToString(FinId) + @"""   
+                              Company_Id=""" + Convert.ToString(CompanyId) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @""" />");
+                }
+                DisDash = "<Line>" + sb + "</Line>";
+
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                //SqlParameters.Add(new SqlParameter("@XML", POId));
+                SqlParameters.Add(new SqlParameter("@XML", DisDash));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                //SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
-                SqlParameters.Add(new SqlParameter("@Office_Id", CommonUtility.GetDefault_OfficeID()));
+                //SqlParameters.Add(new SqlParameter("@SaleId", SaleId));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Discount_InsertUpdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
@@ -57,7 +81,7 @@ namespace IMS.Models.ViewModel
             return this;
         }
 
-        public DataTable DiscountDashboard_Getdata()
+        public DataTable DiscountDashboard_Getdata(int PartyId, int SaleId, string FromDate, string ToDate)
         {
             DataTable dt = new DataTable();
             try
@@ -74,6 +98,16 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
-
-
     }
+    public class Sale_Discount
+    {
+        public string Sale_Id { get; set; }
+        public string Invoice_No { get; set; }
+        public string Office_Id { get; set; }
+        public string Party_Id { get; set; }
+        public string Transaction_Date { get; set; }
+        public string DiscountAmount { get; set; }
+        public string BalAmount { get; set; }
+        public string Remarks { get; set; }
+    }
+}

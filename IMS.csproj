@@ -303,6 +303,7 @@
     <Content Include="Views\Admin\Material\MaterialOrder.cshtml" />
     <Content Include="Views\Admin\Material\OrderCreation.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

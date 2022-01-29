@@ -588,5 +588,77 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialOrder.cshtml", (objMaterialOrder.IsSucceed ? omaterialOrder : materialOrder));
         }
         #endregion
+
+        #region Discount DashBoard
+        public ActionResult DiscountDashboard()
+        {
+            DiscountDashboard discountDashboard = new DiscountDashboard();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            discountDashboard.AppToken = CommonUtility.URLAppToken(AppToken);
+            discountDashboard.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/DiscountDashboard.cshtml", discountDashboard);
+        }
+        [HttpGet]
+        public ActionResult GetDiscountDashboard(int PartyId = 0, int SaleId = 0, string FromDate = "", string ToDate = "", string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                DiscountDashboard discountDashboard = new DiscountDashboard();
+                dt = discountDashboard.DiscountDashboard_Getdata(PartyId, SaleId, FromDate, ToDate);
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageDiscountDashboard(DiscountDashboard discountDashboard)
+        {
+            DiscountDashboard objDiscountDashboard = new DiscountDashboard();
+            try
+            {
+                discountDashboard.Sale_Discounts = JsonConvert.DeserializeObject<List<Sale_Discount>>(discountDashboard.DisDash);
+                objDiscountDashboard = discountDashboard.DiscountDashboard_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                discountDashboard.AppToken = CommonUtility.URLAppToken(AppToken);
+                discountDashboard.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objDiscountDashboard != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objDiscountDashboard.IsSucceed)
+                    {
+                        ViewBag.Msg = objDiscountDashboard.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objDiscountDashboard.IsSucceed && objDiscountDashboard.SaleId != -1)
+                    {
+                        ViewBag.Msg = objDiscountDashboard.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            DiscountDashboard newDiscountDashboard = new DiscountDashboard();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newDiscountDashboard.AppToken = CommonUtility.URLAppToken(AppToken);
+            newDiscountDashboard.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/DiscountDashboard.cshtml", (objDiscountDashboard.IsSucceed ? newDiscountDashboard : discountDashboard));
+        }
+
+        #endregion
     }
 }
