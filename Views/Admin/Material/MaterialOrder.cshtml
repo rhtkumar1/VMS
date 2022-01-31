@@ -143,17 +143,28 @@
 
 
         $("body").on("click", "#btnApprove", function () {
-            $("#POIds").val(selectedItems[0]);
+            
+            $("#POIds").val(getconcatinatestr(selectedItems));
             $("#Status").val("A");
         });
         $("body").on("click", "#btnReject", function () {
-            $("#POIds").val(selectedItems[0]);
+            $("#POIds").val(getconcatinatestr(selectedItems));
             $("#Status").val("R");
         });
         $("body").on("click", "#btnHold", function () {
-            $("#POIds").val(selectedItems[0]);
+            $("#POIds").val(getconcatinatestr(selectedItems));
             $("#Status").val("H");
         });
+
+        function getconcatinatestr(item) {
+            
+            var str = "";
+            $.each(item, function (indexes, values) {
+
+                str = (str == "" ? values : str + "," + values);
+            });
+            return str;
+        }
 
         var dtsrc;
         IMSC.ajaxCall("GET", "/Material/MaterialOrder_GetPendingOrder?AppToken="+'@Model.AppToken', {}, "text", function (d) {
@@ -166,7 +177,7 @@
                         width: 50,
                         sorting: false,
                         headerTemplate: function () {
-                            return $("<input>").attr("type", "checkbox").attr("class", "singleCheckbox checkboxcss").attr("id", "selectAllCheckbox").attr("name", "Action").on("change", function () { checkedAll($(this)); });
+                            return $("<input>").attr("type", "checkbox").attr("class", "selectAllCheckbox checkboxcss").attr("id", "selectAllCheckbox").attr("name", "Action").on("change", function () { checkedAll($(this)); });
                         },
                         itemTemplate: function (_, item) {
                             return $("<input>").attr("type", "checkbox").attr("class", "singleCheckbox checkboxcss")
@@ -228,6 +239,7 @@
         var selectedItems = [];
 
         var selectItem = function (item) {
+            
             selectedItems.push(item);
             if ($(".singleCheckbox").length == $(".singleCheckbox:checked").length) {
                 $("#selectAllCheckbox").prop("checked", true);
@@ -255,12 +267,14 @@
             selectedItems = [];
             if (item[0].checked) { // check select status
                 $('.singleCheckbox').each(function () {
+                    
                     this.checked = true;
                     selectItem($(this).parent().next().text());
                 });
             } else {
 
                 $('.singleCheckbox').each(function () {
+                    
                     this.checked = false;
                     unselectItem(item);
                 });

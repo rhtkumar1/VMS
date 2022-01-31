@@ -26,7 +26,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         <div class="heading">
                             <h4>
-                                Search Material
+                                Search
                             </h4>
                         </div>
                         <div class="col-md-12">
@@ -171,6 +171,14 @@
                                 <div class="col-md-2 form-group">
                                     <label>Discount-2</label>
                                     @Html.TextBox("Discount_2", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2", @class = "form-control", @value = "0" })
+                                </div>
+                                <div class="col-md-2 form-group" hidden="hidden">
+                                    <label>Discount Amount</label>
+                                    @Html.TextBox("Discount_1_Amount", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_1_Amount", @class = "form-control", @value = "0" })
+                                </div>
+                                <div class="col-md-2 form-group" hidden="hidden">
+                                    <label>Discount Amount</label>
+                                    @Html.TextBox("Discount_2_Amount", "0", htmlAttributes: new { @placeholder = "DISC 2 (%)", @id = "Discount_2_Amount", @class = "form-control", @value = "0" })
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Taxable</label>
@@ -340,6 +348,7 @@
                             }
                         }
                         if (isValid) {
+
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
                             oMapping.UnitTitle = $("#lblUnit_" + index).text();
@@ -353,6 +362,8 @@
                             oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
                             oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
                             oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
+                            oMapping.Discount_1_Amount = $("#hdnDiscount_1_Amt_" + index).val();
+                            oMapping.Discount_2_Amount = $("#hdnDiscount_2_Amt_" + index).val();
                             oMapping.GST = $("#lblGST_" + index).text();
                             oMapping.CGST = $("#lblCGST_" + index).text();
                             oMapping.SGST = $("#lblSGST_" + index).text();
@@ -400,6 +411,9 @@
             $("#IGST").val("");
             $("#Total").val("");
             $("#hdnTotalAmount").val("");
+            $("#Discount_1_Amount").val("");
+            $("#Discount_2_Amount").val("");
+            
         });
 
         $("#btnAdd").click(function (e) {
@@ -457,7 +471,12 @@
                               <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
                               <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
+                              <input type="hidden" id="hdnDiscount_1_Amt_${itemId}" name="hdnDiscount_1_Amt_${itemId}" value="${$("#Discount_1_Amount").val()}" />
+                              <input type="hidden" id="hdnDiscount_2_Amt_${itemId}" name="hdnDiscount_2_Amt_${itemId}" value="${$("#Discount_2_Amount").val()}" />
+                                
                             `;
+                //
+
                 cell = $(row.insertCell(-1));
                 cell.append(lblItem);
                 //Add Hsn_Sac cell.
@@ -528,6 +547,9 @@
                 $("#Discount_1").val("0");
                 $("#Discount_2").val("0");
                 $("#Taxable_Amount").val("");
+                $("#Discount_1_Amount").val("");
+                $("#Discount_2_Amount").val("");
+                $("#AvailableQuantity").val("");
                 $("#GST").val("0");
                 $("#CGST").val("");
                 $("#SGST").val("");
@@ -837,6 +859,8 @@
         let gst = 0;
         let discount_1 = 0;
         let discount_2 = 0;
+        let discount_1_Amt = 0;
+        let discount_2_Amt = 0;
         let discountAmount = 0;
         let totalAmount = 0;
         if (quantity > 0 && rate > 0) {
@@ -848,7 +872,14 @@
             discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
             if (discount_1 > 0 || discount_2 > 0) {
                 bIsDiscount = true;
-                disAmu = amount * (discount_1 + discount_2) / 100;
+                //disAmu = amount * (discount_1 + discount_2) / 100;
+                discount_1_Amt = amount * (discount_1) / 100;
+                discount_2_Amt = amount * (discount_2) / 100;
+                disAmu = discount_1_Amt + discount_2_Amt;
+
+                $("#Discount_1_Amount").val(discount_1_Amt.toFixed(2));
+                $("#Discount_2_Amount").val(discount_2_Amt.toFixed(2));
+
                 discountAmount = amount - disAmu;
                 gst = discountAmount * parseFloat($("#GST").val()) / 100;
             } else {
@@ -899,12 +930,15 @@
     }
     function setCaluValuew(index, bIsDiscount, quantity, poLineId)
     {
+        
         let rate = parseFloat($("#txtRate_" + index).val() !== "" ? $("#txtRate_" + index).val() : 0);
         let amount = 0;
         let disAmu = 0;
         let gst = 0;
         let discount_1 = 0;
         let discount_2 = 0;
+        let discount_1_amt = 0;
+        let discount_2_amt = 0;
         let discountAmount = 0;
         let totalAmount = 0;
         let sumOfTotal = 0;
@@ -917,7 +951,14 @@
             discount_2 = parseFloat($("#txtDiscount2_" + index).val() !== "" ? $("#txtDiscount2_" + index).val() : 0);
             if (discount_1 > 0 || discount_2 > 0) {
                 bIsDiscount = true;
-                disAmu = amount * (discount_1 + discount_2) / 100;
+                //disAmu = amount * (discount_1 + discount_2) / 100;
+                discount_1_amt = amount * (discount_1) / 100;
+                discount_2_amt = amount * (discount_2) / 100;
+                disAmu = discount_1_amt + discount_2_amt;
+                
+                $("#hdnDiscount_1_Amt_" + index).val(discount_1_amt.toFixed(2));
+                $("#hdnDiscount_2_Amt_" + index).val(discount_2_amt.toFixed(2));
+
                 discountAmount = amount - disAmu;
                 gst = discountAmount * parseFloat($("#lblGST_" + index).text()) / 100;
             } else {
@@ -1017,8 +1058,9 @@
                     discount_1 = parseInt(value.Discount_1);
                     discount_2 = parseInt(value.Discount_2);
                     amount = value.Amount;
-                    let disamt = amount * (discount_1 + discount_2) / 100;
-                    Texable_Amount = amount - disamt;
+                    //let disamt = amount * (discount_1 + discount_2) / 100;
+                    //Texable_Amount = amount - disamt;
+                    Texable_Amount = value.Taxable_Amount;
                     tamount = value.TotalAmount;
                 }
                 
@@ -1046,6 +1088,8 @@
                             <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
                             <input type="hidden" id="hdnItemTypeGrid_${value.Item_Id}" name="hdnItemTypeGrid_${value.Item_Id}" value="${value.ItemNature}" />
                             <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
+                            <input type="hidden" id="hdnDiscount_1_Amt_${value.Item_Id}" name="hdnDiscount_1_Amt_${value.Item_Id}" value="${value.Discount_1_Amount}" />
+                            <input type="hidden" id="hdnDiscount_2_Amt_${value.Item_Id}" name="hdnDiscount_2_Amt_${value.Item_Id}" value="${value.Discount_2_Amount}" />
                           `;
             cell = $(row.insertCell(-1));
             cell.append(lblItem);

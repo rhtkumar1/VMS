@@ -77,7 +77,9 @@ namespace IMS.Models.ViewModel
                                     Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
                                     IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
                                     CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
-                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  UnitId="""+ Convert.ToString(item.Unit_Id) + @"""
+                                    IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  
+                                    UnitId="""+ Convert.ToString(item.Unit_Id) + @""" Discount_1_Amount=""" + Convert.ToString(item.Discount_1_Amount) + @"""
+                                    Discount_2_Amount=""" + Convert.ToString(item.Discount_2_Amount) + @""" Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" 
                                     />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
@@ -217,6 +219,8 @@ namespace IMS.Models.ViewModel
         public string Discount_1 { get; set; }
         public string Discount_2 { get; set; }
         public string Taxable_Amount { get; set; }
+        public string Discount_1_Amount { get; set; }
+        public string Discount_2_Amount { get; set; }
         public string GST { get; set; }
         public string CGST { get; set; }
         public string SGST { get; set; }

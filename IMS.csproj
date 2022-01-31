@@ -169,6 +169,7 @@
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
+    <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\GroupMaster.cs" />
     <Compile Include="Models\ViewModel\HSNSACMaster.cs" />
@@ -304,6 +305,7 @@
     <Content Include="Views\Admin\Material\MaterialOrder.cshtml" />
     <Content Include="Views\Admin\Material\OrderCreation.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
