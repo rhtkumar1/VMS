@@ -46,7 +46,10 @@
                         <div class="col-md-1 form-group pull-left">
                             <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
-                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                            <button type="button" style="margin-top: 26px;" name="btnPrint" id="btnPrint" class="btncustome pull-right">Print</button>
+                        </div>
+                        
                         <div class="clearfix"></div>
                         @using (Html.BeginForm("ManageMateriaSales", "Material", FormMethod.Post, new { @id = "MaterialSales" }))
                         {
@@ -745,6 +748,12 @@
                 $("#divDeleteMatrial").css('display', 'none');
                 $("#lblTotalAmount").text("Total : 0.00");
             }
+        });
+
+        $("#btnPrint").click(function (e) {
+            let SaleId = parseInt($("#SaleId").val());
+            //window.open("/Reports/ReportViewer.aspx?Param=" + SaleId +"&Report=Material_Sale_Bill");
+            window.open("/Reports/ReportViewer.aspx");
         });
 
         $("#btnSearch").click(function (e) {
