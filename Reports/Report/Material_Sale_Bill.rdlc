@@ -10,7 +10,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="DT_Material_Sale_Bill">
+    <DataSet Name="Material_Sale_Bill">
       <Query>
         <DataSourceName>DS_Material_Sale_Bill</DataSourceName>
         <QueryParameters>
@@ -483,7 +483,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=First(Fields!Party.Value, "DT_Material_Sale_Bill")</Value>
+                                  <Value>=First(Fields!Party.Value, "Material_Sale_Bill")</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -1317,7 +1317,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>DT_Material_Sale_Bill</DataSetName>
+            <DataSetName>Material_Sale_Bill</DataSetName>
             <Top>0.51667in</Top>
             <Left>0.03333in</Left>
             <Height>1.25in</Height>

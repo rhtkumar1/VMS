@@ -752,13 +752,18 @@
 
         $("#btnPrint").click(function (e) {
             let SaleId = parseInt($("#SaleId").val());
-            //window.open("/Reports/ReportViewer.aspx?Param=" + SaleId +"&Report=Material_Sale_Bill");
-            window.open("/Reports/ReportViewer.aspx");
+            if (SaleId == null || SaleId == 0) {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
+                return;
+            }
+            window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"");
+            
         });
 
         $("#btnSearch").click(function (e) {
             e.preventDefault();
-            let SaleId = parseInt($("#SaleId").val());
+            var SaleId = parseInt($("#SaleId").val());
             $("#SaleId").val(SaleId);
             if (SaleId > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {

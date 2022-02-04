@@ -14,34 +14,100 @@ namespace IMS.Reports
 {
     public partial class ReportViewer : System.Web.UI.Page
     {
+        Dictionary<string, string> paramcol = new Dictionary<string, string>();
+        List<string> lstparams = new List<string>();
+        int ReportId;
+        string ReportName;
+        string SPName;
+        string QueryType;
         protected void Page_Load(object sender, EventArgs e)
         {
-            string SaleId = "20";
+            string querystring = "";
+            if (!IsPostBack)
+            {
+                querystring = Request.QueryString.ToString();
+                ReportId = Convert.ToInt32(Request.QueryString["ReportId"]);
+            }
+            MapQueryStringParams(querystring);
+            MapReportConfig(ReportId);
+
             ReportViewer1.ProcessingMode = ProcessingMode.Local;
-            ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/Material_Sale_Bill.rdlc");
-            SqlCommand cmdLatest = OpenConnection("Report_Material_Sale_Bill");
-            cmdLatest.Parameters.Add(new SqlParameter("@SaleId", SaleId));
-            DataSet dt = GetDataSet(cmdLatest);
+            ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/"+ReportName+".rdlc");
+            DataTable reportdt = GetReportData();
             ReportViewer1.LocalReport.DataSources.Clear();
-            ReportViewer1.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource("DT_Material_Sale_Bill", dt.Tables[0]));
+            ReportViewer1.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));
         }
 
-        public SqlCommand OpenConnection(string strSpName)
+        public DataTable GetReportData()
         {
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnectionString"].ConnectionString);
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = strSpName;
-            cmd.Connection = con;
-            cmd.CommandType = CommandType.StoredProcedure;
-            con.Open();
-            return cmd;
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                string paramvalue="";
+                for (int i = 0; i < lstparams.Count(); i++)
+                {
+                    for (int j = 0; j < paramcol.Count(); j++)
+                    {
+                        if (paramcol.ContainsKey(lstparams[i].ToString()))
+                        {
+                            paramvalue = paramcol[lstparams[i].ToString()];
+                            break;
+                        }
+                    }
+                    SqlParameters.Add(new SqlParameter(lstparams[i].ToString(), paramvalue));
+                }
+                if (lstparams.Count() > 0)
+                {
+                    dt = DBManager.ExecuteDataTableWithParameter(SPName, CommandType.StoredProcedure, SqlParameters);
+                }
+                else
+                {
+                    dt = DBManager.ExecuteDataTable(SPName, CommandType.StoredProcedure);
+                }
+                return dt;
+            }
+            catch (Exception ex)
+            { throw ex; }
         }
-        public DataSet GetDataSet(SqlCommand cmd)
+
+        public void MapQueryStringParams(string querystring)
         {
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            return ds;
+            DataSet reportdata = new DataSet();
+            string[] querystr = querystring.Split('&');
+            for (int i = 0; i < querystr.Count(); i++)
+            {
+                string[] param = querystr[i].Split('=');
+                paramcol.Add(param[0].ToString().ToLower(), param[1].ToString().ToLower());
+            }
         }
+
+        public void MapReportConfig(int ReportId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                string sql = "SELECT ReportName,QueryType,Query,Params FROM Report_Config (nolock) WHERE IsActive=1 AND Fin_Id="+ CommonUtility.GetFYID().ToString() +" AND Company_Id="+ CommonUtility.GetCompanyID().ToString() + " AND Report_Id=" + ReportId.ToString() + "";
+                //List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                //SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
+                dt = DBManager.ExecuteDataTable(sql, CommandType.Text);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ReportName = Convert.ToString(dr[0]);
+                    QueryType = Convert.ToString(dr[1]);
+                    SPName = Convert.ToString(dr[2]);
+                    string[] strparam = dr[3].ToString().Split(',');
+                    for (int i = 0; i < strparam.Count(); i++)
+                    {
+                        lstparams.Add(strparam[0].ToString().ToLower());
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+        }
+
+        
     }
 }
