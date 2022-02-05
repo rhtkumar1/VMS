@@ -20,6 +20,7 @@ namespace IMS.Reports
         string ReportName;
         string SPName;
         string QueryType;
+        List<ReportParameter> reportparam = new List<ReportParameter>();
         protected void Page_Load(object sender, EventArgs e)
         {
             string querystring = "";
@@ -34,6 +35,12 @@ namespace IMS.Reports
             ReportViewer1.ProcessingMode = ProcessingMode.Local;
             ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/"+ReportName+".rdlc");
             DataTable reportdt = GetReportData();
+
+
+            //if (reportparam.Count() > 0)
+            //{
+            //    ReportViewer1.ServerReport.SetParameters(reportparam);
+            //}
             ReportViewer1.LocalReport.DataSources.Clear();
             ReportViewer1.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));
         }
@@ -56,6 +63,7 @@ namespace IMS.Reports
                         }
                     }
                     SqlParameters.Add(new SqlParameter(lstparams[i].ToString(), paramvalue));
+                    //reportparam.Add(new ReportParameter(lstparams[i].ToString(), paramvalue));
                 }
                 if (lstparams.Count() > 0)
                 {
