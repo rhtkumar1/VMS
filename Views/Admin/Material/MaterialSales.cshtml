@@ -49,7 +49,7 @@
                         <div class="col-md-2">
                             <button type="button" style="margin-top: 26px;" name="btnPrint" id="btnPrint" class="btncustome pull-right">Print</button>
                         </div>
-                        
+
                         <div class="clearfix"></div>
                         @using (Html.BeginForm("ManageMateriaSales", "Material", FormMethod.Post, new { @id = "MaterialSales" }))
                         {
@@ -417,7 +417,7 @@
             $("#hdnTotalAmount").val("");
             $("#Discount_1_Amount").val("");
             $("#Discount_2_Amount").val("");
-            
+
         });
 
         $("#btnAdd").click(function (e) {
@@ -631,19 +631,19 @@
         });
 
         function ResetFromOfficeChange()
-       {
+           {
 
-           $("#drpPartyId").empty();
-           $("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
-           $("#drpOrderNo").empty();
-           $("#drpOrderNo").append($("<option></option>").val("0").html("--Select--"));
-           $("#StateId").empty();
-           $("#StateId").append($("<option></option>").val("0").html("--Select--"));
-           $("#tbodyid").empty();
-           $("#lblTotalAmount").text("Total : 0.00");
-           $("#IsUpdateMaterialSales").val(0);
-           $("#SaleAmount").val("0");
-        }
+               $("#drpPartyId").empty();
+               $("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
+               $("#drpOrderNo").empty();
+               $("#drpOrderNo").append($("<option></option>").val("0").html("--Select--"));
+               $("#StateId").empty();
+               $("#StateId").append($("<option></option>").val("0").html("--Select--"));
+               $("#tbodyid").empty();
+               $("#lblTotalAmount").text("Total : 0.00");
+               $("#IsUpdateMaterialSales").val(0);
+               $("#SaleAmount").val("0");
+            }
 
         $("#drpPartyId").change(function () {
             let PartyId = parseInt($('#drpPartyId').val());
@@ -672,6 +672,10 @@
                             });
                         } else {
                             $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
+                        }
+                        if (result.Table2 !== undefined && result.Table2.length > 0) {
+                            $("#tbodyid").empty();
+                            BindGrid(result.Table2, 0, 1);
                         }
                     }
                 });
@@ -722,17 +726,17 @@
 
                     if (result.length > 0) {
                         $("#SaleAmount").val("0");
-                        $(result).each(function (index, value) {
-                            $("[id^='hdnItemId_']").each(function () {
-                                if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
-                                    isValid = false;
-                                    return false;
-                                }
-                            });
-                        });
-                        
+                        //$(result).each(function (index, value) {
+                        //    $("[id^='hdnItemId_']").each(function () {
+                        //        if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
+                        //            isValid = false;
+                        //            return false;
+                        //        }
+                        //    });
+                        //});
+
                         if (isValid) {
-                            //$("#tbodyid").empty();
+                            $("#tbodyid").empty();
                             BindGrid(result, 0, 1);
                             $("td").each(function () {
                                 $(this).addClass("tbl-css");
@@ -759,7 +763,7 @@
                 return;
             }
             window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"");
-            
+
         });
 
         $("#btnSearch").click(function (e) {
@@ -945,7 +949,7 @@
     }
     function setCaluValuew(index, bIsDiscount, quantity, poLineId)
     {
-        
+
         let rate = parseFloat($("#txtRate_" + index).val() !== "" ? $("#txtRate_" + index).val() : 0);
         let amount = 0;
         let disAmu = 0;
@@ -970,7 +974,7 @@
                 discount_1_amt = amount * (discount_1) / 100;
                 discount_2_amt = amount * (discount_2) / 100;
                 disAmu = discount_1_amt + discount_2_amt;
-                
+
                 $("#hdnDiscount_1_Amt_" + index).val(discount_1_amt.toFixed(2));
                 $("#hdnDiscount_2_Amt_" + index).val(discount_2_amt.toFixed(2));
 
@@ -1078,7 +1082,7 @@
                     Texable_Amount = value.Taxable_Amount;
                     tamount = value.TotalAmount;
                 }
-                
+
 
             }
 
