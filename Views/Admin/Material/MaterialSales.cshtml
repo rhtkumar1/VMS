@@ -75,8 +75,14 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Invoice Number@*<span class="mandatory">*</span>*@</label>
+                                    <label>Voucher Number</label>
                                     @Html.TextBoxFor(m => m.InvoiceNo, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "InvoiceNo", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Invoice Number</label>
+                                    @Html.TextBoxFor(m => m.VoucherNumber, htmlAttributes: new { @placeholder = "Enter Invoice No", @id = "VoucherNo", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -90,7 +96,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>State<span class="mandatory">*</span></label>
@@ -111,7 +116,6 @@
                                     @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Remarks</label>
@@ -128,6 +132,12 @@
                                 <div class="col-md-4 form-group">
                                     <label>Transporter</label>
                                     @Html.TextBoxFor(m => m.Transporter, htmlAttributes: new { @placeholder = "Enter Transporter", @id = "Transporter", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Dispatch Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Dispatch_Date, htmlAttributes: new { @id = "Dispatch_Date", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -293,6 +303,8 @@
         $("#drpInvoice").select2();
         $("#TransactionDate").val("");
         $("#TransactionDate").attr('placeholder', 'dd/mm/yyyy');
+        $("#Dispatch_Date").val("");
+        $("#Dispatch_Date").attr('placeholder', 'dd/mm/yyyy');
         $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
         $("#drpOrderNo").attr('disabled', 'disabled');
         $("#StateId").append($("<option></option>").val("0").html("Select State"));
@@ -315,7 +327,10 @@
             } else if ($("#TransactionDate").val() === "") {
                 isValid = false;
                 msg = "Please fill all mandatory fields!!!";
-            } else if (parseInt($("#StateId").val()) === 0) {
+            } else if ($("#Dispatch_Date").val() === "") {
+                isValid = false;
+                msg = "Please fill all mandatory fields!!!";
+            }else if (parseInt($("#StateId").val()) === 0) {
                 isValid = false;
                 msg = "Please fill all mandatory fields!!!";
             }
@@ -777,6 +792,7 @@
                     var result = res.Table;
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
+                    $("#VoucherNumber").val(result[0].Voucher_No);
                     $("#drpPartyId").val(result[0].Party_Id);
                     $('#PartyId').val(result[0].Party_Id);
                     $("#StateId").empty();
@@ -797,6 +813,7 @@
                     }
 
                     $("#TransactionDate").val(result[0].Transaction_Date);
+                    $("#Dispatch_Date").val(result[0].Dispatch_Date);
                     $("#Remarks").val(result[0].Remarks);
                     $("#Transporter").val(result[0].Transporter);
                     $("#Marka").val(result[0].Marka);
@@ -829,9 +846,11 @@
             $("#PartyId").val("");
             $("#OfficeId").val($("#drpPartyId option:first").val());
             $("#InvoiceNo").val("");
+            $("#VoucherNumber").val("");
             $("#drpPartyId").val($("#drpPartyId option:first").val());
             $("#Purchase_Ref").val("");
             $("#TransactionDate").val("");
+            $("#Dispatch_Date").val("");
             $("#Remarks").val("");
             $("#Marka").val("");
             $("#Transporter").val("");
@@ -1107,8 +1126,8 @@
                             <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
                             <input type="hidden" id="hdnItemTypeGrid_${value.Item_Id}" name="hdnItemTypeGrid_${value.Item_Id}" value="${value.ItemNature}" />
                             <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
-                            <input type="hidden" id="hdnDiscount_1_Amt_${value.Item_Id}" name="hdnDiscount_1_Amt_${value.Item_Id}" value="${value.Discount_1_Amount}" />
-                            <input type="hidden" id="hdnDiscount_2_Amt_${value.Item_Id}" name="hdnDiscount_2_Amt_${value.Item_Id}" value="${value.Discount_2_Amount}" />
+                            <input type="hidden" id="hdnDiscount_1_Amt_${value.Item_Id}" name="hdnDiscount_1_Amt_${value.Item_Id}" value="${value.Discount_1_Amount === undefined ? "0" : value.Discount_1_Amount}" />
+                            <input type="hidden" id="hdnDiscount_2_Amt_${value.Item_Id}" name="hdnDiscount_2_Amt_${value.Item_Id}" value="${value.Discount_2_Amount === undefined ? "0" : value.Discount_1_Amount}" />
                           `;
             cell = $(row.insertCell(-1));
             cell.append(lblItem);

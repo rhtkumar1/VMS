@@ -21,6 +21,7 @@ namespace IMS.Models.ViewModel
         public int StateId { get; set; }
         public int SupplyStateId { get; set; }
         public string TransactionDate { get; set; }
+        public string Dispatch_Date { get; set; }
         public decimal SaleAmount { get; set; }
         public int FinId { get; set; }
         public int CompanyId { get; set; }
@@ -46,6 +47,7 @@ namespace IMS.Models.ViewModel
         public int IsUpdateMaterialSales { get; set; }
         public int MENU_Id { get; set; }
         public SelectList UnitLists { get; set; }
+        public string VoucherNumber { get; set; }
 
         public MaterialSales()
         {
@@ -87,11 +89,14 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
                 SqlParameters.Add(new SqlParameter("@Invoice_No", InvoiceNo));
+                SqlParameters.Add(new SqlParameter("@Voucher_No", VoucherNumber));
                 SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
                 if (!string.IsNullOrEmpty(TransactionDate))
                     SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
+                if (!string.IsNullOrEmpty(Dispatch_Date))
+                    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(Dispatch_Date))));
                 SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
                 SqlParameters.Add(new SqlParameter("@Marka", Marka));
                 SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));
