@@ -82,7 +82,7 @@ namespace IMS.Models.ViewModel
                                     IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  
                                     UnitId="""+ Convert.ToString(item.Unit_Id) + @""" Discount_1_Amount=""" + Convert.ToString(item.Discount_1_Amount) + @"""
                                     Discount_2_Amount=""" + Convert.ToString(item.Discount_2_Amount) + @""" Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" 
-                                    />");
+                                    LastPurchaseRate=""" + Convert.ToString(item.LastRate) + @""" />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
@@ -219,6 +219,7 @@ namespace IMS.Models.ViewModel
         public string ItemTitle { get; set; }
         public string HSN_SAC { get; set; }
         public string Quantity { get; set; }
+        public string LastRate { get; set; }
         public string Rate { get; set; }
         public string Amount { get; set; }
         public string Discount_1 { get; set; }

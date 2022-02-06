@@ -242,6 +242,7 @@
                                             <th class="tbl-heading">O-Qty</th>
                                             <th class="tbl-heading">A-Qty</th>
                                             <th class="tbl-heading">Unit</th>
+                                            <th class="tbl-heading">Last Rate</th>
                                             <th class="tbl-heading">Rate</th>
                                             <th class="tbl-heading">Amount</th>
                                             <th class="tbl-heading">D1(%)</th>
@@ -271,6 +272,7 @@
                                     <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
                                     <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
                                     <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
+                                    <input type="hidden" id="hdnLastRate" value="0" name="hdnLastRate" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
@@ -377,6 +379,7 @@
                             oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
                             oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
                             oMapping.Rate = $("#txtRate_" + index).val();
+                            oMapping.LastRate = $("#lblLastRate_$" + index).val();
                             oMapping.Amount = $("#lblAmount_" + index).text();
                             oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
                             oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
@@ -514,6 +517,10 @@
                 let lblUnit = `<label id="lblUnit_${itemId}" data-Unit_Id="${$("#Unit_Id").val()}" data-index="${itemId}" >${$("#Unit_Id :selected").text()}</label>`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblUnit);
+                //Add Last Rate cell.
+                let htmlLastRate = `<label id="lblLastRate_${itemId}" data-index="${itemId}" >${$("#hdnLastRate").val()}</label>`;
+                cell = $(row.insertCell(-1));
+                cell.append(htmlLastRate);
                 //Add Rate cell.
                 let htmlRate = `<input type="text" id="txtRate_${itemId}" data-index="${itemId}" name="txtRate_${itemId}" onchange="Calculate(this);" value="${$("#Rate").val()}"  tp-type="numeric" style="width:40px;"/>`;
                 cell = $(row.insertCell(-1));
@@ -576,6 +583,7 @@
                 $("#Total").val("");
                 $("#hdnTotalAmount").val("");
                 $("#hdnRowId").val("");
+                $("#hdnLastRate").val("0")
 
                 $("[id^='lblTotal_Amount_Row_']").each(function () {
                     amount += parseFloat($("#"+this.id).text());
@@ -628,6 +636,7 @@
                         $("#GST").val(result[0].GST);
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
                         $("#hdnItemType").val(result[0].ItemNature);
+                        $("#hdnLastRate").val(result[0].LastPurchaseRate);
                         $("#AvailableQuantity").val(result[0].Available_Qty);
                         $("#Unit_Id").val(result[0].UnitId);
                         $("#GST").change();
@@ -887,6 +896,7 @@
                 window.location.href = "/Material/DeleteMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken';
            }
         });
+
     });
     function CalculateAmount() {
         let bIsDiscount = false;
@@ -1152,6 +1162,10 @@
             let lblUnit = `<label id="lblUnit_${value.Item_Id}" data-Unit_Id="${value.UnitId}" data-index="${value.Item_Id}" >${value.Unit}</label>`;
             cell = $(row.insertCell(-1));
             cell.append(lblUnit);
+            //Add Last Rate cell.
+            let htmlLastRate = `<label id="lblLastRate_${value.Item_Id}" data-index="${value.Item_Id}" >${value.LastPurchaseRate === undefined ? "0" : value.LastPurchaseRate}</label>`;
+            cell = $(row.insertCell(-1));
+            cell.append(htmlLastRate);
             //Add Rate cell.
             let htmlRate = `<input type="text" id="txtRate_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtRate_${value.Item_Id}" onchange="Calculate(this);" value="${rate}"  tp-type="numeric" style="width:40px;"/>`;
             cell = $(row.insertCell(-1));
