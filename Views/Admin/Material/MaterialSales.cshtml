@@ -227,6 +227,7 @@
                                         <tr>
                                             <th class="tbl-heading">Action</th>
                                             <th class="tbl-heading">Item</th>
+                                            <th class="tbl-heading">Order Date</th>
                                             <th class="tbl-heading">H/S</th>
                                             <th class="tbl-heading">O-Qty</th>
                                             <th class="tbl-heading">A-Qty</th>
@@ -475,13 +476,13 @@
                               <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
                               <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
                               <input type="hidden" id="hdnDiscount_1_Amt_${itemId}" name="hdnDiscount_1_Amt_${itemId}" value="${$("#Discount_1_Amount").val()}" />
-                              <input type="hidden" id="hdnDiscount_2_Amt_${itemId}" name="hdnDiscount_2_Amt_${itemId}" value="${$("#Discount_2_Amount").val()}" />
-                                
-                            `;
-                //
-
+                              <input type="hidden" id="hdnDiscount_2_Amt_${itemId}" name="hdnDiscount_2_Amt_${itemId}" value="${$("#Discount_2_Amount").val()}" />`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblItem);
+                //Add Order Date.
+                let lblOrderDate = `<label id="lblOrderDate_${itemId}">${"N/A"}</label>`;
+                cell = $(row.insertCell(-1));
+                cell.append(lblOrderDate);
                 //Add Hsn_Sac cell.
                 let lblHSN_SAC = `<label id="lblHSN_SAC_${itemId}">${$("#Hsn_Sac").val()}</label>`;
                 cell = $(row.insertCell(-1));
@@ -1102,6 +1103,10 @@
                           `;
             cell = $(row.insertCell(-1));
             cell.append(lblItem);
+            //Add Order Date.
+            let lblOrderDate = `<label id="lblOrderDate_${value.Item_Id}">${value.OrderDate !== undefined ? value.OrderDate : "N/A"}</label>`;
+            cell = $(row.insertCell(-1));
+            cell.append(lblOrderDate);
             //Add Hsn_Sac cell.
             let lblHSN_SAC = `<label id="lblHSN_SAC_${value.Item_Id}">${value.HSN_SAC}</label>`;
             cell = $(row.insertCell(-1));
