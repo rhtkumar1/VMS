@@ -48,15 +48,15 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>CESS<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.CESS, htmlAttributes: new { @placeholder = "Enter CESS", @id = "CESS", @class = "form-control", @required = "required" })
+                                    <label>CESS</label>
+                                    @Html.TextBoxFor(m => m.CESS, htmlAttributes: new { @placeholder = "Enter CESS", @id = "CESS", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>CESSP<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.CESSP, htmlAttributes: new { @placeholder = "Enter CESSP", @id = "CESSP", @class = "form-control", @required = "required" })
+                                    <label>CESSP</label>
+                                    @Html.TextBoxFor(m => m.CESSP, htmlAttributes: new { @placeholder = "Enter CESSP", @id = "CESSP", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -71,6 +71,73 @@
                                     @Html.TextBoxFor(m => m.EndDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
+                            
+                            <div class="blank-page" title="Purchase Ledger Detail">
+                                <div class="heading">
+                                    <h4>
+                                        Purchase Ledger Detail
+                                    </h4>
+                                </div>
+                                <div><br /></div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Purchase<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.PurchaseLedgerId, new SelectList(Model.Purchase_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>IGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.PurchaseIGSTLedgerId, new SelectList(Model.Purchase_IGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>CGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.PurchaseCGSTLedgerId, new SelectList(Model.Purchase_CGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>SGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.PurchaseSGSTLedgerId, new SelectList(Model.Purchase_SGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="blank-page" title="Sales Ledger Detail">
+                                <div class="heading">
+                                    <h4>
+                                        Sales Ledger Detail
+                                    </h4>
+                                </div>
+                                <div><br /></div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Sales<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.SaleLedgerId, new SelectList(Model.Sale_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>IGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.SaleIGSTLedgerId, new SelectList(Model.Sale_IGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>CGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.SaleCGSTLedgerId, new SelectList(Model.Sale_CGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>SGST<span class="mandatory">*</span></label>
+                                        @Html.DropDownListFor(m => m.SaleSGSTLedgerId, new SelectList(Model.Sale_SGST_LedgerLists, "Value", "Text"), htmlAttributes: new { @placeholder = "Select", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div><br /></div>
                             <div class="col-md-10">
                             </div>
                             <div class="col-md-1 form-group pull-right">
@@ -164,15 +231,23 @@
 
         var editFormData = function (dilogType, HSNSACMaster) {
             $("msg").text = "";
-            if (HSNSACMaster.HSNSAC_Id > 0) {
+            if (HSNSACMaster.HSN_SACID > 0) {
                 $("#HSN_SACID").val(HSNSACMaster.HSN_SACID);
-                $("#HSN_SAC").val(HSNSACMaster.HSN_SAC);
+                $("#HSN_SACCODE").val(HSNSACMaster.HSN_SAC);
                 $("#Tax_Slab").val(HSNSACMaster.Tax_Slab);
                 $("#CESS").val(HSNSACMaster.CESS);
                 $("#CESSP").val(HSNSACMaster.CESSP);
                 $("#StartDate").val(HSNSACMaster.StartDate);
                 $("#EndDate").val(HSNSACMaster.EndDate);
                 $("#btnSubmit").text("Update")
+                $("#PurchaseLedgerId").val(HSNSACMaster.PurchaseLedgerId);
+                $("#PurchaseIGSTLedgerId").val(HSNSACMaster.PurchaseIGSTLedgerId);
+                $("#PurchaseCGSTLedgerId").val(HSNSACMaster.PurchaseCGSTLedgerId);
+                $("#PurchaseSGSTLedgerId").val(HSNSACMaster.PurchaseSGSTLedgerId);
+                $("#SaleLedgerId").val(HSNSACMaster.SaleLedgerId);
+                $("#SaleIGSTLedgerId").val(HSNSACMaster.SaleIGSTLedgerId);
+                $("#SaleCGSTLedgerId").val(HSNSACMaster.SaleCGSTLedgerId);
+                $("#SaleSGSTLedgerId").val(HSNSACMaster.SaleSGSTLedgerId);
             }
             else {
                 $("#HSNSACId").val("0");
