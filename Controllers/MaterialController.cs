@@ -355,6 +355,21 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
+        public ActionResult SearchParty(string Party, int OfficeId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_Party(Party, OfficeId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
         public ActionResult GetStateSales(int PartyId,int OfficeId, string AppToken = "")
         {
             DataSet ds = new DataSet();
