@@ -61,6 +61,7 @@ namespace IMS.Models.ViewModel
         public decimal ListPrice { get; set; }
         public string BarCodeLocation { get; set; }
         public bool IsNewEntery;
+        public int OpeningQty { get; set; }
 
         public ItemMaster()
         {
@@ -121,6 +122,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Scheme", Scheme));
                 SqlParameters.Add(new SqlParameter("@MRP", MRP));
                 SqlParameters.Add(new SqlParameter("@ListPrice", ListPrice));
+                SqlParameters.Add(new SqlParameter("@OpeningQty", OpeningQty));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -232,6 +234,7 @@ namespace IMS.Models.ViewModel
                     //ItemMapping = dr["ItemMapping"].ToString();
                     //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
                     Remarks = dr["Remarks"].ToString();
+                    OpeningQty = Convert.ToInt32(dr["OpeningQty"]);
                     //Loginid = Convert.ToInt32(dr["LoginId"]);
                 }
             }
