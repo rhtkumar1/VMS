@@ -118,6 +118,7 @@
     <Content Include="assets\admin\css\bootstrap.min.css" />
     <Content Include="assets\admin\css\custom.css" />
     <Content Include="assets\admin\css\font-awesome.css" />
+    <Content Include="assets\admin\css\jquery-ui.css" />
     <Content Include="assets\admin\css\jsgrid-theme.min.css" />
     <Content Include="assets\admin\css\jsgrid.min.css" />
     <Content Include="assets\admin\css\normalize.css" />
@@ -128,6 +129,7 @@
     <Content Include="assets\admin\images\search.png" />
     <Content Include="assets\admin\images\status.gif" />
     <Content Include="assets\admin\js\bootstrap.min.js" />
+    <Content Include="assets\admin\js\jquery-ui.js" />
     <Content Include="assets\admin\js\jsgrid.min.js" />
     <Content Include="assets\admin\js\custom.js" />
     <Content Include="assets\admin\js\jquery.metisMenu.js" />

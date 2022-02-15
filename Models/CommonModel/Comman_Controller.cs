@@ -97,5 +97,20 @@ namespace IMS.Models.CommonModel
 
             return ds;
         }
+        public static DataTable MaterialSales_Get_Party(string Party, int OfficeId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@OfficeId", OfficeId));
+                SqlParameters.Add(new SqlParameter("@Party", Party));
+                dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Get", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
     }
 }
