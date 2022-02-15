@@ -954,6 +954,7 @@
     });
     function CalculateAmount() {
         let bIsDiscount = false;
+        let isValidate = true;
         let quantity = parseFloat($("#Quantity").val() !== "" ? $("#Quantity").val() : 0);
         let rate = parseFloat($("#Rate").val() !== "" ? $("#Rate").val() : 0);
         let amount = 0;
@@ -965,51 +966,67 @@
         let discount_2_Amt = 0;
         let discountAmount = 0;
         let totalAmount = 0;
-        if (quantity > 0 && rate > 0) {
-            amount = quantity * rate;
-            $("#Amount").val(amount.toFixed(2));
+        if (Number($("#hdnItemType").val()) === 16) {
+            isValidate = false;
         }
-        if (amount > 0) {
-            discount_1 = parseFloat($("#Discount_1").val() !== "" ? $("#Discount_1").val() : 0);
-            discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
-            if (discount_1 > 0 || discount_2 > 0) {
-                bIsDiscount = true;
-                //disAmu = amount * (discount_1 + discount_2) / 100;
-                discount_1_Amt = amount * (discount_1) / 100;
-                discount_2_Amt = amount * (discount_2) / 100;
-                disAmu = discount_1_Amt + discount_2_Amt;
-
-                $("#Discount_1_Amount").val(discount_1_Amt.toFixed(2));
-                $("#Discount_2_Amount").val(discount_2_Amt.toFixed(2));
-
-                discountAmount = amount - disAmu;
-                gst = discountAmount * parseFloat($("#GST").val()) / 100;
+        if (quantity > 0) {
+            if (isValidate && rate > 0) {
+                amount = quantity * rate;
+                $("#Amount").val(amount.toFixed(2));
             } else {
-                bIsDiscount = false;
-                gst = amount * parseFloat($("#GST").val()) / 100;
+                amount = quantity * rate;
+                $("#Amount").val(amount.toFixed(2));
             }
 
-            let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
-            if (is_SameState) {
-                $("#CGST").val(parseFloat(gst / 2).toFixed(2));
-                $("#SGST").val(parseFloat(gst / 2).toFixed(2));
-                $("#IGST").val(parseFloat(0).toFixed(2));
-
-            } else {
-                $("#CGST").val(parseFloat(0).toFixed(2));
-                $("#SGST").val(parseFloat(0).toFixed(2));
-                $("#IGST").val(parseFloat(gst).toFixed(2));
-            }
-            if (bIsDiscount) {
-                totalAmount = discountAmount + gst;
-                $("#Taxable_Amount").val(discountAmount.toFixed(2));
-            } else {
-                totalAmount = amount + gst;
-                $("#Taxable_Amount").val(amount.toFixed(2));
-            }
-            $("#Total").val(totalAmount.toFixed(2));
-            $("#hdnTotalAmount").val(totalAmount.toFixed(2));
         }
+        if (isValidate) {
+            if (amount > 0) {
+                CommonFunction();
+            }
+        } else {
+            CommonFunction();
+        }
+    }
+    function CommonFunction() {
+        discount_1 = parseFloat($("#Discount_1").val() !== "" ? $("#Discount_1").val() : 0);
+        discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
+        if (discount_1 > 0 || discount_2 > 0) {
+            bIsDiscount = true;
+            //disAmu = amount * (discount_1 + discount_2) / 100;
+            discount_1_Amt = amount * (discount_1) / 100;
+            discount_2_Amt = amount * (discount_2) / 100;
+            disAmu = discount_1_Amt + discount_2_Amt;
+
+            $("#Discount_1_Amount").val(discount_1_Amt.toFixed(2));
+            $("#Discount_2_Amount").val(discount_2_Amt.toFixed(2));
+
+            discountAmount = amount - disAmu;
+            gst = discountAmount * parseFloat($("#GST").val()) / 100;
+        } else {
+            bIsDiscount = false;
+            gst = amount * parseFloat($("#GST").val()) / 100;
+        }
+
+        let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
+        if (is_SameState) {
+            $("#CGST").val(parseFloat(gst / 2).toFixed(2));
+            $("#SGST").val(parseFloat(gst / 2).toFixed(2));
+            $("#IGST").val(parseFloat(0).toFixed(2));
+
+        } else {
+            $("#CGST").val(parseFloat(0).toFixed(2));
+            $("#SGST").val(parseFloat(0).toFixed(2));
+            $("#IGST").val(parseFloat(gst).toFixed(2));
+        }
+        if (bIsDiscount) {
+            totalAmount = discountAmount + gst;
+            $("#Taxable_Amount").val(discountAmount.toFixed(2));
+        } else {
+            totalAmount = amount + gst;
+            $("#Taxable_Amount").val(amount.toFixed(2));
+        }
+        $("#Total").val(totalAmount.toFixed(2));
+        $("#hdnTotalAmount").val(totalAmount.toFixed(2));
     }
     function Calculate(value) {
         $("#IsUpdateMaterialSales").val(1);
@@ -1032,7 +1049,6 @@
     }
     function setCaluValuew(index, bIsDiscount, quantity, poLineId)
     {
-
         let rate = parseFloat($("#txtRate_" + index).val() !== "" ? $("#txtRate_" + index).val() : 0);
         let amount = 0;
         let disAmu = 0;
