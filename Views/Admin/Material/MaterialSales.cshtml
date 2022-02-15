@@ -299,13 +299,11 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        //$("#drpParty").select2();
         $("#drpInvoice").select2();
         $("#TransactionDate").val("");
         $("#TransactionDate").attr('placeholder', 'dd/mm/yyyy');
         $("#Dispatch_Date").val("");
         $("#Dispatch_Date").attr('placeholder', 'dd/mm/yyyy');
-        //$("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
         $("#SearchOrderNo").attr('disabled', 'disabled');
         $("#StateId").append($("<option></option>").val("0").html("Select State"));
         $("#StateId").attr('disabled', 'disabled');
@@ -603,25 +601,6 @@
             }
         });
 
-        @*$("#OfficeId").change(function () {
-           let OfficeId = parseInt($('#OfficeId').val());
-            ResetFromOfficeChange();
-            if (OfficeId > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + 0 + "&OfficeId=" + OfficeId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                    var result = JSON.parse(d);
-                    if (result !== null) {
-                       if (result.Table.length > 0) {
-                           $.each(result.Table, function (index, value) {
-                                $("#drpPartyId").append($("<option></option>").val(value.Party_Id).html(value.Title));
-                            });
-                        } else {
-                          // $("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
-                        }
-                    }
-                });
-            }
-        });*@
-
         $("#Item_Id").change(function () {
             let Item_Id = parseInt($("#Item_Id").val());
             let Office_Id = parseInt($("#OfficeId").val());
@@ -733,52 +712,6 @@
         }
 
         ResetFromOfficeChange();
-
-        @*$("#drpPartyId").change(function () {
-            let PartyId = parseInt($('#drpPartyId').val());
-            let OfficeId = parseInt($('#OfficeId').val());
-            $("#PartyId").val(PartyId);
-            if (PartyId > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + PartyId + "&OfficeId=" + OfficeId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                    var result = JSON.parse(d);
-                    if (result !== null) {
-                        $("#drpOrderNo").empty();
-                        $("#StateId").empty();
-                        if (result.Table.length > 0) {
-                            $("#StateId").removeAttr('disabled');
-                            $("#StateId").append($("<option></option>").val("0").html("Select State"));
-                            $.each(result.Table, function (index, value) {
-                                $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                            });
-                        } else {
-                            $("#StateId").append($("<option></option>").val("0").html("Select State"));
-                        }
-                        if (result.Table1.length > 0) {
-                            $("#drpOrderNo").removeAttr('disabled');
-                            $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                            $.each(result.Table1, function (index, value) {
-                                $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
-                            });
-                        } else {
-                            $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                        }
-                        if (result.Table2 !== undefined && result.Table2.length > 0) {
-                            $("#tbodyid").empty();
-                            BindGrid(result.Table2, 0, 1);
-                        }
-                    }
-                });
-            } else {
-                $("#drpOrderNo").empty();
-                $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
-                $("#StateId").empty();
-                $("#StateId").append($("<option></option>").val("0").html("Select State"));
-                $("#tbodyid").empty();
-                $("#lblTotalAmount").text("Total : 0.00");
-                $("#IsUpdateMaterialSales").val(0);
-                $("#SaleAmount").val("0");
-            }
-        });*@
 
         $("#StateId").change(function () {
             $("#SupplyStateId").val(parseInt($(this).val()));
@@ -968,7 +901,6 @@
             $('#drpParty').select2().trigger('change');
             $("#drpInvoice").empty();
             $('#drpInvoice').select2().trigger('change');
-            //$("#drpOrderNo").empty();
             $("#SearchOrderNo").val("");
             $("#SearchParty").val("");
             $("#SaleId").val(0);
@@ -1007,8 +939,6 @@
             $("#lblTotalAmount").text("Total : 0.00");
             $("#tblMaterialSales TBODY").empty();
             $("#divDeleteMatrial").css('display', 'none');
-            //$("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-            //$("#drpOrderNo").attr('disabled', 'disabled');
             $("#SearchOrderNo").attr('disabled', 'disabled');
             $("#StateId").append($("<option></option>").val("0").html("Select State"));
             $("#StateId").attr('disabled', 'disabled');
