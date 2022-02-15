@@ -261,7 +261,7 @@
                             <div class="col-md-8"></div>
                             <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
-                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                    <button type="button" name="btnResetFormbtnResetForm" id="btnResetForm" class="btncustome">Reset</button>
                                 </div>
                             </div>
                             <div class="col-md-1 form-group pull-right">
@@ -655,17 +655,21 @@
         $("#SearchParty").autocomplete({
             source: function (request, response) {
                     IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                    var result = JSON.parse(d);
-                    if (result !== null) {
-                        response($.map(result, function (item) {
-                            return { label: item.Title, value: item.Party_Id };
-                        }))
-                    }
+                        var result = JSON.parse(d);
+                        if (result.length===0) {
+                            $("#empty-message").text("No results found");
+                            return response({ label: "No results found", value: 0 });
+                        } else {
+                            response($.map(result, function (item) {
+                                return { label: item.Title, value: item.Party_Id };
+                            }))
+                        }
                 });
             },
             select: function (e, i) {
                 $("#SearchParty").val(i.item.label);
                 let PartyId = parseInt(i.item.value);
+                $("#SearchOrderNo").removeAttr('disabled');
                 let OfficeId = parseInt($('#OfficeId').val());
                 $("#PartyId").val(PartyId);
                 if (PartyId > 0) {
@@ -710,7 +714,7 @@
                     $("#SaleAmount").val("0");
                 }
             },
-            minLength: 3
+            minLength: 1
         });
 
         function ResetFromOfficeChange()
@@ -803,9 +807,12 @@
             source: function (request, response) {
                 IMSC.ajaxCall("GET", "/Material/SearchOrderNo?OrderNo=" + request.term + "&PartyId=" + Number($("#PartyId").val()) + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
-                    if (result !== null) {
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
                         response($.map(result, function (item) {
-                            return { label: item.Title, value: item.Party_Id };
+                            return { label: item.PO_No, value: item.PO_Id };
                         }))
                     }
                 });
@@ -820,18 +827,18 @@
                 if (POId > 0) {
                     IMSC.ajaxCall("GET", "/Material/GetPOData?POId=" + POId + "&Office_Id=" + Office_Id + "&SupplyState_Id=" + SupplyState_Id+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                         var result = JSON.parse(d);
-                
+
                         if (result.length > 0) {
                             $("#SaleAmount").val("0");
-                            //$(result).each(function (index, value) {
-                            //    $("[id^='hdnItemId_']").each(function () {
-                            //        if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
-                            //            isValid = false;
-                            //            return false;
-                            //        }
-                            //    });
-                            //});
-                
+                            $(result).each(function (index, value) {
+                                $("[id^='hdnItemId_']").each(function () {
+                                    if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
+                                        isValid = false;
+                                        return false;
+                                    }
+                                });
+                            });
+
                             if (isValid) {
                                 $("#tbodyid").empty();
                                 BindGrid(result, 0, 1);
@@ -851,7 +858,7 @@
                     $("#lblTotalAmount").text("Total : 0.00");
                 }
             },
-            minLength: 3
+            minLength: 1
         });
 
         $("#drpOrderNo").change(function () {
@@ -913,45 +920,40 @@
             if (SaleId > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
-                if (res !== null) {
-                    var result = res.Table;
-                    $("#OfficeId").val(result[0].Office_Id);
-                    $("#InvoiceNo").val(result[0].Invoice_No);
-                    $("#VoucherNumber").val(result[0].Voucher_No);
-                    $("#txtParty").val(result[0].PartyName);
-                    $('#PartyId').val(result[0].Party_Id);
-                    $("#StateId").empty();
-                    $("#StateId").append($("<option></option>").val(0).html("Select State"));
-                    $.each(res.Table1, function (index, value) {
-                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                    });
-                    $("#StateId").val(result[0].SupplyState_Id);
-                    $("#SupplyStateId").val(result[0].SupplyState_Id);
+                    if (res !== null) {
 
-                    if (res.Table.length>0) {
-                        //$("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                        //$.each(res.Table, function (index, value) {
-                        //    $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
-                        //});
-                        //$("#drpOrderNo").val(result[0].PO_Id);
-                        $("#SearchOrderNo").val(result[0].PO_No);
-                        $("#POId").val(result[0].PO_Id);
-                    }
-
-                    $("#TransactionDate").val(result[0].Transaction_Date);
-                    $("#Dispatch_Date").val(result[0].Dispatch_Date);
-                    $("#Remarks").val(result[0].Remarks);
-                    $("#Transporter").val(result[0].Transporter);
-                    $("#Marka").val(result[0].Marka);
-                    $("#tbodyid").empty();
-                    $("#SaleAmount").val("0");
-                    BindGrid(result, 1,0);
-                    $("td").each(function () {
-                        $(this).addClass("tbl-css");
-                    });
-                    //$("#drpOrderNo").attr('disabled', 'disabled');
-                    $("#SearchOrderNo").attr('disabled', 'disabled');
-
+                        var result = res.Table;
+                        if (res.Table1.length > 0) {
+                            $("#StateId").empty();
+                            $("#StateId").append($("<option></option>").val(0).html("Select State"));
+                            $.each(res.Table1, function (index, value) {
+                                $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                            });
+                        }
+                        if (result.length > 0) {
+                            $("#OfficeId").val(result[0].Office_Id);
+                            $("#InvoiceNo").val(result[0].Invoice_No);
+                            $("#VoucherNumber").val(result[0].Voucher_No);
+                            $("#txtParty").val(result[0].PartyName);
+                            $('#PartyId').val(result[0].Party_Id);
+                            $("#StateId").val(result[0].SupplyState_Id);
+                            $("#SupplyStateId").val(result[0].SupplyState_Id);
+                            $("#SearchOrderNo").val(result[0].PO_No);
+                            $("#POId").val(result[0].PO_Id);
+                            $("#TransactionDate").val(result[0].Transaction_Date);
+                            $("#Dispatch_Date").val(result[0].Dispatch_Date);
+                            $("#Remarks").val(result[0].Remarks);
+                            $("#Transporter").val(result[0].Transporter);
+                            $("#Marka").val(result[0].Marka);
+                            $("#tbodyid").empty();
+                            $("#SaleAmount").val("0");
+                            BindGrid(result, 1, 0);
+                            $("td").each(function () {
+                                $(this).addClass("tbl-css");
+                            });
+                            //$("#drpOrderNo").attr('disabled', 'disabled');
+                            $("#SearchOrderNo").attr('disabled', 'disabled');
+                        }
                 }
             });
             } else {
@@ -968,6 +970,7 @@
             $('#drpInvoice').select2().trigger('change');
             //$("#drpOrderNo").empty();
             $("#SearchOrderNo").val("");
+            $("#SearchParty").val("");
             $("#SaleId").val(0);
             $("#IsUpdateMaterialSales").val(false);
             $("#SaleLine").val("");

@@ -368,6 +368,20 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+        [HttpGet]
+        public ActionResult SearchOrderNo(string OrderNo, int PartyId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_OrderNo(OrderNo, PartyId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
 
         [HttpGet]
         public ActionResult GetStateSales(int PartyId,int OfficeId, string AppToken = "")
