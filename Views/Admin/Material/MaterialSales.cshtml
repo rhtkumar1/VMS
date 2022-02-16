@@ -48,9 +48,16 @@
                         <div class="col-md-1 form-group pull-left">
                             <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                         </div>
-                        <div class="col-md-2">
-                            <button type="button" style="margin-top: 26px;" name="btnPrint" id="btnPrint" class="btncustome pull-right">Print</button>
+                        <div class="col-md-2 form-group pull-left" id="divBillFormat">
+                            <select class="form-control" style="margin-top: 26px;" id="drpBillFormat">
+                                <option value="1">Bill Format 1</option>
+                                <option value="2">Bill Format 2</option>
+                            </select>
                         </div>
+                        <div class="col-md-1 form-group pull-left">
+                            <button type="button" style="margin-top: 26px;" name="btnPrint" id="btnPrint" class="btncustome pull-right">Print&nbsp;Bill</button>
+                        </div>
+
 
                         <div class="clearfix"></div>
                         @using (Html.BeginForm("ManageMateriaSales", "Material", FormMethod.Post, new { @id = "MaterialSales" }))
@@ -446,7 +453,7 @@
             } else if ($("#Quantity").val() === "") {
                 msg = "Please enter quantity.";
                 bAdded = false;
-            } else if (parseInt($("#Unit_Id").val()) === 0) {
+            } else if (parseInt($("#Unit_Id").val()) === 0 && parseInt($("#hdnItemType").val()) === 15) {
                 msg = "Please select unit.";
                 bAdded = false;
             } else if ($("#Rate").val() === "") {
@@ -836,14 +843,15 @@
         });
 
         $("#btnPrint").click(function (e) {
+            
             let SaleId = parseInt($("#SaleId").val());
+            let BillFormatId = parseInt($("#drpBillFormat").val());
             if (SaleId == null || SaleId == 0) {
                 $('#alertModal').modal('show');
                 $('#msg').html("Please select inovice.");
                 return;
             }
-            window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"");
-
+            window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"&BillFormat="+BillFormatId+"");
         });
 
         $("#btnSearch").click(function (e) {
@@ -995,7 +1003,7 @@
             //disAmu = amount * (discount_1 + discount_2) / 100;
             discount_1_Amt = amount * (discount_1) / 100;
             discount_2_Amt = amount * (discount_2) / 100;
-            disAmu = discount_1_Amt + discount_2_Amt;
+            disAmu = discount_1_Amt; //+ discount_2_Amt;
 
             $("#Discount_1_Amount").val(discount_1_Amt.toFixed(2));
             $("#Discount_2_Amount").val(discount_2_Amt.toFixed(2));
@@ -1072,7 +1080,7 @@
                 //disAmu = amount * (discount_1 + discount_2) / 100;
                 discount_1_amt = amount * (discount_1) / 100;
                 discount_2_amt = amount * (discount_2) / 100;
-                disAmu = discount_1_amt + discount_2_amt;
+                disAmu = discount_1_amt;//+ discount_2_amt;
 
                 $("#hdnDiscount_1_Amt_" + index).val(discount_1_amt.toFixed(2));
                 $("#hdnDiscount_2_Amt_" + index).val(discount_2_amt.toFixed(2));

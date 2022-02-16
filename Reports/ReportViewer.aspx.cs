@@ -20,7 +20,6 @@ namespace IMS.Reports
         string ReportName;
         string SPName;
         string QueryType;
-        List<ReportParameter> reportparam = new List<ReportParameter>();
         protected void Page_Load(object sender, EventArgs e)
         {
             string querystring = "";
@@ -107,7 +106,7 @@ namespace IMS.Reports
                     string[] strparam = dr[3].ToString().Split(',');
                     for (int i = 0; i < strparam.Count(); i++)
                     {
-                        lstparams.Add(strparam[0].ToString().ToLower());
+                        lstparams.Add(strparam[i].ToString().ToLower());
                     }
 
                 }
