@@ -446,21 +446,32 @@
             let bAdded = true;
             let msg = "";
             let amount = 0.0;
-
+            let isSpecialService = true;
+            if (Number($("#hdnItemType").val()) === 16) {
+                  isSpecialService = true;
+            }
             if (parseInt($("#Item_Id").val()) === 0) {
                 msg = "Please select item.";
                 bAdded = false;
-            } else if ($("#Quantity").val() === "") {
-                msg = "Please enter quantity.";
-                bAdded = false;
-            } else if (parseInt($("#Unit_Id").val()) === 0 && parseInt($("#hdnItemType").val()) === 15) {
+            }
+            if (!isSpecialService) {
+                if ($("#Quantity").val() === "") {
+                    msg = "Please enter quantity.";
+                    bAdded = false;
+                }
+            } else {
+                $("#Unit_Id").val(0)
+            }
+            if (parseInt($("#Unit_Id").val()) === 0 && !isSpecialService) {
                 msg = "Please select unit.";
                 bAdded = false;
-            } else if ($("#Rate").val() === "") {
+            }
+            if ($("#Rate").val() === "") {
                 msg = "Please enter rate.";
                 bAdded = false;
             }
-            else if (parseInt($("#hdnItemType").val()) === 15 && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
+
+            if (!isSpecialService && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
                 msg = "Please correct quantity that must not be greater than Available Quantity!!!";
                 bAdded = false;
             }
@@ -974,8 +985,13 @@
         let discount_2_Amt = 0;
         let discountAmount = 0;
         let totalAmount = 0;
+        let isSpecialService = true;
         if (Number($("#hdnItemType").val()) === 16) {
+            isSpecialService = true;
+        }
+        if (isSpecialService) {
             isValidate = false;
+            quantity = 1;
         }
         if (quantity > 0) {
             if (isValidate && rate > 0) {
@@ -989,13 +1005,13 @@
         }
         if (isValidate) {
             if (amount > 0) {
-                CommonFunction();
+                CommonFunction(bIsDiscount, isValidate, quantity, rate, amount,disAmu,gst,discount_1, discount_2, discount_1_Amt, discount_2_Amt, discountAmount, totalAmount);
             }
         } else {
-            CommonFunction();
+            CommonFunction(bIsDiscount, isValidate, quantity, rate, amount, disAmu, gst, discount_1, discount_2, discount_1_Amt, discount_2_Amt, discountAmount, totalAmount);
         }
     }
-    function CommonFunction() {
+    function CommonFunction(bIsDiscount, isValidate, quantity, rate, amount, disAmu, gst, discount_1, discount_2, discount_1_Amt, discount_2_Amt, discountAmount, totalAmount) {
         discount_1 = parseFloat($("#Discount_1").val() !== "" ? $("#Discount_1").val() : 0);
         discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
         if (discount_1 > 0 || discount_2 > 0) {
