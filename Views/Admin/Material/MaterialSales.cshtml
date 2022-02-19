@@ -111,7 +111,6 @@
                                 <div class="col-md-4 form-group">
                                     <label>Order No</label>
                                     <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select party first</span>
-                                    @*<select id="drpOrderNo" name="drpOrderNo" class="form-control"></select>*@
                                     <input type="text" id="SearchOrderNo" name="SearchOrderNo" placeholder="Search Order No" class="form-control" />
                                 </div>
                             </div>
@@ -156,7 +155,8 @@
                             <div class="styled-input">
                                 <div class="col-md-2 form-group">
                                     <label>Item<span class="mandatory">*</span></label>
-                                    @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                    <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
+                                    <input type="hidden" id="Item_Id" name="Item_Id" value="" />
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>HSN/SAC</label>
@@ -420,8 +420,8 @@
 
         $("#btnReset").click(function (e) {
             e.preventDefault();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
+            $("#Item_Id").val("");
+            $("#ItemSearch").val("");
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val("");
@@ -500,7 +500,7 @@
                 cell = $(row.insertCell(-1));
                 cell.append(htmlEditBtn);
                 //Add Item cell.
-                let lblItem = `<label id="lblItem_${itemId}">${$("#Item_Id :selected").text()}</label>
+                let lblItem = `<label id="lblItem_${itemId}">${$("#ItemSearch").val()}</label>
                               <input type="hidden" id="hdnItemId_${itemId}" name="hdnItemId_${itemId}" value="${itemId}" />
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0}" />
@@ -577,8 +577,8 @@
                 cell.append(lblTotal_Amount);
 
                 //Set Default
-                $("#Item_Id").val($("#Item_Id option:first").val());
-                $('#Item_Id').select2().trigger('change');
+                $("#Item_Id").val("");
+                $("#ItemSearch").val("");
                 $("#Hsn_Sac").val("");
                 $("#Quantity").val("");
                 $("#Unit_Id").val($("#Unit_Id option:first").val());
@@ -649,6 +649,145 @@
             CalculateAmount();
         });
 
+        $("#StateId").change(function () {
+            $("#SupplyStateId").val(parseInt($(this).val()));
+        });
+
+        $("#drpParty").change(function () {
+            let Party_Id = parseInt($('#drpParty').val());
+            $('#PartyId').val(Party_Id);
+            IMSC.ajaxCall("GET", "/Material/GetInvoiceSales?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                     var result = JSON.parse(d);
+                     $("#drpInvoice").empty();
+                     $("#drpInvoice").append($("<option></option>").val("0").html("Select Invoice"));
+                    if (result.length > 0) {
+                        $.each(result, function (index, value) {
+                            $("#drpInvoice").append($("<option></option>").val(value.Sale_Id).html(value.Invoice_No));
+                        });
+                    }
+            });
+        }).change();
+
+        $("#drpInvoice").change(function () {
+            $("#SaleId").val(parseInt($("#drpInvoice").val() !== "" ? $("#drpInvoice").val():"0"));
+        });
+
+        $("#btnPrint").click(function (e) {
+
+            let SaleId = parseInt($("#SaleId").val());
+            let BillFormatId = parseInt($("#drpBillFormat").val());
+            if (SaleId == null || SaleId == 0) {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
+                return;
+            }
+            window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"&BillFormat="+BillFormatId+"");
+        });
+
+        $("#btnSearch").click(function (e) {
+            e.preventDefault();
+            var SaleId = parseInt($("#SaleId").val());
+            $("#SaleId").val(SaleId);
+            if (SaleId > 0) {
+                IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var res = JSON.parse(d);
+                    if (res !== null) {
+
+                        var result = res.Table;
+                        if (res.Table1.length > 0) {
+                            $("#StateId").empty();
+                            $("#StateId").append($("<option></option>").val(0).html("Select State"));
+                            $.each(res.Table1, function (index, value) {
+                                $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                            });
+                        }
+                        if (result.length > 0) {
+                            $("#OfficeId").val(result[0].Office_Id);
+                            $("#InvoiceNo").val(result[0].Invoice_No);
+                            $("#VoucherNumber").val(result[0].Voucher_No);
+                            $("#txtParty").val(result[0].PartyName);
+                            $('#PartyId').val(result[0].Party_Id);
+                            $("#StateId").val(result[0].SupplyState_Id);
+                            $("#SupplyStateId").val(result[0].SupplyState_Id);
+                            $("#SearchOrderNo").val(result[0].PO_No);
+                            $("#POId").val(result[0].PO_Id);
+                            $("#TransactionDate").val(result[0].Transaction_Date);
+                            $("#Dispatch_Date").val(result[0].Dispatch_Date);
+                            $("#Remarks").val(result[0].Remarks);
+                            $("#Transporter").val(result[0].Transporter);
+                            $("#Marka").val(result[0].Marka);
+                            $("#tbodyid").empty();
+                            $("#SaleAmount").val("0");
+                            BindGrid(result, 1, 0);
+                            $("td").each(function () {
+                                $(this).addClass("tbl-css");
+                            });
+                            $("#SearchOrderNo").attr('disabled', 'disabled');
+                        }
+                }
+            });
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
+            }
+        });
+
+        $("#btnResetForm").click(function (e) {
+            e.preventDefault();
+            $("#drpParty").val($("#drpParty option:first").val());
+            $('#drpParty').select2().trigger('change');
+            $("#drpInvoice").empty();
+            $('#drpInvoice').select2().trigger('change');
+            $("#SearchOrderNo").val("");
+            $("#SearchParty").val("");
+            $("#SaleId").val(0);
+            $("#IsUpdateMaterialSales").val(false);
+            $("#SaleLine").val("");
+            $("#SupplyStateId").val("");
+            $("#PartyId").val("");
+            $("#OfficeId").val($("#drpPartyId option:first").val());
+            $("#InvoiceNo").val("");
+            $("#VoucherNumber").val("");
+            $("#drpPartyId").val($("#drpPartyId option:first").val());
+            $("#Purchase_Ref").val("");
+            $("#TransactionDate").val("");
+            $("#Dispatch_Date").val("");
+            $("#Remarks").val("");
+            $("#Marka").val("");
+            $("#Transporter").val("");
+            $("#StateId").empty();
+            $("#Item_Id").val("");
+            $("#ItemSearch").val("");
+            $("#Hsn_Sac").val("");
+            $("#Quantity").val("");
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $('#Unit_Id').select2().trigger('change');
+            $("#Rate").val("");
+            $("#Amount").val("");
+            $("#Discount_1").val("");
+            $("#Discount_2").val("");
+            $("#Taxable_Amount").val("");
+            $("#GST").val("");
+            $("#CGST").val("");
+            $("#SGST").val("");
+            $("#IGST").val("");
+            $("#Total").val("");
+            $("#hdnRowId").val("");
+            $("#lblTotalAmount").text("Total : 0.00");
+            $("#tblMaterialSales TBODY").empty();
+            $("#divDeleteMatrial").css('display', 'none');
+            $("#SearchOrderNo").attr('disabled', 'disabled');
+            $("#StateId").append($("<option></option>").val("0").html("Select State"));
+            $("#StateId").attr('disabled', 'disabled');
+        });
+
+        $("#btnDelete").click(function () {
+            let SaleId = parseInt($("#SaleId").val());
+            if (SaleId > 0) {
+                window.location.href = "/Material/DeleteMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken';
+           }
+        });
+
         $("#SearchParty").autocomplete({
             source: function (request, response) {
                     IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
@@ -673,7 +812,6 @@
                     IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + PartyId + "&OfficeId=" + OfficeId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result !== null) {
-                            //$("#drpOrderNo").empty();
                             $("#StateId").empty();
                             if (result.Table.length > 0) {
                                 $("#StateId").removeAttr('disabled');
@@ -684,15 +822,6 @@
                             } else {
                                 $("#StateId").append($("<option></option>").val("0").html("Select State"));
                             }
-                            //if (result.Table1.length > 0) {
-                            //    $("#drpOrderNo").removeAttr('disabled');
-                            //    $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                            //    $.each(result.Table1, function (index, value) {
-                            //        $("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
-                            //    });
-                            //} else {
-                            //    $("#drpOrderNo").append($("<option></option>").val("0").html("Select Order"));
-                            //}
                             if (result.Table2 !== undefined && result.Table2.length > 0) {
                                 $("#tbodyid").empty();
                                 BindGrid(result.Table2, 0, 1);
@@ -701,8 +830,6 @@
                     });
                 } else {
                     $("#SearchOrderNo").val("");
-                    //$("#drpOrderNo").empty();
-                    //$("#drpOrderNo").append($("<option></option>").val(value.PO_Id).html(value.PO_No));
                     $("#StateId").empty();
                     $("#StateId").append($("<option></option>").val("0").html("Select State"));
                     $("#tbodyid").empty();
@@ -712,46 +839,6 @@
                 }
             },
             minLength: 1
-        });
-
-        function ResetFromOfficeChange()
-        {
-           //$("#drpPartyId").empty();
-           //$("#drpPartyId").append($("<option></option>").val("0").html("--Select--"));
-           //$("#drpOrderNo").empty();
-           //$("#drpOrderNo").append($("<option></option>").val("0").html("--Select--"));
-           $("#SearchOrderNo").val("");
-           $("#StateId").empty();
-           $("#StateId").append($("<option></option>").val("0").html("--Select--"));
-           $("#tbodyid").empty();
-           $("#lblTotalAmount").text("Total : 0.00");
-           $("#IsUpdateMaterialSales").val(0);
-           $("#SaleAmount").val("0");
-        }
-
-        ResetFromOfficeChange();
-
-        $("#StateId").change(function () {
-            $("#SupplyStateId").val(parseInt($(this).val()));
-        });
-
-        $("#drpParty").change(function () {
-            let Party_Id = parseInt($('#drpParty').val());
-            $('#PartyId').val(Party_Id);
-            IMSC.ajaxCall("GET", "/Material/GetInvoiceSales?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                     var result = JSON.parse(d);
-                     $("#drpInvoice").empty();
-                     $("#drpInvoice").append($("<option></option>").val("0").html("Select Invoice"));
-                    if (result.length > 0) {
-                        $.each(result, function (index, value) {
-                            $("#drpInvoice").append($("<option></option>").val(value.Sale_Id).html(value.Invoice_No));
-                        });
-                    }
-            });
-        }).change();
-
-        $("#drpInvoice").change(function () {
-            $("#SaleId").val(parseInt($("#drpInvoice").val() !== "" ? $("#drpInvoice").val():"0"));
         });
 
         $("#SearchOrderNo").autocomplete({
@@ -812,164 +899,61 @@
             minLength: 1
         });
 
-        $("#drpOrderNo").change(function () {
-            let isValid = true;
-            $("#POId").val(parseInt($("#drpOrderNo").val()));
-            var POId = parseInt($("#drpOrderNo").val());
-            var Office_Id = parseInt($("#OfficeId").val());
-            var SupplyState_Id = parseInt($("#SupplyStateId").val());
-            if (POId > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetPOData?POId=" + POId + "&Office_Id=" + Office_Id + "&SupplyState_Id=" + SupplyState_Id+"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+        $("#ItemSearch").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
-
-                    if (result.length > 0) {
-                        $("#SaleAmount").val("0");
-                        //$(result).each(function (index, value) {
-                        //    $("[id^='hdnItemId_']").each(function () {
-                        //        if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
-                        //            isValid = false;
-                        //            return false;
-                        //        }
-                        //    });
-                        //});
-
-                        if (isValid) {
-                            $("#tbodyid").empty();
-                            BindGrid(result, 0, 1);
-                            $("td").each(function () {
-                                $(this).addClass("tbl-css");
-                            });
-                        } else {
-                            $('#alertModal').modal('show');
-                            $('#msg').html("One of the Item is already mapped in the grid. Please remove that first !!!");
-                        }
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
+                        response($.map(result, function (item) {
+                            return { label: item.Title, value: item.Item_Id };
+                        }))
                     }
-                 });
-            } else {
-                $("#tbodyid").empty();
-                $("#SaleAmount").val("0");
-                $("#divDeleteMatrial").css('display', 'none');
-                $("#lblTotalAmount").text("Total : 0.00");
-            }
-        });
-
-        $("#btnPrint").click(function (e) {
-            
-            let SaleId = parseInt($("#SaleId").val());
-            let BillFormatId = parseInt($("#drpBillFormat").val());
-            if (SaleId == null || SaleId == 0) {
-                $('#alertModal').modal('show');
-                $('#msg').html("Please select inovice.");
-                return;
-            }
-            window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId +"&BillFormat="+BillFormatId+"");
-        });
-
-        $("#btnSearch").click(function (e) {
-            e.preventDefault();
-            var SaleId = parseInt($("#SaleId").val());
-            $("#SaleId").val(SaleId);
-            if (SaleId > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                var res = JSON.parse(d);
-                    if (res !== null) {
-
-                        var result = res.Table;
-                        if (res.Table1.length > 0) {
-                            $("#StateId").empty();
-                            $("#StateId").append($("<option></option>").val(0).html("Select State"));
-                            $.each(res.Table1, function (index, value) {
-                                $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                            });
+                });
+            },
+            select: function (e, i) {
+                $("#ItemSearch").val(i.item.label);
+                let Item_Id = parseInt(i.item.value);
+                $("#Item_Id").val(Item_Id);
+                let Office_Id = parseInt($("#OfficeId").val());
+                let P_State_Id = parseInt($("#SupplyStateId").val());
+                if (Item_Id >0) {
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
+                            $("#Hsn_Sac").val(result[0].HSN_SAC);
+                            $("#GST").val(result[0].GST);
+                            $("#hdnIs_SameState").val(result[0].Is_SameState);
+                            $("#hdnItemType").val(result[0].ItemNature);
+                            $("#hdnLastRate").val(result[0].LastPurchaseRate);
+                            $("#AvailableQuantity").val(result[0].Available_Qty);
+                            $("#Unit_Id").val(result[0].UnitId);
+                            $("#GST").change();
+                        } else {
+                            $("#Hsn_Sac").val("");
+                            $("#GST").val("0");
+                            $("#hdnIs_SameState").val("0");
+                            $("#GST").change();
                         }
-                        if (result.length > 0) {
-                            $("#OfficeId").val(result[0].Office_Id);
-                            $("#InvoiceNo").val(result[0].Invoice_No);
-                            $("#VoucherNumber").val(result[0].Voucher_No);
-                            $("#txtParty").val(result[0].PartyName);
-                            $('#PartyId').val(result[0].Party_Id);
-                            $("#StateId").val(result[0].SupplyState_Id);
-                            $("#SupplyStateId").val(result[0].SupplyState_Id);
-                            $("#SearchOrderNo").val(result[0].PO_No);
-                            $("#POId").val(result[0].PO_Id);
-                            $("#TransactionDate").val(result[0].Transaction_Date);
-                            $("#Dispatch_Date").val(result[0].Dispatch_Date);
-                            $("#Remarks").val(result[0].Remarks);
-                            $("#Transporter").val(result[0].Transporter);
-                            $("#Marka").val(result[0].Marka);
-                            $("#tbodyid").empty();
-                            $("#SaleAmount").val("0");
-                            BindGrid(result, 1, 0);
-                            $("td").each(function () {
-                                $(this).addClass("tbl-css");
-                            });
-                            //$("#drpOrderNo").attr('disabled', 'disabled');
-                            $("#SearchOrderNo").attr('disabled', 'disabled');
-                        }
+                    });
                 }
-            });
-            } else {
-                $('#alertModal').modal('show');
-                $('#msg').html("Please select inovice.");
-            }
+            },
+            minLength: 1
         });
 
-        $("#btnResetForm").click(function (e) {
-            e.preventDefault();
-            $("#drpParty").val($("#drpParty option:first").val());
-            $('#drpParty').select2().trigger('change');
-            $("#drpInvoice").empty();
-            $('#drpInvoice').select2().trigger('change');
+        function ResetFromOfficeChange() {
             $("#SearchOrderNo").val("");
-            $("#SearchParty").val("");
-            $("#SaleId").val(0);
-            $("#IsUpdateMaterialSales").val(false);
-            $("#SaleLine").val("");
-            $("#SupplyStateId").val("");
-            $("#PartyId").val("");
-            $("#OfficeId").val($("#drpPartyId option:first").val());
-            $("#InvoiceNo").val("");
-            $("#VoucherNumber").val("");
-            $("#drpPartyId").val($("#drpPartyId option:first").val());
-            $("#Purchase_Ref").val("");
-            $("#TransactionDate").val("");
-            $("#Dispatch_Date").val("");
-            $("#Remarks").val("");
-            $("#Marka").val("");
-            $("#Transporter").val("");
             $("#StateId").empty();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
-            $("#Hsn_Sac").val("");
-            $("#Quantity").val("");
-            $("#Unit_Id").val($("#Unit_Id option:first").val());
-            $('#Unit_Id').select2().trigger('change');
-            $("#Rate").val("");
-            $("#Amount").val("");
-            $("#Discount_1").val("");
-            $("#Discount_2").val("");
-            $("#Taxable_Amount").val("");
-            $("#GST").val("");
-            $("#CGST").val("");
-            $("#SGST").val("");
-            $("#IGST").val("");
-            $("#Total").val("");
-            $("#hdnRowId").val("");
+            $("#StateId").append($("<option></option>").val("0").html("--Select--"));
+            $("#tbodyid").empty();
             $("#lblTotalAmount").text("Total : 0.00");
-            $("#tblMaterialSales TBODY").empty();
-            $("#divDeleteMatrial").css('display', 'none');
-            $("#SearchOrderNo").attr('disabled', 'disabled');
-            $("#StateId").append($("<option></option>").val("0").html("Select State"));
-            $("#StateId").attr('disabled', 'disabled');
-        });
+            $("#IsUpdateMaterialSales").val(0);
+            $("#SaleAmount").val("0");
+        }
 
-        $("#btnDelete").click(function () {
-            let SaleId = parseInt($("#SaleId").val());
-            if (SaleId > 0) {
-                window.location.href = "/Material/DeleteMatrialSales?SaleId=" + SaleId + "&AppToken=" + '@Model.AppToken';
-           }
-        });
-
+        ResetFromOfficeChange();
     });
     function CalculateAmount() {
         let bIsDiscount = false;

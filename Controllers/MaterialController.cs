@@ -355,35 +355,6 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult SearchParty(string Party, int OfficeId, string AppToken = "")
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                dt = CommonModuleClass.MaterialSales_Get_Party(Party, OfficeId);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return Content(JsonConvert.SerializeObject(dt));
-        }
-        [HttpGet]
-        public ActionResult SearchOrderNo(string OrderNo, int PartyId, string AppToken = "")
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                dt = CommonModuleClass.MaterialSales_Get_OrderNo(OrderNo, PartyId);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return Content(JsonConvert.SerializeObject(dt));
-        }
-
-        [HttpGet]
         public ActionResult GetStateSales(int PartyId,int OfficeId, string AppToken = "")
         {
             DataSet ds = new DataSet();
@@ -689,5 +660,52 @@ namespace IMS.Controllers
         }
 
         #endregion
+
+        #region Common Method
+        [HttpGet]
+        public ActionResult SearchParty(string Party, int OfficeId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_Party(Party, OfficeId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchItem(string Item,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.Material_Get_Item(Item);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchOrderNo(string OrderNo, int PartyId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_OrderNo(OrderNo, PartyId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        #endregion
+
+
     }
 }

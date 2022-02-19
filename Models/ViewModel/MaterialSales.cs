@@ -37,7 +37,6 @@ namespace IMS.Models.ViewModel
         public SelectList PartyLists { get; set; }
         public SelectList StateLists { get; set; }
         public SelectList HSN_SAC_Lists { get; set; }
-        public SelectList Item_Lists { get; set; }
         public List<MaterialSalesMapping> MaterialSalesMappings { get; set; }
         public List<MaterialSalesMapping> MaterialMappingList { get; set; }
         public string AppToken { get; set; }
@@ -55,8 +54,6 @@ namespace IMS.Models.ViewModel
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
-            //POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
-            Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
