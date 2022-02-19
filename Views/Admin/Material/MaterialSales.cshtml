@@ -304,7 +304,7 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        IMSMaterial.AppToken = '@Model.AppToken';
-        IMSMaterial.materialSales();
+        IMSMaterialSales.AppToken = '@Model.AppToken';
+        IMSMaterialSales.materialSales();
     });
 </script>

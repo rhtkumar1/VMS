@@ -138,7 +138,9 @@
     <Content Include="assets\admin\js\screenfull.js" />
     <Content Include="assets\admin\js\scripts.js" />
     <Content Include="assets\admin\js\skycons.js" />
-    <Content Include="assets\material.js" />
+    <Content Include="assets\materiaOrderCreation.js" />
+    <Content Include="assets\materialPurchase.js" />
+    <Content Include="assets\materialSales.js" />
     <Content Include="assets\common.js" />
     <Content Include="assets\home\css\fontawesome-all.css" />
     <Content Include="assets\home\css\style.css" />

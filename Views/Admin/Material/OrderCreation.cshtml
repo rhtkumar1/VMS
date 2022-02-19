@@ -225,7 +225,7 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        IMSMaterial.AppToken = '@Model.AppToken';
-        IMSMaterial.materialOrderCreation();
+        IMSMaterialOrderCreation.AppToken = '@Model.AppToken';
+        IMSMaterialOrderCreation.materialOrderCreation();
     });
 </script>
