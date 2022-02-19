@@ -5,7 +5,8 @@
     ViewBag.Title = "Material Purchase";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
-
+<link href="~/assets/admin/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/assets/admin/js/jquery-ui.js"></script>
 @{
     var AppToken = Convert.ToString(@Model.AppToken);
 }
@@ -77,12 +78,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party<span class="mandatory">*</span></label>
-                                    <select id="drpPartyId" name="drpPartyId" class="form-control">
-                                        @foreach (var item in Model.PartyLists.AsEnumerable())
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    </select>
+                                    <input type="text" id="SearchParty" name="SearchParty" placeholder="Search Party" class="form-control" />
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -119,7 +115,9 @@
                                 <div class="styled-input">
                                     <div class="col-md-2 form-group">
                                         <label>Item<span class="mandatory">*</span></label>
-                                        @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                        <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
+                                        <input type="hidden" id="Item_Id" name="Item_Id" value="" />
+                                        @*@Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })*@
                                         <input type="hidden" id="hdnIs_SameState" name="hdnIs_SameState" value="" />
                                     </div>
                                     <div class="col-md-2 form-group">
@@ -132,7 +130,7 @@
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Unit<span class="mandatory">*</span></label>
-                                        @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control",@disabled="disabled" })
+                                        @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Rate<span class="mandatory">*</span></label>
@@ -252,8 +250,6 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        //IMSM.matrialPurchase();
-        $("#Item_Id").select2();
         $("#drpParty").select2();
         $("#drpInvoice").select2();
         $("#TransactionDate").val("");
@@ -262,12 +258,11 @@
 
         $("body").on("click", "#btnReset", function (e) {
             e.preventDefault();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
+            $("#Item_Id").val("");
+            $('#ItemSearch').val("");
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
-            //$('#Unit_Id').select2().trigger('change');
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("0");
@@ -328,7 +323,7 @@
 
                     //Add Item cell.
                     var cell = $(row.insertCell(-1));
-                    cell.html($("#Item_Id :selected").text());
+                    cell.html($("#ItemSearch").text());
                     cell.attr('data-item-id', $("#Item_Id").val());
                     cell.attr('data-line-Id', 0);
 
@@ -375,8 +370,8 @@
                 //}
 
                 //Set Default
-                $("#Item_Id").val($("#Item_Id option:first").val());
-                $('#Item_Id').select2().trigger('change');
+                $("#Item_Id").val("");
+                $('#ItemSearch').val("");
                 $("#Hsn_Sac").val("");
                 $("#Quantity").val("");
                 $("#Unit_Id").val($("#Unit_Id option:first").val());
@@ -446,7 +441,7 @@
                 msg = "Please add at least 1 matrial purchase.";
                 isValid = false;
             }
-            if (parseInt($("#OfficeId").val()) === 0 || $("#InvoiceNo").val() === "" || parseInt($("#drpPartyId").val()) === 0
+            if (parseInt($("#OfficeId").val()) === 0 || $("#InvoiceNo").val() === "" || parseInt($("#PartyId").val()) === 0
                 || $("#Purchase_Ref").val() === "" || $("#TransactionDate").val() === "" || parseInt($("#StateId").val()) === 0) {
                 msg = "Please fill all mandatory fields.";
                 isValid = false;
@@ -474,7 +469,7 @@
                         $("#hdnIs_SameState").val(result[0].Is_SameState);
                         $("#GST").change();
                         $("#Unit_Id").val(result[0].UnitId);
-                        
+
                     } else {
                         $("#Hsn_Sac").val("");
                         $("#GST").val("0");
@@ -483,6 +478,48 @@
                     }
                 });
             }
+        });
+
+        $("#ItemSearch").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
+                        response($.map(result, function (item) {
+                            return { label: item.Title, value: item.Item_Id };
+                        }))
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#ItemSearch").val(i.item.label);
+                let Item_Id = parseInt(i.item.value);
+                $("#Item_Id").val(Item_Id);
+                let Office_Id = parseInt($("#OfficeId").val());
+                let P_State_Id = parseInt($("#SupplyStateId").val());
+                if (Item_Id >0) {
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
+                            $("#Hsn_Sac").val(result[0].HSN_SAC);
+                            $("#GST").val(result[0].GST);
+                            $("#hdnIs_SameState").val(result[0].Is_SameState);
+                            $("#GST").change();
+                            $("#Unit_Id").val(result[0].UnitId);
+
+                        } else {
+                            $("#Hsn_Sac").val("");
+                            $("#GST").val("0");
+                            $("#hdnIs_SameState").val(0);
+                            $("#GST").change();
+                        }
+                    });
+                }
+            },
+            minLength: 1
         });
 
         $("#drpPartyId").change(function () {
@@ -500,6 +537,40 @@
                     $("#StateId").append($("<option></option>").val("").html("Select State"));
                 }
             });
+        });
+
+        $("#SearchParty").autocomplete({
+            source: function (request, response) {
+                    IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result.length===0) {
+                            $("#empty-message").text("No results found");
+                            return response({ label: "No results found", value: 0 });
+                        } else {
+                            response($.map(result, function (item) {
+                                return { label: item.Title, value: item.Party_Id };
+                            }))
+                        }
+                });
+            },
+            select: function (e, i) {
+                $("#SearchParty").val(i.item.label);
+                let PartyId = parseInt(i.item.value);
+                $("#PartyId").val(PartyId);
+                IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    $("#StateId").empty();
+                    if (result !== null && result.length > 0) {
+                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                        $.each(result, function (index, value) {
+                            $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                        });
+                    } else {
+                        $("#StateId").append($("<option></option>").val("").html("Select State"));
+                    }
+                });
+            },
+            minLength: 1
         });
 
         $("#StateId").change(function () {
@@ -549,7 +620,8 @@
                     $("#IsUpdateMaterialPurchase").val(1);
                     $("#OfficeId").val(result[0].Office_Id);
                     $("#InvoiceNo").val(result[0].Invoice_No);
-                    $("#drpPartyId").val(result[0].Party_Id);
+                    $("#PartyId").val(result[0].Party_Id);
+                    $("#SearchParty").val(result[0].PartyName);
                     $("#Purchase_Ref").val(result[0].Purchase_Ref);
                     $("#TransactionDate").val(result[0].Transaction_Date);
                     $("#SupplyStateId").val(result[0].SupplyState_Id);
@@ -645,18 +717,18 @@
             $("#PurchaseLine").val("");
             $("#SupplyStateId").val("");
             $("#PartyId").val("");
-            $("#OfficeId").val($("#drpPartyId option:first").val());
+            $("#OfficeId").val($("#OfficeId option:first").val());
             $("#InvoiceNo").val("");
-            $("#drpPartyId").val($("#drpPartyId option:first").val());
+            $("#PartyId").val("");
+            $("#SearchParty").val("");
             $("#Purchase_Ref").val("");
             $("#TransactionDate").val("");
             $("#StateId").empty();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
+            $("#Item_Id").val("");
+            $('#ItemSearch').val();
             $("#Hsn_Sac").val("");
             $("#Quantity").val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
-            //$('#Unit_Id').select2().trigger('change');
             $("#Rate").val("");
             $("#Amount").val("");
             $("#Discount_1").val("0");
@@ -712,7 +784,7 @@
                 bIsDiscount = false;
                 gst = amount * parseFloat($("#GST").val()) / 100;
             }
-            
+
             let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
             if (is_SameState) {
                 $("#CGST").val(parseFloat(gst / 2).toFixed(2));

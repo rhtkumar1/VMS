@@ -3,7 +3,8 @@
     ViewBag.Title = "Order Creation";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
-
+<link href="~/assets/admin/css/jquery-ui.css" rel="stylesheet" />
+<script src="~/assets/admin/js/jquery-ui.js"></script>
 @{
     var AppToken = Convert.ToString(@Model.AppToken);
 }
@@ -53,6 +54,7 @@
                             @Html.HiddenFor(m => m.IsUpdate, htmlAttributes: new { @id = "IsUpdate" })
                             @Html.HiddenFor(m => m.MaterialLine, htmlAttributes: new { @id = "MaterialLine" })
                             @Html.HiddenFor(m => m.TotalAmount, htmlAttributes: new { @id = "TotalAmount" })
+                            @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
 
                             <div class="heading">
                                 <h4>
@@ -63,7 +65,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(x => x.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "PartyId", @class = "form-control" })
+                                    <input type="text" id="SearchParty" name="SearchParty" placeholder="Search Party" class="form-control" />
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -75,9 +77,10 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Address</label>
-                                    <label id="lblAddress" class="form-control" readonly></label>
+                                    <input type="text" id="txtAddress" name="txtAddress" readonly class="form-control" />
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Party Category</label>
@@ -112,7 +115,8 @@
                             <div class="styled-input">
                                 <div class="col-md-2 form-group">
                                     <label>Item<span class="mandatory">*</span></label>
-                                    @Html.DropDownList("Item_Id", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @Item_Id = "Item_Id", @class = "form-control" })
+                                     <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
+                                    <input type="hidden" id="Item_Id" name="Item_Id" value="" />
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
@@ -146,7 +150,7 @@
                                     <label>Order Rate<span class="mandatory">*</span></label>
                                     <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
                                 </div>
-                                
+
                                 <div class="col-md-4 form-group">
                                     <label>Remark</label>
                                     <input id="txtRemark" name="txtRemark" class="form-control" />
@@ -223,16 +227,13 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-  //IMSM.matrialPurchase();
-        $("#Item_Id").select2();
         $("#drpParty").select2();
-        $("#PartyId").select2();
         $("#drpOrder").select2();
 
         $("body").on("click", "#btnReset", function (e) {
             e.preventDefault();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
+            $("#Item_Id").val("");
+            $('#ItemSearch').val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
             $('#Unit_Id').select2().trigger('change');
             $("#lblAvailableQty").text("");
@@ -284,12 +285,12 @@
                     });
                 }
             }
-            
+
             if (bAdded) {
                 if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
                     let trId = "#trRow_" + parseInt($("#hdnRowId").val());
                     var row = $(trId).closest("TR").find('td');
-                    row[1].textContent = $("#Item_Id option:selected").text();
+                    row[1].textContent = $("#ItemSearch").text();
                     row[1].setAttribute('data-item-id', $("#Item_Id").val());
                     row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
                     row[1].setAttribute('data-index', $("#Item_Id").val());
@@ -317,7 +318,7 @@
                     cell.append(btnRemove);
                     //Add Item cell.
                     cell = $(row.insertCell(-1));
-                    cell.html($("#Item_Id option:selected").text());
+                    cell.html($("#ItemSearch").text());
                     cell.attr('data-item-id', $("#Item_Id").val());
                     cell.attr('data-line-id', 0);
                     cell.attr('data-index', $("#Item_Id").val());
@@ -365,8 +366,8 @@
                 }
 
                 //Set Default
-                $("#Item_Id").val($("#Item_Id option:first").val());
-                $('#Item_Id').select2().trigger('change');
+                $("#Item_Id").val("");
+                $('#ItemSearch').val("");
                 $("#Unit_Id").val($("#Unit_Id option:first").val());
                 $('#Unit_Id').select2().trigger('change');
                 $("#lblAvailableQty").text("");
@@ -407,7 +408,7 @@
                 $("#tblOrderCreation TBODY TR").each(function () {
                     let row = $(this).find('td');
                     let oMapping = {};
-                    
+
                     oMapping.Line_Id = row.eq(1).attr('data-line-Id');
                     oMapping.Item_Id = row.eq(1).attr('data-item-id');
                     oMapping.UnitId = row.eq(2).attr('data-unit-id');
@@ -444,46 +445,82 @@
             }
         });
 
-        $("#Item_Id").change(function () {
-            let Item_Id = parseInt($("#Item_Id").val());
-            if (Item_Id >0) {
-                IMSC.ajaxCall("GET", "/Material/GetItemDetail?Item_Id=" + Item_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+        $("#ItemSearch").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                     var result = JSON.parse(d);
-                    if (result != null && result.length > 0) {
-                        $("#lblAvailableQty").text(result[0].Available_Qty);
-                        $("#lblLastRate").text(result[0].Last_Rate);
-                        $("#lblLastDist1").text(result[0].Last_Disc_1);
-                        $("#lblLastDist2").text(result[0].Last_Disc_2);
-                        $("#lblListPrice").text(result[0].List_Price);
-                        $("#Unit_Id").val(result[0].UnitId);
-                        $("#hdnRowId").val("");
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
+                        response($.map(result, function (item) {
+                            return { label: item.Title, value: item.Item_Id };
+                        }))
                     }
                 });
-            }
-        });
+            },
+            select: function (e, i) {
+                $("#ItemSearch").val(i.item.label);
+                let Item_Id = parseInt(i.item.value);
+                $("#Item_Id").val(Item_Id);
+                if (Item_Id >0) {
+                    IMSC.ajaxCall("GET", "/Material/GetItemDetail?Item_Id=" + Item_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result != null && result.length > 0) {
+                            $("#lblAvailableQty").text(result[0].Available_Qty);
+                            $("#lblLastRate").text(result[0].Last_Rate);
+                            $("#lblLastDist1").text(result[0].Last_Disc_1);
+                            $("#lblLastDist2").text(result[0].Last_Disc_2);
+                            $("#lblListPrice").text(result[0].List_Price);
+                            $("#Unit_Id").val(result[0].UnitId);
+                            $("#hdnRowId").val("");
+                        }
+                    });
+                }
+            },
+            minLength: 1
+         });
 
-        $("#PartyId").change(function () {
-             let PartyId = parseInt($('#PartyId').val());
-             if (PartyId >0 ) {
-                IMSC.ajaxCall("GET", "/Material/GetParty?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                    var result = JSON.parse(d);
-                    if (result !== null && result.length > 0) {
-                        $("#lblContactNo").text(result[0].ContactNo);
-                        $("#lblOverDueAmount").text(result[0].OverdueAmount);
-                        $("#lblCashBalance").text(result[0].CashBalance);
-                        $("#lblLedgerBalance").text(result[0].LedgerBalance);
-                        $("#lblPartyCategory").text(result[0].Category === null ? "" : result[0].Category);
-                        $("#lblAddress").text(result[0].Address);
-                    }
+        $("#SearchParty").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchPartyOrderCreation?Party=" + request.term + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result.length===0) {
+                            $("#empty-message").text("No results found");
+                            return response({ label: "No results found", value: 0 });
+                        } else {
+                            response($.map(result, function (item) {
+                                return { label: item.Title, value: item.Party_Id };
+                            }))
+                        }
                 });
-             } else {
-                 $("#lblContactNo").text("");
-                 $("#lblOverDueAmount").text("");
-                 $("#lblCashBalance").text("");
-                 $("#lblLedgerBalance").text("");
-                 $("#lblPartyCategory").text("");
-                 $("#lblAddress").text("");
-             }
+            },
+            select: function (e, i) {
+                $("#SearchParty").val(i.item.label);
+                let PartyId = parseInt(i.item.value);
+                $("#PartyId").text(PartyId);
+                if (PartyId >0 ) {
+                   IMSC.ajaxCall("GET", "/Material/GetParty?PartyId=" + PartyId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                       var result = JSON.parse(d);
+                       if (result !== null && result.length > 0) {
+                           $("#lblContactNo").text(result[0].ContactNo);
+                           $("#lblOverDueAmount").text(result[0].OverdueAmount);
+                           $("#lblCashBalance").text(result[0].CashBalance);
+                           $("#lblLedgerBalance").text(result[0].LedgerBalance);
+                           $("#lblPartyCategory").text(result[0].Category === null ? "" : result[0].Category);
+                           $("#txtAddress").val(result[0].Address);
+                       }
+                   });
+                } else {
+                    $("#lblContactNo").text("");
+                    $("#lblOverDueAmount").text("");
+                    $("#lblCashBalance").text("");
+                    $("#lblLedgerBalance").text("");
+                    $("#lblPartyCategory").text("");
+                    $("#txtAddress").val("");
+                }
+            },
+            minLength: 1
         });
 
         $("#drpParty").change(function () {
@@ -522,12 +559,12 @@
                     $("#POId").val(result[0].PO_Id);
                     $("#PONo").val(result[0].PO_No);
                     $("#PartyId").val(result[0].Party_Id);
-                    $("#PartyId").select2().trigger('change');
+                    $("#SearchParty").val(result[0].PartyName);
                     $("#lblLedgerBalance").text(res.Table1[0].LedgerBalance);
                     $("#lblCashBalance").text(res.Table1[0].CashBalance);
                     $("#lblOverDueAmount").text(res.Table1[0].OverdueAmount);
                     $("#lblPartyCategory").text(res.Table1[0].Category === null ? "" : res.Table1[0].Category);
-                    $("#lblAddress").text(res.Table1[0].Address);
+                    $("#txtAddress").val(res.Table1[0].Address);
                     $("#lblContactNo").text(res.Table1[0].ContactNo);
                     $("#tbodyid").empty();
                     $.each(res.Table, function (index, value) {
@@ -607,8 +644,8 @@
 
         $("#btnResetForm").click(function (e) {
             e.preventDefault();
-            $("#Item_Id").val($("#Item_Id option:first").val());
-            $('#Item_Id').select2().trigger('change');
+            $("#Item_Id").val("");
+            $('#ItemSearch').val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
             $('#Unit_Id').select2().trigger('change');
             $("#lblAvailableQty").text("");
@@ -619,14 +656,14 @@
             $("#txtOrderQty").val("");
             $("#txtOrderRate").val("");
             $("#txtRemark").val("");
-            $("#PartyId").val($("#PartyId option:first").val());
-            $('#PartyId').select2().trigger('change');
+            $("#PartyId").val("");
+            $('#SearchParty').val("");
             $("#lblContactNo").text("");
             $("#lblOverDueAmount").text("");
             $("#lblCashBalance").text("");
             $("#lblLedgerBalance").text("");
             $("#lblPartyCategory").text("");
-            $("#lblAddress").text("");
+            $("#txtAddress").val("");
             $("#hdnRowId").val("");
             $("#btnAdd").val("Add");
             $("#tblOrderCreation TBODY").empty();
@@ -651,8 +688,8 @@
         $("#btnAdd").val("Update");
         $("#IsUpdate").val(1);
         var row = $(button).closest("TR").find('td');
-        $("#Item_Id").val(parseInt(row.eq(1).attr('data-item-id')));
-        $('#Item_Id').select2().trigger('change');
+        $("#Item_Id").val("");
+        $('#ItemSearch').val("");
         $("#Unit_Id").val(parseInt(row.eq(2).attr('data-unit-id')));
         $('#Unit_Id').select2().trigger('change');
         $("#txtOrderQty").val(row[8].innerText);

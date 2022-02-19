@@ -677,6 +677,20 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
+        public ActionResult SearchPartyOrderCreation(string Party,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.Get_Party_Order_Creation(Party);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
         public ActionResult SearchItem(string Item,string AppToken = "")
         {
             DataTable dt = new DataTable();

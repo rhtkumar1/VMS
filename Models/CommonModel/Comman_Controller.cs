@@ -112,6 +112,20 @@ namespace IMS.Models.CommonModel
 
             return dt;
         }
+        public static DataTable Get_Party_Order_Creation(string Party)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party", Party));
+                dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Get_Order_Creation", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
         public static DataTable Material_Get_Item(string Item)
         {
             DataTable dt = new DataTable();
