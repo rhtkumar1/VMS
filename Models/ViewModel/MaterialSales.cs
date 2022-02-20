@@ -91,9 +91,9 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
                 if (!string.IsNullOrEmpty(TransactionDate))
-                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
+                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(TransactionDate))));
                 if (!string.IsNullOrEmpty(Dispatch_Date))
-                    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(Dispatch_Date))));
+                    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Dispatch_Date))));
                 SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
                 SqlParameters.Add(new SqlParameter("@Marka", Marka));
                 SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));

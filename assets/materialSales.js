@@ -14,7 +14,6 @@
             let PurchaseLineValues = [];
             let isValid = true;
             let msg = "";
-
             if (parseInt($("#OfficeId").val()) === 0) {
                 isValid = false;
                 msg = "Please select office!!!";
@@ -57,7 +56,6 @@
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-
                         let oMapping = {};
                         let index = parseInt($("#" + $(this).context.id).val());
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
@@ -95,15 +93,15 @@
                             oMapping.Item_Id = $("#hdnItemId_" + index).val();
                             oMapping.ItemTitle = $("#lblItem_" + index).text();
                             oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
-                            oMapping.Quantity = $("#txtOrder_Qty_" + index).val();
+                            oMapping.Quantity = ($("#txtOrder_Qty_" + index).val() === "" ? "0" : $("#txtOrder_Qty_" + index).val());
                             oMapping.Rate = $("#txtRate_" + index).val();
-                            oMapping.LastRate = $("#lblLastRate_$" + index).val();
+                            oMapping.LastRate = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
                             oMapping.Amount = $("#lblAmount_" + index).text();
-                            oMapping.Discount_1 = $("#txtDiscount1_" + index).val();
-                            oMapping.Discount_2 = $("#txtDiscount2_" + index).val();
+                            oMapping.Discount_1 = ($("#txtDiscount1_" + index).val() === "" ? "0" : $("#txtDiscount1_" + index).val());
+                            oMapping.Discount_2 = ($("#txtDiscount2_" + index).val() === "" ? "0" : $("#txtDiscount2_" + index).val());
                             oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
-                            oMapping.Discount_1_Amount = $("#hdnDiscount_1_Amt_" + index).val();
-                            oMapping.Discount_2_Amount = $("#hdnDiscount_2_Amt_" + index).val();
+                            oMapping.Discount_1_Amount = ($("#hdnDiscount_1_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_1_Amt_" + index).val());
+                            oMapping.Discount_2_Amount = ($("#hdnDiscount_2_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_2_Amt_" + index).val());
                             oMapping.GST = $("#lblGST_" + index).text();
                             oMapping.CGST = $("#lblCGST_" + index).text();
                             oMapping.SGST = $("#lblSGST_" + index).text();
@@ -162,33 +160,41 @@
             let msg = "";
             let amount = 0.0;
             let isSpecialService = false;
-            if (Number($("#hdnItemType").val()) === 16) {
-                isSpecialService = true;
-            }
-            if (parseInt($("#Item_Id").val()) === 0) {
-                msg = "Please select item.";
-                bAdded = false;
-            }
-            if (!isSpecialService) {
-                if ($("#Quantity").val() === "") {
-                    msg = "Please enter quantity.";
-                    bAdded = false;
+            while (true) {
+                if (Number($("#hdnItemType").val()) === 16) {
+                    isSpecialService = true;
                 }
-            } else {
-                $("#Unit_Id").val(0)
-            }
-            if (parseInt($("#Unit_Id").val()) === 0 && !isSpecialService) {
-                msg = "Please select unit.";
-                bAdded = false;
-            }
-            if ($("#Rate").val() === "") {
-                msg = "Please enter rate.";
-                bAdded = false;
-            }
+                if (parseInt($("#Item_Id").val()) === 0 || $("#Item_Id").val() === "") {
+                    msg = "Please select item.";
+                    bAdded = false;
+                    break;
+                }
+                if (!isSpecialService) {
+                    if ($("#Quantity").val() === "") {
+                        msg = "Please enter quantity.";
+                        bAdded = false;
+                        break;
+                    }
+                } else {
+                    $("#Unit_Id").val(0)
+                }
+                if (parseInt($("#Unit_Id").val()) === 0 && !isSpecialService) {
+                    msg = "Please select unit.";
+                    bAdded = false;
+                    break;
+                }
+                if ($("#Rate").val() === "") {
+                    msg = "Please enter rate.";
+                    bAdded = false;
+                    break;
+                }
 
-            if (!isSpecialService && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
-                msg = "Please correct quantity that must not be greater than Available Quantity!!!";
-                bAdded = false;
+                if (!isSpecialService && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
+                    msg = "Please correct quantity that must not be greater than Available Quantity!!!";
+                    bAdded = false;
+                    break;
+                }
+                break;
             }
 
             //Reference the Party and Location ddl.
