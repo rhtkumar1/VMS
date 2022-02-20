@@ -138,14 +138,14 @@
         var deleteFormData = function (dialogType, ItemMaster) {
             var result = confirm("Do you want to delete?");
             if (result == true) {
-            IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-            var result = JSON.parse(d);
-            if (result !== "null" && result !== "") {
-                window.location.reload();
-            }
-        });
+                IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== "null" && result !== "") {
+                        window.location.reload();
+                    }
+                });
             } else {
                 return false;
             }
-    };
+        };
 </script>
