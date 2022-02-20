@@ -31,6 +31,9 @@
                 if (parseInt($("#Item_Id").val()) === 0 || $("#txtOrderQty").val() === "" || $("#txtOrderRate").val() === "") {
                     msg = "Please select all mandatory fields to add material in list.";
                     bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
                 }
             }
             if (bAdded) {
@@ -39,6 +42,9 @@
                 } else {
                     msg = "Order qty grater then available qty!!!";
                     bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
                 }
             }
             if (bAdded) {
@@ -61,83 +67,83 @@
             }
 
             if (bAdded) {
-                if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
-                    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
-                    var row = $(trId).closest("TR").find('td');
-                    row[1].textContent = $("#ItemSearch").text();
-                    row[1].setAttribute('data-item-id', $("#Item_Id").val());
-                    row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
-                    row[1].setAttribute('data-index', $("#Item_Id").val());
-                    row[2].textContent = $("#Unit_Id").val();
-                    row[3].textContent = $("#lblAvailableQty").text();
-                    row[4].textContent = $("#lblLastRate").text();
-                    row[5].textContent = $("#lblLastDist1").text();
-                    row[6].textContent = $("#lblLastDist2").text();
-                    row[7].textContent = $("#lblListPrice").text();
-                    row[8].textContent = $("#txtOrderQty").val();
-                    row[9].textContent = $("#txtOrderRate").val();
-                    row[10].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
-                    row[11].textContent = $("#txtRemark").val();
-                    $("#hdnRowId").val("");
-                    $("#hdnLineId").val("");
-                    $("#btnAdd").val("Add");
-                } else {
-                    //Get the reference of the Table's TBODY element.
-                    var tBody = $("#tblOrderCreation > TBODY")[0];
-                    //Add Row.
-                    var row = tBody.insertRow(-1);
-                    //Edit Button cell.
-                    cell = $(row.insertCell(-1));
-                    let btnRemove = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
-                    cell.append(btnRemove);
-                    //Add Item cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#ItemSearch").text());
-                    cell.attr('data-item-id', $("#Item_Id").val());
-                    cell.attr('data-line-id', 0);
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add Unit.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#Unit_Id option:selected").text());
-                    cell.attr('data-unit-id', $("#Unit_Id").val());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add AvailableQty.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#lblAvailableQty").text());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add Last Rate.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#lblLastRate").text());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add LastDist1 cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#lblLastDist1").text());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add LastDist2 cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#lblLastDist2").text());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add ListPrice cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#lblListPrice").text() !== "" ? $("#lblListPrice").text() : 0);
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add txtOrderQty cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#txtOrderQty").val());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add txtOrderRate cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#txtOrderRate").val());
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add amount cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html(parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2));
-                    cell.attr('data-index', $("#Item_Id").val());
-                    //Add txtRemark cell.
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#txtRemark").val());
-                    cell.attr('data-index', $("#Item_Id").val());
-                }
+                //if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
+                //    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
+                //    var row = $(trId).closest("TR").find('td');
+                //    row[1].textContent = $("#ItemSearch").text();
+                //    row[1].setAttribute('data-item-id', $("#Item_Id").val());
+                //    row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
+                //    row[1].setAttribute('data-index', $("#Item_Id").val());
+                //    row[2].textContent = $("#Unit_Id").val();
+                //    row[3].textContent = $("#lblAvailableQty").text();
+                //    row[4].textContent = $("#lblLastRate").text();
+                //    row[5].textContent = $("#lblLastDist1").text();
+                //    row[6].textContent = $("#lblLastDist2").text();
+                //    row[7].textContent = $("#lblListPrice").text();
+                //    row[8].textContent = $("#txtOrderQty").val();
+                //    row[9].textContent = $("#txtOrderRate").val();
+                //    row[10].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
+                //    row[11].textContent = $("#txtRemark").val();
+                //    $("#hdnRowId").val("");
+                //    $("#hdnLineId").val("");
+                //    $("#btnAdd").val("Add");
+                //} else {
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblOrderCreation > TBODY")[0];
+                //Add Row.
+                var row = tBody.insertRow(-1);
+                //Edit Button cell.
+                cell = $(row.insertCell(-1));
+                let btnRemove = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                cell.append(btnRemove);
+                //Add Item cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#ItemSearch").val());
+                cell.attr('data-item-id', $("#Item_Id").val());
+                cell.attr('data-line-id', 0);
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add Unit.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Unit_Id option:selected").text());
+                cell.attr('data-unit-id', $("#Unit_Id").val());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add AvailableQty.
+                cell = $(row.insertCell(-1));
+                cell.html($("#lblAvailableQty").text());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add Last Rate.
+                cell = $(row.insertCell(-1));
+                cell.html($("#lblLastRate").text());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add LastDist1 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#lblLastDist1").text());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add LastDist2 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#lblLastDist2").text());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add ListPrice cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#lblListPrice").text() !== "" ? $("#lblListPrice").text() : 0);
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add txtOrderQty cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#txtOrderQty").val());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add txtOrderRate cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#txtOrderRate").val());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add amount cell.
+                cell = $(row.insertCell(-1));
+                cell.html(parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2));
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add txtRemark cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#txtRemark").val());
+                cell.attr('data-index', $("#Item_Id").val());
+                //}
 
                 //Set Default
                 $("#Item_Id").val("");
@@ -178,6 +184,13 @@
             let isValid = true;
             totalAmount = 0.0;
             let msg = "";
+            if ($("#PartyId").val() === "0" || $("#PartyId").val() === "") {
+                msg = "Please fill party.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
             if ($("#tblOrderCreation TBODY TR").length > 0) {
                 $("#tblOrderCreation TBODY TR").each(function () {
                     let row = $(this).find('td');
@@ -204,15 +217,11 @@
             } else {
                 msg = "Please add at least 1 matrial order.";
                 isValid = false;
-            }
-            if (parseInt($("#PartyId").val()) === 0) {
-                msg = "Please fill party.";
-                isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-
+            
             if (isValid) {
                 return true;
             } else {
@@ -250,6 +259,7 @@
                             $("#lblLastDist2").text(result[0].Last_Disc_2);
                             $("#lblListPrice").text(result[0].List_Price);
                             $("#Unit_Id").val(result[0].UnitId);
+                            $('#Unit_Id').select2().trigger('change');
                             $("#hdnRowId").val("");
                         }
                     });
@@ -275,7 +285,7 @@
             select: function (e, i) {
                 $("#SearchParty").val(i.item.label);
                 let PartyId = parseInt(i.item.value);
-                $("#PartyId").text(PartyId);
+                $("#PartyId").val(PartyId);
                 if (PartyId > 0) {
                     IMSC.ajaxCall("GET", "/Material/GetParty?PartyId=" + PartyId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);

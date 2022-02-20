@@ -35,8 +35,8 @@
             let msg = "";
             let amount = 0.0;
 
-            if (parseInt($("#Item_Id").val()) === 0) {
-                msg = "Please select item.";
+            if ($("#Item_Id").val() === "0" || $("#Item_Id").val() === "" || $("#ItemSearch").val() === "") {
+                msg = "Please fill item.";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
@@ -252,30 +252,6 @@
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
-            }
-        });
-
-        $("#Item_Id").change(function () {
-            let Item_Id = parseInt($("#Item_Id").val());
-            let Office_Id = parseInt($("#OfficeId").val());
-            let P_State_Id = parseInt($("#SupplyStateId").val());
-            if (Item_Id > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
-                    var result = JSON.parse(d);
-                    if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
-                        $("#Hsn_Sac").val(result[0].HSN_SAC);
-                        $("#GST").val(result[0].GST);
-                        $("#hdnIs_SameState").val(result[0].Is_SameState);
-                        $("#GST").change();
-                        $("#Unit_Id").val(result[0].UnitId);
-
-                    } else {
-                        $("#Hsn_Sac").val("");
-                        $("#GST").val("0");
-                        $("#hdnIs_SameState").val(0);
-                        $("#GST").change();
-                    }
-                });
             }
         });
 
