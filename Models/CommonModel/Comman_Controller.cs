@@ -119,7 +119,7 @@ namespace IMS.Models.CommonModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party", Party));
-                dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Get_Order_Creation", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_GetParty", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }

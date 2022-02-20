@@ -56,7 +56,7 @@ namespace IMS.Models.ViewModel
                 {
                     sb.AppendLine(@"<listnode Sale_Id=""" + Convert.ToString(item.Sale_Id) + @""" Invoice_No=""" + Convert.ToString(item.Invoice_No) + @"""   
                               Office_Id=""" + Convert.ToString(OfficeId) + @""" Party_Id=""" + Convert.ToString(item.Party_Id) + @"""
-                              Transaction_Date=""" + Convert.ToDateTime(item.Transaction_Date).ToString("yyyy-MM-dd") + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
+                              Transaction_Date=""" + CommonUtility.GetDateYYYYMMDD(item.Transaction_Date) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
                               BalAmount=""" + Convert.ToString(item.BalAmount) + @""" Fin_Id=""" + Convert.ToString(FinId) + @"""   
                               Company_Id=""" + Convert.ToString(CompanyId) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @""" />");
                 }

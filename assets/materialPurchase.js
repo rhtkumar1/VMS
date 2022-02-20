@@ -99,7 +99,7 @@
                 //Add Unit cell.
                 cell = $(row.insertCell(-1));
                 cell.html($("#Unit_Id :selected").text());
-                cell.attr('data-Unit_Id', $("#Unit_Id").val());
+                cell.attr('data-Unit-Id', $("#Unit_Id").val());
                 //Add Rate cell.
                 cell = $(row.insertCell(-1));
                 cell.html($("#Rate").val());

@@ -190,9 +190,12 @@
             let DisDash = [];
             let isValid = true;
             let msg = "";
+            let isanyitemchecked = false;
             $("[id^='hdnSaleId_']").each(function () {
                 let index = parseInt($("#" + this.id).val());
+                
                 if ($("#chk_" + index).prop('checked') === true) {
+                    isanyitemchecked = true;
                     let oMapping = {};
                     let BalAmount = 0;
                     let ReceivedAmount = 0;
@@ -245,7 +248,9 @@
                         oMapping.Remarks = $("#Remarks_" + index).val();
                         DisDash.push(oMapping);
                     }
-                } else {
+                }
+
+                if (!isanyitemchecked) {
                     isValid = false;
                     msg = "Please select record!!!";
                     return false;
@@ -262,6 +267,7 @@
         });
 
         $("#chkAll").change(function () {
+            
             if (this.checked) {
                 $("[id^='chk_']").each(function () {
                     $("#" + this.id).prop('checked', true);

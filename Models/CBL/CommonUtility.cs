@@ -69,7 +69,7 @@ public static class CommonUtility
     public static string GetDateYYYYMMDD(string strDate)
     {
         string[] splitDate = strDate.Split('/');
-        return splitDate[2]+"-"+(splitDate[0].Length == 2 ? splitDate[0] : "0" + splitDate[0]) +"-"+ (splitDate[1].Length == 2 ? splitDate[1] : "0" + splitDate[1]);
+        return splitDate[2]+"-"+(splitDate[1].Length == 2 ? splitDate[1] : "0" + splitDate[1]) +"-"+ (splitDate[1].Length == 2 ? splitDate[0] : "0" + splitDate[0]);
     }
 
     public static int GetAuthMode(string AppToken)

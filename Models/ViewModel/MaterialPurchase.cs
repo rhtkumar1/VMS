@@ -84,7 +84,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
                 if (!string.IsNullOrEmpty(TransactionDate))
-                    SqlParameters.Add(new SqlParameter("@Transaction_Date", CommonUtility.GetDateDDMMYYYY(TransactionDate)));
+                    SqlParameters.Add(new SqlParameter("@Transaction_Date", CommonUtility.GetDateYYYYMMDD(TransactionDate)));
                 SqlParameters.Add(new SqlParameter("@Purchase_Amount", PurchaseAmount));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
