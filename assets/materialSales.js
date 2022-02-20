@@ -400,7 +400,7 @@
                             $("#OfficeId").val(result[0].Office_Id);
                             $("#InvoiceNo").val(result[0].Invoice_No);
                             $("#VoucherNumber").val(result[0].Voucher_No);
-                            $("#txtParty").val(result[0].PartyName);
+                            $("#SearchParty").val(result[0].PartyName);
                             $('#PartyId').val(result[0].Party_Id);
                             $("#StateId").val(result[0].SupplyState_Id);
                             $("#SupplyStateId").val(result[0].SupplyState_Id);
@@ -504,6 +504,7 @@
                 let OfficeId = parseInt($('#OfficeId').val());
                 $("#PartyId").val(PartyId);
                 if (PartyId > 0) {
+                    $("#tbodyid").empty();
                     IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + PartyId + "&OfficeId=" + OfficeId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result !== null) {
@@ -826,7 +827,6 @@ function Remove(button) {
 function BindGrid(result, isqtydisabled, sourceid) {
     let totalAmount = 0;
     $.each(result, function (index, value) {
-
         let quantity = parseFloat(value.Order_Qty);
         let rate = parseFloat(value.Order_Rate);
         let gst = parseFloat(value.GST !== "" ? value.GST : "0");
@@ -839,25 +839,28 @@ function BindGrid(result, isqtydisabled, sourceid) {
         let Texable_Amount = 0;
         let discount_1 = 0;
         let discount_2 = 0;
-        if (quantity > 0 && rate > 0) {
-            amount = quantity * rate;
-        }
+        
 
-        if (amount > 0) {
+        //if (amount > 0) {
             gstAmount = amount * gst / 100;
             if (sourceid === 1) {
-                let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
-                if (is_SameState) {
-                    cgst = parseFloat(gstAmount / 2).toFixed(2)
-                    sgst = parseFloat(gstAmount / 2).toFixed(2)
-                    igst = parseFloat(0).toFixed(2);
-                } else {
-                    cgst = parseFloat(0).toFixed(2)
-                    sgst = parseFloat(0).toFixed(2)
-                    igst = parseFloat(gstAmount).toFixed(2);
+                if (quantity > 0 && rate > 0) {
+                    amount = quantity * rate;
                 }
-                Texable_Amount = amount;
-                tamount = amount + gstAmount;
+                if (amount > 0) {
+                    let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
+                    if (is_SameState) {
+                        cgst = parseFloat(gstAmount / 2).toFixed(2)
+                        sgst = parseFloat(gstAmount / 2).toFixed(2)
+                        igst = parseFloat(0).toFixed(2);
+                    } else {
+                        cgst = parseFloat(0).toFixed(2)
+                        sgst = parseFloat(0).toFixed(2)
+                        igst = parseFloat(gstAmount).toFixed(2);
+                    }
+                    Texable_Amount = amount;
+                    tamount = amount + gstAmount;
+                }
             }
             else {
                 cgst = value.CGST;
@@ -873,7 +876,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
             }
 
 
-        }
+        //}
 
 
 
