@@ -243,7 +243,7 @@
                 cell = $(row.insertCell(-1));
                 cell.append(lblAvailable_Qty);
                 //Add Unit cell.
-                let lblUnit = `<label id="lblUnit_${itemId}" data-Unit_Id="${!isSpecialService ? $("#Unit_Id").val() : "0"}" data-index="${itemId}" >${!isSpecialService ? $("#Unit_Id :selected").text():"0"}</label>`;
+                let lblUnit = `<label id="lblUnit_${itemId}" data-Unit_Id="${!isSpecialService ? $("#Unit_Id").val() : "0"}" data-index="${itemId}" >${!isSpecialService ? $("#Unit_Id :selected").text():""}</label>`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblUnit);
                 //Add Last Rate cell.
@@ -557,14 +557,14 @@
 
                         if (result.length > 0) {
                             $("#SaleAmount").val("0");
-                            $(result).each(function (index, value) {
-                                $("[id^='hdnItemId_']").each(function () {
-                                    if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
-                                        isValid = false;
-                                        return false;
-                                    }
-                                });
-                            });
+                            //$(result).each(function (index, value) {
+                            //    $("[id^='hdnItemId_']").each(function () {
+                            //        if (parseInt(value.Item_Id) === parseInt($("#" + this.id).val())) {
+                            //            isValid = false;
+                            //            return false;
+                            //        }
+                            //    });
+                            //});
 
                             if (isValid) {
                                 $("#tbodyid").empty();

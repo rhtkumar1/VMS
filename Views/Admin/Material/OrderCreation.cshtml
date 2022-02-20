@@ -3,6 +3,9 @@
     ViewBag.Title = "Order Creation";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
+<!--Material Order Creation -->
+<script src="~/assets/materiaOrderCreation.js"></script>
+<!--Material Order Creation END -->
 @{
     var AppToken = Convert.ToString(@Model.AppToken);
 }
@@ -113,7 +116,7 @@
                             <div class="styled-input">
                                 <div class="col-md-2 form-group">
                                     <label>Item<span class="mandatory">*</span></label>
-                                     <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
+                                    <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
                                     <input type="hidden" id="Item_Id" name="Item_Id" value="" />
                                 </div>
                                 <div class="col-md-2 form-group">
