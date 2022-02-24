@@ -94,16 +94,16 @@ namespace IMS.Reports
             DataTable dt = new DataTable();
             try
             {
-                string sql = "SELECT ReportName,QueryType,Query,Params FROM Report_Config (nolock) WHERE IsActive=1 AND Fin_Id="+ CommonUtility.GetFYID().ToString() +" AND Company_Id="+ CommonUtility.GetCompanyID().ToString() + " AND Report_Id=" + ReportId.ToString() + "";
+                string sql = "SELECT ReportName,QueryType,Query,Params FROM Report_Config (nolock) WHERE IsActive=1 AND Report_Id=" + ReportId.ToString() + "";
                 //List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 //SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
                 dt = DBManager.ExecuteDataTable(sql, CommandType.Text);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    ReportName = Convert.ToString(dr[0]);
-                    QueryType = Convert.ToString(dr[1]);
-                    SPName = Convert.ToString(dr[2]);
-                    string[] strparam = dr[3].ToString().Split(',');
+                    ReportName = Convert.ToString(dr["ReportName"]);
+                    QueryType = Convert.ToString(dr["QueryType"]);
+                    SPName = Convert.ToString(dr["Query"]);
+                    string[] strparam = dr["Params"].ToString().Split(',');
                     for (int i = 0; i < strparam.Count(); i++)
                     {
                         lstparams.Add(strparam[i].ToString().ToLower());

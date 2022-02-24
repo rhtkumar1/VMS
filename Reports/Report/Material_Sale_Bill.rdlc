@@ -3182,6 +3182,7 @@ Fields!Transporter.Value</Value>
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>
@@ -3731,7 +3732,7 @@ Fields!Transporter.Value</Value>
                               <TablixMember>
                                 <Group Name="HSN_SAC">
                                   <GroupExpressions>
-                                    <GroupExpression>=Fields!HSN_SAC.Value</GroupExpression>
+                                    <GroupExpression>=IIF(Fields!HSN_SAC.Value &lt;&gt; "" ,Fields!HSN_SAC.Value ,"")</GroupExpression>
                                   </GroupExpressions>
                                 </Group>
                                 <SortExpressions>
