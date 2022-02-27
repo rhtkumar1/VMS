@@ -720,6 +720,31 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Matrial Get Pass Data
+        public ActionResult MaterialGatepass()
+        {
+            GatePass gatePass = new GatePass();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            gatePass.AppToken = CommonUtility.URLAppToken(AppToken);
+            gatePass.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/MaterialGatepass.cshtml", gatePass);
+        }
 
+        [HttpGet]
+        public ActionResult GetPassData(string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                GatePass gatePass = new GatePass();
+                dt = gatePass.Material_GetPassData();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        #endregion
     }
 }
