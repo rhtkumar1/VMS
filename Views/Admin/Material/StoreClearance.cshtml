@@ -1,0 +1,308 @@
+﻿@model IMS.Models.ViewModel.StoreClearance
+@{
+    ViewBag.Title = "Material Store Clearance";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+@{
+    var AppToken = Convert.ToString(Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-shopping-cart"></i>
+                <span>Material Store Clearance</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="clearfix"></div>
+                        @using (Html.BeginForm("MaterialStoreClearance_InsertUpdate", "Material", FormMethod.Post, new { @id = "MaterialStoreClearance" }))
+                        {
+                            @Html.HiddenFor(m => m.SaleId, htmlAttributes: new { @id = "SaleId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.StoreData, htmlAttributes: new { @id = "StoreData" })
+
+                            <div class="heading">
+                                <h4>
+                                    Material Store Clearance
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    <label id="OfficeTitel" name="OfficeTitel" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Voucher Number</label>
+                                    <label id="Invoice_No" name="Invoice_No" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Invoice Number</label>
+                                    <label id="Voucher_No" name="Voucher_No" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Party<span class="mandatory">*</span></label>
+                                    <label id="PartyName" name="PartyName" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>State<span class="mandatory">*</span></label>
+                                    <label id="StateName" name="StateName" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Order No</label>
+                                    <label id="PO_No" name="PO_No" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Date<span class="mandatory">*</span></label>
+                                    <label id="Transaction_Date" name="Transaction_Date" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Remarks</label>
+                                    <label id="Remarks" name="Remarks" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Marka</label>
+                                    <label id="Marka" name="Marka" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Transporter</label>
+                                    <label id="Transporter" name="Transporter" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Dispatch Date<span class="mandatory">*</span></label>
+                                    <label id="Dispatch_Date" name="Dispatch_Date" class="form-control"></label>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Dispatch Date<span class="mandatory">*</span></label>
+                                    <input type="text" placeholder="Search Get Pass" class="form-control" id="txtGetPass" name="txtGetPass" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Material Sale Item
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="clearfix"></div>
+                            <div id="listGrid"></div>
+
+                            <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Material Store Item
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="tblMaterialStoreData" class="table table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Item</th>
+                                            <th class="tbl-heading">O-Qty</th>
+                                            <th class="tbl-heading">Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid"></tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-11"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetFormbtnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+
+        $("body").on("click", "#btnSubmit", function () {
+            let StoreLineValues = [];
+            let isValid = true;
+            let msg = "";
+            if ($("#tbodyid [id^='trRow_']").length > 0) {
+                $("#tbodyid [id^='trRow_']").each(function () {
+                    let oMapping = {};
+                    let itemId = parseInt($(this)[0].attributes[1].value);
+                    oMapping.Item_Id = parseInt(itemId);
+                    oMapping.Sale_Unit = $("#lblSaleunit_" + itemId).text();
+                    oMapping.Code = $("#lblCode_" + itemId).text();
+                    StoreLineValues.push(oMapping);
+                    isValid = true;
+                });
+                $("#StoreData").val(JSON.stringify(StoreLineValues));
+            } else {
+                isValid = false;
+                msg = "Please add at least one store data!!!";
+            }
+            if (isValid) {
+                return true;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+        });
+
+        function BindStoreMasterData() {
+            IMSC.ajaxCall("GET", `/Material/Material_Sale_GetStoreData?SaleId=${@Model.SaleId}&AppToken=${'@Model.AppToken'}`, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== null) {
+                    if (result.length > 0) {
+                        $("#OfficeTitel").text(result[0].OfficeTitel);
+                        $("#Invoice_No").text(result[0].Invoice_No);
+                        $("#Voucher_No").text(result[0].Voucher_No);
+                        $("#PartyName").text(result[0].PartyName);
+                        $('#StateName').text(result[0].StateName);
+                        $("#PO_No").text(result[0].PO_No === null ? 'N/A' : result[0].PO_No);
+                        $("#Transaction_Date").text(result[0].Transaction_Date);
+                        $("#Remarks").text(result[0].Remarks);
+                        $("#Marka").text(result[0].Marka);
+                        $("#Transporter").text(result[0].Transporter);
+                        $("#Dispatch_Date").text(result[0].Dispatch_Date);
+                        $("#tbodyid").empty();
+
+                        var fields = [
+                             { name: "Item_Id", css: "hidden" },
+                             { name: "ItemName", type: "text", title: "Item Name", sorting: true, filtering: true},
+                             { name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: false},
+                             { name: "Order_Qty", type: "text", title: "Order Qty", sorting: true, filtering: false },
+                             { name: "Available_Qty", type: "text", title: "Available Qty", sorting: true, filtering: false},
+                             { name: "Unit", type: "text", title: "Unit", sorting: true, filtering: false},
+                             { name: "LastPurchaseRate", type: "text", title: "Last Rate", sorting: true, filtering: false },
+                             { name: "Order_Rate", type: "text", title: "Order Rate", sorting: true, filtering: false },
+                             { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false },
+                             { name: "Discount_1", type: "text", title: "Discount 1(%)", sorting: true, filtering: false },
+                             { name: "Discount_2", type: "text", title: "Discount 2(%)", sorting: true, filtering: false },
+                             { name: "Taxable_Amount", type: "text", title: "Taxable Amount", sorting: true, filtering: false },
+                             { name: "GST", type: "text", title: "GST", sorting: true, filtering: false },
+                             { name: "CGST", type: "text", title: "CGST", sorting: true, filtering: false },
+                             { name: "SGST", type: "text", title: "SGST", sorting: true, filtering: false },
+                             { name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
+                             { name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
+                             { name: "TotalAmount", type: "text", title: "Total Amount", sorting: true, filtering: false }
+                        ];
+                        var options = {
+                            filtering: true,
+                            editing: true,
+                            sorting: true,
+                            paging: true,
+                            autoload: true,
+                            controller: {
+                                GetPassData: result,
+                                loadData: function (filter) {
+                                    return $.grep(this.GetPassData, function (GetPassData) {
+                                        return (!filter.ItemName || GetPassData.ItemName.toLowerCase().indexOf(filter.ItemName.toLowerCase()) > -1);
+                                    });
+                                }
+                            },
+                            fields: fields
+                        };
+                        $.extend(options, IMSC.grid_options);
+                        $("#listGrid").jsGrid(options);
+
+                        IMSC.filteOnKeyPress("#listGrid");
+
+                        $("td").each(function () {
+                            $(this).addClass("tbl-css");
+                        });
+                    }
+                }
+            });
+        };
+
+        BindStoreMasterData();
+
+        $('#txtGetPass').change(function () {
+            let item = parseInt($(this).val());
+            IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + item + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                var res = JSON.parse(d);
+                if (res !== null) {
+                        var result = res;
+                        if (result.length > 0) {
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblMaterialStoreData > TBODY")[0];
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+                            $(row).attr('id', 'trRow_' + result[0].Item_Id);
+                            $(row).attr('data-index', result[0].Item_Id);
+                            //Add Item cell.
+                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="value.Item_Id">${result[0].Title}</label> `;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblItem);
+                            //Add Order Date.
+                            let lblCode = `<label id="lblCode_${result[0].Item_Id}">${result[0].Code}</label>`;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblCode);
+                            //Add Hsn_Sac cell.
+                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Saleunit}">${result[0].Saleunit}</label>`;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblSaleunit);
+
+                            $("td").each(function () {
+                                $(this).addClass("tbl-css");
+                            });
+                        }
+                    }
+            });
+        });
+
+        $("#btnResetForm").click(function (e) {
+            e.preventDefault();
+            BindStoreMasterData();
+        });
+    });
+</script>

@@ -208,6 +208,7 @@
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
+    <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
     <Compile Include="Models\ViewModel\GroupMaster.cs" />
     <Compile Include="Models\ViewModel\HSNSACMaster.cs" />
@@ -354,6 +355,7 @@
     <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
+    <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
