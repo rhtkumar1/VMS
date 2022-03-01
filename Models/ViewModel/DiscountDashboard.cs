@@ -11,7 +11,7 @@ namespace IMS.Models.ViewModel
 {
     public class DiscountDashboard
     {
-
+        public int SaleDisId { get; set; }
         public int SaleId { get; set; }
         public string Invoice_No { get; set; }
         public string FromDate { get; set; }
@@ -55,8 +55,8 @@ namespace IMS.Models.ViewModel
                 foreach (var item in Sale_Discounts)
                 {
                     sb.AppendLine(@"<listnode Sale_Id=""" + Convert.ToString(item.Sale_Id) + @""" Invoice_No=""" + Convert.ToString(item.Invoice_No) + @"""   
-                              Office_Id=""" + Convert.ToString(item.Office_Id) + @""" Party_Id=""" + Convert.ToString(item.Party_Id) + @"""
-                              Transaction_Date=""" + Convert.ToString(item.Transaction_Date) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
+                              Office_Id=""" + Convert.ToString(OfficeId) + @""" Party_Id=""" + Convert.ToString(item.Party_Id) + @"""
+                              Transaction_Date=""" + CommonUtility.GetDateYYYYMMDD(item.Transaction_Date) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
                               BalAmount=""" + Convert.ToString(item.BalAmount) + @""" Fin_Id=""" + Convert.ToString(FinId) + @"""   
                               Company_Id=""" + Convert.ToString(CompanyId) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @""" />");
                 }
@@ -70,7 +70,7 @@ namespace IMS.Models.ViewModel
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Discount_InsertUpdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    SaleId = Convert.ToInt32(dr[0]);
+                    SaleDisId = Convert.ToInt32(dr[0]);
                     IsSucceed = Convert.ToBoolean(dr[1]);
                     ActionMsg = dr[2].ToString();
                 }

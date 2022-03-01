@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
+//using System.Web.Script.Serialization;
 
 namespace IMS.Controllers
 {
@@ -659,6 +659,178 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/DiscountDashboard.cshtml", (objDiscountDashboard.IsSucceed ? newDiscountDashboard : discountDashboard));
         }
 
+        #endregion
+
+        #region Common Method
+        [HttpGet]
+        public ActionResult SearchParty(string Party, int OfficeId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_Party(Party, OfficeId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchPartyOrderCreation(string Party,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.Get_Party_Order_Creation(Party);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchItem(string Item,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.Material_Get_Item(Item);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult SearchOrderNo(string OrderNo, int PartyId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommonModuleClass.MaterialSales_Get_OrderNo(OrderNo, PartyId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        #endregion
+
+        #region Matrial Get Pass Data
+        public ActionResult MaterialGatepass()
+        {
+            GatePass gatePass = new GatePass();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            gatePass.AppToken = CommonUtility.URLAppToken(AppToken);
+            gatePass.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/MaterialGatepass.cshtml", gatePass);
+        }
+
+        [HttpGet]
+        public ActionResult GetPassData(string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                GatePass gatePass = new GatePass();
+                dt = gatePass.Material_GetPassData();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        #endregion
+
+        #region Store Clearance
+        public ActionResult StoreClearance(int SaleId, string AppToken = "")
+        {
+            StoreClearance storeClearance = new StoreClearance();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            storeClearance.AppToken = CommonUtility.URLAppToken(AppToken);
+            storeClearance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            storeClearance.SaleId = SaleId;
+            return View("~/Views/Admin/Material/StoreClearance.cshtml", storeClearance);
+        }
+        [HttpGet]
+        public ActionResult Material_Sale_GetStoreData(int SaleId,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                StoreClearance storeClearance = new StoreClearance();
+                dt = storeClearance.Material_Sale_GetStoreData(SaleId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+        [HttpGet]
+        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, int ItemId,string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                StoreClearance storeClearance = new StoreClearance();
+                dt = storeClearance.Material_Sale_Item_ForBarcodegun(SaleId, ItemId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult MaterialStoreClearance_InsertUpdate(StoreClearance storeClearance)
+        {
+            StoreClearance objStoreClearance = new StoreClearance();
+            try
+            {
+                storeClearance.StoreClearanceMappings = JsonConvert.DeserializeObject<List<StoreClearanceMapping>>(storeClearance.StoreData);
+                objStoreClearance = storeClearance.MaterialStoreClearance_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                storeClearance.AppToken = CommonUtility.URLAppToken(AppToken);
+                storeClearance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objStoreClearance != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objStoreClearance.IsSucceed)
+                    {
+                        ViewBag.Msg = objStoreClearance.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objStoreClearance.IsSucceed && objStoreClearance.SaleId != -1)
+                    {
+                        ViewBag.Msg = objStoreClearance.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            StoreClearance newStoreClearance = new StoreClearance();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newStoreClearance.AppToken = CommonUtility.URLAppToken(AppToken);
+            newStoreClearance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/MaterialSales.cshtml", (objStoreClearance.IsSucceed ? newStoreClearance : storeClearance));
+        }
         #endregion
     }
 }

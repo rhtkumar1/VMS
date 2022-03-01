@@ -97,5 +97,63 @@ namespace IMS.Models.CommonModel
 
             return ds;
         }
+        public static DataTable MaterialSales_Get_Party(string Party, int OfficeId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@OfficeId", OfficeId));
+                SqlParameters.Add(new SqlParameter("@Party", Party));
+                dt = DBManager.ExecuteDataTableWithParameter("Party_Master_Get", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        public static DataTable Get_Party_Order_Creation(string Party)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party", Party));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_GetParty", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        public static DataTable Material_Get_Item(string Item)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item", Item));
+                dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Get", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        public static DataTable MaterialSales_Get_OrderNo(string OrderNo, int PartyId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                SqlParameters.Add(new SqlParameter("@PO_No", OrderNo));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetOrder", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
     }
 }

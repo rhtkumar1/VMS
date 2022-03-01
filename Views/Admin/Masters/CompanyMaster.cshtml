@@ -76,13 +76,13 @@
                             <div class="styled-input">
                                 <div class="col-md-6 form-group">
                                     <label>Address1<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Address1, htmlAttributes: new { @placeholder = "Enter Address1", @required = "required", @class = "form-control" })
+                                    @Html.TextAreaFor(m => m.Address1, htmlAttributes: new { @placeholder = "Enter Address1", @required = "required", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-6 form-group">
-                                    <label>Address2<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Address2, htmlAttributes: new { @placeholder = "Enter Address2", @required = "required", @class = "form-control" })
+                                    <label>Address2</label>
+                                    @Html.TextAreaFor(m => m.Address2, htmlAttributes: new { @placeholder = "Enter Address2", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">

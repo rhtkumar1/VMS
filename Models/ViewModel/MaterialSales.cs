@@ -21,6 +21,7 @@ namespace IMS.Models.ViewModel
         public int StateId { get; set; }
         public int SupplyStateId { get; set; }
         public string TransactionDate { get; set; }
+        public string Dispatch_Date { get; set; }
         public decimal SaleAmount { get; set; }
         public int FinId { get; set; }
         public int CompanyId { get; set; }
@@ -36,7 +37,6 @@ namespace IMS.Models.ViewModel
         public SelectList PartyLists { get; set; }
         public SelectList StateLists { get; set; }
         public SelectList HSN_SAC_Lists { get; set; }
-        public SelectList Item_Lists { get; set; }
         public List<MaterialSalesMapping> MaterialSalesMappings { get; set; }
         public List<MaterialSalesMapping> MaterialMappingList { get; set; }
         public string AppToken { get; set; }
@@ -46,6 +46,7 @@ namespace IMS.Models.ViewModel
         public int IsUpdateMaterialSales { get; set; }
         public int MENU_Id { get; set; }
         public SelectList UnitLists { get; set; }
+        public string VoucherNumber { get; set; }
 
         public MaterialSales()
         {
@@ -53,8 +54,6 @@ namespace IMS.Models.ViewModel
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
-            //POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("PO_Id", "PO_No", "VW_Pending_Material_Order", ""), "Id", "Value");
-            Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
@@ -80,18 +79,21 @@ namespace IMS.Models.ViewModel
                                     IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  
                                     UnitId="""+ Convert.ToString(item.Unit_Id) + @""" Discount_1_Amount=""" + Convert.ToString(item.Discount_1_Amount) + @"""
                                     Discount_2_Amount=""" + Convert.ToString(item.Discount_2_Amount) + @""" Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" 
-                                    />");
+                                    LastPurchaseRate=""" + Convert.ToString(item.LastRate) + @""" />");
                 }
                 SaleLine = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
                 SqlParameters.Add(new SqlParameter("@Invoice_No", InvoiceNo));
+                SqlParameters.Add(new SqlParameter("@Voucher_No", VoucherNumber));
                 SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
                 if (!string.IsNullOrEmpty(TransactionDate))
-                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateDDMMYYYY(TransactionDate))));
+                    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(TransactionDate))));
+                if (!string.IsNullOrEmpty(Dispatch_Date))
+                    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Dispatch_Date))));
                 SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
                 SqlParameters.Add(new SqlParameter("@Marka", Marka));
                 SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));
@@ -214,6 +216,7 @@ namespace IMS.Models.ViewModel
         public string ItemTitle { get; set; }
         public string HSN_SAC { get; set; }
         public string Quantity { get; set; }
+        public string LastRate { get; set; }
         public string Rate { get; set; }
         public string Amount { get; set; }
         public string Discount_1 { get; set; }

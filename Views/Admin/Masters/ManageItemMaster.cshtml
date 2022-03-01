@@ -43,13 +43,13 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Title<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.Title, htmlAttributes: new { @placeholder = "Enter Title", @id = "Title", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Code<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code", @id = "Code", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -68,51 +68,51 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Dead Stock Days<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.DeadStockDays, htmlAttributes: new { @placeholder = "Dead Stock Days", @required = "required", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.DeadStockDays, htmlAttributes: new { @placeholder = "Dead Stock Days", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Min Level<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.MinLevel, htmlAttributes: new { @placeholder = "Min Level", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.MinLevel, htmlAttributes: new { @placeholder = "Min Level", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Max Level<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.MaxLevel, htmlAttributes: new { @placeholder = "Max Level", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.MaxLevel, htmlAttributes: new { @placeholder = "Max Level", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Reorder Level<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.ReorderLevel, htmlAttributes: new { @placeholder = "Reorder Level", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.ReorderLevel, htmlAttributes: new { @placeholder = "Reorder Level", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Inward Unit<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.InwardUnitId, new SelectList(Model.Unit_In_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.InwardUnitId, new SelectList(Model.Unit_In_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Outward Unit<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.OutwardUnitId, new SelectList(Model.Unit_Out_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.OutwardUnitId, new SelectList(Model.Unit_Out_Lists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>HSN SAC<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Text", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
+                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Text", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -131,21 +131,27 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>MRP<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.MRP, htmlAttributes: new { @placeholder = "MRP", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.MRP, htmlAttributes: new { @placeholder = "MRP", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>ListPrice<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.ListPrice, htmlAttributes: new { @placeholder = "List Price", @class = "form-control", @required = "required" })
+                                    @Html.TextBoxFor(m => m.ListPrice, htmlAttributes: new { @placeholder = "List Price", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Scheme</label>
                                     <br />
                                     @Html.CheckBoxFor(m => m.Scheme, htmlAttributes: new { @placeholder = "Scheme", @class = "checkboxcss" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Opening Balance</label>
+                                    @Html.TextBoxFor(m => m.OpeningQty, htmlAttributes: new { @placeholder = "Opening Qty Balance", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -294,22 +300,129 @@
             }
         });
         $("body").on("click", "#btnSubmit", function () {
-            //Loop through the Table rows and build a JSON array.
-            var ItemMasterValues = [];
-            $("#tblCustomers TBODY TR").each(function () {
-                var row = $(this);
-                var oMapping = {};
-                oMapping.PartyId = row.find("TD").eq(0).attr('data-party-id');
-                oMapping.LocationId = row.find("TD").eq(1).attr('data-location-id');
-                ItemMasterValues.push(oMapping);
-            });
-            $("#ItemMapping").val(JSON.stringify(ItemMasterValues));
+            let bAdded = true;
+            let msg = "";
+            if ($("#Title").val() === "") {
+                msg = "Please fill title.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#Code").val() === "") {
+                msg = "Please fill Code.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#GroupId").val() === "0" || $("#GroupId").val() === "") {
+                msg = "Please select froup.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#Nature").val() === "0" || $("#Nature").val() === "") {
+                msg = "Please fill nature.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#DeadStockDays").val() === "") {
+                msg = "Please fill dead stock days.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#MinLevel").val() === "") {
+                msg = "Please fill min-level.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#MaxLevel").val() === "") {
+                msg = "Please fill max-level.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#ReorderLevel").val() === "") {
+                msg = "Please fill reorder level.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#BaseUnitId").val() === "0" || $("#BaseUnitId").val() === "") {
+                msg = "Please select base unit.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#InwardUnitId").val() === "0" || $("#InwardUnitId").val() === "") {
+                msg = "Please select inward unit.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#OutwardUnitId").val() === "0" || $("#OutwardUnitId").val() === "") {
+                msg = "Please select outward unit.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#HSN_SAC").val() === "0" || $("#HSN_SAC").val() === "") {
+                msg = "Please select hsn sac.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#MRP").val() === "") {
+                msg = "Please fill MRP.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#ListPrice").val() === "") {
+                msg = "Please fill list price.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if (bAdded) {
+                //Loop through the Table rows and build a JSON array.
+                var ItemMasterValues = [];
+                $("#tblCustomers TBODY TR").each(function () {
+                    var row = $(this);
+                    var oMapping = {};
+                    oMapping.PartyId = row.find("TD").eq(0).attr('data-party-id');
+                    oMapping.LocationId = row.find("TD").eq(1).attr('data-location-id');
+                    ItemMasterValues.push(oMapping);
+                });
+                $("#ItemMapping").val(JSON.stringify(ItemMasterValues));
+            } else {
+                msg = "Please check all mandatory filds!!!";
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
         });
         $("#btnPartyAndLocationMapping").click(function () {
             $("#divShowPartyAndLocationMapping").toggle();
         });
-          $("#btnBack").click(function () {
-            window.location.href = "@Url.Action("ItemIndex", "master")?AppToken=@Model.AppToken";
+        $("#btnBack").click(function () {
+          window.location.href = "@Url.Action("ItemIndex", "master")?AppToken=@Model.AppToken";
         });
     });
     function Remove(button) {

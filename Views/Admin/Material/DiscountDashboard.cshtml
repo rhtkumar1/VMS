@@ -27,8 +27,9 @@
                     </div>
                     <div class="styled-input">
                         <div class="col-md-2 form-group">
-                            <label>Order No</label>
-                            @Html.DropDownListFor(m => m.OrderId, new SelectList(Model.OrderList, "Value", "Text"), htmlAttributes: new { @id = "drpOrderId", @class = "form-control" })
+                            <label>Invoice No</label>
+                            @*@Html.DropDownListFor(m => m.OrderId, new SelectList(Model.OrderList, "Value", "Text"), htmlAttributes: new { @id = "drpOrderId", @class = "form-control" })*@
+                            <select id="drpInvoice" name="drpInvoice" class="form-control"></select>
                         </div>
                     </div>
                     <div class="styled-input">
@@ -63,6 +64,11 @@
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button name="btnReset" id="btnReset" class="btncustome">Reset</button>
+                                </div>
+                            </div>
                         }
                     </div>
                 </div>
@@ -82,9 +88,25 @@
             $('#msg').html("@ViewBag.Msg");
         }
         var listItems = [];
+
+        $("#drpParty").change(function () {
+            let Party_Id = parseInt($('#drpParty').val());
+            $("#drpInvoice").empty();
+            $("#drpInvoice").append($("<option></option>").val("0").html("Select Invoice"));
+            $('#PartyId').val(Party_Id);
+            IMSC.ajaxCall("GET", "/Material/GetInvoiceSales?Party_Id=" + Party_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result.length > 0) {
+                    $.each(result, function (index, value) {
+                        $("#drpInvoice").append($("<option></option>").val(value.Sale_Id).html(value.Invoice_No));
+                    });
+                }
+            });
+        });
+
         var loadData = () => {
             let PartyId = parseInt($("#drpParty").val());
-            let OrderId = parseInt($("#drpOrderId").val());
+            let OrderId = parseInt($("#drpInvoice").val());
             let FromDate = "";
             if ($("#FromDate").val() !== "") {
                 let arr = $("#FromDate").val().split("/");
@@ -119,8 +141,7 @@
             },
             fields: [
                 {
-
-                    width: 10,
+                    width:25,
                     sorting: false,
                     headerTemplate: function () {
                         return `<input type="checkbox" id="chkAll" class="chkAll checkboxcss" name="chkAll" />`;
@@ -132,25 +153,25 @@
                 { name: "Sale_Id", css: "hidden", },
                 { name: "Office_Id", css: "hidden", },
                 { name: "Party_Id", css: "hidden", },
-                { name: "Invoice_No", type: "text", title: "Invoice No", sorting: true, filtering: true, width: 30 },
-                { name: "Bill_Date", title: "Date", sorting: true, filtering: false, width: 30 },
-                { name: "Bill_Discount", title: "Dis-%", sorting: true, filtering: true, width: 20 },
-                { name: "Bill_DiscountAmount", title: "Dis-Amount", sorting: true, filtering: true, width: 20 },
+                { name: "Invoice_No", type: "text", title: "Invoice No", sorting: true, filtering: true},
+                { name: "Bill_Date", title: "Bill Date", sorting: true, filtering: false},
+                { name: "Bill_Discount", title: "Discount(%)", sorting: true, filtering: true},
+                { name: "Bill_DiscountAmount", title: "Discount Amount", sorting: true, filtering: true},
                 {
-                    width: 30, title: "Received-Amount", sorting: true, filtering: true,
+                    title: "Received Amount", sorting: true, filtering: true,
                     itemTemplate: function (i,o) {
                         return ` <input type="text" id="ReceivedAmount_${o.Sale_Id}" placeholder = "Received-Amount"  name="ReceivedAmount_${o.Sale_Id}" class="form-control" />`;
                     }
                 },
                 {
-                    width: 30, title: "Received-Date", sorting: true, filtering: true,
+                    title: "Received Date", sorting: true, filtering: true,
                     itemTemplate: function (i, o) {
                         return `<input type="text" id="ReceivedDate_${o.Sale_Id}" placeholder = "dd/mm/yyyy" name="ReceivedDate_${o.Sale_Id}" class="form-control clsDate" />`;
                     }
                 },
-                { name: "BalAmount",  title: "Balance Amount", sorting: true, filtering: true, width: 20 },
+                { name: "BalAmount",  title: "Balance Amount", sorting: true, filtering: true},
                 {
-                    width: 50, title: "Remarks", sorting: true, filtering: true,
+                    title: "Remarks", sorting: true, filtering: true,
                     itemTemplate: function (i, o) {
                         return `<input type="text" id="Remarks_${o.Sale_Id}" placeholder = "Remarks" name="Remarks_${o.Sale_Id}" class="form-control" />
                                 <input type="hidden" id="hdnSaleId_${o.Sale_Id}" name="hdnSaleId_${o.Sale_Id}" value="${o.Sale_Id}"
@@ -174,9 +195,12 @@
             let DisDash = [];
             let isValid = true;
             let msg = "";
+            let isanyitemchecked = false;
             $("[id^='hdnSaleId_']").each(function () {
                 let index = parseInt($("#" + this.id).val());
+                
                 if ($("#chk_" + index).prop('checked') === true) {
+                    isanyitemchecked = true;
                     let oMapping = {};
                     let BalAmount = 0;
                     let ReceivedAmount = 0;
@@ -191,21 +215,32 @@
                         msg = "Please select received date!!!";
                         return false;
                     }
-                    if ($("#Remarks_" + index).val() === "") {
-                        isValid = false;
-                        msg = "Please enter remarks!!!";
-                        return false;
-                    }
+                    //if ($("#Remarks_" + index).val() === "") {
+                    //    isValid = false;
+                    //    msg = "Please enter remarks!!!";
+                    //    return false;
+                    //}
                     if (isValid) {
                         ReceivedAmount = parseFloat($("#ReceivedAmount_" + index).val());
                         Bill_DiscountAmount = parseFloat($("#" + this.id).attr('data-Bill_DiscountAmount'));
-                        if (ReceivedAmount <= Bill_DiscountAmount) {
+                        BalAmount = parseFloat($("#" + this.id).attr('data-BalanceAmount'));
+                        if (BalAmount == Bill_DiscountAmount) {
+                            if (ReceivedAmount > Bill_DiscountAmount) {
+                                msg = "Received amount cannot be greater than Discount Amount !!!";
+                                isValid = false;
+                                return false;
+                            }
                             BalAmount = Bill_DiscountAmount - ReceivedAmount;
-                        } else {
-                            msg = "Received amount can grater then and equal to balance amount!!!";
-                            isValid = false;
-                            return false;
                         }
+                        else {
+                            if (ReceivedAmount > BalAmount) {
+                                msg = "Received amount cannot be greater than Balance Amount !!!";
+                                isValid = false;
+                                return false;
+                            }
+                            BalAmount = BalAmount - ReceivedAmount;
+                        }
+
                     }
                     if (isValid) {
                         oMapping.Sale_Id = index;
@@ -218,12 +253,14 @@
                         oMapping.Remarks = $("#Remarks_" + index).val();
                         DisDash.push(oMapping);
                     }
-                } else {
+                }
+
+                if (!isanyitemchecked) {
                     isValid = false;
                     msg = "Please select record!!!";
                     return false;
                 }
-                
+
 
             });
             $("#DisDash").val(JSON.stringify(DisDash));
@@ -235,6 +272,7 @@
         });
 
         $("#chkAll").change(function () {
+            
             if (this.checked) {
                 $("[id^='chk_']").each(function () {
                     $("#" + this.id).prop('checked', true);
@@ -254,6 +292,15 @@
 
             }
         });
+    });
+
+    $("#btnReset").click(function (e) {
+        e.preventDefault();
+        $("#drpParty").val($("#drpParty option:first").val());
+        $("#drpInvoice").empty();
+        $("#FromDate").val("");
+        $("#ToDate").val("");
+        loadData();
     });
 
 </script>

@@ -67,7 +67,7 @@
                                         var $customeEditButton = `<a href="/master/itemmaster?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
                                         var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px"><i class="fa fa-trash"></i></a>')
                                             .click(function (e) {
-                                                deleteFormData(args);
+                                                deleteFormData("Delete",args);
                                                 return false;
                                             });
                                         return $("<div class='display-flex'></div>").append($customeEditButton, $customeDeleteButton);
@@ -77,8 +77,13 @@
                             }
                         },
                  { name: "Item_Id", css: "hidden" },
-                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true, width: 150 },
-                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 150 },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true,width: 250 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 100 },
+                 { name: "GroupName", type: "text", title: "Group", sorting: true, filtering: true, width: 150 },
+                 { name: "HSN_SAC", type: "text", title: "HSN/SAC", sorting: true, filtering: true},
+                 { name: "ReorderLevel", type: "text", title: "Reorder Level", sorting: true, filtering: false},
+                 { name: "MRP", type: "text", title: "MRP", sorting: true, filtering: false},
+                 { name: "ListPrice", type: "text", title: "List Price", sorting: true, filtering: false},
                  { name: "Type_Id", css: "hidden" },
                  { name: "Remarks", css: "hidden" },
              ];
@@ -131,16 +136,16 @@
         //};
 
         var deleteFormData = function (dialogType, ItemMaster) {
-            var result = confirm("Want to delete?");
+            var result = confirm("Do you want to delete?");
             if (result == true) {
-            IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-            var result = JSON.parse(d);
-            if (result !== "null" && result !== "") {
-                window.location.reload();
-            }
-        });
+                IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== "null" && result !== "") {
+                        window.location.reload();
+                    }
+                });
             } else {
                 return false;
             }
-    };
+        };
 </script>
