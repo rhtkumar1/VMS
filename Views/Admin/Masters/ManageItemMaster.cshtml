@@ -55,14 +55,14 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Group<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(Model.GroupLists, "Value", "Text"), htmlAttributes: new { @id = "GroupId", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.GroupId, new SelectList(Model.GroupLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Nature</label>
-                                    @Html.DropDownListFor(m => m.Nature, new SelectList(Model.NatureLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                    <label>Nature<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Nature, new SelectList(Model.NatureLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @required = "required" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -257,6 +257,7 @@
             $('#msg').html("@ViewBag.Msg");
         }
         $("body").on("click", "#btnAdd", function () {
+         
             var bAdded = true;
             $("#IsMappingChanged").val(bAdded);
             //Reference the Party and Location ddl.
