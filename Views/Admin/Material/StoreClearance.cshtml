@@ -214,7 +214,7 @@
                             $(row).attr('data-index', result[0].Item_Id);
                             $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
                             //Add Item cell.
-                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${value.Item_Id}">${result[0].Title}</label> `;
+                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
                             cell = $(row.insertCell(-1));
                             cell.append(lblItem);
                             //Add Quantity.
@@ -222,7 +222,7 @@
                             cell = $(row.insertCell(-1));
                             cell.append(lblQuantity);
                             //Add Unit cell.
-                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Saleunit}">${result[0].Saleunit}</label>`;
+                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblSaleunit);
                         } else {

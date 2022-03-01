@@ -45,12 +45,12 @@ namespace IMS.Models.ViewModel
                                    Unit_Id=""" + Convert.ToString(item.Sale_Unit) + @""" />");
                 }
                 StoreData = "<Line>" + sb + "</Line>";
-
+                GatePass_Id = 0;
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
                 SqlParameters.Add(new SqlParameter("@Store_Line", StoreData));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                SqlParameters.Add(new SqlParameter("@GatePass_Id", 0));
+                SqlParameters.Add(new SqlParameter("@GatePass_Id", GatePass_Id));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_StoreClearance_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
