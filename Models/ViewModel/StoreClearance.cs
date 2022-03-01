@@ -17,6 +17,7 @@ namespace IMS.Models.ViewModel
         public int CompanyId { get; set; }
         public int Loginid { get; set; }
         public int MENU_Id { get; set; }
+        public int GatePass_Id { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
@@ -39,20 +40,18 @@ namespace IMS.Models.ViewModel
                 var sb = new System.Text.StringBuilder();
                 foreach (var item in StoreClearanceMappings)
                 {
-                    sb.AppendLine(@"<listnode Item_Id=""" + Convert.ToString(item.Item_Id) + @""" Sale_Unit=""" + Convert.ToString(item.Sale_Unit) + @""" 
-                                           Quantity=""" + Convert.ToString(item.Code) + @""" />");
+                    sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @"""  SaleLine_Id=""" + Convert.ToString(item.SaleLine_Id) + @""" 
+                                   Item_Id=""" + Convert.ToString(item.Item_Id) + @"""  Quantity=""" + Convert.ToString(item.Quantity) + @"""
+                                   Unit_Id=""" + Convert.ToString(item.Sale_Unit) + @""" />");
                 }
                 StoreData = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
-                SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
-                SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
                 SqlParameters.Add(new SqlParameter("@Store_Line", StoreData));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
-
-                DataTable dt = null;//DBManager.ExecuteDataTableWithParameter("Material_Sale_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@GatePass_Id", 0));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_StoreClearance_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     SaleId = Convert.ToInt32(dr[0]);
@@ -97,8 +96,10 @@ namespace IMS.Models.ViewModel
     }
     public class StoreClearanceMapping
     {
+        public string Line_Id { get; set; }
+        public string SaleLine_Id { get; set; }
         public string Item_Id { get; set; }
         public string Sale_Unit { get; set; }
-        public string Code { get; set; }
+        public string Quantity { get; set; }
     }
 }

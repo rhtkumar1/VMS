@@ -110,9 +110,11 @@
                 $("#tbodyid [id^='trRow_']").each(function () {
                     let oMapping = {};
                     let itemId = parseInt($(this)[0].attributes[1].value);
+                    oMapping.Line_Id = "0";
+                    oMapping.SaleLine_Id = $(this)[0].attributes[2].value;
                     oMapping.Item_Id = parseInt(itemId);
                     oMapping.Sale_Unit = $("#lblSaleunit_" + itemId).text();
-                    oMapping.Code = $("#lblCode_" + itemId).text();
+                    oMapping.Quantity = $("#lblQuantity_" + itemId).text();
                     StoreLineValues.push(oMapping);
                     isValid = true;
                 });
@@ -210,15 +212,16 @@
                             var row = tBody.insertRow(-1);
                             $(row).attr('id', 'trRow_' + result[0].Item_Id);
                             $(row).attr('data-index', result[0].Item_Id);
+                            $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
                             //Add Item cell.
-                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="value.Item_Id">${result[0].Title}</label> `;
+                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${value.Item_Id}">${result[0].Title}</label> `;
                             cell = $(row.insertCell(-1));
                             cell.append(lblItem);
-                            //Add Order Date.
-                            let lblCode = `<label id="lblCode_${result[0].Item_Id}">${result[0].Code}</label>`;
+                            //Add Quantity.
+                            let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
                             cell = $(row.insertCell(-1));
-                            cell.append(lblCode);
-                            //Add Hsn_Sac cell.
+                            cell.append(lblQuantity);
+                            //Add Unit cell.
                             let lblSaleunit = `<label id="lblSaleunit_${result[0].Saleunit}">${result[0].Saleunit}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblSaleunit);
