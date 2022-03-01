@@ -38,74 +38,7 @@
                             <br />
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Office<span class="mandatory">*</span></label>
-                                    <label id="OfficeTitel" name="OfficeTitel" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Voucher Number</label>
-                                    <label id="Invoice_No" name="Invoice_No" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Invoice Number</label>
-                                    <label id="Voucher_No" name="Voucher_No" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Party<span class="mandatory">*</span></label>
-                                    <label id="PartyName" name="PartyName" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>State<span class="mandatory">*</span></label>
-                                    <label id="StateName" name="StateName" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Order No</label>
-                                    <label id="PO_No" name="PO_No" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Date<span class="mandatory">*</span></label>
-                                    <label id="Transaction_Date" name="Transaction_Date" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Remarks</label>
-                                    <label id="Remarks" name="Remarks" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Marka</label>
-                                    <label id="Marka" name="Marka" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Transporter</label>
-                                    <label id="Transporter" name="Transporter" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Dispatch Date<span class="mandatory">*</span></label>
-                                    <label id="Dispatch_Date" name="Dispatch_Date" class="form-control"></label>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Dispatch Date<span class="mandatory">*</span></label>
+                                    <label>Search Get Pass</label>
                                     <input type="text" placeholder="Search Get Pass" class="form-control" id="txtGetPass" name="txtGetPass" />
                                 </div>
                             </div>
@@ -202,17 +135,6 @@
                 var result = JSON.parse(d);
                 if (result !== null) {
                     if (result.length > 0) {
-                        $("#OfficeTitel").text(result[0].OfficeTitel);
-                        $("#Invoice_No").text(result[0].Invoice_No);
-                        $("#Voucher_No").text(result[0].Voucher_No);
-                        $("#PartyName").text(result[0].PartyName);
-                        $('#StateName').text(result[0].StateName);
-                        $("#PO_No").text(result[0].PO_No === null ? 'N/A' : result[0].PO_No);
-                        $("#Transaction_Date").text(result[0].Transaction_Date);
-                        $("#Remarks").text(result[0].Remarks);
-                        $("#Marka").text(result[0].Marka);
-                        $("#Transporter").text(result[0].Transporter);
-                        $("#Dispatch_Date").text(result[0].Dispatch_Date);
                         $("#tbodyid").empty();
 
                         var fields = [
@@ -266,13 +188,22 @@
 
         BindStoreMasterData();
 
-        $('#txtGetPass').change(function () {
-            let item = parseInt($(this).val());
-            IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + item + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+        $('#txtGetPass').keyup(function () {
+            let item = $("#txtGetPass").val();
+            if (item!=="") {
+                IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + parseInt(item) + "&AppToken=" + '@AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
                 if (res !== null) {
-                        var result = res;
-                        if (result.length > 0) {
+                    var result = res;
+                    if (result.length > 0) {
+                        let bIsValid = true;
+                        $("#tbodyid [id^='trRow_']").each(function () {
+                            let itemId = parseInt($(this)[0].attributes[1].value);
+                            if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
+                                bIsValid = false;
+                            }
+                        });
+                        if (bIsValid) {
                             //Get the reference of the Table's TBODY element.
                             var tBody = $("#tblMaterialStoreData > TBODY")[0];
                             //Add Row.
@@ -291,17 +222,26 @@
                             let lblSaleunit = `<label id="lblSaleunit_${result[0].Saleunit}">${result[0].Saleunit}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblSaleunit);
-
-                            $("td").each(function () {
-                                $(this).addClass("tbl-css");
-                            });
+                        } else {
+                            $('#alertModal').modal('show');
+                            $('#msg').html("Item is already mapped!!!");
                         }
+
+                        $("td").each(function () {
+                            $(this).addClass("tbl-css");
+                        });
+                      } else {
+                          $('#alertModal').modal('show');
+                          $('#msg').html("Item not available!!!");
+                      }
                     }
-            });
+               });
+            }
         });
 
         $("#btnResetForm").click(function (e) {
             e.preventDefault();
+            $("#txtGetPass").val("");
             BindStoreMasterData();
         });
     });
