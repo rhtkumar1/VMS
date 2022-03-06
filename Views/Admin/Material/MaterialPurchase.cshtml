@@ -84,13 +84,19 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-2 form-group">
                                     <label> Purchase Ref<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.Purchase_Ref, htmlAttributes: new { @placeholder = "Purchase Number", @id = "Purchase_Ref", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
+                                    <label>Agent</label>
+                                    @Html.DropDownListFor(m => m.AgentId,new SelectList(Model.Agent_Lists, "Value", "Text"), htmlAttributes: new { @id = "AgentId", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
                                     <label>Date<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @id = "TransactionDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>

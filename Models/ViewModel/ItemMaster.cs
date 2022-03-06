@@ -36,6 +36,8 @@ namespace IMS.Models.ViewModel
         public SelectList Unit_Out_Lists { get; set; }
         public SelectList LocationLists { get; set; }
         public SelectList PartyLists { get; set; }
+        public SelectList ItemLocationLists { get; set; }
+        public int ItemLocationId { get; set; }
         public string GroupName { get; set; }
         public string ItemBarCode { get; set; }
         // it would be a xml string for item location and party mapping grid
@@ -72,6 +74,7 @@ namespace IMS.Models.ViewModel
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
             NatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And IsActive=1"), "Id", "Value");
+            ItemLocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And Sub_Type=2 And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
             Loginid = CommonUtility.GetLoginID();
@@ -123,6 +126,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@MRP", MRP));
                 SqlParameters.Add(new SqlParameter("@ListPrice", ListPrice));
                 SqlParameters.Add(new SqlParameter("@OpeningQty", OpeningQty));
+                SqlParameters.Add(new SqlParameter("@ItemLocationId", ItemLocationId));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -235,6 +239,7 @@ namespace IMS.Models.ViewModel
                     //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
                     Remarks = dr["Remarks"].ToString();
                     OpeningQty = Convert.ToInt32(dr["OpeningQty"]);
+                    ItemLocationId = Convert.ToInt32(dr["ItemLocationId"]);
                     //Loginid = Convert.ToInt32(dr["LoginId"]);
                 }
             }

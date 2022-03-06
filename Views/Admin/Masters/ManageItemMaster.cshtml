@@ -91,9 +91,15 @@
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-2 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
                                     @Html.DropDownListFor(m => m.BaseUnitId, new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Item Location</label>
+                                    @Html.DropDownListFor(m => m.ItemLocationId, new SelectList(Model.ItemLocationLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div class="clearfix"></div>
