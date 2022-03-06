@@ -133,7 +133,7 @@ namespace IMS.Models.ViewModel
             return ds;
         }
 
-        public DataTable MaterialSales_GetPOData(int POId, int Office_Id, int SupplyState_Id)
+        public DataTable MaterialSales_GetPOData(int POId, int Office_Id, int SupplyState_Id,int Party_Id)
         {
             DataTable dt = new DataTable();
             try
@@ -142,6 +142,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@PO_Id", POId));
                 SqlParameters.Add(new SqlParameter("@Office_Id", Office_Id));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyState_Id));
+                SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetPODetail", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

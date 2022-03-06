@@ -378,13 +378,13 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetPOData(int POId, int Office_Id, int SupplyState_Id, string AppToken = "")
+        public ActionResult GetPOData(int POId, int Office_Id, int SupplyState_Id,int Party_Id=0, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
                 MaterialSales materialSales = new MaterialSales();
-                dt = materialSales.MaterialSales_GetPOData(POId, Office_Id, SupplyState_Id);
+                dt = materialSales.MaterialSales_GetPOData(POId, Office_Id, SupplyState_Id, Party_Id);
             }
             catch (Exception)
             {

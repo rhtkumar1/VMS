@@ -270,12 +270,31 @@
                 });
             },
             select: function (e, i) {
+                isValid = true;
+                if (parseInt($("#PartyId").val()) === 0) {
+                    msg = "Please select party.";
+                    isValid = false;
+                    $("#ItemSearch").val("");
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+                
+                if (parseInt($("#StateId").val()) === 0) {
+                    msg = "Please select State.";
+                    isValid = false;
+                    $("#ItemSearch").val("");
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+
                 $("#ItemSearch").val(i.item.label);
                 let Item_Id = parseInt(i.item.value);
                 $("#Item_Id").val(Item_Id);
                 let Office_Id = parseInt($("#OfficeId").val());
                 let P_State_Id = parseInt($("#SupplyStateId").val());
-                if (Item_Id > 0) {
+                if (Item_Id > 0 && isValid) {
                     IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
