@@ -592,7 +592,8 @@
                     $("#lblTotalAmount").text("Total : 0.00");
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         $("#ItemSearch").autocomplete({
@@ -636,7 +637,8 @@
                     });
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         function ResetFromOfficeChange() {
