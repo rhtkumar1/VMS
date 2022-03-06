@@ -265,7 +265,8 @@
                     });
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         $("#SearchParty").autocomplete({
@@ -307,7 +308,8 @@
                     $("#txtAddress").val("");
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         $("#drpParty").change(function () {
