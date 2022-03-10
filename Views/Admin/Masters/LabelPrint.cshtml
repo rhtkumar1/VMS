@@ -24,7 +24,11 @@
             <div class="blank">
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                    <div>
+                        <button class="btn pull-left" id="btnPrint" onclick="printContent('printarea');">Print Label</button>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="printarea" class="col-lg-4 col-md-4 col-sm-12 col-xs-12 form-group pull-right">
                         <img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".gif" )" alt="" />
                     </div>
                 </div>
@@ -35,3 +39,19 @@
     <!--//content-->
     <!---->
 </div>
+<script type="text/javascript">
+    function printContent(el) {
+        var restorepage = $('body').html();
+        var printcontent = $('#' + el).clone();
+        $('body').empty().html(printcontent);
+        window.print();
+        $('body').html(restorepage);
+    }
+</script>
+<style>
+    @@media print {
+        #btnPrint {
+            display: none;
+        }
+    }
+</style>
