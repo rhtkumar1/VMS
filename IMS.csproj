@@ -163,19 +163,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\ReportViewer.aspx" />
-    <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\Admin\Masters\CompanyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\RoleMaster.cshtml" />
     <Content Include="Views\web.config" />
@@ -236,7 +223,6 @@
     <Compile Include="Reports\ReportViewer.aspx.designer.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\DashBoard\fontawesome-webfont.eot" />
@@ -356,6 +342,8 @@
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
+    <Content Include="Views\Admin\Masters\OrderApproval.cshtml" />
+    <Content Include="Views\Admin\Masters\LabelPrint.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
