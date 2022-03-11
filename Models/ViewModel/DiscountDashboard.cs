@@ -56,9 +56,9 @@ namespace IMS.Models.ViewModel
                 {
                     sb.AppendLine(@"<listnode Sale_Id=""" + Convert.ToString(item.Sale_Id) + @""" Invoice_No=""" + Convert.ToString(item.Invoice_No) + @"""   
                               Office_Id=""" + Convert.ToString(OfficeId) + @""" Party_Id=""" + Convert.ToString(item.Party_Id) + @"""
-                              Transaction_Date=""" + CommonUtility.GetDateYYYYMMDD(item.Transaction_Date) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
+                              Transaction_Date=""" + (string.IsNullOrEmpty(item.Transaction_Date) ? "" : CommonUtility.GetDateYYYYMMDD(item.Transaction_Date)) + @""" DiscountAmount=""" + Convert.ToString(item.DiscountAmount) + @""" 
                               BalAmount=""" + Convert.ToString(item.BalAmount) + @""" Fin_Id=""" + Convert.ToString(FinId) + @"""   
-                              Company_Id=""" + Convert.ToString(CompanyId) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @""" />");
+                              Company_Id=""" + Convert.ToString(CompanyId) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @""" Is_Disc2_Settled=""" + Convert.ToString(item.Is_Disc2_Settled) + @""" />"); 
                 }
                 DisDash = "<Line>" + sb + "</Line>";
 
@@ -109,5 +109,6 @@ namespace IMS.Models.ViewModel
         public string DiscountAmount { get; set; }
         public string BalAmount { get; set; }
         public string Remarks { get; set; }
+        public string Is_Disc2_Settled { get; set; }
     }
 }
