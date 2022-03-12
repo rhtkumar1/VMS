@@ -33,6 +33,7 @@ namespace IMS.Models.ViewModel
         public SelectList StateLists { get; set; }
         public SelectList HSN_SAC_Lists { get; set; }
         public SelectList Item_Lists { get; set; }
+        public SelectList Agent_Lists { get; set; }
         public List<MaterialPurchaseMapping> MaterialPurchaseMappings { get; set; }
         public List<MaterialPurchaseMapping> MaterialMappingList { get; set; }
         public string AppToken { get; set; }
@@ -40,6 +41,7 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public int IsUpdateMaterialPurchase{ get; set; }
+        public int AgentId { get; set; }
         public SelectList UnitLists { get; set; }
 
         public MaterialPurchase()
@@ -51,6 +53,7 @@ namespace IMS.Models.ViewModel
             HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
+            Agent_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
             CompanyId = CommonUtility.GetCompanyID();
@@ -91,7 +94,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
                 SqlParameters.Add(new SqlParameter("@Purchase_Line", PurchaseLine));
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                
+                SqlParameters.Add(new SqlParameter("@AgentId", AgentId));
+
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {

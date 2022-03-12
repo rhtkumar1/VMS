@@ -50,7 +50,7 @@
              var fields = [
                  {
                             title: "Action",
-                            width: 80,
+                            width: 120,
                             itemTemplate: function (value, args) {
                                 switch (@Model.AuthMode) {
                                     case 0:
@@ -60,17 +60,19 @@
                                         break;
                                     case 2:
                                         $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
                                         var $customeEditButton = `<a href="/master/itemmaster?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
-                                        return $("<div class='display-flex'></div>").append($customeEditButton);
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton);
                                     case 3:
                                         $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
                                         var $customeEditButton = `<a href="/master/itemmaster?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
                                         var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px"><i class="fa fa-trash"></i></a>')
                                             .click(function (e) {
                                                 deleteFormData("Delete",args);
                                                 return false;
                                             });
-                                        return $("<div class='display-flex'></div>").append($customeEditButton, $customeDeleteButton);
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton, $customeDeleteButton);
                                     default:
                                         break;
                                 }

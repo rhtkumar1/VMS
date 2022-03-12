@@ -94,7 +94,7 @@ namespace IMS.Controllers
             try
             {
                 //financialMaster.FinancialId = financialId;
-                FinancialMaster objFinancialMaster= financialMaster.FinancialMaster_Delete(financialMaster);
+                FinancialMaster objFinancialMaster = financialMaster.FinancialMaster_Delete(financialMaster);
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 financialMaster.AppToken = CommonUtility.URLAppToken(AppToken);
                 financialMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
@@ -552,7 +552,7 @@ namespace IMS.Controllers
         public ActionResult GetRoleMaster(string AppToken = "")
         {
             DataTable dt = new DataTable();
-            RoleMaster roleMaster= new RoleMaster();
+            RoleMaster roleMaster = new RoleMaster();
             try
             {
                 dt = roleMaster.RoleMaster_Get();
@@ -1371,6 +1371,7 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Masters/UnitConversion.cshtml", unitConversonFactor);
         }
         #endregion
+
         #region Group Master
         public ActionResult GroupIndex()
         {
@@ -1676,6 +1677,32 @@ namespace IMS.Controllers
 
         #region Order Approval 
 
+        #endregion
+
+        #region
+        [HttpGet]
+        public ActionResult LebelPrint(int item_Id = 0, string appToken = "", string sMsg = "")
+        {
+            try
+            {
+                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
+                ItemMaster itemMaster = new ItemMaster();
+
+                if (item_Id > 0)
+                {
+                    itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode/" + item_Id + ".gif");
+                    itemMaster.ItemId = item_Id;
+                }
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                itemMaster.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+                itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+                return View("~/Views/Admin/Masters/LabelPrint.cshtml", itemMaster);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

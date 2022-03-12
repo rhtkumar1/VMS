@@ -46,13 +46,8 @@
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
-            } else if ($("#Dispatch_Date").val() === "") {
-                isValid = false;
-                msg = "Please fill dispatch date!!!";
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } 
+            }
+            
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
@@ -399,7 +394,7 @@
                         if (result.length > 0) {
                             $("#OfficeId").val(result[0].Office_Id);
                             $("#InvoiceNo").val(result[0].Invoice_No);
-                            $("#VoucherNumber").val(result[0].Voucher_No);
+                            $("#VoucherNo").val(result[0].Voucher_No);
                             $("#SearchParty").val(result[0].PartyName);
                             $('#PartyId').val(result[0].Party_Id);
                             $("#StateId").val(result[0].SupplyState_Id);
@@ -483,6 +478,20 @@
             }
         });
 
+        $("#StateId").change(function () {
+            var Office_Id = parseInt($("#OfficeId").val());
+            var SupplyState_Id = parseInt($("#StateId").val());
+            if (SupplyState_Id > 0) {
+                IMSC.ajaxCall("GET", "/Material/GetPOData?POId=" + 0 + "&Office_Id=" + Office_Id + "&SupplyState_Id=" + SupplyState_Id + "&AppToken=" + scope.AppToken + "&Party_Id=" + Number($("#PartyId").val()), {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result.length > 0) {
+                        $("#tbodyid").empty();
+                        BindGrid(result, 0, 1);
+                    }
+                });
+            }
+        });
+
         $("#SearchParty").autocomplete({
             source: function (request, response) {
                 IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
@@ -518,10 +527,10 @@
                             } else {
                                 $("#StateId").append($("<option></option>").val("0").html("Select State"));
                             }
-                            if (result.Table2 !== undefined && result.Table2.length > 0) {
-                                $("#tbodyid").empty();
-                                BindGrid(result.Table2, 0, 1);
-                            }
+                            //if (result.Table2 !== undefined && result.Table2.length > 0) {
+                            //    $("#tbodyid").empty();
+                            //    BindGrid(result.Table2, 0, 1);
+                            //}
                         }
                     });
                 } else {
@@ -592,7 +601,8 @@
                     $("#lblTotalAmount").text("Total : 0.00");
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         $("#ItemSearch").autocomplete({
@@ -610,12 +620,35 @@
                 });
             },
             select: function (e, i) {
+                var isValid = true;
+                if (parseInt($("#OfficeId").val()) === 0) {
+                    isValid = false;
+                    msg = "Please select office!!!";
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    $("#ItemSearch").val("");
+                    return false;
+                } else if (parseInt($("#PartyId").val()) === 0) {
+                    isValid = false;
+                    msg = "Please select party!!!";
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    $("#ItemSearch").val("");
+                    return false;
+                } else if (parseInt($("#StateId").val()) === 0) {
+                    isValid = false;
+                    msg = "Please select state!!!";
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    $("#ItemSearch").val("");
+                    return false;
+                }
                 $("#ItemSearch").val(i.item.label);
                 let Item_Id = parseInt(i.item.value);
                 $("#Item_Id").val(Item_Id);
                 let Office_Id = parseInt($("#OfficeId").val());
                 let P_State_Id = parseInt($("#SupplyStateId").val());
-                if (Item_Id > 0) {
+                if (Item_Id > 0 && isValid) {
                     IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
@@ -636,7 +669,8 @@
                     });
                 }
             },
-            minLength: 1
+            minLength: 1,
+            delay: 1000,
         });
 
         function ResetFromOfficeChange() {
@@ -842,11 +876,11 @@ function BindGrid(result, isqtydisabled, sourceid) {
         
 
         //if (amount > 0) {
-            gstAmount = amount * gst / 100;
             if (sourceid === 1) {
                 if (quantity > 0 && rate > 0) {
                     amount = quantity * rate;
                 }
+                gstAmount = amount * gst / 100;
                 if (amount > 0) {
                     let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
                     if (is_SameState) {
