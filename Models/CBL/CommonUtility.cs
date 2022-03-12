@@ -1,15 +1,16 @@
 ﻿using IMS.Models;
 using IMS.Models.CBL;
 using IMS.Models.ViewModel;
-using OnBarcode.Barcode;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Web.Mvc.Filters;
+using ZXing;
 
 public static class CommonUtility
 {
@@ -162,43 +163,68 @@ public static class CommonUtility
             throw Ex;
         }
     }
-    public static bool GenerateBarCode(string Data, string Location)
+    public static bool GenerateBarCode(string Data, string Location,string Code,string MRP)
     {
         try
         {
-            Linear barcode = new Linear();
-            barcode.Type = BarcodeType.CODE39;
-            barcode.Data = Data;
-            barcode.drawBarcode(Location);
-            return true;
+            
+            BarcodeWriter writter = new BarcodeWriter()
+            {
+                Format = (BarcodeFormat)BarcodeFormat.CODE_128 //  BarcodeFormat.CODE_128
+            };
+
+
+            writter.Options.Width = int.Parse("100");
+            writter.Options.Height = int.Parse("50");
+            writter.Options.Margin = int.Parse("0");
+            writter.Options.PureBarcode = false;
+            Bitmap Image = writter.Write(Data);
+            Bitmap NewBitMap = new Bitmap(Image.Width+60, (Image.Height + 60));
+            using (Graphics graphic = Graphics.FromImage(NewBitMap))
+            {
+                Font newfont = new Font("IDAutomationHC39M", 10, FontStyle.Regular);
+                PointF point = new PointF(0, 5);
+                SolidBrush black = new SolidBrush(Color.Black);
+                SolidBrush white = new SolidBrush(Color.White);
+                // graphic
+                // graphic.FillRectangle(white, 0, Image.Height - 20, Image.Width, Image.Height);
+                graphic.DrawString(" Code" + " : "+ Code, newfont, black, point);
+                graphic.DrawString(" MRP      " + " : " + MRP, newfont, black, new PointF(0, 25));
+                graphic.DrawImage(Image, new PointF(0, 50));
+            }
+
+            NewBitMap.Save(Location);            
         }
-        catch(Exception Ex)
+        catch (Exception ex)
         {
-            return false;
+            throw ex;
         }
+        return true;
     }
-    public static bool GenerateQrcode(string Data, string Location)
-    {
-        try
-        {
-            QRCode qrcode = new QRCode();
-            qrcode.Data = Data;
-            qrcode.DataMode = QRCodeDataMode.Byte;
-            qrcode.UOM = UnitOfMeasure.PIXEL;
-            qrcode.X = 3;
-            qrcode.LeftMargin = 0;
-            qrcode.RightMargin = 0;
-            qrcode.TopMargin = 0;
-            qrcode.BottomMargin = 0;
-            qrcode.Resolution = 72;
-            qrcode.Rotate = Rotate.Rotate0;
-            qrcode.ImageFormat = ImageFormat.Gif;
-            qrcode.drawBarcode(Location);
-            return true;
-        }
-        catch (Exception Ex)
-        {
-            return false;
-        }
-    }
+                
+         
+    //public static bool GenerateQrcode(string Data, string Location)
+    //{
+    //    try
+    //    {
+    //        QRCode qrcode = new QRCode();
+    //        qrcode.Data = Data;
+    //        qrcode.DataMode = QRCodeDataMode.Byte;
+    //        qrcode.UOM = UnitOfMeasure.PIXEL;
+    //        qrcode.X = 3;
+    //        qrcode.LeftMargin = 0;
+    //        qrcode.RightMargin = 0;
+    //        qrcode.TopMargin = 0;
+    //        qrcode.BottomMargin = 0;
+    //        qrcode.Resolution = 72;
+    //        qrcode.Rotate = Rotate.Rotate0;
+    //        qrcode.ImageFormat = ImageFormat.Gif;
+    //        qrcode.drawBarcode(Location);
+    //        return true;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        return false;
+    //    }
+    //}
 }
