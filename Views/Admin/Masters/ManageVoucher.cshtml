@@ -1,0 +1,153 @@
+﻿@model IMS.Models.ViewModel.ItemMaster
+@{
+    ViewBag.Title = "Item Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Item Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                <div class="col-lg-12"><p id="pMessage" style="color:forestgreen;text-align:center"></p></div>
+                <div class="blank-page">
+                    <div class="col-md-12" style="margin-bottom:10px; padding:0px">
+                        <a href="/master/ItemMaster?appToken=@Model.AppToken" title="Add Item" name="AddItem" id="AddItem" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+         if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        IMSC.ajaxCall("GET", "/Master/GetItemMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var ItemLists = JSON.parse(d);
+         if (ItemLists !== "null") {
+             var fields = [
+                 {
+                            title: "Action",
+                            width: 120,
+                            itemTemplate: function (value, args) {
+                                switch (@Model.AuthMode) {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        break;
+                                    case 2:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
+                                        var $customeEditButton = `<a href="/master/itemmaster?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton);
+                                    case 3:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
+                                        var $customeEditButton = `<a href="/master/itemmaster?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px"><i class="fa fa-trash"></i></a>')
+                                            .click(function (e) {
+                                                deleteFormData("Delete",args);
+                                                return false;
+                                            });
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton, $customeDeleteButton);
+                                    default:
+                                        break;
+                                }
+                            }
+                        },
+                 { name: "Item_Id", css: "hidden" },
+                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true,width: 250 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 100 },
+                 { name: "GroupName", type: "text", title: "Group", sorting: true, filtering: true, width: 150 },
+                 { name: "HSN_SAC", type: "text", title: "HSN/SAC", sorting: true, filtering: true},
+                 { name: "ReorderLevel", type: "text", title: "Reorder Level", sorting: true, filtering: false},
+                 { name: "MRP", type: "text", title: "MRP", sorting: true, filtering: false},
+                 { name: "ListPrice", type: "text", title: "List Price", sorting: true, filtering: false},
+                 { name: "Type_Id", css: "hidden" },
+                 { name: "Remarks", css: "hidden" },
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     ItemLists: ItemLists,
+                     loadData: function (filter) {
+                         return $.grep(this.ItemLists, function (ItemList) {
+                             return ((!filter.Title || ItemList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                 && (!filter.Code || ItemList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        });
+        //var editFormData = function (dilogType, ItemMaster) {
+        //    $("msg").text = "";
+        //    if (ItemMaster.Item_Id > 0) {
+        //        $("#ItemId").val(ItemMaster.Item_Id);
+        //        $("#Title").val(ItemMaster.Title);
+        //        $("#Code").val(ItemMaster.Code);
+        //        $("#GroupId").val(ItemMaster.Group_Id);
+        //        $("#Nature").val(ItemMaster.Nature);
+        //        $("#DeadStockDays").val(ItemMaster.DeadStockDays);
+        //        $("#MinLevel").val(ItemMaster.MinLevel);
+        //        $("#MaxLevel").val(ItemMaster.ReorderLevel);
+        //        $("#BaseUnitId").val(ItemMaster.BaseUnit_Id);
+        //        $("#InwardUnitId").val(ItemMaster.InwardUnit_Id);
+        //        $("#OutwardUnitId").val(ItemMaster.OutwardUnit_Id);
+        //        $("#HSN_SAC").val(ItemMaster.HSN_SAC);
+        //        $("#Remarks").val(ItemMaster.Remarks);
+        //        $("#TypeId").val(ItemMaster.Type_Id);
+        //        $("#btnSubmit").text("Update")
+        //    }
+        //    else {
+        //        $("#ItemId").val("0");
+        //        $("#btnSubmit").text("Submit")
+        //    }
+        //};
+
+        var deleteFormData = function (dialogType, ItemMaster) {
+            var result = confirm("Do you want to delete?");
+            if (result == true) {
+                IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== "null" && result !== "") {
+                        window.location.reload();
+                    }
+                });
+            } else {
+                return false;
+            }
+        };
+</script>

@@ -1679,6 +1679,79 @@ namespace IMS.Controllers
 
         #endregion
 
+        #region Matrial Purchase Master
+        public ActionResult ManageVoucher()
+        {
+            VoucherMaster voucherMaster = new VoucherMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            voucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/ManageVoucher.cshtml", voucherMaster);
+        }
+
+        [HttpGet]
+        public ActionResult GeVoucher(int voucherId=0,  string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            VoucherMaster voucherMaster = new VoucherMaster();
+            try
+            {
+                dt = voucherMaster.Voucher_Get_Data(voucherId);
+                dt.TableName = "Voucher";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult SaveVoucher(VoucherMaster voucherMaster)
+        {
+            VoucherMaster objVoucherMaster = new VoucherMaster();
+            try
+            {
+                voucherMaster.VoucherMappings = JsonConvert.DeserializeObject<List<VoucherMapping>>(voucherMaster.VoucherLine);
+                objVoucherMaster = voucherMaster.Voucher_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                voucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objVoucherMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objVoucherMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objVoucherMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objVoucherMaster.IsSucceed && objVoucherMaster.VoucherId != -1)
+                    {
+                        ViewBag.Msg = objVoucherMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            VoucherMaster newVoucherMaster = new VoucherMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newVoucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newVoucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/MaterialPurchase.cshtml", (objVoucherMaster.IsSucceed ? newVoucherMaster : voucherMaster));
+        }
+
+        #endregion
+
         #region
         [HttpGet]
         public ActionResult LebelPrint(int item_Id = 0, string appToken = "", string sMsg = "")

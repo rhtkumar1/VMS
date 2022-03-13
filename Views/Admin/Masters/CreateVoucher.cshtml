@@ -1,0 +1,738 @@
+﻿@model IMS.Models.ViewModel.VoucherMaster
+@{
+    /**/
+
+    ViewBag.Title = "Voucher Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-gift"></i>
+                <span>Voucher</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageMaterialPurchase", "Material", FormMethod.Post, new { @id = "MaterialPurchase" }))
+                        {
+                            @Html.HiddenFor(m => m.VoucherId, htmlAttributes: new { @id = "VoucherId" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.VoucherLine, htmlAttributes: new { @id = "VoucherLine" })
+                            @Html.HiddenFor(m => m.Amount_DR, htmlAttributes: new { @id = "Amount_DR" })
+                            @Html.HiddenFor(m => m.Amount_CR, htmlAttributes: new { @id = "Amount_CR" })
+                            @Html.HiddenFor(m => m.Total_Amount, htmlAttributes: new { @id = "Total_Amount" })
+                            <div class="heading">
+                                <h4>
+                                    Voucher Detail
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Voucher Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Constant_Id, new SelectList(Model.Vouchers, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Voucher Number<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.VoucherNumber, htmlAttributes: new { @placeholder = "Voucher Number", @id = "VoucherNumber", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label> Voucher Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.VoucherDate, htmlAttributes: new { @id = "VoucherDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Check Number</label>
+                                    @Html.TextBoxFor(m => m.CheckNumber, htmlAttributes: new { @id = "CheckNumber", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Check Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.CheckDate, htmlAttributes: new { @id = "CheckDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="heading">
+                                    <h4>
+                                        Add/Update Material Purchase
+                                    </h4>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Entry Type<span class="mandatory">*</span></label>
+                                    <select id="ddlEnteryType" name="ddlEnteryType" class="form-control">
+                                        <option value="CR" selected>Cr</option>
+                                        <option value="DR" selected>Dr</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>Party</label>
+                                    @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "PartyId", @class = "form-control" })
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>Amount<span class="mandatory">*</span></label>
+                                    @Html.TextBox("Amount", "", htmlAttributes: new { @placeholder = "Amount", @id = "Amount", @class = "form-control" })
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>Action</label>
+                                    <br />
+                                    <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                    <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <label id="lblTotalAmount">Total : 0.00</label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="tblVoucher" class="table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Action</th>
+                                            <th class="tbl-heading">Entry Type</th>
+                                            <th class="tbl-heading">Party</th>
+                                            <th class="tbl-heading">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Debit Total <label id="lblDebitTotal"></label></td>
+                                            <td>Credit Total <label id="lblCreditTotal"></label></td>
+                                            <td>Diffrence Total <label id="lblDiffrenceTotal"></label></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @id = "Remarks", @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div style="display:none" id="divDeleteVoucher">
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome pull-right">Delete</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        $("#VoucherDate").val("");
+        $("#VoucherDate").attr('placeholder', 'dd/mm/yyyy');
+        $("#CheckDate").val("");
+        $("#CheckDate").attr('placeholder', 'dd/mm/yyyy');
+
+        $("body").on("click", "#btnReset", function (e) {
+            e.preventDefault();
+            $("#PartyId").val("");
+            $("#Amount").val("");
+            $("#btnAdd").val("Add");
+        });
+
+        $("#btnAdd").click(function (e) {
+            e.preventDefault();
+            let bAdded = true;
+            let msg = "";
+
+            if ($("#PartyId :selected").val() === "0" || $("#PartyId :selected") === "" ||
+                $("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "" ||
+                $("#Amount").val() === "0" || $("#Amount") === "") {
+                msg = "Please fill item.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            } else if ($("#Amount").val() === "") {
+                msg = "Please enter quantity.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            } else if (parseInt($("#Amount").val()) === 0) {
+                msg = "Please select unit.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            else if (parseInt($("#Amount").val()) === 0) {
+                msg = "Please select unit.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            //Reference the Party and Location ddl.
+            if (bAdded) {
+                if ($("#tblVoucher TBODY TR").length > 0) {
+                    $("[id^='hdnPartyId_']").each(function () {
+                        let partyId = parseInt($("#" + this.id).val());
+                        if (parseInt($("#" + this.id).val()) === partyId) {
+                            msg = "Voucher is already mapped!!!";
+                            bAdded = false;
+                            $('#alertModal').modal('show');
+                            $('#msg').html(msg);
+                            return false;
+                        }
+                    });
+                }
+            }
+
+            if (bAdded) {
+                let partyId = parseInt($("#PartyId").val());
+                var tBody = $("#tblVoucher > TBODY")[0];
+                //Add Row.
+                var row = tBody.insertRow(-1);
+                //Add Button cell.
+                cell = $(row.insertCell(-1));
+                let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
+                                 <input type="hidden" id="hdnLine_Id_${partyId}" name="hdnLine_Id_${partyId}" value="0" />
+                                 <input type="hidden" id="hdnPartyId_${partyId}" name="hdnPartyId_${partyId}" value="${$("#PartyId :selected").val()}" />
+                                 <input type="hidden" id="hdnEnteryType_${partyId}" name="hdnEnteryType_${partyId}" value="${$("#ddlEnteryType :selected").val()}" />
+                                 <input type="hidden" id="hdnAmount_${partyId}" name="hdnAmount_${partyId}" value="${$("#Amount").val()}" />
+                               `;
+                cell.append(btnRemove);
+
+                //Add Entry Type cell.
+                var cell = $(row.insertCell(-1));
+                cell.html($("#ddlEnteryType :selected").text());
+
+                //Add Party cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#PartyId").text());
+                //Add Office cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#OfficeId :selected").text());
+                //Add Amount cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#Amount").val());
+            
+                //Set Default
+                $("#ddlEnteryType").val("CR");
+                $('#PartyId').val("");
+                $("#Amount").val("");
+
+
+                $("[id^='hdnAmount_']").each(function () {
+                    amount += parseFloat($("#" + this.id).val());
+                });
+ 
+                $("td").each(function () {
+                    $(this).addClass("tbl-css");
+                });
+
+            }
+
+            if (bAdded) {
+                return true;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+        });
+
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            let VoucherLine = [];
+            let isValid = true;
+            let msg = "";
+            if (parseInt($("#OfficeId").val()) === 0) {
+                msg = "Please select office.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#InvoiceNo").val() === "") {
+                msg = "Please fill invoice no.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if (parseInt($("#PartyId").val()) === 0) {
+                msg = "Please fill party.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#Purchase_Ref").val() === "") {
+                msg = "Please fill purchase ref.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#TransactionDate").val() === "") {
+                msg = "Please select transaction date.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if (parseInt($("#StateId").val()) === 0) {
+                msg = "Please select State.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if (isValid) {
+                if ($("#tblVoucher TBODY TR").length > 0) {
+                    $("[id^='hdnPartyId_']").each(function () {
+                        let partyId = parseInt($("#" + this.id).val());
+                        let oMapping = {};
+                        oMapping.Line_Id = $('#hdnLine_Id_' + partyId).val();
+                        oMapping.Ledger_Id = $('#hdnPartyId_' + partyId).val();
+                        oMapping.Entry_Type = $('#hdnEnteryType_' + partyId).val();
+                        oMapping.Amount = $('#hdnAmount_' + partyId).val();
+                        VoucherLine.push(oMapping);
+                    });
+                    $("#VoucherLine").val(JSON.stringify(VoucherLine));
+                } else {
+                    msg = "Please add at least 1 voucher.";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+        });
+
+        $("#ItemSearch").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
+                        response($.map(result, function (item) {
+                            return { label: item.Title, value: item.Item_Id };
+                        }))
+                    }
+                });
+            },
+            select: function (e, i) {
+                isValid = true;
+                if (parseInt($("#PartyId").val()) === 0) {
+                    msg = "Please select party.";
+                    isValid = false;
+                    $("#ItemSearch").val("");
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+
+                if (parseInt($("#StateId").val()) === 0) {
+                    msg = "Please select State.";
+                    isValid = false;
+                    $("#ItemSearch").val("");
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+
+                $("#ItemSearch").val(i.item.label);
+                let Item_Id = parseInt(i.item.value);
+                $("#Item_Id").val(Item_Id);
+                let Office_Id = parseInt($("#OfficeId").val());
+                let P_State_Id = parseInt($("#SupplyStateId").val());
+                if (Item_Id > 0 && isValid) {
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
+                            $("#Hsn_Sac").val(result[0].HSN_SAC);
+                            $("#GST").val(result[0].GST);
+                            $("#hdnIs_SameState").val(result[0].Is_SameState);
+                            $("#GST").change();
+                            $("#Unit_Id").val(result[0].UnitId);
+
+                        } else {
+                            $("#Hsn_Sac").val("");
+                            $("#GST").val("0");
+                            $("#hdnIs_SameState").val(0);
+                            $("#GST").change();
+                        }
+                    });
+                }
+            },
+            minLength: 1,
+            delay: 1000,
+        });
+
+        $("#drpPartyId").change(function () {
+            let PartyId = parseInt($('#drpPartyId').val());
+            $("#PartyId").val(PartyId);
+            IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + PartyId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                $("#StateId").empty();
+                if (result !== null && result.length > 0) {
+                    $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                    $.each(result, function (index, value) {
+                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                    });
+                } else {
+                    $("#StateId").append($("<option></option>").val("").html("Select State"));
+                }
+            });
+        });
+
+        $("#SearchParty").autocomplete({
+            source: function (request, response) {
+                IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result.length === 0) {
+                        $("#empty-message").text("No results found");
+                        return response({ label: "No results found", value: 0 });
+                    } else {
+                        response($.map(result, function (item) {
+                            return { label: item.Title, value: item.Party_Id };
+                        }))
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#SearchParty").val(i.item.label);
+                let PartyId = parseInt(i.item.value);
+                $("#PartyId").val(PartyId);
+                IMSC.ajaxCall("GET", "/Material/GetState?PartyId=" + PartyId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    $("#StateId").empty();
+                    if (result !== null && result.length > 0) {
+                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                        $.each(result, function (index, value) {
+                            $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                        });
+                    } else {
+                        $("#StateId").append($("<option></option>").val("").html("Select State"));
+                    }
+                });
+            },
+            minLength: 1,
+            delay: 1000,
+        });
+
+        $("#StateId").change(function () {
+            $("#SupplyStateId").val(parseInt($(this).val()));
+        });
+
+        $("#drpParty").change(function () {
+            let Party_Id = parseInt($('#drpParty').val());
+            $("#PartyId").val(Party_Id);
+            IMSC.ajaxCall("GET", "/Material/GetInvoice?Party_Id=" + Party_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                $("#drpInvoice").empty();
+                $("#PurchaseId").val(0);
+                if (result.length > 0) {
+                    if (result !== null) {
+                        $.each(result, function (index, value) {
+                            $("#drpInvoice").append($("<option></option>").val(value.Purchase_Id).html(value.Invoice_No));
+                        });
+                        $("#drpInvoice").change();
+                    }
+                } else {
+                    $("#drpInvoice").empty();
+                    $("#PurchaseId").val(0);
+                }
+            });
+        }).change();
+
+        $("#drpInvoice").change(function () {
+            $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
+        });
+
+        $("#btnSearch").click(function (e) {
+            e.preventDefault();
+            let Purchase_Id = parseInt($("#PurchaseId").val());
+            if (Purchase_Id > 0) {
+                IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    var res = JSON.parse(d);
+                    if (res !== null) {
+                        var result = res.Table;
+                        $("#StateId").empty();
+                        $("#StateId").append($("<option></option>").val(0).html("Select State"));
+                        $.each(res.Table1, function (index, value) {
+                            $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                        });
+                        $("#PartyId").val(result[0].Party_Id);
+                        $("#StateId").val(result[0].SupplyState_Id);
+                        $("#IsUpdateMaterialPurchase").val(1);
+                        $("#OfficeId").val(result[0].Office_Id);
+                        $("#InvoiceNo").val(result[0].Invoice_No);
+                        $("#PartyId").val(result[0].Party_Id);
+                        $("#SearchParty").val(result[0].PartyName);
+                        $("#Purchase_Ref").val(result[0].Purchase_Ref);
+                        $("#TransactionDate").val(result[0].Transaction_Date);
+                        $("#SupplyStateId").val(result[0].SupplyState_Id);
+                        $("#Remarks").val(result[0].Remarks);
+                        $("#PurchaseId").val(result[0].Purchase_Id)
+                        $("#AgentId").val(result[0].AgentId);
+                        $("#tbodyid").empty(Purchase_Id);
+                        let amount = 0;
+                        $.each(result, function (index, value) {
+                            amount += parseFloat(value.Total_Amount);
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblMaterialPurchase > TBODY")[0];
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+                            $(row).attr('id', 'trRow_' + value.Line_Id);
+                            //Add Button cell.
+                            cell = $(row.insertCell(-1));
+                            let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                            cell.append(btnRemove);
+                            //Add Item cell.
+                            var cell = $(row.insertCell(-1));
+                            cell.html(value.ItemTitle);
+                            cell.attr('data-item-id', value.Item_Id);
+                            cell.attr('data-line-Id', value.Line_Id);
+                            //Add Hsn_Sac cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.HSN_SAC);
+                            //Add Quantity cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Quantity);
+                            //Add Unit cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.UnitTitle);
+                            cell.attr('data-Unit_Id', value.Unit_Id);
+                            //Add Rate cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Rate);
+                            //Add Amount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Amount);
+                            //Add Discount_1 cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Discount_1);
+                            //Add Discount_2 cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Discount_2);
+                            //Add Taxable_Amount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Taxable_Amount);
+                            //Add GST cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.GST);
+                            //Add CGST cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.CGST);
+                            //Add SGST cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.SGST);
+                            //Add IGST cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.IGST);
+                            //Add Total_Amount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.attr('data-row-Id', value.Line_Id);
+                            cell.html(value.Total_Amount);
+                        });
+                        $("#lblTotalAmount").text("Total : " + amount.toFixed(2));
+                        $("#divDeleteMatrial").css('display', 'block');
+                        $("td").each(function () {
+                            $(this).addClass("tbl-css");
+                        });
+                    }
+                });
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
+            }
+        });
+
+        $("#Quantity,#Rate,#Discount_1,#Discount_2,#GST").change(function () {
+            Calculate();
+        });
+
+        $("#btnResetForm").click(function (e) {
+            e.preventDefault();
+            $("#drpParty").val($("#drpParty option:first").val());
+            $('#drpParty').select2().trigger('change');
+            $("#drpInvoice").select2({
+                placeholder: "Select Invoice",
+                allowClear: true
+            });
+            $("#PurchaseId").val(0);
+            $("#IsUpdateMaterialPurchase").val(false);
+            $("#PurchaseLine").val("");
+            $("#SupplyStateId").val("");
+            $("#PartyId").val("");
+            $("#InvoiceNo").val("");
+            $("#PartyId").val("");
+            $("#SearchParty").val("");
+            $("#Purchase_Ref").val("");
+            $("#TransactionDate").val("");
+            $("#StateId").empty();
+            $("#Item_Id").val("");
+            $('#ItemSearch').val();
+            $("#Hsn_Sac").val("");
+            $("#Quantity").val("");
+            $("#Unit_Id").val($("#Unit_Id option:first").val());
+            $("#Rate").val("");
+            $("#Amount").val("");
+            $("#Discount_1").val("0");
+            $("#Discount_2").val("0");
+            $("#Taxable_Amount").val("");
+            $("#GST").val("0");
+            $("#CGST").val("");
+            $("#SGST").val("");
+            $("#IGST").val("");
+            $("#Total").val("");
+            $("#hdnTotalAmount").val("");
+            $("#hdnRowId").val("");
+            $("#btnAdd").val("Add");
+            $("#hdnIs_SameState").val("");
+            $("#tblMaterialPurchase TBODY").empty();
+            $("#divDeleteMatrial").css('display', 'none');
+        });
+
+        $("#btnDelete").click(function () {
+            let Purchase_Id = parseInt($("#PurchaseId").val());
+            if (Purchase_Id > 0) {
+                window.location.href = "/Material/DeleteMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + scope.AppToken;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select inovice.");
+            }
+        });
+    });
+    function Calculate() {
+        let bIsDiscount = false;
+        let quantity = parseFloat($("#Quantity").val() !== "" ? $("#Quantity").val() : 0);
+        let rate = parseFloat($("#Rate").val() !== "" ? $("#Rate").val() : 0);
+        let amount = 0;
+        let disAmu = 0;
+        let gst = 0;
+        let discount_1 = 0;
+        let discount_2 = 0;
+        let discountAmount = 0;
+        let totalAmount = 0;
+        if (quantity > 0 && rate > 0) {
+            amount = quantity * rate;
+            $("#Amount").val(amount.toFixed(2));
+        }
+        if (amount > 0) {
+            discount_1 = parseFloat($("#Discount_1").val() !== "" ? $("#Discount_1").val() : 0);
+            discount_2 = parseFloat($("#Discount_2").val() !== "" ? $("#Discount_2").val() : 0);
+            if (discount_1 > 0 || discount_2 > 0) {
+                bIsDiscount = true;
+                disAmu = amount * (discount_1 + discount_2) / 100;
+                discountAmount = amount - disAmu;
+                gst = discountAmount * parseFloat($("#GST").val()) / 100;
+            } else {
+                bIsDiscount = false;
+                gst = amount * parseFloat($("#GST").val()) / 100;
+            }
+
+            let is_SameState = $("#hdnIs_SameState").val() === "1" ? true : false;
+            if (is_SameState) {
+                $("#CGST").val(parseFloat(gst / 2).toFixed(2));
+                $("#SGST").val(parseFloat(gst / 2).toFixed(2));
+                $("#IGST").val(parseFloat(0).toFixed(2));
+
+            } else {
+                $("#CGST").val(parseFloat(0).toFixed(2));
+                $("#SGST").val(parseFloat(0).toFixed(2));
+                $("#IGST").val(parseFloat(gst).toFixed(2));
+            }
+            if (bIsDiscount) {
+                totalAmount = discountAmount + gst;
+                $("#Taxable_Amount").val(discountAmount.toFixed(2));
+            } else {
+                totalAmount = amount + gst;
+                $("#Taxable_Amount").val(amount.toFixed(2));
+            }
+            $("#Total").val(totalAmount.toFixed(2));
+            $("#hdnTotalAmount").val(totalAmount.toFixed(2));
+        }
+    }
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        $("#IsUpdateMaterialPurchase").val(0);
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).text();
+        if (confirm("Do you want to remove this purchase.", "Remove")) {
+            //Get the reference of the Table.
+            var table = $("#tblMaterialPurchase")[0];
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+        let sumOfTotal = 0;
+        $("#tblMaterialPurchase TBODY TR").each(function () {
+            var row = $(this);
+            let td = row.find("TD");
+            sumOfTotal += parseFloat(td[13].innerText);
+        });
+        $("#PurchaseAmount").val(sumOfTotal.toFixed(2));
+        $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
+    };
+</script>

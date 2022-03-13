@@ -195,6 +195,7 @@
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
+    <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
     <Compile Include="Models\ViewModel\GroupMaster.cs" />
@@ -344,6 +345,8 @@
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
     <Content Include="Views\Admin\Masters\OrderApproval.cshtml" />
     <Content Include="Views\Admin\Masters\LabelPrint.cshtml" />
+    <Content Include="Views\Admin\Masters\CreateVoucher.cshtml" />
+    <Content Include="Views\Admin\Masters\ManageVoucher.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
