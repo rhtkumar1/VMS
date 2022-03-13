@@ -136,7 +136,13 @@ namespace IMS.Models.ViewModel
                 }
                 if(ItemId>0)
                 {
-                    CommonUtility.GenerateBarCode(Convert.ToString(ItemId), BarCodeLocation +Convert.ToString(ItemId)+ ".gif");
+                    string BarCodeString = "";
+                    for(int i = ItemId.ToString().Length;i<12;i++)
+                    {
+                        BarCodeString += "0";
+                    }
+                    BarCodeString += "X"+ItemId.ToString();
+                    CommonUtility.GenerateBarCode(Convert.ToString(BarCodeString), BarCodeLocation +Convert.ToString(ItemId)+ ".gif", Code,MRP.ToString()+" INR");
                 }
             }
             catch (Exception ex)
