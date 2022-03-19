@@ -24,7 +24,7 @@
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         <div class="clearfix"></div>
-                        @using (Html.BeginForm("MaterialStoreClearance_InsertUpdate", "Material", FormMethod.Post, new { @id = "MaterialStoreClearance" }))
+                        @using (Html.BeginForm("MaterialStoreClearance_InsertUpdate", "Material", FormMethod.Post, new { @id = "MaterialStoreClearance", onkeydown = "return event.keyCode!=13" }))
                         {
                             @Html.HiddenFor(m => m.SaleId, htmlAttributes: new { @id = "SaleId" })
                             @Html.HiddenFor(m => m.AppToken)
@@ -190,55 +190,57 @@
 
         BindStoreMasterData();
 
-        $('#txtGetPass').keyup(function () {
-            let item = $("#txtGetPass").val();
-            if (item!=="") {
-                IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + parseInt(item) + "&AppToken=" + '@AppToken', {}, "text", function (d) {
-                var res = JSON.parse(d);
-                if (res !== null) {
-                    var result = res;
-                    if (result.length > 0) {
-                        let bIsValid = true;
-                        $("#tbodyid [id^='trRow_']").each(function () {
-                            let itemId = parseInt($(this)[0].attributes[1].value);
-                            if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
-                                bIsValid = false;
-                            }
-                        });
-                        if (bIsValid) {
-                            //Get the reference of the Table's TBODY element.
-                            var tBody = $("#tblMaterialStoreData > TBODY")[0];
-                            //Add Row.
-                            var row = tBody.insertRow(-1);
-                            $(row).attr('id', 'trRow_' + result[0].Item_Id);
-                            $(row).attr('data-index', result[0].Item_Id);
-                            $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
-                            //Add Item cell.
-                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
-                            cell = $(row.insertCell(-1));
-                            cell.append(lblItem);
-                            //Add Quantity.
-                            let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
-                            cell = $(row.insertCell(-1));
-                            cell.append(lblQuantity);
-                            //Add Unit cell.
-                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
-                            cell = $(row.insertCell(-1));
-                            cell.append(lblSaleunit);
-                        } else {
-                            $('#alertModal').modal('show');
-                            $('#msg').html("Item is already mapped!!!");
-                        }
+        $('#txtGetPass').keyup(function (event) {
+            if (event.which == 13) {
+                let item = $("#txtGetPass").val();
+                if (item !== "") {
+                    IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + parseInt(item) + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                        var res = JSON.parse(d);
+                        if (res !== null) {
+                            var result = res;
+                            if (result.length > 0) {
+                                let bIsValid = true;
+                                $("#tbodyid [id^='trRow_']").each(function () {
+                                    let itemId = parseInt($(this)[0].attributes[1].value);
+                                    if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
+                                        bIsValid = false;
+                                    }
+                                });
+                                if (bIsValid) {
+                                    //Get the reference of the Table's TBODY element.
+                                    var tBody = $("#tblMaterialStoreData > TBODY")[0];
+                                    //Add Row.
+                                    var row = tBody.insertRow(-1);
+                                    $(row).attr('id', 'trRow_' + result[0].Item_Id);
+                                    $(row).attr('data-index', result[0].Item_Id);
+                                    $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
+                                    //Add Item cell.
+                                    let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
+                                    cell = $(row.insertCell(-1));
+                                    cell.append(lblItem);
+                                    //Add Quantity.
+                                    let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
+                                    cell = $(row.insertCell(-1));
+                                    cell.append(lblQuantity);
+                                    //Add Unit cell.
+                                    let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
+                                    cell = $(row.insertCell(-1));
+                                    cell.append(lblSaleunit);
+                                } else {
+                                    $('#alertModal').modal('show');
+                                    $('#msg').html("Item is already mapped!!!");
+                                }
 
-                        $("td").each(function () {
-                            $(this).addClass("tbl-css");
-                        });
-                      } else {
-                          $('#alertModal').modal('show');
-                          $('#msg').html("Item not available!!!");
-                      }
-                    }
-               });
+                                $("td").each(function () {
+                                    $(this).addClass("tbl-css");
+                                });
+                            } else {
+                                $('#alertModal').modal('show');
+                                $('#msg').html("Item not available!!!");
+                            }
+                        }
+                    });
+                }
             }
         });
 
