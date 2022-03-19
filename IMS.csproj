@@ -207,6 +207,7 @@
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
+    <Compile Include="Models\ViewModel\DashBoard.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
