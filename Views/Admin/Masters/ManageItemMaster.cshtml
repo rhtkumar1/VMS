@@ -26,7 +26,7 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                       
+
                         @using (Html.BeginForm("ManageItemMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "ItemMaster", onkeydown = "return event.keyCode!=13" }))
                         {
                             @Html.HiddenFor(m => m.ItemId, htmlAttributes: new { @id = "ItemId" })
@@ -165,6 +165,13 @@
                                 <div class="col-md-4 form-group">
                                     <label>Remarks</label>
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>BarCoad ID</label>
+                                    @Html.TextAreaFor(m => m.BarCoadID, htmlAttributes: new { @placeholder = "BarCoadID", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">

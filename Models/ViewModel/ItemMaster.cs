@@ -64,10 +64,10 @@ namespace IMS.Models.ViewModel
         public string BarCodeLocation { get; set; }
         public bool IsNewEntery;
         public int OpeningQty { get; set; }
-
+        public string BarCoadID { get; set; }
         public ItemMaster()
         {
-            GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
+            //GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "VW_HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
@@ -127,6 +127,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@ListPrice", ListPrice));
                 SqlParameters.Add(new SqlParameter("@OpeningQty", OpeningQty));
                 SqlParameters.Add(new SqlParameter("@ItemLocationId", ItemLocationId));
+                if (!string.IsNullOrEmpty(BarCoadID))
+                    SqlParameters.Add(new SqlParameter("@BarCoadID", BarCoadID));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -134,15 +136,23 @@ namespace IMS.Models.ViewModel
                     IsSucceed = Convert.ToBoolean(dr[1]);
                     ActionMsg = dr[2].ToString();
                 }
-                if(ItemId>0)
+                if (ItemId > 0)
                 {
-                    string BarCodeString = "";
-                    for(int i = ItemId.ToString().Length;i<12;i++)
+                    string BarCodeString;
+                    if (string.IsNullOrEmpty(BarCoadID))
                     {
-                        BarCodeString += "0";
+                        BarCodeString = "SYS";
+                        for (int i = ItemId.ToString().Length; i < 9; i++)
+                        {
+                            BarCodeString += "0";
+                        }
+                        BarCodeString += "X" + ItemId.ToString();
+                        
+
                     }
-                    BarCodeString += "X"+ItemId.ToString();
-                    CommonUtility.GenerateBarCode(Convert.ToString(BarCodeString), BarCodeLocation +Convert.ToString(ItemId)+ ".gif", Code,MRP.ToString()+" INR");
+                    else
+                    { BarCodeString = BarCoadID; }
+                    CommonUtility.GenerateBarCode(Convert.ToString(BarCodeString), BarCodeLocation + Convert.ToString(ItemId) + ".gif", Code, MRP.ToString() + " INR");
                 }
             }
             catch (Exception ex)
@@ -239,13 +249,14 @@ namespace IMS.Models.ViewModel
                         DeactivateDate = Convert.ToString(dr["DeactivateDate"]);
                     }   
                     Scheme=Convert.ToBoolean(dr["Scheme"]);
-                    MRP = Convert.ToDecimal(dr["MRP"]); ; 
+                    MRP = Convert.ToDecimal(dr["MRP"]);
                     ListPrice = Convert.ToDecimal(dr["ListPrice"]); ;
                     //ItemMapping = dr["ItemMapping"].ToString();
                     //IsMappingChanged = Convert.ToBoolean(dr["IsMappingChanged"]);
                     Remarks = dr["Remarks"].ToString();
                     OpeningQty = Convert.ToInt32(dr["OpeningQty"]);
                     ItemLocationId = Convert.ToInt32(dr["ItemLocationId"]);
+                    BarCoadID = dr["BarCoadID"].ToString();
                     //Loginid = Convert.ToInt32(dr["LoginId"]);
                 }
             }
