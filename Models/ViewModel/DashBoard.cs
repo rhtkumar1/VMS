@@ -32,7 +32,8 @@ namespace IMS.Models.ViewModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PartyId", PartyId));
-                SqlParameters.Add(new SqlParameter("@Date", Convert.ToDateTime(Date)));
+                if (!string.IsNullOrEmpty(Date))
+                    SqlParameters.Add(new SqlParameter("@Date", CommonUtility.GetDateYYYYMMDD(Date)));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Dashboard_Status", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

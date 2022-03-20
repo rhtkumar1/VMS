@@ -15,25 +15,34 @@ namespace IMS.Controllers
         // GET: Admin
         public ActionResult DashBoard()
         {
-            DashBoard dashBoard = new DashBoard();
-            return View("~/Views/Shared/DashBoard/DashBoard.cshtml", dashBoard);
+            if (Session["UserName"] != null)
+            {
+                DashBoard dashBoard = new DashBoard();
+                return View("~/Views/Shared/DashBoard/DashBoard.cshtml", dashBoard);
+            }
+            else
+            {
+                return View("~/Views/Home/Index.cshtml");
+            }
         }
 
         public ActionResult GetOrderDashBoardStatus(DashBoard dashBoard, int partyId, string date)
         {
-            DataTable dt = new DataTable();
-            try
-            {
-                dashBoard.PartyId = partyId;
-                dashBoard.Date = date;
-                dt = dashBoard.OrderDashboard_Get();
-                dt.TableName = "OrderDashBoard";
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return Content(JsonConvert.SerializeObject(dt));
+            
+                DataTable dt = new DataTable();
+                try
+                {
+                    dashBoard.PartyId = partyId;
+                    dashBoard.Date = date;
+                    dt = dashBoard.OrderDashboard_Get();
+                    dt.TableName = "OrderDashBoard";
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                return Content(JsonConvert.SerializeObject(dt));
+            
         }
     }
 }
