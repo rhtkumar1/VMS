@@ -361,6 +361,7 @@
     <Content Include="Views\Admin\Masters\LabelPrint.cshtml" />
     <Content Include="Views\Admin\Masters\CreateVoucher.cshtml" />
     <Content Include="Views\Admin\Masters\ManageVoucher.cshtml" />
+    <Content Include="Views\Admin\Masters\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -15,6 +15,7 @@ namespace IMS.Models.ViewModel
         public string FullName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string ChangePassword { get; set; }
         public string ConfirmPassword { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -100,7 +101,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Pincode", userMaster.Pincode));
                 SqlParameters.Add(new SqlParameter("@Country", "India"));
                 SqlParameters.Add(new SqlParameter("@DOJ", CommonUtility.GetDateDDMMYYYY(userMaster.DOJ)));
-                SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole)); 
+                SqlParameters.Add(new SqlParameter("@PrimaryRole", userMaster.PrimaryRole));
                 SqlParameters.Add(new SqlParameter("@Default_OfficeId", Default_OfficeId));
                 SqlParameters.Add(new SqlParameter("@UserMapping", UserMapping));
                 SqlParameters.Add(new SqlParameter("@IsMappingChanged", IsMappingChanged));
@@ -108,7 +109,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Roles", userMaster.sRoles));
                 SqlParameters.Add(new SqlParameter("@CreatedBy", userMaster.CreatedBy));
                 SqlParameters.Add(new SqlParameter("@ModifiedBy", userMaster.ModifiedBy));
-                SqlParameters.Add(new SqlParameter("@CompanyId", userMaster.CompanyId));                
+                SqlParameters.Add(new SqlParameter("@CompanyId", userMaster.CompanyId));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("User_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -183,6 +184,7 @@ namespace IMS.Models.ViewModel
                 {
                     User_Id = Convert.ToInt32(drUser["User_Id"]),
                     UserName = drUser["UserName"].ToString(),
+                    Password = drUser["PasswordHash"].ToString(),
                     FirstName = drUser["FirstName"].ToString(),
                     MiddleName = drUser["MiddleName"].ToString(),
                     LastName = drUser["LastName"].ToString(),
@@ -201,10 +203,31 @@ namespace IMS.Models.ViewModel
                     Remarks = drUser["Remarks"].ToString(),
                     Default_OfficeId = Convert.ToInt32(drUser["Default_OfficeId"]),
                     CompanyId = Convert.ToInt32(drUser["CompanyId"]),
-                 
+
                     sRoles = dtUserRollMapping.Rows[0]["Roles"].ToString()
                 };
                 return userMaster;
+            }
+            catch (Exception ex)
+            { throw ex; }
+        }
+
+        public UserMaster ManagePassword(UserMaster userMaster)
+        {
+            try
+            {
+                userMaster.User_Id = CommonUtility.GetLoginID();
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@User_Id", userMaster.User_Id));
+                SqlParameters.Add(new SqlParameter("@PasswordHash", userMaster.Password));
+                SqlParameters.Add(new SqlParameter("@ChangePassword", userMaster.ChangePassword));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Change_Password", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    IsSucceed = Convert.ToBoolean(dr[0]);
+                    ActionMsg = Convert.ToString(dr[1]);
+                }
+                return this;
             }
             catch (Exception ex)
             { throw ex; }

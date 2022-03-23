@@ -28,21 +28,69 @@ namespace IMS.Controllers
 
         public ActionResult GetOrderDashBoardStatus(DashBoard dashBoard, int partyId, string date)
         {
-            
-                DataTable dt = new DataTable();
-                try
+
+            DataTable dt = new DataTable();
+            try
+            {
+                dashBoard.PartyId = partyId;
+                dashBoard.Date = date;
+                dt = dashBoard.OrderDashboard_Get();
+                dt.TableName = "OrderDashBoard";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+
+        }
+
+        public ActionResult ChangePassword()
+        {
+            UserMaster userMaster = new UserMaster();
+            return View("~/Views/Admin/Masters/ChangePassword.cshtml", userMaster);
+        }
+
+        [HttpPost]
+        public ActionResult ManageChangePassword(UserMaster userMaster)
+        {
+            UserMaster objUserMaster = new UserMaster();
+            try
+            {
+                if (userMaster.ChangePassword == userMaster.ConfirmPassword)
                 {
-                    dashBoard.PartyId = partyId;
-                    dashBoard.Date = date;
-                    dt = dashBoard.OrderDashboard_Get();
-                    dt.TableName = "OrderDashBoard";
+                    objUserMaster = userMaster.ManagePassword(userMaster);
+
+                    if (objUserMaster != null)
+                    {
+                        // In case of record successfully added or updated
+                        if (objUserMaster.IsSucceed)
+                        {
+                            ViewBag.Msg = objUserMaster.ActionMsg;
+                        }
+
+                        // In case of any error occured
+                        else
+                        {
+                            ViewBag.Msg = "Unknown Error Occured !!!";
+
+                        }
+                        ModelState.Clear();
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw ex;
+                    ViewBag.Msg = "Passwords do not match. Please check current password and confirm password..!";
                 }
-                return Content(JsonConvert.SerializeObject(dt));
-            
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "Unknown Error Occured !!!";
+            }
+            // to reset fields only in case of added or updated.
+            UserMaster newUserMaster = new UserMaster();
+            return View("~/Views/Admin/Masters/ChangePassword.cshtml", (objUserMaster.IsSucceed ? newUserMaster : userMaster));
         }
     }
 }
