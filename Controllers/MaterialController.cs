@@ -309,7 +309,7 @@ namespace IMS.Controllers
             }
             catch (Exception ex)
             {
-                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = ex.Message.ToString()}));
+                return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = ex.Message.ToString() }));
             }
         }
         [HttpGet]
@@ -355,7 +355,7 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetStateSales(int PartyId,int OfficeId, string AppToken = "")
+        public ActionResult GetStateSales(int PartyId, int OfficeId, string AppToken = "")
         {
             DataSet ds = new DataSet();
             try
@@ -364,9 +364,9 @@ namespace IMS.Controllers
                 {
                     ds = CommonModuleClass.MaterialSales_GetGST_State(PartyId, OfficeId);
                 }
-                else if (PartyId == 0  && OfficeId>0)
+                else if (PartyId == 0 && OfficeId > 0)
                 {
-                    ds = CommonModuleClass.PartyByOfficeID(OfficeId); 
+                    ds = CommonModuleClass.PartyByOfficeID(OfficeId);
                 }
 
             }
@@ -378,7 +378,7 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetPOData(int POId, int Office_Id, int SupplyState_Id,int Party_Id=0, string AppToken = "")
+        public ActionResult GetPOData(int POId, int Office_Id, int SupplyState_Id, int Party_Id = 0, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -677,7 +677,7 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult SearchPartyOrderCreation(string Party,string AppToken = "")
+        public ActionResult SearchPartyOrderCreation(string Party, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -691,7 +691,7 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult SearchItem(string Item,string AppToken = "")
+        public ActionResult SearchItem(string Item, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -758,7 +758,7 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/StoreClearance.cshtml", storeClearance);
         }
         [HttpGet]
-        public ActionResult Material_Sale_GetStoreData(int SaleId,string AppToken = "")
+        public ActionResult Material_Sale_GetStoreData(int SaleId, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -773,7 +773,7 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, int ItemId,string AppToken = "")
+        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, int ItemId, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -824,12 +824,12 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = ex.Message.ToString();
             }
-            StoreClearance newStoreClearance = new StoreClearance();
+            GatePass gatePass = new GatePass();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-            newStoreClearance.AppToken = CommonUtility.URLAppToken(AppToken);
-            newStoreClearance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            gatePass.AppToken = CommonUtility.URLAppToken(AppToken);
+            gatePass.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Material/MaterialSales.cshtml", (objStoreClearance.IsSucceed ? newStoreClearance : storeClearance));
+            return View("~/Views/Admin/Material/MaterialGatepass.cshtml", gatePass);
         }
         #endregion
     }
