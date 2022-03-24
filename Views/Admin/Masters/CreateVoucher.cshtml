@@ -61,7 +61,7 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="styled-input">
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label> Voucher Date<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.VoucherDate, htmlAttributes: new { @id = "VoucherDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
@@ -69,11 +69,11 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Check Number</label>
-                                    @Html.TextBoxFor(m => m.CheckNumber, htmlAttributes: new { @id = "CheckNumber", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.CheckNumber, htmlAttributes: new { @id = "CheckNumber", @placeholder = "Check Number", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Check Date<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.CheckDate, htmlAttributes: new { @id = "CheckDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
@@ -130,7 +130,11 @@
                                 <div id="divAmountDiffrence" class="row" style="display:none">
                                     <div class="col-md-4">
                                         <span>Debit Total:  <label id="lblDebitTotal"></label></span>
+                                    </div>
+                                    <div class="col-md-4">
                                         <span>Credit Total:  <label id="lblCreditTotal"></label></span>
+                                    </div>
+                                    <div class="col-md-4">
                                         <span>Diffrence Total:  <label id="lblDiffrenceTotal"></label></span>
                                     </div>
                                 </div>
@@ -249,20 +253,20 @@
                 return false;
             }
             //Reference the Party and Location ddl.
-            if (bAdded) {
-                if ($("#tblVoucher TBODY TR").length > 0) {
-                    $("[id^='hdnPartyId_']").each(function () {
-                        let partyId = parseInt($("#" + this.id).val());
-                        if (parseInt($("#" + this.id).val()) === partyId) {
-                            msg = "Voucher is already mapped!!!";
-                            bAdded = false;
-                            $('#alertModal').modal('show');
-                            $('#msg').html(msg);
-                            return false;
-                        }
-                    });
-                }
-            }
+            //if (bAdded) {
+            //    if ($("#tblVoucher TBODY TR").length > 0) {
+            //        $("[id^='hdnPartyId_']").each(function () {
+            //            let partyId = parseInt($("#" + this.id).val());
+            //            if (parseInt($("#" + this.id).val()) === partyId) {
+            //                msg = "Voucher is already mapped!!!";
+            //                bAdded = false;
+            //                $('#alertModal').modal('show');
+            //                $('#msg').html(msg);
+            //                return false;
+            //            }
+            //        });
+            //    }
+            //}
 
             if (bAdded) {
                 let partyId = parseInt($("#PartyId").val());
@@ -288,7 +292,7 @@
 
                 //Add Party cell.
                 cell = $(row.insertCell(-1));
-                cell.html($("#PartyId").text());
+                cell.html($("#PartyId option:selected").text());
                 //Add Office cell.
                 cell = $(row.insertCell(-1));
                 cell.html($("#OfficeId :selected").text());
@@ -298,7 +302,7 @@
 
                 //Set Default
                 $("#ddlEnteryType").val("CR");
-                $('#PartyId').val("");
+                $('#PartyId').val(0);
                 $("#Amount").val("");
 
                 $("td").each(function () {
@@ -320,9 +324,9 @@
                     diffamount = cramount - dramount;
                 }
                 $("#divAmountDiffrence").show();
-                $("#lblDebitTotal").val(dramount);
-                $("#lblCreditTotal").val(cramount);
-                $("#lblDiffrenceTotal").val(diffamount);
+                $("#lblDebitTotal").text(dramount.toFixed(2));
+                $("#lblCreditTotal").text(cramount.toFixed(2));
+                $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
             } else {
                 $("#divAmountDiffrence").hide();
             }
@@ -410,7 +414,7 @@
 
         $("#btnResetForm").click(function (e) {
             e.preventDefault();
-            $("#drpParty").val($("#drpParty option:first").val());
+            $("#drpParty").val(0);
             $("#VoucherLine").val("");
             $("#Amount_DR").val(0);
             $("#Amount_CR").val(0);
