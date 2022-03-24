@@ -1,6 +1,6 @@
-﻿@model IMS.Models.ViewModel.ItemMaster
+﻿@model IMS.Models.ViewModel.VoucherMaster
 @{
-    ViewBag.Title = "Item Master";
+    ViewBag.Title = "Voucher Master";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
 
@@ -14,7 +14,7 @@
             <h2>
                 <a href="/admin/dashboard">Home</a>
                 <i class="fa fa-angle-right"></i>
-                <span>Item Master</span>
+                <span>Voucher Master</span>
             </h2>
         </div>
         <!--//banner-->
@@ -25,7 +25,7 @@
                 <div class="col-lg-12"><p id="pMessage" style="color:forestgreen;text-align:center"></p></div>
                 <div class="blank-page">
                     <div class="col-md-12" style="margin-bottom:10px; padding:0px">
-                        <a href="/master/ItemMaster?appToken=@Model.AppToken" title="Add Item" name="AddItem" id="AddItem" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a>
+                        <a href="/master/AddVoucher?appToken=@Model.AppToken" title="Add Voucher" name="AddVoucher" id="AddVoucher" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a>
                     </div>
                     <div class="clearfix"></div>
                     <div id="listGrid"></div>
@@ -44,11 +44,11 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        IMSC.ajaxCall("GET", "/Master/GetItemMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
-         var ItemLists = JSON.parse(d);
-         if (ItemLists !== "null") {
+        IMSC.ajaxCall("GET", "/Master/GeVoucher?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var VoucherLists = JSON.parse(d);
+         if (VoucherLists !== "null") {
              var fields = [
-                 {
+                 @*{
                             title: "Action",
                             width: 120,
                             itemTemplate: function (value, args) {
@@ -77,17 +77,18 @@
                                         break;
                                 }
                             }
-                        },
-                 { name: "Item_Id", css: "hidden" },
-                 { name: "Title", type: "text", title: "Title", sorting: true, filtering: true,width: 250 },
-                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: true, width: 100 },
-                 { name: "GroupName", type: "text", title: "Group", sorting: true, filtering: true, width: 150 },
-                 { name: "HSN_SAC", type: "text", title: "HSN/SAC", sorting: true, filtering: true},
-                 { name: "ReorderLevel", type: "text", title: "Reorder Level", sorting: true, filtering: false},
-                 { name: "MRP", type: "text", title: "MRP", sorting: true, filtering: false},
-                 { name: "ListPrice", type: "text", title: "List Price", sorting: true, filtering: false},
-                 { name: "Type_Id", css: "hidden" },
-                 { name: "Remarks", css: "hidden" },
+                        },*@
+                 { name: "Voucher_Id", css: "hidden" },
+                 { name: "Voucher_No", type: "text", title: "Voucher No", sorting: true, filtering: true,width: 250 },
+                 { name: "Voucher_Type", type: "text", title: "Voucher Type", sorting: true, filtering: true, width: 100 },
+                 { name: "Voucher_Date", type: "text", title: "Voucher Date", sorting: true, filtering: true, width: 150 },
+                 { name: "Cheque_No", type: "text", title: "Cheque No", sorting: true, filtering: true},
+                 { name: "Cheque_Date", type: "text", title: "Cheque Date", sorting: true, filtering: false},
+                 { name: "Amount_DR", type: "text", title: "MRAmount DR", sorting: true, filtering: false},
+                 { name: "Amount_CR", type: "text", title: "Amount CR", sorting: true, filtering: false },
+                 { name: "Total_Amount", type: "text", title: "Total Amount", sorting: true, filtering: false },
+                 { name: "Entry_Type", type: "text", title: "Entry Type", sorting: true, filtering: false },
+                 { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false }
              ];
              var options = {
                  filtering: true,
@@ -96,11 +97,11 @@
                  paging: true,
                  autoload: true,
                  controller: {
-                     ItemLists: ItemLists,
+                     VoucherLists: VoucherLists,
                      loadData: function (filter) {
-                         return $.grep(this.ItemLists, function (ItemList) {
-                             return ((!filter.Title || ItemList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
-                                 && (!filter.Code || ItemList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         return $.grep(this.VoucherLists, function (VoucherList) {
+                             return ((!filter.Voucher_No || VoucherList.Voucher_No.toLowerCase().indexOf(filter.Voucher_No.toLowerCase()) > -1)
+                                 && (!filter.Voucher_Type || VoucherList.Voucher_Type.toLowerCase().indexOf(filter.Voucher_Type.toLowerCase()) > -1));
                          });
                      }
                  },
@@ -137,7 +138,7 @@
         //    }
         //};
 
-        var deleteFormData = function (dialogType, ItemMaster) {
+        @*var deleteFormData = function (dialogType, ItemMaster) {
             var result = confirm("Do you want to delete?");
             if (result == true) {
                 IMSC.ajaxCall("POST", "/Master/DeleteItemMaster?ItemId=" + ItemMaster.Item_Id +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
@@ -149,5 +150,5 @@
             } else {
                 return false;
             }
-        };
+        };*@
 </script>
