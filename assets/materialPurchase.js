@@ -395,12 +395,13 @@
         }).change();
 
         $("#drpInvoice").change(function () {
-            $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
+          //  $("#PurchaseId").val(parseInt($("#drpInvoice").val()));
         });
 
         $("#btnSearch").click(function (e) {
             e.preventDefault();
-            let Purchase_Id = parseInt($("#PurchaseId").val());
+            //let Purchase_Id = parseInt($("#PurchaseId").val());
+            let Purchase_Id =  parseInt($("#drpInvoice").val())
             if (Purchase_Id > 0) {
                 IMSC.ajaxCall("GET", "/Material/GetMatrialPurchase?Purchase_Id=" + Purchase_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                     var res = JSON.parse(d);
