@@ -739,8 +739,8 @@ function CommonFunction(bIsDiscount, isValidate, quantity, rate, amount, disAmu,
         bIsDiscount = true;
         //disAmu = amount * (discount_1 + discount_2) / 100;
         discount_1_Amt = amount * (discount_1) / 100;
-        discount_2_Amt = amount * (discount_2) / 100;
-        disAmu = discount_1_Amt; //+ discount_2_Amt;
+        discount_2_Amt = (amount - discount_1_Amt) * (discount_2) / 100;
+        disAmu = discount_1_Amt + discount_2_Amt;
 
         $("#Discount_1_Amount").val(discount_1_Amt.toFixed(2));
         $("#Discount_2_Amount").val(discount_2_Amt.toFixed(2));
@@ -796,8 +796,8 @@ function setCaluValuew(index, bIsDiscount, quantity, poLineId) {
             bIsDiscount = true;
             //disAmu = amount * (discount_1 + discount_2) / 100;
             discount_1_amt = amount * (discount_1) / 100;
-            discount_2_amt = amount * (discount_2) / 100;
-            disAmu = discount_1_amt;//+ discount_2_amt;
+            discount_2_amt = (amount - discount_1_amt) * (discount_2) / 100;
+            disAmu = discount_1_amt + discount_2_amt;
 
             $("#hdnDiscount_1_Amt_" + index).val(discount_1_amt.toFixed(2));
             $("#hdnDiscount_2_Amt_" + index).val(discount_2_amt.toFixed(2));
