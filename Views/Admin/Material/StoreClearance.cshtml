@@ -27,35 +27,42 @@
                         @using (Html.BeginForm("MaterialStoreClearance_InsertUpdate", "Material", FormMethod.Post, new { @id = "MaterialStoreClearance", onkeydown = "return event.keyCode!=13" }))
                         {
                             @Html.HiddenFor(m => m.SaleId, htmlAttributes: new { @id = "SaleId" })
+                            @Html.HiddenFor(m => m.GatePass_Id, htmlAttributes: new { @id = "GatePass_Id" })
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.StoreData, htmlAttributes: new { @id = "StoreData" })
 
-                            <div class="heading">
-                                <h4>
-                                    Material Store Clearance
-                                </h4>
-                            </div>
+
                             <br />
-                            <div class="styled-input">
-                                <div class="col-md-4 form-group">
-                                    <label>Search Get Pass</label>
-                                    <input type="text" placeholder="Search Get Pass" class="form-control" id="txtGetPass" name="txtGetPass" />
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
+
                             <div class="heading">
                                 <h4>
-                                    Material Sale Item
+                                    Sale Item
                                 </h4>
                             </div>
                             <br />
                             <div class="clearfix"></div>
                             <div id="listGrid"></div>
-
                             <div class="clearfix"></div>
                             <div class="heading">
                                 <h4>
-                                    Material Store Item
+                                    Item Search
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    Item BarCoad :
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <input type="text" placeholder="Bar Code ID" class="form-control" id="txtGetPass" name="txtGetPass" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Store Item
                                 </h4>
                             </div>
                             <br />
@@ -109,9 +116,13 @@
             if ($("#tbodyid [id^='trRow_']").length > 0) {
                 $("#tbodyid [id^='trRow_']").each(function () {
                     let oMapping = {};
-                    let itemId = parseInt($(this)[0].attributes[1].value);
-                    oMapping.Line_Id = "0";
+                    let itemId = parseInt($(this)[0].attributes[1].value);                    
+                    oMapping.Line_Id = parseInt($(this)[0].attributes[3].value);
                     oMapping.SaleLine_Id = $(this)[0].attributes[2].value;
+                    let GPID = parseInt($(this)[0].attributes[4].value);
+                    //if (GPID > 0) {
+                    //    $("#GatePass_Id").val(GPID.toString());
+                    //}
                     oMapping.Item_Id = parseInt(itemId);
                     oMapping.Sale_Unit = $("#lblSaleunit_" + itemId).text();
                     oMapping.Quantity = $("#lblQuantity_" + itemId).text();
@@ -137,27 +148,28 @@
                 var result = JSON.parse(d);
                 if (result !== null) {
                     if (result.length > 0) {
-                        $("#tbodyid").empty();
+                        //$("#tbodyid").empty();
 
                         var fields = [
                              { name: "Item_Id", css: "hidden" },
-                             { name: "ItemName", type: "text", title: "Item Name", sorting: true, filtering: true},
-                             { name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: false},
-                             { name: "Order_Qty", type: "text", title: "Order Qty", sorting: true, filtering: false },
-                             { name: "Available_Qty", type: "text", title: "Available Qty", sorting: true, filtering: false},
-                             { name: "Unit", type: "text", title: "Unit", sorting: true, filtering: false},
-                             { name: "LastPurchaseRate", type: "text", title: "Last Rate", sorting: true, filtering: false },
-                             { name: "Order_Rate", type: "text", title: "Order Rate", sorting: true, filtering: false },
-                             { name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false },
-                             { name: "Discount_1", type: "text", title: "Discount 1(%)", sorting: true, filtering: false },
-                             { name: "Discount_2", type: "text", title: "Discount 2(%)", sorting: true, filtering: false },
-                             { name: "Taxable_Amount", type: "text", title: "Taxable Amount", sorting: true, filtering: false },
-                             { name: "GST", type: "text", title: "GST", sorting: true, filtering: false },
-                             { name: "CGST", type: "text", title: "CGST", sorting: true, filtering: false },
-                             { name: "SGST", type: "text", title: "SGST", sorting: true, filtering: false },
-                             { name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
-                             { name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
-                             { name: "TotalAmount", type: "text", title: "Total Amount", sorting: true, filtering: false }
+                             { name: "ItemName", type: "text", Width:200, title: "Item Name", sorting: true, filtering: false},
+                            { name: "Order_Qty", type: "text", title: "Order Qty", sorting: true, filtering: false },
+                            { name: "Available_Qty", type: "text", title: "Available Qty", sorting: true, filtering: false }
+
+                             //{ name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: false },
+                             //{ name: "Unit", type: "text", title: "Unit", sorting: true, filtering: false},
+                             //{ name: "LastPurchaseRate", type: "text", title: "Last Rate", sorting: true, filtering: false },
+                             //{ name: "Order_Rate", type: "text", title: "Order Rate", sorting: true, filtering: false },
+                             //{ name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false },
+                             //{ name: "Discount_1", type: "text", title: "Discount 1(%)", sorting: true, filtering: false },
+                             //{ name: "Discount_2", type: "text", title: "Discount 2(%)", sorting: true, filtering: false },
+                             //{ name: "Taxable_Amount", type: "text", title: "Taxable Amount", sorting: true, filtering: false },
+                             //{ name: "GST", type: "text", title: "GST", sorting: true, filtering: false },
+                             //{ name: "CGST", type: "text", title: "CGST", sorting: true, filtering: false },
+                             //{ name: "SGST", type: "text", title: "SGST", sorting: true, filtering: false },
+                             //{ name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
+                             //{ name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
+                             //{ name: "TotalAmount", type: "text", title: "Total Amount", sorting: true, filtering: false }
                         ];
                         var options = {
                             filtering: true,
@@ -186,15 +198,69 @@
                     }
                 }
             });
+            BindGatePassData();
+        };
+        function BindGatePassData() {
+            IMSC.ajaxCall("GET", "/Material/Material_GatePass_GetRecord?SaleId=" + @Model.SaleId + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                var res = JSON.parse(d);
+                if (res !== null) {
+                    var result = res;
+                    if (result.length > 0) {
+                        let bIsValid = true;
+                        $("#tbodyid [id^='trRow_']").each(function () {
+                            let itemId = parseInt($(this)[0].attributes[1].value);
+                            if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
+                                bIsValid = false;
+                            }
+                        });
+                        if (bIsValid) {
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblMaterialStoreData > TBODY")[0];
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+                            $(row).attr('id', 'trRow_' + result[0].Item_Id);
+                            $(row).attr('data-index', result[0].Item_Id);
+                            $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
+                            $(row).attr('data-Line_Id', result[0].Line_Id);
+                            $(row).attr('data-GatePass_Id', result[0].GatePass_Id);
+                            //Add Item cell.
+                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblItem);
+                            //Add Quantity.
+                            let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblQuantity);
+                            //Add Unit cell.
+                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblSaleunit);
+                        } else {
+                            //$('#alertModal').modal('show');
+                            //$('#msg').html("Item is already mapped!!!");
+                        }
+
+                        $("td").each(function () {
+                            $(this).addClass("tbl-css");
+                        });
+                    }
+                    else {
+                        //$('#alertModal').modal('show');
+                        //$('#msg').html("Item not available!!!");
+                    }
+                }
+            });
+            IMSC.waitToggle();
         };
 
         BindStoreMasterData();
-
+        
         $('#txtGetPass').keyup(function (event) {
             if (event.which == 13) {
                 let item = $("#txtGetPass").val();
                 if (item !== "") {
-                    IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + parseInt(item) + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                    IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + item.toString() + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                        $("#txtGetPass").val("");
                         var res = JSON.parse(d);
                         if (res !== null) {
                             var result = res;
@@ -214,6 +280,8 @@
                                     $(row).attr('id', 'trRow_' + result[0].Item_Id);
                                     $(row).attr('data-index', result[0].Item_Id);
                                     $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
+                                    $(row).attr('data-Line_Id', result[0].Line_Id);
+                                    $(row).attr('data-GatePass_Id', result[0].GatePass_Id);
                                     //Add Item cell.
                                     let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
                                     cell = $(row.insertCell(-1));

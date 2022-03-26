@@ -773,7 +773,7 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, int ItemId, string AppToken = "")
+        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, string ItemId, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -781,9 +781,25 @@ namespace IMS.Controllers
                 StoreClearance storeClearance = new StoreClearance();
                 dt = storeClearance.Material_Sale_Item_ForBarcodegun(SaleId, ItemId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult Material_GatePass_GetRecord(int SaleId, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                StoreClearance storeClearance = new StoreClearance();
+                dt = storeClearance.Material_GatePass_GetRecord(SaleId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
