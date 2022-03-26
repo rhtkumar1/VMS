@@ -11,7 +11,8 @@ namespace IMS.Models.ViewModel
     {
         public int PartyId { get; set; }
         public string PartyName { get; set; }
-        public string Date { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
         public int OfficeId { get; set; }
         public SelectList PartyLists { get; set; }
         public string AppToken { get; set; }
@@ -19,7 +20,8 @@ namespace IMS.Models.ViewModel
         public string ActionMsg { get; set; }
         public DashBoard()
         {
-            Date = DateTime.Now.ToString("dd/MM/yyyy");
+            FromDate = DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy");
+            ToDate = DateTime.Now.ToString("dd/MM/yyyy");
             OfficeId = CommonUtility.GetDefault_OfficeID();
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
@@ -32,8 +34,10 @@ namespace IMS.Models.ViewModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@PartyId", PartyId));
-                if (!string.IsNullOrEmpty(Date))
-                    SqlParameters.Add(new SqlParameter("@Date", CommonUtility.GetDateYYYYMMDD(Date)));
+                if (!string.IsNullOrEmpty(FromDate))
+                    SqlParameters.Add(new SqlParameter("@FromDate", CommonUtility.GetDateYYYYMMDD(FromDate)));
+                if (!string.IsNullOrEmpty(ToDate))
+                    SqlParameters.Add(new SqlParameter("@ToDate", CommonUtility.GetDateYYYYMMDD(ToDate)));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Order_Dashboard_Status", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

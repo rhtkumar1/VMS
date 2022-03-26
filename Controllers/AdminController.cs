@@ -26,14 +26,15 @@ namespace IMS.Controllers
             }
         }
 
-        public ActionResult GetOrderDashBoardStatus(DashBoard dashBoard, int partyId, string date)
+        public ActionResult GetOrderDashBoardStatus(DashBoard dashBoard, int partyId, string fromDate, string toDate )
         {
 
             DataTable dt = new DataTable();
             try
             {
                 dashBoard.PartyId = partyId;
-                dashBoard.Date = date;
+                dashBoard.FromDate = fromDate;
+                dashBoard.ToDate = toDate;
                 dt = dashBoard.OrderDashboard_Get();
                 dt.TableName = "OrderDashBoard";
             }
