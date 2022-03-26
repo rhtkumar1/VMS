@@ -223,13 +223,13 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult GetItemDetail(int Item_Id, string AppToken = "")
+        public ActionResult GetItemDetail(int Item_Id, int Party_Id, string AppToken = "")
         {
             DataTable dt = new DataTable();
             MaterialOrder materialOrder = new MaterialOrder();
             try
             {
-                dt = materialOrder.GetItemDetail(Item_Id);
+                dt = materialOrder.GetItemDetail(Item_Id, Party_Id);
             }
             catch (Exception)
             {

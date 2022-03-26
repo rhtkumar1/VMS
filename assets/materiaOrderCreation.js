@@ -15,6 +15,7 @@
             $("#lblLastDist1").text("");
             $("#lblLastDist2").text("");
             $("#lblListPrice").text("");
+            $("#lblPendingQty").text("");
             $("#txtOrderQty").val("");
             $("#txtOrderRate").val("");
             $("#txtRemark").val("");
@@ -36,17 +37,17 @@
                     return false;
                 }
             }
-            if (bAdded) {
-                if (parseInt($("#txtOrderQty").val()) <= parseInt($("#lblAvailableQty").text())) {
-                    bAdded = true;
-                } else {
-                    msg = "Order qty grater then available qty!!!";
-                    bAdded = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                }
-            }
+            //if (bAdded) {
+            //    if (parseInt($("#txtOrderQty").val()) <= parseInt($("#lblAvailableQty").text())) {
+            //        bAdded = true;
+            //    } else {
+            //        msg = "Order qty grater then available qty!!!";
+            //        bAdded = false;
+            //        $('#alertModal').modal('show');
+            //        $('#msg').html(msg);
+            //        return false;
+            //    }
+            //}
             if (bAdded) {
                 //Reference the Party and Location ddl.
                 if ($("#tblOrderCreation TBODY TR").length > 0) {
@@ -115,14 +116,6 @@
                 cell = $(row.insertCell(-1));
                 cell.html($("#lblLastRate").text());
                 cell.attr('data-index', $("#Item_Id").val());
-                //Add LastDist1 cell.
-                cell = $(row.insertCell(-1));
-                cell.html($("#lblLastDist1").text());
-                cell.attr('data-index', $("#Item_Id").val());
-                //Add LastDist2 cell.
-                cell = $(row.insertCell(-1));
-                cell.html($("#lblLastDist2").text());
-                cell.attr('data-index', $("#Item_Id").val());
                 //Add ListPrice cell.
                 cell = $(row.insertCell(-1));
                 cell.html($("#lblListPrice").text() !== "" ? $("#lblListPrice").text() : 0);
@@ -135,9 +128,17 @@
                 cell = $(row.insertCell(-1));
                 cell.html($("#txtOrderRate").val());
                 cell.attr('data-index', $("#Item_Id").val());
+                //Add LastDist1 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#txtDisc1").val());
+                cell.attr('data-index', $("#Item_Id").val());
+                //Add LastDist2 cell.
+                cell = $(row.insertCell(-1));
+                cell.html($("#txtDisc2").val());
+                cell.attr('data-index', $("#Item_Id").val());
                 //Add amount cell.
                 cell = $(row.insertCell(-1));
-                cell.html(parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2));
+                cell.html(Calculation(parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())), parseFloat($("#txtDisc1").val()), parseFloat($("#txtDisc2").val())));
                 cell.attr('data-index', $("#Item_Id").val());
                 //Add txtRemark cell.
                 cell = $(row.insertCell(-1));
@@ -152,15 +153,18 @@
                 $('#Unit_Id').select2().trigger('change');
                 $("#lblAvailableQty").text("");
                 $("#lblLastRate").text("");
+                $("#txtDisc1").val("");
+                $("#txtDisc2").val("");
+                $("#lblListPrice").text("");
+                $("#lblPendingQty").text("");
                 $("#lblLastDist1").text("");
                 $("#lblLastDist2").text("");
-                $("#lblListPrice").text("");
                 $("#txtOrderQty").val("");
                 $("#txtOrderRate").val("");
                 $("#txtRemark").val("");
                 $("#hdnRowId").val("");
                 $("#tblOrderCreation TBODY TR").each(function () {
-                    totalAmount += parseFloat($(this).find('td')[9].innerText);
+                    totalAmount += parseFloat($(this).find('td')[10].innerText);
                 });
                 $("td").each(function () {
                     $(this).addClass("tbl-css");
@@ -195,19 +199,19 @@
                 $("#tblOrderCreation TBODY TR").each(function () {
                     let row = $(this).find('td');
                     let oMapping = {};
-
+                    
                     oMapping.Line_Id = row.eq(1).attr('data-line-Id');
                     oMapping.Item_Id = row.eq(1).attr('data-item-id');
                     oMapping.UnitId = row.eq(2).attr('data-unit-id');
                     oMapping.Available_Qty = row[3].innerText;
                     oMapping.Last_Rate = row[4].innerText;
-                    oMapping.Last_Discount_1 = row[5].innerText;
-                    oMapping.Last_Discount_2 = row[6].innerText;
-                    oMapping.Last_Price = row[7].innerText;
-                    oMapping.Order_Qty = row[8].innerText;
-                    oMapping.Order_Rate = row[9].innerText;
-                    oMapping.Amount = parseFloat(row[8].innerText) * parseFloat(row[9].innerText);
-                    totalAmount += parseFloat(row[8].innerText) * parseFloat(row[9].innerText);
+                    oMapping.Last_Price = row[5].innerText;
+                    oMapping.Order_Qty = row[6].innerText;
+                    oMapping.Order_Rate = row[7].innerText;
+                    oMapping.Last_Discount_1 = row[8].innerText;
+                    oMapping.Last_Discount_2 = row[9].innerText;
+                    oMapping.Amount = Calculation(parseFloat(row[6].innerText) * parseFloat(row[7].innerText), parseFloat(row[8].innerText), parseFloat(row[9].innerText));
+                    totalAmount += parseFloat(oMapping.Amount);
                     oMapping.Remarks = row[11].innerText
                     oMapping.IsUpdate = $("#IsUpdate").val();
                     OrderLineValues.push(oMapping);
@@ -231,6 +235,17 @@
             }
         });
 
+        function Calculation(Amount, Disc1, Disc2) {
+            var FinalAmount = Amount;
+            if (!isNaN(Disc1)) {
+                FinalAmount = (Amount - (Amount * Disc1 / 100)).toFixed(2);
+            }
+            if (!isNaN(Disc2)) {
+                FinalAmount = (FinalAmount - (FinalAmount * Disc2 / 100)).toFixed(2);
+            }
+            return FinalAmount;
+        }
+
         $("#ItemSearch").autocomplete({
             source: function (request, response) {
                 IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
@@ -246,11 +261,22 @@
                 });
             },
             select: function (e, i) {
+                
+                if (parseInt($("#PartyId").val()) === 0) {
+                    msg = "Please select party.";
+                    isValid = false;
+                    $("#ItemSearch").val("");
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+
                 $("#ItemSearch").val(i.item.label);
                 let Item_Id = parseInt(i.item.value);
+                let PartyId = parseInt($("#PartyId").val());
                 $("#Item_Id").val(Item_Id);
                 if (Item_Id > 0) {
-                    IMSC.ajaxCall("GET", "/Material/GetItemDetail?Item_Id=" + Item_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    IMSC.ajaxCall("GET", "/Material/GetItemDetail?Item_Id=" + Item_Id + "&Party_Id=" + PartyId+ "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result != null && result.length > 0) {
                             $("#lblAvailableQty").text(result[0].Available_Qty);
@@ -258,9 +284,11 @@
                             $("#lblLastDist1").text(result[0].Last_Disc_1);
                             $("#lblLastDist2").text(result[0].Last_Disc_2);
                             $("#lblListPrice").text(result[0].List_Price);
+                            $("#lblPendingQty").text(result[0].Pending_Qty);
                             $("#Unit_Id").val(result[0].UnitId);
                             $('#Unit_Id').select2().trigger('change');
                             $("#hdnRowId").val("");
+                            
                         }
                     });
                 }
@@ -387,17 +415,9 @@
                             cell = $(row.insertCell(-1));
                             cell.html(value.Last_Rate);
                             cell.attr('data-index', value.Item_Id);
-                            //Add LastDist1 cell.
-                            cell = $(row.insertCell(-1));
-                            cell.html(value.Last_Discount_1);
-                            cell.attr('data-index', value.Item_Id);
-                            //Add LastDist2 cell.
-                            cell = $(row.insertCell(-1));
-                            cell.html(value.Last_Discount_2);
-                            cell.attr('data-index', value.Item_Id);
                             //Add ListPrice cell.
                             cell = $(row.insertCell(-1));
-                            cell.html(value.List_Price !== undefined ? value.List_Price : 0);
+                            cell.html(value.Last_Price !== undefined ? value.Last_Price : 0);
                             cell.attr('data-index', value.Item_Id);
                             //Add txtOrderQty cell.
                             cell = $(row.insertCell(-1));
@@ -406,6 +426,14 @@
                             //Add txtOrderRate cell.
                             cell = $(row.insertCell(-1));
                             cell.html(value.Order_Rate);
+                            cell.attr('data-index', value.Item_Id);
+                            //Add LastDist1 cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Last_Discount_1);
+                            cell.attr('data-index', value.Item_Id);
+                            //Add LastDist2 cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(value.Last_Discount_2);
                             cell.attr('data-index', value.Item_Id);
                             //Add amount cell.
                             cell = $(row.insertCell(-1));
@@ -442,6 +470,7 @@
             $("#lblLastDist1").text("");
             $("#lblLastDist2").text("");
             $("#lblListPrice").text("");
+            $("#lblPendingQty").text("");
             $("#txtOrderQty").val("");
             $("#txtOrderRate").val("");
             $("#txtRemark").val("");
