@@ -15,7 +15,7 @@
         <DataSourceName>DS_Material_Sale_Bill</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@SaleId">
-            <Value>1063</Value>
+            <Value>1066</Value>
           </QueryParameter>
           <QueryParameter Name="@BillFormat">
             <Value>1</Value>
@@ -196,7 +196,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>3.58571in</Height>
+                  <Height>3.18571in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -215,7 +215,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.23714in</Height>
+                                <Height>0.15714in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -263,7 +263,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>1.43714in</Height>
+                                <Height>1.35714in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -370,7 +370,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.23714in</Height>
+                                <Height>0.15714in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -443,7 +443,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.23714in</Height>
+                                <Height>0.15714in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -494,7 +494,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>1.43714in</Height>
+                                <Height>1.35714in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1672,7 +1672,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>0.8in</Height>
+                                <Height>0.4in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -1768,7 +1768,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2962,7 +2962,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -3150,7 +3150,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4218,7 +4218,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.13333in</Height>
+                  <Height>0.12958in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4772,7 +4772,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.16in</Height>
+                  <Height>0.15625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -4942,7 +4942,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5046,7 +5046,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.16in</Height>
+                  <Height>0.15625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5254,7 +5254,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.16in</Height>
+                  <Height>0.15625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5498,7 +5498,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5650,7 +5650,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.24625in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -5834,9 +5834,9 @@
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <DataSetName>Material_Sale_Bill</DataSetName>
-            <Top>0.175in</Top>
+            <Top>0.1625in</Top>
             <Left>0.025in</Left>
-            <Height>8.39774in</Height>
+            <Height>7.96024in</Height>
             <Width>8.01666in</Width>
             <Style>
               <Border>
@@ -5846,7 +5846,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>9.12661in</Height>
+        <Height>8.17661in</Height>
         <Style />
       </Body>
       <Width>8.1221in</Width>
@@ -5863,7 +5863,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Tax Invoice</Value>
+                      <Value>Performa Invoice</Value>
                       <Style>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -5875,10 +5875,10 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.05in</Top>
+              <Top>0.11667in</Top>
               <Left>0.0125in</Left>
-              <Height>0.2875in</Height>
-              <Width>7.89167in</Width>
+              <Height>0.1625in</Height>
+              <Width>8.01667in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -5900,8 +5900,8 @@
         <PageWidth>8.4in</PageWidth>
         <LeftMargin>0.1in</LeftMargin>
         <RightMargin>0.1in</RightMargin>
-        <TopMargin>0.25in</TopMargin>
-        <BottomMargin>0.15in</BottomMargin>
+        <TopMargin>0.1in</TopMargin>
+        <BottomMargin>0.1in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>
