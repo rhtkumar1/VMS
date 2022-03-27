@@ -2069,7 +2069,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Disc</Value>
+                                  <Value>Disc.1</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
@@ -2121,7 +2121,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Ext.Disc</Value>
+                                  <Value>Disc</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
@@ -5852,7 +5852,7 @@
       <Width>8.1221in</Width>
       <Page>
         <PageHeader>
-          <Height>0.425in</Height>
+          <Height>0.48in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -5865,20 +5865,53 @@
                     <TextRun>
                       <Value>Performa Invoice</Value>
                       <Style>
+                        <FontFamily>calibri</FontFamily>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Center</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
               <Top>0.11667in</Top>
-              <Left>0.0125in</Left>
+              <Left>3.46166in</Left>
               <Height>0.1625in</Height>
-              <Width>8.01667in</Width>
+              <Width>4.56751in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox591">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Hari Om Sai</Value>
+                      <Style>
+                        <FontFamily>calibri</FontFamily>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox591</rd:DefaultName>
+              <Top>0.11667in</Top>
+              <Left>0.025in</Left>
+              <Height>0.1625in</Height>
+              <Width>1in</Width>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
