@@ -142,11 +142,11 @@ namespace IMS.Models.ViewModel
                     if (string.IsNullOrEmpty(BarCoadID))
                     {
                         BarCodeString = "SYS";
-                        for (int i = ItemId.ToString().Length; i < 9; i++)
+                        for (int i = ItemId.ToString().Length+3; i < 11; i++)
                         {
-                            BarCodeString += "0";
+                            BarCodeString = BarCodeString + "0";
                         }
-                        BarCodeString += "X" + ItemId.ToString();
+                        BarCodeString = BarCodeString + "X" + ItemId.ToString();
                         
 
                     }

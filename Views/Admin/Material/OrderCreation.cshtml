@@ -132,12 +132,16 @@
                                     <label id="lblLastRate" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-2 form-group">
-                                    <label>Last Dist-1(%)</label>
+                                    <label>Last Disc-1(%)</label>
                                     <label id="lblLastDist1" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-2 form-group">
-                                    <label>Last Dist-2(%)</label>
+                                    <label>Last Disc-2(%)</label>
                                     <label id="lblLastDist2" class="form-control" readonly></label>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>Item Pending Qty</label>
+                                    <label id="lblPendingQty" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>List Price</label>
@@ -149,10 +153,17 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Order Rate<span class="mandatory">*</span></label>
-                                    <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
+                                    <input id="txtOrderRate" name="txtOrderRate"  class="form-control" />
                                 </div>
-
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-2 form-group">
+                                    <label>Disc-1(%)</label>
+                                    <input id="txtDisc1" name="txtDisc1" class="form-control" />
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>Disc-2(%)</label>
+                                    <input id="txtDisc2" name="txtDisc2" class="form-control" />
+                                </div>
+                                <div class="col-md-10 form-group">
                                     <label>Remark</label>
                                     <input id="txtRemark" name="txtRemark" class="form-control" />
                                 </div>
@@ -175,13 +186,13 @@
                                             <th class="tbl-heading">Action</th>
                                             <th class="tbl-heading">Item</th>
                                             <th class="tbl-heading">Unit</th>
-                                            <th class="tbl-heading">Available Qty</th>
+                                            <th class="tbl-heading">Avail-Qty</th>
                                             <th class="tbl-heading">Last Rate</th>
-                                            <th class="tbl-heading">Last Dist-1(%)</th>
-                                            <th class="tbl-heading">Last Dist-2(%)</th>
-                                            <th class="tbl-heading">List Price(MRP)</th>
+                                            <th class="tbl-heading">List Price</th>
                                             <th class="tbl-heading">Order Qty</th>
                                             <th class="tbl-heading">Order Rate</th>
+                                            <th class="tbl-heading">Disc-1(%)</th>
+                                            <th class="tbl-heading">Disc-2(%)</th>
                                             <th class="tbl-heading">Amount</th>
                                             <th class="tbl-heading">Remark</th>
                                         </tr>

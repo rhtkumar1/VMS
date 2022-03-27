@@ -78,13 +78,27 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
-        public DataTable Material_Sale_Item_ForBarcodegun(int SaleId,int ItemId)
+        public DataTable Material_GatePass_GetRecord(int SaleId)
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@itemID", ItemId));
+                SqlParameters.Add(new SqlParameter("@SaleId", SaleId));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_GatePass_GetRecord", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        public DataTable Material_Sale_Item_ForBarcodegun(int SaleId,string ItemId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@barcoadID", ItemId));
                 SqlParameters.Add(new SqlParameter("@saleID", SaleId));
                 dt = DBManager.ExecuteDataTableWithParameter("Sale_Item_ForBarcodegun", CommandType.StoredProcedure, SqlParameters);
             }
@@ -93,6 +107,8 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
+
     }
     public class StoreClearanceMapping
     {

@@ -23,18 +23,25 @@
                     {
                         @Html.HiddenFor(m => m.AppToken)
                         <div class="styled-input">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <label>Party</label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
-                        </div>
+                        </div> 
+
                         <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Order Date</label>
-                                @Html.TextBoxFor(m => m.Date, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                            <div class="col-md-3 form-group">
+                                <label>From Date</label>
+                                @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                             </div>
                         </div>
-                        <div class="col-md-4 form-group pull-right">
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>To Date</label>
+                                @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                            </div>
+                        </div>
+                        <div class="col-md-3 form-group pull-right">
                             <div class="appointment-btn text-lg-right">
                                 <br />
                                 <button type="button" name="btnSearch" id="btnSearch" class="btncustome">Search</button>
@@ -58,7 +65,7 @@
         searchData();
         });
 
-    $('#Date').datepicker({
+    $('#FromDate, #ToDate').datepicker({
         autoclose: true,
         format: "dd/mm/yyyy",
         immediateUpdates: true,
@@ -72,20 +79,22 @@
 
      function searchData() {
                 let Party_Id = parseInt($('#drpParty').val());
-                var date = $('#Date').val();
-                IMSC.ajaxCall("GET", "/Admin/GetOrderDashBoardStatus?partyId=" + Party_Id + "&date=" + date, {}, "text", function (d) {
+                var fromDate = $('#FromDate').val();
+                var toDate = $('#ToDate').val();
+         IMSC.ajaxCall("GET", "/Admin/GetOrderDashBoardStatus?partyId=" + Party_Id + "&fromDate=" + fromDate + "&toDate=" + toDate, {}, "text", function (d) {
                     var result = JSON.parse(d);
                     if (result !== "null" && result !== "") {
                         var fields = [
 
                             { name: "PO_Id", css: "hidden", },
                             { name: "PO_No", type: "text", title: "PO No", sorting: true, filtering: true, width: 100 },
+                            { name: "ItemName", type: "text", title: "Item Name", sorting: true, filtering: true, width: 150 },
                             { name: "CreatedOn", title: "PO Date", sorting: true, filtering: true, width: 100 },
                             { name: "Status", title: "PO Status", sorting: true, filtering: true, width: 100 },
                             { name: "PartyName", type: "text", title: "Party Name", sorting: true, filtering: true, width: 250 },
-                            { name: "OrderQty", title: "Order Qty", sorting: true, filtering: true, width: 100 },
-                            { name: "SalesQty", title: "Sales Qty", sorting: true, filtering: true, width: 100 },
-                            { name: "GateQty", title: "Gate Qty", sorting: true, filtering: true, width: 100 },
+                            { name: "OrderQty", title: "Order Qty", sorting: true, filtering: true, width: 80 },
+                            { name: "SalesQty", title: "Sales Qty", sorting: true, filtering: true, width: 80 },
+                            { name: "GateQty", title: "Gate Qty", sorting: true, filtering: true, width: 80 },
 
                         ];
                         var options = {
@@ -99,7 +108,8 @@
                                 loadData: function (filter) {
                                     return $.grep(this.OrderDashBoardStatuss, function (OrderDashBoardStatus) {
                                         return ((!filter.PO_No || OrderDashBoardStatus.PO_No.toLowerCase().indexOf(filter.PO_No.toLowerCase()) > -1)
-                                            && (!filter.PartyName || OrderDashBoardStatus.PartyName.toLowerCase().indexOf(filter.PartyName.toLowerCase()) > -1));
+                                            && (!filter.PartyName || OrderDashBoardStatus.PartyName.toLowerCase().indexOf(filter.PartyName.toLowerCase()) > -1)
+                                            && (!filter.ItemName || OrderDashBoardStatus.ItemName.toLowerCase().indexOf(filter.ItemName.toLowerCase()) > -1));
                                     });
                                 }
                             },

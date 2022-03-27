@@ -78,10 +78,10 @@ namespace IMS.Models.ViewModel
                 {
                     sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
                                     Available_Qty=""" + Convert.ToString(item.Available_Qty) + @""" Last_Rate=""" + Convert.ToString(item.Last_Rate) + @"""
-                                    Last_Discount_1=""" + Convert.ToString(item.Last_Discount_1) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
+                                    Last_Discount_1=""" + (Convert.ToString(item.Last_Discount_1)=="" ? "0" : Convert.ToString(item.Last_Discount_1)) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
                                     Order_Qty=""" + Convert.ToString(item.Order_Qty) + @""" Order_Rate=""" + Convert.ToString(item.Order_Rate) + @"""   
                                     Amount=""" + Convert.ToString(item.Amount) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @"""  
-                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + Convert.ToString(item.Last_Discount_2) + @""" UnitId = """+ Convert.ToString(item.UnitId)+@""" />");
+                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + (Convert.ToString(item.Last_Discount_2)=="" ? "0" : Convert.ToString(item.Last_Discount_2)) + @""" UnitId = """+ Convert.ToString(item.UnitId)+@""" />");
                 }
                 MaterialLine = "<Line>" + sb + "</Line>";
 
@@ -131,13 +131,14 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
-        public DataTable GetItemDetail(int Item_Id)
+        public DataTable GetItemDetail(int Item_Id,int Party_Id)
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
+                SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetItemDetail", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
