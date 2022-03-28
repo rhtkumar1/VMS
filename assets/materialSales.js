@@ -103,7 +103,7 @@
                             oMapping.SGST = $("#lblSGST_" + index).text();
                             oMapping.IGST = $("#lblIGST_" + index).text();
                             oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
-                            debugger;
+                            
                             oMapping.PO_Id = $("#hdnPOId_" + index).val();
                             oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
                             oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
@@ -208,7 +208,7 @@
             }
 
             if (bAdded) {
-                debugger;
+                
                 //Get the reference of the Table's TBODY element.
                 var tBody = $("#tblMaterialSales > TBODY")[0];
                 //Add Row.
