@@ -51,7 +51,7 @@
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-                        
+                        debugger;
                         let oMapping = {};
                         let index = parseInt($("#" + $(this).context.id).val());
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());
@@ -70,17 +70,17 @@
                                 }
                             }
                         }
-                        //else {
-                        //    if (isItemType === 16) {
-                        //        isValid = true;
-                        //    } else {
-                        //        if (qty !== NaN && qty > 0 && qty > availableQty) {
-                        //            msg = "Please check the quantity for Item: " + itemname + "!!!";
-                        //            isValid = false;
-                        //            return false;
-                        //        }
-                        //    }
-                        //}
+                        else {
+                            if (isItemType === 16) {
+                                isValid = true;
+                            } else {
+                                if (qty !== NaN && qty > 0 && qty > availableQty) {
+                                    msg = "Please check the quantity for Item: " + itemname + "!!!";
+                                    isValid = false;
+                                    return false;
+                                }
+                            }
+                        }
                         if (isValid) {
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
