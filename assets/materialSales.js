@@ -82,7 +82,6 @@
                         //    }
                         //}
                         if (isValid) {
-
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
                             oMapping.UnitTitle = $("#lblUnit_" + index).text();
@@ -104,6 +103,7 @@
                             oMapping.SGST = $("#lblSGST_" + index).text();
                             oMapping.IGST = $("#lblIGST_" + index).text();
                             oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
+                            debugger;
                             oMapping.PO_Id = $("#hdnPOId_" + index).val();
                             oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
                             oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
@@ -848,7 +848,7 @@ function Remove(button) {
     $("#IsUpdateMaterialSales").val(0);
     var row = $(button).closest("TR");
     var name = $("TD", row).eq(0).text();
-    if (confirm("Do you want to remove this purchase.", "Remove")) {
+    if (confirm("Do you want to remove this Item.", "Remove")) {
         //Get the reference of the Table.
         var table = $("#tblMaterialSales")[0];
         //Delete the Table row using it's Index.
