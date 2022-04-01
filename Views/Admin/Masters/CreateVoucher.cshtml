@@ -271,7 +271,7 @@
                         let index = parseInt($(this).val());
                         let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
                         let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                        if (enterytype === "cr" && (party === "cash" && party === "bank")) {
+                        if (enterytype === "cr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
                             msg = "One CR side one ledger must have of the group Cash and bank .!!!";
@@ -281,6 +281,12 @@
                             return false;
                         }
                     });
+                } else {
+                    msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
                 }
             }
 
@@ -290,7 +296,7 @@
                         let index = parseInt((this).val());
                         let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
                         let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                        if (enterytype === "dr" && (party === "cash" && party === "bank")) {
+                        if (enterytype === "dr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
                             msg = "One CR side one ledger must have of the group Cash and bank .!!!";
@@ -300,6 +306,12 @@
                             return false;
                         }
                     });
+                } else {
+                    msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
                 }
             }
             //Reference the Party and Location ddl.
@@ -486,22 +498,27 @@
             $("#divDeleteVoucher").css('display', 'none');
 
             if ($("#tblVoucher TBODY TR").length > 0) {
-                $("[id^='hdnAmount_']").each(function () {
-                    let index = $(this).attr("data-index");
-                    if ($("#hdnEnteryType_" + index).val() === "CR") {
-                        cramount += parseFloat($(this).val());
+                if ($("[id^='hdnAmount_']").length > 0) {
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = $(this).attr("data-index");
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                            cramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = $(this).attr("data-index");
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                            dramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+                    if (cramount > 0 && dramount > 0) {
+                        diffamount = cramount - dramount;
                     }
-                    if ($("#hdnEnteryType_" + index).val() === "DR") {
-                        dramount += parseFloat($(this).val());
-                    }
-                });
-                if (cramount > 0 && dramount > 0) {
-                    diffamount = cramount - dramount;
+                    $("#divAmountDiffrence").show();
+                    $("#lblDebitTotal").text(dramount.toFixed(2));
+                    $("#lblCreditTotal").text(cramount.toFixed(2));
+                    $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
                 }
-                $("#divAmountDiffrence").show();
-                $("#lblDebitTotal").val(dramount);
-                $("#lblCreditTotal").val(cramount);
-                $("#lblDiffrenceTotal").val(diffamount);
             } else {
                 $("#divAmountDiffrence").hide();
             }
@@ -513,22 +530,27 @@
                 window.location.href = "/Material/DeleteMatrialPurchase?VoucherId=" + VoucherId + "&AppToken=" + scope.AppToken;
             }
             if ($("#tblVoucher TBODY TR").length > 0) {
-                $("[id^='hdnAmount_']").each(function () {
-                    let index = $(this).attr("data-index");
-                    if ($("#hdnEnteryType_" + index).val() === "CR") {
-                        cramount += parseFloat($(this).val());
+                if ($("[id^='hdnAmount_']").length > 0) {
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = $(this).attr("data-index");
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                            cramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = $(this).attr("data-index");
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                            dramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+                    if (cramount > 0 && dramount > 0) {
+                        diffamount = cramount - dramount;
                     }
-                    if ($("#hdnEnteryType_" + index).val() === "DR") {
-                        dramount += parseFloat($(this).val());
-                    }
-                });
-                if (cramount > 0 && dramount > 0) {
-                    diffamount = cramount - dramount;
+                    $("#divAmountDiffrence").show();
+                    $("#lblDebitTotal").text(dramount.toFixed(2));
+                    $("#lblCreditTotal").text(cramount.toFixed(2));
+                    $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
                 }
-                $("#divAmountDiffrence").show();
-                $("#lblDebitTotal").val(dramount);
-                $("#lblCreditTotal").val(cramount);
-                $("#lblDiffrenceTotal").val(diffamount);
             } else {
                 $("#divAmountDiffrence").hide();
             }
@@ -540,35 +562,32 @@
         var row = $(button).closest("TR");
         if (confirm("Do you want to remove this voucher.", "Remove")) {
             //Get the reference of the Table.
-            var table = $("#tblMaterialPurchase")[0];
+            var table = $("#tblVoucher")[0];
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
         }
-        //let sumOfTotal = 0;
-        //$("#tblVoucher TBODY TR").each(function () {
-        //    var row = $(this);
-        //    let td = row.find("TD");
-        //    sumOfTotal += parseFloat(td[13].innerText);
-        //});
-        //$("#PurchaseAmount").val(sumOfTotal.toFixed(2));
-        //$("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
         if ($("#tblVoucher TBODY TR").length > 0) {
-            $("[id^='hdnAmount_']").each(function () {
-                let index = $(this).attr("data-index");
-                if ($("#hdnEnteryType_" + index).val() === "CR") {
-                    cramount += parseFloat($(this).val());
+            if ($("[id^='hdnAmount_']").length > 0) {
+                $("[id^='hdnAmount_']").each(function () {
+                    let index = $(this).attr("data-index");
+                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                        cramount += parseFloat($(`#hdnAmount_${index}`).val());
+                    }
+                });
+                $("[id^='hdnAmount_']").each(function () {
+                    let index = $(this).attr("data-index");
+                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                        dramount += parseFloat($(`#hdnAmount_${index}`).val());
+                    }
+                });
+                if (cramount > 0 && dramount > 0) {
+                    diffamount = cramount - dramount;
                 }
-                if ($("#hdnEnteryType_" + index).val() === "DR") {
-                    dramount += parseFloat($(this).val());
-                }
-            });
-            if (cramount > 0 && dramount > 0) {
-                diffamount = cramount - dramount;
+                $("#divAmountDiffrence").show();
+                $("#lblDebitTotal").text(dramount.toFixed(2));
+                $("#lblCreditTotal").text(cramount.toFixed(2));
+                $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
             }
-            $("#divAmountDiffrence").show();
-            $("#lblDebitTotal").val(dramount);
-            $("#lblCreditTotal").val(cramount);
-            $("#lblDiffrenceTotal").val(diffamount);
         } else {
             $("#divAmountDiffrence").hide();
         }
