@@ -73,7 +73,7 @@ namespace IMS.Models.ViewModel
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
-            NatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And IsActive=1"), "Id", "Value");
+            NatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And IsActive=1 And Sub_Type=1"), "Id", "Value");
             ItemLocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And Sub_Type=2 And IsActive=1"), "Id", "Value");
             Unit_In_Lists = UnitLists;
             Unit_Out_Lists = UnitLists;
