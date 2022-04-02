@@ -195,7 +195,7 @@ public static class CommonUtility
                 Font newfont = new Font("IDAutomationHC39M", 10, FontStyle.Regular);
                 PointF point = new PointF(0, 5);
                 SolidBrush black = new SolidBrush(Color.Black);
-                SolidBrush white = new SolidBrush(Color.White);
+                //SolidBrush white = new SolidBrush(Color.White);
                 // graphic
                 // graphic.FillRectangle(white, 0, Image.Height - 20, Image.Width, Image.Height);
                 graphic.DrawString(" Code" + " : "+ Code, newfont, black, point);
