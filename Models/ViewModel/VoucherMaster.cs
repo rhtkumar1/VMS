@@ -16,6 +16,7 @@ namespace IMS.Models.ViewModel
         public int OfficeIdVocherLine { get; set; }
         public int Constant_Id { get; set; }
         public string VoucherType { get; set; }
+        public string VoucherTypeId { get; set; }
         public string VoucherNumber { get; set; }
         public string VoucherDate { get; set; }
         public string CheckNumber { get; set; }
@@ -45,7 +46,7 @@ namespace IMS.Models.ViewModel
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
-            Vouchers = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And IsActive=1"), "Id", "Value");
+            Vouchers = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And IsActive=1 And Menu_Id=10016"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
             CompanyId = CommonUtility.GetCompanyID();

@@ -68,13 +68,13 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Check Number</label>
-                                    @Html.TextBoxFor(m => m.CheckNumber, htmlAttributes: new { @id = "CheckNumber", @placeholder = "Check Number", @class = "form-control" })
+                                    <label>Cheque Number</label>
+                                    @Html.TextBoxFor(m => m.CheckNumber, htmlAttributes: new { @id = "CheckNumber", @placeholder = "Cheque Number", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Check Date<span class="mandatory">*</span></label>
+                                    <label>Cheque Date<span class="mandatory">*</span></label>
                                     @Html.TextBoxFor(m => m.CheckDate, htmlAttributes: new { @id = "CheckDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
@@ -91,8 +91,8 @@
                                 <div class="col-md-2 form-group">
                                     <label>Entry Type<span class="mandatory">*</span></label>
                                     <select id="ddlEnteryType" name="ddlEnteryType" class="form-control">
-                                        <option value="CR">Cr</option>
-                                        <option value="DR">Dr</option>
+                                        <option value="CR">CR</option>
+                                        <option value="DR">DR</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2 form-group">
@@ -252,11 +252,11 @@
                 $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
 
                 if ($("#PartyId :selected").text().toLowerCase().trim() === "cash" ||
-                    $("#PartyId :selected").text().toLowerCase().trim() === "bankledger") {
+                    $("#PartyId :selected").text().toLowerCase().trim() === "bank") {
 
                     if ($("#ddlEnteryType :selected").text().toLowerCase().trim() === "dr" ||
                         $("#ddlEnteryType :selected").text().toLowerCase().trim() === "cr") {
-                        msg = "In case of JV / sales / purchase voucher type system should not accept any cash / Bank ledger in Dr and CR side .";
+                        msg = "In case of JV / Sales / Purchase VoucherType any Cash / Bank ledger with Dr or CR will not allowed.";
                         bAdded = false;
                         $('#alertModal').modal('show');
                         $('#msg').html(msg);
@@ -274,7 +274,7 @@
                         if (enterytype === "cr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
-                            msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                            msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
                             bAdded = false;
                             $('#alertModal').modal('show');
                             $('#msg').html(msg);
@@ -282,7 +282,7 @@
                         }
                     });
                 } else {
-                    msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                    msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
                     bAdded = false;
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
@@ -290,7 +290,7 @@
                 }
             }
 
-            if ($("#Constant_Id :selected").text().toLowerCase().trim() === "receiptvoucher") {
+            if ($("#Constant_Id :selected").text().toLowerCase().trim() === "receipt") {
                 if ($("[id^='hdnPartyId_']").length > 0) {
                     $("[id^='hdnPartyId_']").each(function () {
                         let index = parseInt((this).val());
@@ -299,7 +299,7 @@
                         if (enterytype === "dr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
-                            msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                            msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
                             bAdded = false;
                             $('#alertModal').modal('show');
                             $('#msg').html(msg);
@@ -307,7 +307,7 @@
                         }
                     });
                 } else {
-                    msg = "One CR side one ledger must have of the group Cash and bank .!!!";
+                    msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
                     bAdded = false;
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
@@ -408,6 +408,7 @@
 
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
+            
             let VoucherLine = [];
             let isValid = true;
             let msg = "";
@@ -418,36 +419,37 @@
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#Constant_Id :selected").val() === "") {
+            if ($("#Constant_Id :selected").val() === "0") {
                 msg = "Please select voucher type.";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#VoucherNumber").val() === "") {
-                msg = "Please enter voucher number.";
-                isValid = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            }
-            if ($("#CheckNumber").val() === "") {
-                msg = "Please enter check number.";
-                isValid = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            }
+            //if ($("#VoucherNumber").val() === "") {
+            //    msg = "Please enter voucher number.";
+            //    isValid = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //}
             if ($("#VoucherDate").val() === "") {
-                msg = "Voucher date required.";
+                msg = "Please select Voucher date.";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#CheckDate").val() === "") {
-                msg = "Check date required.";
+            //if ($("#CheckNumber").val() === "") {
+            //    msg = "Please enter Cheque number.";
+            //    isValid = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //}
+            
+            if ($("#CheckDate").val() === "" && $("#CheckNumber").val() != "") {
+                msg = "Please select Cheque date.";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
