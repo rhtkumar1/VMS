@@ -26,7 +26,7 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        @using (Html.BeginForm("ManageMaterialPurchase", "Material", FormMethod.Post, new { @id = "MaterialPurchase" }))
+                        @using (Html.BeginForm("SaveVoucher", "Master", FormMethod.Post, new { @id = "Voucher" }))
                         {
                             @Html.HiddenFor(m => m.VoucherId, htmlAttributes: new { @id = "VoucherId" })
                             @Html.HiddenFor(m => m.AppToken)
@@ -192,9 +192,6 @@
         $("#CheckDate").val("");
         $("#CheckDate").attr('placeholder', 'dd/mm/yyyy');
         if (@Model.VoucherId > 0) {
-            var cramount = parseFloat(0);
-            var dramount = parseFloat(0);
-            var diffamount = parseFloat(0);
             IMSC.ajaxCall("GET", `/Master/GeVoucher?voucherId=${@Model.VoucherId}&AppToken=${'@Model.AppToken'}`, {}, "text", function (d) {
                 var VoucherLists = JSON.parse(d);
                 $("#VoucherId").val(VoucherLists[0].Voucher_Id);
@@ -217,7 +214,7 @@
                     cell = $(row.insertCell(-1));
                     let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
                                  <input type="hidden" id="hdnLine_Id_${o.Ledger_Id}" name="hdnLine_Id_${o.Ledger_Id}" value="0" />
-                                 <input type="hidden" id="hdnPartyId_${o.Ledger_Id}" name="hdnPartyId_${o.Ledger_Id}" value="${o.Ledger_Id}" />
+                                 <input type="hidden" id="hdnPartyId_${o.Ledger_Id}" name="hdnPartyId_${o.Ledger_Id}" data-party-id="${o.Ledger_Id}" value="${o.Title}" />
                                  <input type="hidden" id="hdnEnteryType_${o.Ledger_Id}" name="hdnEnteryType_${o.Ledger_Id}" value="${o.Entry_Type}" />
                                  <input type="hidden" id="hdnAmount_${o.Ledger_Id}" data-index="${o.Ledger_Id}" name="hdnAmount_${o.Ledger_Id}" value="${o.Amount}" />
                                `;
@@ -240,31 +237,8 @@
                 $("td").each(function () {
                     $(this).addClass("tbl-css");
                 });
-                if ($("#tblVoucher TBODY TR").length > 0) {
-                    if ($("[id^='hdnAmount_']").length > 0) {
-                        $("[id^='hdnAmount_']").each(function () {
-                            let index = $(this).attr("data-index");
-                            if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
-                                cramount += parseFloat($(`#hdnAmount_${index}`).val());
-                            }
-                        });
-                        $("[id^='hdnAmount_']").each(function () {
-                            let index = $(this).attr("data-index");
-                            if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
-                                dramount += parseFloat($(`#hdnAmount_${index}`).val());
-                            }
-                        });
-                        if (cramount > 0 && dramount > 0) {
-                            diffamount = cramount - dramount;
-                        }
-                        $("#divAmountDiffrence").show();
-                        $("#lblDebitTotal").text(dramount.toFixed(2));
-                        $("#lblCreditTotal").text(cramount.toFixed(2));
-                        $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
-                    }
-                } else {
-                    $("#divAmountDiffrence").hide();
-                }
+
+                Calculate();
             });
         }
 
@@ -337,7 +311,7 @@
             if ($("#Constant_Id :selected").text().toLowerCase().trim() === "payment") {
                 if ($("[id^='#hdnPartyId_']").length > 0) {
                     $("[id^='#hdnPartyId_']").each(function () {
-                        let index = parseInt($(this).val());
+                        let index = parseInt($(this).attr('data-party-id'));
                         let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
                         let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
                         if (enterytype === "cr" && (party === "cash" || party === "bank")) {
@@ -362,7 +336,7 @@
             if ($("#Constant_Id :selected").text().toLowerCase().trim() === "receipt") {
                 if ($("[id^='hdnPartyId_']").length > 0) {
                     $("[id^='hdnPartyId_']").each(function () {
-                        let index = parseInt((this).val());
+                        let index = parseInt($(this).attr('data-party-id'));
                         let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
                         let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
                         if (enterytype === "dr" && (party === "cash" || party === "bank")) {
@@ -387,8 +361,8 @@
             if (bAdded) {
                 if ($("#tblVoucher TBODY TR").length > 0) {
                     $("[id^='hdnPartyId_']").each(function () {
-                        let partyId = parseInt($("#" + this.id).val());
-                        if (parseInt($("#" + this.id).val()) === partyId) {
+                        let partyId = parseInt($(this).attr('data-party-id'));
+                        if (parseInt($("#PartyId").val()) === partyId) {
                             msg = "Voucher is already mapped!!!";
                             bAdded = false;
                             $('#alertModal').modal('show');
@@ -401,9 +375,6 @@
 
             if (bAdded) {
                 let partyId = parseInt($("#PartyId").val());
-                var cramount = parseFloat(0);
-                var dramount = parseFloat(0);
-                var diffamount = parseFloat(0);
                 var tBody = $("#tblVoucher > TBODY")[0];
                 //Add Row.
                 var row = tBody.insertRow(-1);
@@ -441,33 +412,8 @@
                 });
             }
 
-            if ($("#tblVoucher TBODY TR").length > 0) {
-                if ($("[id^='hdnAmount_']").length > 0) {
-                    $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
-                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
-                            cramount += parseFloat($(`#hdnAmount_${index}`).val());
-                        }
-                    });
-                    $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
-                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
-                            dramount += parseFloat($(`#hdnAmount_${index}`).val());
-                        }
-                    });
-                    if (cramount > 0 && dramount > 0) {
-                        diffamount = cramount - dramount;
-                    }
-                    $("#divAmountDiffrence").show();
-                    $("#lblDebitTotal").text(dramount.toFixed(2));
-                    $("#lblCreditTotal").text(cramount.toFixed(2));
-                    $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
-                    $("#Amount_DR").val(dramount.toFixed(2));
-                    $("#Amount_CR").text(cramount.toFixed(2));
-                }
-            } else {
-                $("#divAmountDiffrence").hide();
-            }
+            Calculate();
+
             if (bAdded) {
                 return true;
             } else {
@@ -479,7 +425,8 @@
 
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
-
+            var cramount = parseFloat(0);
+            var dramount = parseFloat(0);
             let VoucherLine = [];
             let isValid = true;
             let msg = "";
@@ -575,13 +522,35 @@
                         });
                     }
 
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = parseInt($(this).attr("data-index"));
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                            cramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+
+                    $("[id^='hdnAmount_']").each(function () {
+                        let index = parseInt($(this).attr("data-index"));
+                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                            dramount += parseFloat($(`#hdnAmount_${index}`).val());
+                        }
+                    });
+
+                    if (cramount !== dramount) {
+                        msg = "Dr amount and Cr amount not equal!";
+                        isValid = false;
+                        $('#alertModal').modal('show');
+                        $('#msg').html(msg);
+                        return false;
+                    }
+
                     if (isValid) {
                         $("[id^='hdnPartyId_']").each(function () {
                             let partyId = parseInt($(this).attr('data-party-id'));
                             let oMapping = {};
                             oMapping.Line_Id = $('#hdnLine_Id_' + partyId).val();
                             oMapping.Ledger_Id = partyId;
-                            oMapping.Entry_Type = $('#hdnEnteryType_' + partyId).text();
+                            oMapping.Entry_Type = $('#hdnEnteryType_' + partyId).val();
                             oMapping.Amount = $('#hdnAmount_' + partyId).val();
                             VoucherLine.push(oMapping);
                         });
@@ -618,17 +587,19 @@
             $("#Remarks").val("");
             $("#tblVoucher TBODY").empty();
             $("#divDeleteVoucher").css('display', 'none');
-
+            var cramount = parseFloat(0);
+            var dramount = parseFloat(0);
+            var diffamount = parseFloat(0);
             if ($("#tblVoucher TBODY TR").length > 0) {
                 if ($("[id^='hdnAmount_']").length > 0) {
                     $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
+                        let index = parseInt($(this).attr("data-index"));
                         if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
                             cramount += parseFloat($(`#hdnAmount_${index}`).val());
                         }
                     });
                     $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
+                        let index = parseInt($(this).attr("data-index"));
                         if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
                             dramount += parseFloat($(`#hdnAmount_${index}`).val());
                         }
@@ -640,6 +611,9 @@
                     $("#lblDebitTotal").text(dramount.toFixed(2));
                     $("#lblCreditTotal").text(cramount.toFixed(2));
                     $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
+                    $("#Amount_DR").val(dramount.toFixed(2));
+                    $("#Amount_CR").val(cramount.toFixed(2));
+                    $("#Total_Amount").val(dramount.toFixed(2));
                 }
             } else {
                 $("#divAmountDiffrence").hide();
@@ -651,31 +625,7 @@
             if (VoucherId > 0) {
                 window.location.href = "/Material/DeleteMatrialPurchase?VoucherId=" + VoucherId + "&AppToken=" + scope.AppToken;
             }
-            if ($("#tblVoucher TBODY TR").length > 0) {
-                if ($("[id^='hdnAmount_']").length > 0) {
-                    $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
-                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
-                            cramount += parseFloat($(`#hdnAmount_${index}`).val());
-                        }
-                    });
-                    $("[id^='hdnAmount_']").each(function () {
-                        let index = $(this).attr("data-index");
-                        if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
-                            dramount += parseFloat($(`#hdnAmount_${index}`).val());
-                        }
-                    });
-                    if (cramount > 0 && dramount > 0) {
-                        diffamount = cramount - dramount;
-                    }
-                    $("#divAmountDiffrence").show();
-                    $("#lblDebitTotal").text(dramount.toFixed(2));
-                    $("#lblCreditTotal").text(cramount.toFixed(2));
-                    $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
-                }
-            } else {
-                $("#divAmountDiffrence").hide();
-            }
+            Calculate();
         });
     });
 
@@ -688,17 +638,24 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
         }
+        Calculate();
+    };
+
+    function Calculate() {
+        var cramount = parseFloat(0);
+        var dramount = parseFloat(0);
+        var diffamount = parseFloat(0);
         if ($("#tblVoucher TBODY TR").length > 0) {
             if ($("[id^='hdnAmount_']").length > 0) {
                 $("[id^='hdnAmount_']").each(function () {
-                    let index = $(this).attr("data-index");
-                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                    let index = parseInt($(this).attr("data-index"));
+                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim() === "cr") {
                         cramount += parseFloat($(`#hdnAmount_${index}`).val());
                     }
                 });
                 $("[id^='hdnAmount_']").each(function () {
-                    let index = $(this).attr("data-index");
-                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                    let index = parseInt($(this).attr("data-index"));
+                    if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim() === "dr") {
                         dramount += parseFloat($(`#hdnAmount_${index}`).val());
                     }
                 });
@@ -709,6 +666,9 @@
                 $("#lblDebitTotal").text(dramount.toFixed(2));
                 $("#lblCreditTotal").text(cramount.toFixed(2));
                 $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
+                $("#Amount_DR").val(dramount.toFixed(2));
+                $("#Amount_CR").val(cramount.toFixed(2));
+                $("#Total_Amount").val(dramount.toFixed(2));
             }
         } else {
             $("#divAmountDiffrence").hide();
