@@ -16,6 +16,7 @@ namespace IMS.Reports
     {
         Dictionary<string, string> paramcol = new Dictionary<string, string>();
         List<string> lstparams = new List<string>();
+        string Reportquerystring;
         int ReportId;
         string ReportName;
         string SPName;
@@ -28,20 +29,28 @@ namespace IMS.Reports
                 querystring = Request.QueryString.ToString();
                 ReportId = Convert.ToInt32(Request.QueryString["ReportId"]);
             }
-            MapQueryStringParams(querystring);
-            MapReportConfig(ReportId);
+            if (ReportId > 0)
+            {
+                if (ReportId == 1)
+                {
+                    MapQueryStringParams(querystring);
+                }
+                else
+                {
+                    Reportquerystring= Convert.ToString(Request.QueryString["Reportquerystring"]);
+                    MapReportquerystring(Reportquerystring);
+                }
+                MapReportConfig(ReportId);
 
-            ReportViewer1.ProcessingMode = ProcessingMode.Local;
-            ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/"+ReportName+".rdlc");
-            DataTable reportdt = GetReportData();
-
-
-            //if (reportparam.Count() > 0)
-            //{
-            //    ReportViewer1.ServerReport.SetParameters(reportparam);
-            //}
-            ReportViewer1.LocalReport.DataSources.Clear();
-            ReportViewer1.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));
+                ReportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;//ProcessingMode.Local;
+                ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/" + ReportName + ".rdlc");
+                DataTable reportdt = GetReportData();
+                ReportDataSource ReportDataSource = new ReportDataSource(ReportName, reportdt);
+                ReportViewer1.LocalReport.DataSources.Clear();
+                ReportViewer1.LocalReport.DataSources.Add(ReportDataSource);//new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));
+                ReportViewer1.LocalReport.Refresh();
+                //ReportViewer1.RefreshReport(); // refresh report
+            }
         }
 
         public DataTable GetReportData()
@@ -51,17 +60,27 @@ namespace IMS.Reports
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 string paramvalue="";
+                string ParamName = "";
                 for (int i = 0; i < lstparams.Count(); i++)
                 {
+                    ParamName = lstparams[i].ToString();
                     for (int j = 0; j < paramcol.Count(); j++)
                     {
                         if (paramcol.ContainsKey(lstparams[i].ToString()))
                         {
-                            paramvalue = paramcol[lstparams[i].ToString()];
+                            if (ParamName.Contains("date"))
+                            {
+                                if (!string.IsNullOrEmpty(paramcol[lstparams[i].ToString()]))
+                                 paramvalue = CommonUtility.GetDateYYYYMMDD(paramcol[lstparams[i].ToString()]);
+                            }
+                            else
+                            {
+                                paramvalue = paramcol[lstparams[i].ToString()];
+                            }
                             break;
                         }
                     }
-                    SqlParameters.Add(new SqlParameter(lstparams[i].ToString(), paramvalue));
+                    SqlParameters.Add(new SqlParameter(ParamName, paramvalue));
                     //reportparam.Add(new ReportParameter(lstparams[i].ToString(), paramvalue));
                 }
                 if (lstparams.Count() > 0)
@@ -88,16 +107,29 @@ namespace IMS.Reports
                 paramcol.Add(param[0].ToString().ToLower(), param[1].ToString().ToLower());
             }
         }
+        public void MapReportquerystring(string querystring)
+        {
+            DataSet reportdata = new DataSet();
+            string[] querystr = querystring.Split(',');
+            for (int i = 0; i < querystr.Count(); i++)
+            {
+                string[] param = querystr[i].Split(':');
+                paramcol.Add(param[0].ToString().ToLower(), param[1].ToString().ToLower());
+            }
+        }
 
         public void MapReportConfig(int ReportId)
         {
             DataTable dt = new DataTable();
             try
             {
-                string sql = "SELECT ReportName,QueryType,Query,Params FROM Report_Config (nolock) WHERE IsActive=1 AND Report_Id=" + ReportId.ToString() + "";
+                //string sql = "SELECT ReportName,QueryType,Query,Params FROM Report_Config (nolock) WHERE IsActive=1 AND Report_Id=" + ReportId.ToString() + "";
                 //List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 //SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
-                dt = DBManager.ExecuteDataTable(sql, CommandType.Text);
+                string sql = "Report_Config_GetData";
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Report_Id", ReportId));
+                dt = DBManager.ExecuteDataTableWithParameter(sql, CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     ReportName = Convert.ToString(dr["ReportName"]);
