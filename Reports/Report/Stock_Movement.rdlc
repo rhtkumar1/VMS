@@ -15,13 +15,13 @@
         <DataSourceName>Stock_Movement</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@ItemID">
-            <Value>=Parameters!ItemID.Value</Value>
+            <Value>0</Value>
           </QueryParameter>
           <QueryParameter Name="@FromDate">
-            <Value>=Parameters!FromDate.Value</Value>
+            <Value>1/1/2022</Value>
           </QueryParameter>
           <QueryParameter Name="@todate">
-            <Value>=Parameters!todate.Value</Value>
+            <Value>1/1/2023</Value>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -580,41 +580,10 @@
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParameters>
-    <ReportParameter Name="ItemID">
-      <DataType>Integer</DataType>
-      <Prompt>Item ID</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="FromDate">
-      <DataType>DateTime</DataType>
-      <Prompt>From Date</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="todate">
-      <DataType>DateTime</DataType>
-      <Prompt>todate</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
-      <CellDefinitions>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>ItemID</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>FromDate</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>todate</ParameterName>
-        </CellDefinition>
-      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
