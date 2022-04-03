@@ -1,0 +1,106 @@
+﻿@model IMS.Models.ViewModel.ReportInterFace
+@{
+    ViewBag.Title = "Report InterFace";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Report Interface</span>
+            </h2>
+        </div>
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "ReportInterface" }))
+                    {
+                        @Html.HiddenFor(m => m.AppToken)
+                    <div class="styled-input">
+                        <div class="col-md-3 form-group">
+                            <label>Report Name</label>
+                            @Html.DropDownList("ddlReportName", new SelectList(Model.Report_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlReportName", @class = "form-control" })
+                        </div>
+                    </div>
+
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Item</label>
+                                @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="styled-input">
+                            <div class="col-md-2 form-group">
+                                <label>From Date</label>
+                                @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-2 form-group">
+                                <label>To Date</label>
+                                @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 form-group pull-right">
+                            <div class="appointment-btn text-lg-right">
+                                <br />
+                                <button type="button" name="btnSearch" id="btnSearch" class="btncustome">Search</button>
+                            </div>
+                        </div>
+                    }
+                <div id="Ifream">
+                    <iframe id="ReportInterfaceView" src="~/Reports/ReportViewer.aspx?ReportId=0"  width="900" height="500">
+                    </iframe>
+                   
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+<script type="text/javascript">
+        $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        $("#drpParty").select2();
+        searchData();
+        });
+
+    $('#FromDate, #ToDate').datepicker({
+        autoclose: true,
+        format: "dd/mm/yyyy",
+        immediateUpdates: true,
+        todayBtn: true,
+        todayHighlight: true
+    }).datepicker();
+
+    $("#btnSearch").click(function (e) {
+        searchData();
+    });
+
+    function searchData() {
+
+        let ReportID = parseInt($('#ddlReportName').val());
+        let ItemID = parseInt($('#ddlItem').val());
+        var fromDate = $('#FromDate').val();
+        var toDate = $('#ToDate').val();
+        let frame_src = document.getElementById('ReportInterfaceView').src;
+        const OperationatSRC = frame_src.split("?");
+        var Reportquerystring = "ItemID:" + ItemID.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
+        var Href = OperationatSRC[0] + "?ReportId=" + ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
+        $("#ReportInterfaceView").attr("src", Href);         
+           };
+
+</script>

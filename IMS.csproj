@@ -188,6 +188,7 @@
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -208,6 +209,7 @@
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\DashBoard.cs" />
+    <Compile Include="Models\ViewModel\ReportInterFace.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
@@ -362,6 +364,8 @@
     <Content Include="Views\Admin\Masters\CreateVoucher.cshtml" />
     <Content Include="Views\Admin\Masters\ManageVoucher.cshtml" />
     <Content Include="Views\Admin\Masters\ChangePassword.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Report\ReportInterFace.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -372,6 +376,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ItemBarCode\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report\Stock_Movement.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
