@@ -191,26 +191,81 @@
         $("#VoucherDate").attr('placeholder', 'dd/mm/yyyy');
         $("#CheckDate").val("");
         $("#CheckDate").attr('placeholder', 'dd/mm/yyyy');
+        if (@Model.VoucherId > 0) {
+            var cramount = parseFloat(0);
+            var dramount = parseFloat(0);
+            var diffamount = parseFloat(0);
+            IMSC.ajaxCall("GET", `/Master/GeVoucher?voucherId=${@Model.VoucherId}&AppToken=${'@Model.AppToken'}`, {}, "text", function (d) {
+                var VoucherLists = JSON.parse(d);
+                $("#VoucherId").val(VoucherLists[0].Voucher_Id);
+                $("#Amount_DR").val(VoucherLists[0].Amount_DR);
+                $("#Amount_CR").val(VoucherLists[0].Amount_CR);
+                $("#Total_Amount").val(VoucherLists[0].Total_Amount);
+                $("#OfficeId").val(VoucherLists[0].Office_Id);
+                $("#Constant_Id").val(VoucherLists[0].VoucherTypeId);
+                $("#VoucherNumber").val(VoucherLists[0].Voucher_No);
+                $("#VoucherDate").val(VoucherLists[0].Voucher_Date);
+                $("#CheckNumber").val(VoucherLists[0].Cheque_No);
+                $("#CheckDate").val(VoucherLists[0].Cheque_Date);
+                $("#Remarks").val(VoucherLists[0].Remarks);
 
-        if ($("#tblVoucher TBODY TR").length > 0) {
-            $("[id^='hdnAmount_']").each(function () {
-                let index = $(this).attr("data-index");
-                if ($("#hdnEnteryType_" + index).val() === "CR") {
-                    cramount += parseFloat($(this).val());
-                }
-                if ($("#hdnEnteryType_" + index).val() === "DR") {
-                    dramount += parseFloat($(this).val());
+                $(VoucherLists).each(function (i,o) {
+                    var tBody = $("#tblVoucher > TBODY")[0];
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
+                                 <input type="hidden" id="hdnLine_Id_${o.Ledger_Id}" name="hdnLine_Id_${o.Ledger_Id}" value="0" />
+                                 <input type="hidden" id="hdnPartyId_${o.Ledger_Id}" name="hdnPartyId_${o.Ledger_Id}" value="${o.Ledger_Id}" />
+                                 <input type="hidden" id="hdnEnteryType_${o.Ledger_Id}" name="hdnEnteryType_${o.Ledger_Id}" value="${o.Entry_Type}" />
+                                 <input type="hidden" id="hdnAmount_${o.Ledger_Id}" data-index="${o.Ledger_Id}" name="hdnAmount_${o.Ledger_Id}" value="${o.Amount}" />
+                               `;
+                    cell.append(btnRemove);
+
+                    //Add Entry Type cell.
+                    var cell = $(row.insertCell(-1));
+                    cell.html(o.Entry_Type);
+
+                    //Add Party cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(o.Title);
+                    //Add Office cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#OfficeId :selected").text());
+                    //Add Amount cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html(o.Amount);
+                });
+                $("td").each(function () {
+                    $(this).addClass("tbl-css");
+                });
+                if ($("#tblVoucher TBODY TR").length > 0) {
+                    if ($("[id^='hdnAmount_']").length > 0) {
+                        $("[id^='hdnAmount_']").each(function () {
+                            let index = $(this).attr("data-index");
+                            if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
+                                cramount += parseFloat($(`#hdnAmount_${index}`).val());
+                            }
+                        });
+                        $("[id^='hdnAmount_']").each(function () {
+                            let index = $(this).attr("data-index");
+                            if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "dr") {
+                                dramount += parseFloat($(`#hdnAmount_${index}`).val());
+                            }
+                        });
+                        if (cramount > 0 && dramount > 0) {
+                            diffamount = cramount - dramount;
+                        }
+                        $("#divAmountDiffrence").show();
+                        $("#lblDebitTotal").text(dramount.toFixed(2));
+                        $("#lblCreditTotal").text(cramount.toFixed(2));
+                        $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
+                    }
+                } else {
+                    $("#divAmountDiffrence").hide();
                 }
             });
-            if (cramount > 0 && dramount > 0) {
-                diffamount = cramount - dramount;
-            }
-            $("#divAmountDiffrence").show();
-            $("#lblDebitTotal").val(dramount);
-            $("#lblCreditTotal").val(cramount);
-            $("#lblDiffrenceTotal").val(diffamount);
-        } else {
-            $("#divAmountDiffrence").hide();
         }
 
         $("body").on("click", "#btnReset", function (e) {
@@ -225,22 +280,36 @@
             let bAdded = true;
             let msg = "";
 
-            if ($("#PartyId :selected").val() === "0" || $("#PartyId :selected") === "" ||
-                $("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "" ||
-                $("#Amount").val() === "0" || $("#Amount") === "") {
-                msg = "Please fill item.";
+            if ($("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "") {
+                msg = "Please select office.";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
-            } else if ($("#Amount").val() === "") {
-                msg = "Please enter quantity.";
+            }
+            else if ($("#PartyId :selected").val() === "0" || $("#PartyId :selected") === "") {
+                msg = "Please select party.";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
-            } else if (parseInt($("#Amount").val()) === 0) {
-                msg = "Please select unit.";
+            }
+            else if ($("#Constant_Id :selected").val().toLowerCase().trim() === "" || $("#Constant_Id :selected").val().toLowerCase().trim() === "0") {
+                msg = "Please select voucher type.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            else if ($("#Amount").val() === "" || parseInt($("#Amount").val()) === 0) {
+                msg = "Please enter amount.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            else if ($("#ddlEnteryType :selected").val().toLowerCase().trim() === "") {
+                msg = "Please select entery type.";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
@@ -342,7 +411,7 @@
                 cell = $(row.insertCell(-1));
                 let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
                                  <input type="hidden" id="hdnLine_Id_${partyId}" name="hdnLine_Id_${partyId}" value="0" />
-                                 <input type="hidden" id="hdnPartyId_${partyId}" name="hdnPartyId_${partyId}" value="${$("#PartyId :selected").text()}" />
+                                 <input type="hidden" id="hdnPartyId_${partyId}" name="hdnPartyId_${partyId}" data-party-id="${$("#PartyId :selected").val()}" value="${$("#PartyId :selected").text()}" />
                                  <input type="hidden" id="hdnEnteryType_${partyId}" name="hdnEnteryType_${partyId}" value="${$("#ddlEnteryType :selected").text()}" />
                                  <input type="hidden" id="hdnAmount_${partyId}" data-index="${partyId}" name="hdnAmount_${partyId}" value="${$("#Amount").val()}" />
                                `;
@@ -393,6 +462,8 @@
                     $("#lblDebitTotal").text(dramount.toFixed(2));
                     $("#lblCreditTotal").text(cramount.toFixed(2));
                     $("#lblDiffrenceTotal").text(diffamount.toFixed(2));
+                    $("#Amount_DR").val(dramount.toFixed(2));
+                    $("#Amount_CR").text(cramount.toFixed(2));
                 }
             } else {
                 $("#divAmountDiffrence").hide();
@@ -408,31 +479,31 @@
 
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
-            
+
             let VoucherLine = [];
             let isValid = true;
             let msg = "";
-            if (parseInt($("#OfficeId").val()) === 0) {
+            if ($("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "") {
                 msg = "Please select office.";
-                isValid = false;
+                bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#Constant_Id :selected").val() === "0") {
+            if ($("#Constant_Id :selected").val().toLowerCase().trim() === "" || $("#Constant_Id :selected").val().toLowerCase().trim() === "0") {
                 msg = "Please select voucher type.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#VoucherNumber").val() === "") {
+                msg = "Please enter voucher number.";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            //if ($("#VoucherNumber").val() === "") {
-            //    msg = "Please enter voucher number.";
-            //    isValid = false;
-            //    $('#alertModal').modal('show');
-            //    $('#msg').html(msg);
-            //    return false;
-            //}
             if ($("#VoucherDate").val() === "") {
                 msg = "Please select Voucher date.";
                 isValid = false;
@@ -440,33 +511,82 @@
                 $('#msg').html(msg);
                 return false;
             }
-            //if ($("#CheckNumber").val() === "") {
-            //    msg = "Please enter Cheque number.";
-            //    isValid = false;
-            //    $('#alertModal').modal('show');
-            //    $('#msg').html(msg);
-            //    return false;
-            //}
-            
-            if ($("#CheckDate").val() === "" && $("#CheckNumber").val() != "") {
-                msg = "Please select Cheque date.";
+            if ($("#CheckDate").val() === "") {
+                msg = "Please select cheque date.";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
+
             if (isValid) {
                 if ($("#tblVoucher TBODY TR").length > 0) {
-                    $("[id^='hdnPartyId_']").each(function () {
-                        let partyId = parseInt($("#" + this.id).val());
-                        let oMapping = {};
-                        oMapping.Line_Id = $('#hdnLine_Id_' + partyId).val();
-                        oMapping.Ledger_Id = $('#hdnPartyId_' + partyId).val();
-                        oMapping.Entry_Type = $('#hdnEnteryType_' + partyId).val();
-                        oMapping.Amount = $('#hdnAmount_' + partyId).val();
-                        VoucherLine.push(oMapping);
-                    });
-                    $("#VoucherLine").val(JSON.stringify(VoucherLine));
+                    if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
+                        $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
+                        $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
+
+                        $("[id^='#hdnPartyId_']").each(function () {
+                            let index = parseInt($(this).attr('data-party-id'));
+                            let party = $(this).val().toLowerCase().trim();
+                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
+                            if (party === "cash" || party === "bank") {
+                                if (enterytype === "dr" || enterytype==="cr") {
+                                    msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                                    isValid = false;
+                                    $('#alertModal').modal('show');
+                                    $('#msg').html(msg);
+                                    return false;
+                                }
+                            } 
+                        });
+                    }
+
+                    if ($("#Constant_Id :selected").text().toLowerCase().trim() === "payment") {
+                        $("[id^='#hdnPartyId_']").each(function () {
+                            let index = parseInt($(this).attr('data-party-id'));
+                            let party = $(this).val().toLowerCase().trim();
+                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
+                            if (enterytype === "cr" && (party === "cash" || party === "bank")) {
+                                return true;
+                            } else {
+                                msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                                isValid = false;
+                                $('#alertModal').modal('show');
+                                $('#msg').html(msg);
+                                return false;
+                            }
+                        });
+                    }
+
+                    if ($("#Constant_Id :selected").text().toLowerCase().trim() === "receipt") {
+                        $("[id^='hdnPartyId_']").each(function () {
+                            let index = parseInt($(this).attr('data-party-id'));
+                            let party = $(this).val().toLowerCase().trim();
+                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
+                            if (enterytype === "dr" && (party === "cash" || party === "bank")) {
+                                return true;
+                            } else {
+                                msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
+                                isValid = false;
+                                $('#alertModal').modal('show');
+                                $('#msg').html(msg);
+                                return false;
+                            }
+                        });
+                    }
+
+                    if (isValid) {
+                        $("[id^='hdnPartyId_']").each(function () {
+                            let partyId = parseInt($(this).attr('data-party-id'));
+                            let oMapping = {};
+                            oMapping.Line_Id = $('#hdnLine_Id_' + partyId).val();
+                            oMapping.Ledger_Id = partyId;
+                            oMapping.Entry_Type = $('#hdnEnteryType_' + partyId).text();
+                            oMapping.Amount = $('#hdnAmount_' + partyId).val();
+                            VoucherLine.push(oMapping);
+                        });
+                        $("#VoucherLine").val(JSON.stringify(VoucherLine));
+                    }
                 } else {
                     msg = "Please add at least 1 voucher.";
                     isValid = false;

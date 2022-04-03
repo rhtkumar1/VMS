@@ -1688,16 +1688,17 @@ namespace IMS.Controllers
             voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/ManageVoucher.cshtml", voucherMaster);
         }
-        public ActionResult AddVoucher(string appToken)
+        public ActionResult AddVoucher(string appToken, int voucher_Id)
         {
             VoucherMaster voucherMaster = new VoucherMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
             voucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            voucherMaster.VoucherId = voucher_Id > 0 ? voucher_Id : 0;
             return View("~/Views/Admin/Masters/CreateVoucher.cshtml", voucherMaster);
         }
         [HttpGet]
-        public ActionResult GeVoucher(int voucherId=0,  string AppToken = "")
+        public ActionResult GeVoucher(int voucherId = 0, string AppToken = "")
         {
             DataTable dt = new DataTable();
             VoucherMaster voucherMaster = new VoucherMaster();
