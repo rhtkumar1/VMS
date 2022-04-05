@@ -65,7 +65,7 @@ namespace IMS.Models.ViewModel
                 VoucherLine = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@VoucherId", VoucherId));
+                SqlParameters.Add(new SqlParameter("@Voucher_Id", VoucherId));
                 SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
                 SqlParameters.Add(new SqlParameter("@Voucher_Type", Constant_Id));
                 SqlParameters.Add(new SqlParameter("@Voucher_No", VoucherNumber));
@@ -84,7 +84,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
                 SqlParameters.Add(new SqlParameter("@MENU_Id", CommonUtility.GetMenuID(AppToken)));
 
-                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Purchase_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Voucher_Entry_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     VoucherId = Convert.ToInt32(dr[0]);

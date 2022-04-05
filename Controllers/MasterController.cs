@@ -1680,7 +1680,7 @@ namespace IMS.Controllers
         #endregion
 
         #region Matrial Purchase Master
-        public ActionResult ManageVoucher()
+        public ActionResult ManageVoucher(string appToken = "")
         {
             VoucherMaster voucherMaster = new VoucherMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
@@ -1688,16 +1688,17 @@ namespace IMS.Controllers
             voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Masters/ManageVoucher.cshtml", voucherMaster);
         }
-        public ActionResult AddVoucher(string appToken)
+        public ActionResult AddVoucher(string appToken, int voucher_Id)
         {
             VoucherMaster voucherMaster = new VoucherMaster();
             AppToken = Request.QueryString["AppToken"].ToString();
             voucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
             voucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            voucherMaster.VoucherId = voucher_Id > 0 ? voucher_Id : 0;
             return View("~/Views/Admin/Masters/CreateVoucher.cshtml", voucherMaster);
         }
         [HttpGet]
-        public ActionResult GeVoucher(int voucherId=0,  string AppToken = "")
+        public ActionResult GeVoucher(int voucherId = 0, string AppToken = "")
         {
             DataTable dt = new DataTable();
             VoucherMaster voucherMaster = new VoucherMaster();
@@ -1749,12 +1750,13 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = ex.Message.ToString();
             }
-            VoucherMaster newVoucherMaster = new VoucherMaster();
+            //VoucherMaster newVoucherMaster = new VoucherMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-            newVoucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-            newVoucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            //newVoucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            //newVoucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             // to reset fields only in case of added or updated.
-            return View("~/Views/Admin/Material/MaterialPurchase.cshtml", (objVoucherMaster.IsSucceed ? newVoucherMaster : voucherMaster));
+            //return View("~/Views/Admin/Masters/CreateVoucher.cshtml", (objVoucherMaster.IsSucceed ? newVoucherMaster : voucherMaster));
+           return RedirectToAction("ManageVoucher", new { appToken = AppToken });
         }
 
         #endregion
