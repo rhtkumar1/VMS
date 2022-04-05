@@ -119,13 +119,14 @@
                                     <input type="text" id="ItemSearch" name="ItemSearch" placeholder="Search Item" class="form-control" />
                                     <input type="hidden" id="Item_Id" name="Item_Id" value="" />
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Unit<span class="mandatory">*</span></label>
                                     @Html.DropDownList("Unit_Id", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Available Qty</label>
-                                    <label id="lblAvailableQty" class="form-control" readonly></label>
+                                    @Html.DropDownList("ddlAvailableQty", new SelectList(Model.OfficeAvailableQty, "Value", "Text"), htmlAttributes: new { @id = "ddlAvailableQty", @class = "form-control", })
+                                    @*<label id="lblAvailableQty" class="form-control" hidden="hidden" readonly></label>*@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Last Rate</label>
@@ -140,7 +141,7 @@
                                     <label id="lblLastDist2" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-2 form-group">
-                                    <label>Item Pending Qty</label>
+                                    <label>Pending Qty</label>
                                     <label id="lblPendingQty" class="form-control" readonly></label>
                                 </div>
                                 <div class="col-md-2 form-group">
@@ -153,75 +154,76 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Order Rate<span class="mandatory">*</span></label>
-                                    <input id="txtOrderRate" name="txtOrderRate"  class="form-control" />
+                                    <input id="txtOrderRate" name="txtOrderRate" class="form-control" />
                                 </div>
-                                <div class="col-md-2 form-group">
-                                    <label>Disc-1(%)</label>
-                                    <input id="txtDisc1" name="txtDisc1" class="form-control" />
+                                <div class="clearfix"></div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Disc-1(%)</label>
+                                        <input id="txtDisc1" name="txtDisc1" class="form-control" />
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Disc-2(%)</label>
+                                        <input id="txtDisc2" name="txtDisc2" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>Remark</label>
+                                        <input id="txtRemark" name="txtRemark" class="form-control" />
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Action</label>
+                                        <br />
+                                        <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                        <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 form-group">
-                                    <label>Disc-2(%)</label>
-                                    <input id="txtDisc2" name="txtDisc2" class="form-control" />
+                                <div class="clearfix"></div>
+                                <div class="styled-input">
+                                    <label id="lblTotalAmount">Total : 0.00</label>
                                 </div>
-                                <div class="col-md-10 form-group">
-                                    <label>Remark</label>
-                                    <input id="txtRemark" name="txtRemark" class="form-control" />
+                                <div class="clearfix"></div>
+                                <div class="table-responsive">
+                                    <table id="tblOrderCreation" class="table table-striped" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th class="tbl-heading">Action</th>
+                                                <th class="tbl-heading">Item</th>
+                                                <th class="tbl-heading">Unit</th>
+                                                <th class="tbl-heading">Avail-Qty</th>
+                                                <th class="tbl-heading">Last Rate</th>
+                                                <th class="tbl-heading">List Price</th>
+                                                <th class="tbl-heading">Order Qty</th>
+                                                <th class="tbl-heading">Order Rate</th>
+                                                <th class="tbl-heading">Disc-1(%)</th>
+                                                <th class="tbl-heading">Disc-2(%)</th>
+                                                <th class="tbl-heading">Amount</th>
+                                                <th class="tbl-heading">Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyid"></tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-2 form-group">
-                                    <label>Action</label>
-                                    <br />
-                                    <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                                    <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                <div class="clearfix"></div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-1 form-group pull-right">
+                                    <div class="appointment-btn text-lg-right">
+                                        <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="styled-input">
-                                <label id="lblTotalAmount">Total : 0.00</label>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="table-responsive">
-                                <table id="tblOrderCreation" class="table table-striped" cellpadding="0" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th class="tbl-heading">Action</th>
-                                            <th class="tbl-heading">Item</th>
-                                            <th class="tbl-heading">Unit</th>
-                                            <th class="tbl-heading">Avail-Qty</th>
-                                            <th class="tbl-heading">Last Rate</th>
-                                            <th class="tbl-heading">List Price</th>
-                                            <th class="tbl-heading">Order Qty</th>
-                                            <th class="tbl-heading">Order Rate</th>
-                                            <th class="tbl-heading">Disc-1(%)</th>
-                                            <th class="tbl-heading">Disc-2(%)</th>
-                                            <th class="tbl-heading">Amount</th>
-                                            <th class="tbl-heading">Remark</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyid"></tbody>
-                                </table>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="col-md-8"></div>
-                            <div class="col-md-1 form-group pull-right">
-                                <div class="appointment-btn text-lg-right">
-                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
-                                </div>
-                            </div>
 
-                            <div class="col-md-1 form-group pull-right">
-                                <div class="appointment-btn text-lg-right">
-                                    <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
-                                    <input type="hidden" id="hdnLineId" name="hdnLineId" value="" />
-                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                <div class="col-md-1 form-group pull-right">
+                                    <div class="appointment-btn text-lg-right">
+                                        <input type="hidden" id="hdnRowId" name="hdnRowId" value="" />
+                                        <input type="hidden" id="hdnLineId" name="hdnLineId" value="" />
+                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-1 form-group pull-right">
-                                <div style="display:none" id="divDeleteMatrial">
-                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome">Delete</button>
+                                <div class="col-md-1 form-group pull-right">
+                                    <div style="display:none" id="divDeleteMatrial">
+                                        <button type="button" name="btnDelete" id="btnDelete" class="btncustome">Delete</button>
+                                    </div>
                                 </div>
+                                }
                             </div>
-                        }
-                    </div>
                 </div>
                 <div class="blank-page">
                     <div id="listGrid"></div>

@@ -10,7 +10,10 @@
             $('#ItemSearch').val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
             $('#Unit_Id').select2().trigger('change');
-            $("#lblAvailableQty").text("");
+            $("#ddlAvailableQty").val($("#ddlAvailableQty option:first").val());
+            $('#ddlAvailableQty').select2().trigger('change');
+            //$("#lblAvailableQty").text("");
+            ResetStockQty(true);
             $("#lblLastRate").text("");
             $("#lblLastDist1").text("");
             $("#lblLastDist2").text("");
@@ -110,7 +113,8 @@
                 cell.attr('data-index', $("#Item_Id").val());
                 //Add AvailableQty.
                 cell = $(row.insertCell(-1));
-                cell.html($("#lblAvailableQty").text());
+                cell.html($("#ddlAvailableQty option:selected").text());
+                cell.attr('data-StockOffice-id', $("#ddlAvailableQty").val());
                 cell.attr('data-index', $("#Item_Id").val());
                 //Add Last Rate.
                 cell = $(row.insertCell(-1));
@@ -151,7 +155,8 @@
                 $('#ItemSearch').val("");
                 $("#Unit_Id").val($("#Unit_Id option:first").val());
                 $('#Unit_Id').select2().trigger('change');
-                $("#lblAvailableQty").text("");
+                //$("#lblAvailableQty").text("");
+                ResetStockQty(true);
                 $("#lblLastRate").text("");
                 $("#txtDisc1").val("");
                 $("#txtDisc2").val("");
@@ -204,12 +209,14 @@
                     oMapping.Item_Id = row.eq(1).attr('data-item-id');
                     oMapping.UnitId = row.eq(2).attr('data-unit-id');
                     oMapping.Available_Qty = row[3].innerText;
+                    oMapping.Stock_Office_Id = row.eq(3).attr('data-StockOffice-id');
                     oMapping.Last_Rate = row[4].innerText;
                     oMapping.Last_Price = row[5].innerText;
                     oMapping.Order_Qty = row[6].innerText;
                     oMapping.Order_Rate = row[7].innerText;
                     oMapping.Last_Discount_1 = row[8].innerText;
                     oMapping.Last_Discount_2 = row[9].innerText;
+
                     oMapping.Amount = Calculation(parseFloat(row[6].innerText) * parseFloat(row[7].innerText), parseFloat(row[8].innerText), parseFloat(row[9].innerText));
                     totalAmount += parseFloat(oMapping.Amount);
                     oMapping.Remarks = row[11].innerText
@@ -279,7 +286,7 @@
                     IMSC.ajaxCall("GET", "/Material/GetItemDetail?Item_Id=" + Item_Id + "&Party_Id=" + PartyId+ "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result != null && result.length > 0) {
-                            $("#lblAvailableQty").text(result[0].Available_Qty);
+                           /* $("#lblAvailableQty").text(result[0].Available_Qty);*/
                             $("#lblLastRate").text(result[0].Last_Rate);
                             $("#lblLastDist1").text(result[0].Last_Disc_1);
                             $("#lblLastDist2").text(result[0].Last_Disc_2);
@@ -288,6 +295,18 @@
                             $("#Unit_Id").val(result[0].UnitId);
                             $('#Unit_Id').select2().trigger('change');
                             $("#hdnRowId").val("");
+                            ResetStockQty(false);
+                            $.each(result, function (data, value) {
+                                if (value.Office_ID > 0) {
+                                    $("#ddlAvailableQty").append($("<option></option>").val(value.Office_ID).html(value.OfficeName));
+                                }
+                            })
+                            try {
+                                $("#ddlAvailableQty").val(result[0].Default_OfficeID);
+                            }
+                            catch (ex) {
+
+                            }
                             
                         }
                     });
@@ -410,6 +429,7 @@
                             //Add AvailableQty.
                             cell = $(row.insertCell(-1));
                             cell.html(value.Available_Qty);
+                            cell.attr('data-StockOffice-id', value.StockOfficeID);
                             cell.attr('data-index', value.Item_Id);
                             //Add Last Rate.
                             cell = $(row.insertCell(-1));
@@ -465,7 +485,8 @@
             $('#ItemSearch').val("");
             $("#Unit_Id").val($("#Unit_Id option:first").val());
             $('#Unit_Id').select2().trigger('change');
-            $("#lblAvailableQty").text("");
+            //$("#lblAvailableQty").text("");
+            ResetStockQty(true);
             $("#lblLastRate").text("");
             $("#lblLastDist1").text("");
             $("#lblLastDist2").text("");
@@ -504,6 +525,12 @@
     return scope;
 })(IMSMaterialOrderCreation || {});
 
+function ResetStockQty(Setval) {
+    $('#ddlAvailableQty').empty();
+    if (Setval) {
+        $("#ddlAvailableQty").append($("<option></option>").val(0).html("--Select--"));
+    }
+}
 function Edit(button) {
     //Determine the reference of the Row using the Button.
     $("#btnAdd").val("Update");

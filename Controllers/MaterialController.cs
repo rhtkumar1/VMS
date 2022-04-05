@@ -336,9 +336,9 @@ namespace IMS.Controllers
                 MaterialOrder materialOrder = new MaterialOrder();
                 ds = materialOrder.MaterialOrder_Get(PO_Id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Content(JsonConvert.SerializeObject(ds));
         }
@@ -698,9 +698,9 @@ namespace IMS.Controllers
             {
                 dt = CommonModuleClass.Material_Get_Item(Item);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Content(JsonConvert.SerializeObject(dt));
         }

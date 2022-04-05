@@ -52,6 +52,8 @@ namespace IMS.Models.ViewModel
         public string POIds { get; set; }
         public string Status { get; set; }
         public SelectList UnitLists { get; set; }
+        public int Item_Office_Id { get; set; }
+        public SelectList OfficeAvailableQty { get; set; }
 
 
         public MaterialOrder()
@@ -65,6 +67,7 @@ namespace IMS.Models.ViewModel
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MaterialOrderLines = new List<MaterialOrderLine>();
+            OfficeAvailableQty = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_ID", "OfficeName", "VW_StockAsOnDateOfficeWiseFor_Material_Order", "And ItemID=0"), "Id", "Value");
         }
 
 
@@ -81,7 +84,7 @@ namespace IMS.Models.ViewModel
                                     Last_Discount_1=""" + (Convert.ToString(item.Last_Discount_1)=="" ? "0" : Convert.ToString(item.Last_Discount_1)) + @""" Last_Price=""" + Convert.ToString(item.Last_Price) + @"""   
                                     Order_Qty=""" + Convert.ToString(item.Order_Qty) + @""" Order_Rate=""" + Convert.ToString(item.Order_Rate) + @"""   
                                     Amount=""" + Convert.ToString(item.Amount) + @""" Remarks=""" + Convert.ToString(item.Remarks) + @"""  
-                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + (Convert.ToString(item.Last_Discount_2)=="" ? "0" : Convert.ToString(item.Last_Discount_2)) + @""" UnitId = """+ Convert.ToString(item.UnitId)+@""" />");
+                                    IsUpdate=""" + Convert.ToString(IsUpdate) + @""" Last_Discount_2=""" + (Convert.ToString(item.Last_Discount_2)=="" ? "0" : Convert.ToString(item.Last_Discount_2)) + @""" UnitId = """+ Convert.ToString(item.UnitId)+ @""" Stock_Office_Id = """ + Convert.ToString(item.Stock_Office_Id) + @""" />");
                 }
                 MaterialLine = "<Line>" + sb + "</Line>";
 
@@ -139,6 +142,7 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
                 SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
+                SqlParameters.Add(new SqlParameter("@OfficeID", CommonUtility.GetDefault_OfficeID()));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetItemDetail", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
@@ -295,5 +299,6 @@ namespace IMS.Models.ViewModel
         public string Amount { get; set; }
         public string Remarks { get; set; }
         public string IsUpdate { get; set; }
+        public string Stock_Office_Id { get; set; }
     }
 }
