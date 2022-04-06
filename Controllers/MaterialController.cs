@@ -370,9 +370,9 @@ namespace IMS.Controllers
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Content(JsonConvert.SerializeObject(ds));
         }

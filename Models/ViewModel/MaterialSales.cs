@@ -143,7 +143,8 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Office_Id", Office_Id));
                 SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyState_Id));
                 SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
-                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetPODetail", CommandType.StoredProcedure, SqlParameters);
+                //dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetPODetail", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetPODetail_V1", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
