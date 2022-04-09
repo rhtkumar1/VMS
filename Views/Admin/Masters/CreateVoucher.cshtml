@@ -74,7 +74,7 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>Cheque Date<span class="mandatory">*</span></label>
+                                    <label>Cheque Date</label>
                                     @Html.TextBoxFor(m => m.CheckDate, htmlAttributes: new { @id = "CheckDate", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                             <div class="styled-input">
                                 <div class="heading">
                                     <h4>
-                                        Add/Update Material Purchase
+                                        Add/Update Voucher Detail
                                     </h4>
                                 </div>
                                 <br />
@@ -136,7 +136,7 @@
                                         <span>Credit Total:  <label id="lblCreditTotal"></label></span>
                                     </div>
                                     <div class="col-md-4">
-                                        <span>Diffrence Total:  <label id="lblDiffrenceTotal"></label></span>
+                                        <span>Difference Total:  <label id="lblDiffrenceTotal"></label></span>
                                     </div>
                                 </div>
                             </div>
@@ -155,6 +155,11 @@
                                     {
                                         <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
                                     }
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnBack" id="btnBack" class="btncustome">Return</button>
                                 </div>
                             </div>
                             <div class="col-md-1 form-group pull-right">
@@ -194,6 +199,7 @@
         if (@Model.VoucherId > 0) {
             IMSC.ajaxCall("GET", `/Master/GeVoucher?voucherId=${@Model.VoucherId}&AppToken=${'@Model.AppToken'}`, {}, "text", function (d) {
                 var VoucherLists = JSON.parse(d);
+                
                 $("#VoucherId").val(VoucherLists[0].Voucher_Id);
                 $("#Amount_DR").val(VoucherLists[0].Amount_DR);
                 $("#Amount_CR").val(VoucherLists[0].Amount_CR);
@@ -213,8 +219,8 @@
                     //Add Button cell.
                     cell = $(row.insertCell(-1));
                     let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
-                                 <input type="hidden" id="hdnLine_Id_${o.Ledger_Id}" name="hdnLine_Id_${o.Ledger_Id}" value="0" />
-                                 <input type="hidden" id="hdnPartyId_${o.Ledger_Id}" name="hdnPartyId_${o.Ledger_Id}" data-party-id="${o.Ledger_Id}" value="${o.Title}" />
+                                 <input type="hidden" id="hdnLine_Id_${o.Ledger_Id}" name="hdnLine_Id_${o.Ledger_Id}" data-line-id="${o.Ledger_Id}" value="${o.Line_Id}" />
+                                 <input type="hidden" id="hdnPartyId_${o.Ledger_Id}" name="hdnPartyId_${o.Ledger_Id}" data-party-id="${o.Ledger_Id}" value="${o.Ledger}" />
                                  <input type="hidden" id="hdnEnteryType_${o.Ledger_Id}" name="hdnEnteryType_${o.Ledger_Id}" value="${o.Entry_Type}" />
                                  <input type="hidden" id="hdnAmount_${o.Ledger_Id}" data-index="${o.Ledger_Id}" name="hdnAmount_${o.Ledger_Id}" value="${o.Amount}" />
                                `;
@@ -226,7 +232,7 @@
 
                     //Add Party cell.
                     cell = $(row.insertCell(-1));
-                    cell.html(o.Title);
+                    cell.html(o.Ledger);
                     //Add Office cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#OfficeId :selected").text());
@@ -255,21 +261,28 @@
             let msg = "";
 
             if ($("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "") {
-                msg = "Please select office.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            }
-            else if ($("#PartyId :selected").val() === "0" || $("#PartyId :selected") === "") {
-                msg = "Please select party.";
+                msg = "Please select office";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
             else if ($("#Constant_Id :selected").val().toLowerCase().trim() === "" || $("#Constant_Id :selected").val().toLowerCase().trim() === "0") {
-                msg = "Please select voucher type.";
+                msg = "Please select voucher type";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            else if ($("#ddlEnteryType :selected").val().toLowerCase().trim() === "") {
+                msg = "Please select entry type.";
+                bAdded = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            else if ($("#PartyId :selected").val() === "0" || $("#PartyId :selected") === "") {
+                msg = "Please select party";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
@@ -282,13 +295,7 @@
                 $('#msg').html(msg);
                 return false;
             }
-            else if ($("#ddlEnteryType :selected").val().toLowerCase().trim() === "") {
-                msg = "Please select entery type.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            }
+            
 
             if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
                 $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
@@ -299,7 +306,7 @@
 
                     if ($("#ddlEnteryType :selected").text().toLowerCase().trim() === "dr" ||
                         $("#ddlEnteryType :selected").text().toLowerCase().trim() === "cr") {
-                        msg = "In case of JV / Sales / Purchase VoucherType any Cash / Bank ledger with Dr or CR will not allowed.";
+                        msg = "In case of JV / Sales / Purchase VoucherType any Cash / Bank ledger with Dr or CR will not allowed";
                         bAdded = false;
                         $('#alertModal').modal('show');
                         $('#msg').html(msg);
@@ -317,7 +324,7 @@
                         if (enterytype === "cr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
-                            msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                            msg = "In case of Payment VocherType at least one Cash or bank ledger must be entered with CR";
                             bAdded = false;
                             $('#alertModal').modal('show');
                             $('#msg').html(msg);
@@ -325,7 +332,7 @@
                         }
                     });
                 } else {
-                    msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                    msg = "In case of Payment VocherType at least one Cash or bank ledger must be entered with CR";
                     bAdded = false;
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
@@ -342,7 +349,7 @@
                         if (enterytype === "dr" && (party === "cash" || party === "bank")) {
                             return true;
                         } else {
-                            msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
+                            msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
                             bAdded = false;
                             $('#alertModal').modal('show');
                             $('#msg').html(msg);
@@ -350,7 +357,7 @@
                         }
                     });
                 } else {
-                    msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
+                    msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
                     bAdded = false;
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
@@ -363,7 +370,7 @@
                     $("[id^='hdnPartyId_']").each(function () {
                         let partyId = parseInt($(this).attr('data-party-id'));
                         if (parseInt($("#PartyId").val()) === partyId) {
-                            msg = "Voucher is already mapped!!!";
+                            msg = "Entry is already exists!!!";
                             bAdded = false;
                             $('#alertModal').modal('show');
                             $('#msg').html(msg);
@@ -425,45 +432,48 @@
 
         $("body").on("click", "#btnSubmit", function () {
             //Loop through the Table rows and build a JSON array.
+            
             var cramount = parseFloat(0);
             var dramount = parseFloat(0);
             let VoucherLine = [];
             let isValid = true;
             let msg = "";
             if ($("#OfficeId :selected").val() === "0" || $("#OfficeId :selected") === "") {
-                msg = "Please select office.";
+                msg = "Please select office";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
             if ($("#Constant_Id :selected").val().toLowerCase().trim() === "" || $("#Constant_Id :selected").val().toLowerCase().trim() === "0") {
-                msg = "Please select voucher type.";
+                msg = "Please select voucher type";
                 bAdded = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#VoucherNumber").val() === "") {
-                msg = "Please enter voucher number.";
-                isValid = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            }
+            //if ($("#VoucherNumber").val() === "") {
+            //    msg = "Please enter voucher number";
+            //    isValid = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //}
             if ($("#VoucherDate").val() === "") {
-                msg = "Please select Voucher date.";
+                msg = "Please select voucher date";
                 isValid = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
             }
-            if ($("#CheckDate").val() === "") {
-                msg = "Please select cheque date.";
-                isValid = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
+            if ($("#CheckNumber").val("") != "") {
+                if ($("#CheckDate").val() === "") {
+                    msg = "Please select cheque date";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
             }
 
             if (isValid) {
@@ -478,13 +488,13 @@
                             let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
                             if (party === "cash" || party === "bank") {
                                 if (enterytype === "dr" || enterytype==="cr") {
-                                    msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                                    msg = "In case of Payment VocherType atleast one Cash or bank ledger must be entered with CR";
                                     isValid = false;
                                     $('#alertModal').modal('show');
                                     $('#msg').html(msg);
                                     return false;
                                 }
-                            } 
+                            }
                         });
                     }
 
@@ -496,7 +506,7 @@
                             if (enterytype === "cr" && (party === "cash" || party === "bank")) {
                                 return true;
                             } else {
-                                msg = "In case of Payment VocherType atleast one Cash or bank ledger should be entered with CR";
+                                msg = "In case of Payment VocherType atleast one Cash or bank ledger must be entered with CR";
                                 isValid = false;
                                 $('#alertModal').modal('show');
                                 $('#msg').html(msg);
@@ -513,7 +523,7 @@
                             if (enterytype === "dr" && (party === "cash" || party === "bank")) {
                                 return true;
                             } else {
-                                msg = "In case of Receipt VocherType atleast one Cash or bank ledger should be entered with DR";
+                                msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
                                 isValid = false;
                                 $('#alertModal').modal('show');
                                 $('#msg').html(msg);
@@ -521,7 +531,7 @@
                             }
                         });
                     }
-
+                    
                     $("[id^='hdnAmount_']").each(function () {
                         let index = parseInt($(this).attr("data-index"));
                         if ($("#hdnEnteryType_" + index).val().toLocaleLowerCase() === "cr") {
@@ -537,7 +547,7 @@
                     });
 
                     if (cramount !== dramount) {
-                        msg = "Dr amount and Cr amount not equal!";
+                        msg = "Dr and Cr total must be equal";
                         isValid = false;
                         $('#alertModal').modal('show');
                         $('#msg').html(msg);
@@ -623,7 +633,9 @@
         $("#btnDelete").click(function () {
             let VoucherId = parseInt($("#VoucherId").val());
             if (VoucherId > 0) {
-                window.location.href = "/Material/DeleteMatrialPurchase?VoucherId=" + VoucherId + "&AppToken=" + scope.AppToken;
+                if (confirm("Do you want to remove this voucher", "Remove")) {
+                    window.location.href = "/Material/DeleteMatrialPurchase?VoucherId=" + VoucherId + "&AppToken=" + scope.AppToken;
+                }
             }
             Calculate();
         });
@@ -632,7 +644,7 @@
     function Remove(button) {
         //Determine the reference of the Row using the Button.
         var row = $(button).closest("TR");
-        if (confirm("Do you want to remove this voucher.", "Remove")) {
+        if (confirm("Do you want to remove this entry type", "Remove")) {
             //Get the reference of the Table.
             var table = $("#tblVoucher")[0];
             //Delete the Table row using it's Index.
@@ -640,6 +652,10 @@
         }
         Calculate();
     };
+
+    $("#btnBack").click(function () {
+        window.location.href = "@Url.Action("ManageVoucher", "master")?AppToken=@Model.AppToken";
+    });
 
     function Calculate() {
         var cramount = parseFloat(0);
@@ -660,7 +676,7 @@
                     }
                 });
                 if (cramount > 0 && dramount > 0) {
-                    diffamount = cramount - dramount;
+                    diffamount = Math.abs(cramount - dramount);
                 }
                 $("#divAmountDiffrence").show();
                 $("#lblDebitTotal").text(dramount.toFixed(2));
