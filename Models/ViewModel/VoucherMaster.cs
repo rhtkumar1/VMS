@@ -44,8 +44,8 @@ namespace IMS.Models.ViewModel
         {
             OfficeId = CommonUtility.GetDefault_OfficeID();
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
-            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
-            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
+            //string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Vouchers = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And IsActive=1 And Menu_Id=10016"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
