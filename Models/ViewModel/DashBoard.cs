@@ -33,6 +33,7 @@ namespace IMS.Models.ViewModel
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@OfficeID", OfficeId));
                 SqlParameters.Add(new SqlParameter("@PartyId", PartyId));
                 if (!string.IsNullOrEmpty(FromDate))
                     SqlParameters.Add(new SqlParameter("@FromDate", CommonUtility.GetDateYYYYMMDD(FromDate)));
