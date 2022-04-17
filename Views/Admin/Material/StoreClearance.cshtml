@@ -40,6 +40,12 @@
                                 </h4>
                             </div>
                             <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "OfficeId", @class = "form-control" })
+                                </div>
+                            </div>
                             <div class="clearfix"></div>
                             <div id="listGrid"></div>
                             <div class="clearfix"></div>
@@ -248,8 +254,9 @@
         $('#txtGetPass').keyup(function (event) {
             if (event.which == 13) {
                 let item = $("#txtGetPass").val();
+                let GPOfficeID = $("#OfficeId").val();
                 if (item !== "") {
-                    IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + item.toString() + "&AppToken=" + '@AppToken', {}, "text", function (d) {
+                    IMSC.ajaxCall("GET", "/Material/Material_Sale_Item_ForBarcodegun?SaleId=" + @Model.SaleId + "&ItemId=" + item.toString() + "&officeID=" + GPOfficeID + "&AppToken=" + '@AppToken', {}, "text", function (d) {
                         $("#txtGetPass").val("");
                         var res = JSON.parse(d);
                         if (res !== null) {

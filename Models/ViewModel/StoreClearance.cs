@@ -24,9 +24,12 @@ namespace IMS.Models.ViewModel
         public bool IsSucceed { get; set; }
         public string StoreData { get; set; }
         public List<StoreClearanceMapping> StoreClearanceMappings { get; set; }
+        public SelectList OfficeLists { get; set; }
         public StoreClearance()
         {
             OfficeId = CommonUtility.GetDefault_OfficeID();
+            string OfficeTable = "Office_Master_Multipal(" + OfficeId.ToString() + ")";
+            OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_ID", "OfficeName", OfficeTable, "And 1=1"), "Id", "Value");
             MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
@@ -93,7 +96,7 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
-        public DataTable Material_Sale_Item_ForBarcodegun(int SaleId,string ItemId)
+        public DataTable Material_Sale_Item_ForBarcodegun(int SaleId,string ItemId,int GPofficeID)
         {
             DataTable dt = new DataTable();
             try
@@ -101,7 +104,7 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@barcoadID", ItemId));
                 SqlParameters.Add(new SqlParameter("@saleID", SaleId));
-                SqlParameters.Add(new SqlParameter("@OfficeID", OfficeId));
+                SqlParameters.Add(new SqlParameter("@OfficeID", GPofficeID));
                 dt = DBManager.ExecuteDataTableWithParameter("Sale_Item_ForBarcodegun", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)

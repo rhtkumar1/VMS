@@ -773,13 +773,13 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, string ItemId, string AppToken = "")
+        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, string ItemId,int officeID, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
                 StoreClearance storeClearance = new StoreClearance();
-                dt = storeClearance.Material_Sale_Item_ForBarcodegun(SaleId, ItemId);
+                dt = storeClearance.Material_Sale_Item_ForBarcodegun(SaleId, ItemId, officeID);
             }
             catch (Exception ex)
             {
