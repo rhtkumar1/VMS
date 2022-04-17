@@ -51,7 +51,7 @@
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
-                        debugger;
+                        /*debugger;*/
                         let oMapping = {};
                         let index = parseInt($("#" + $(this).context.id).val());
                         let availableQty = parseInt($("#lblAvailable_Qty_" + index).text());

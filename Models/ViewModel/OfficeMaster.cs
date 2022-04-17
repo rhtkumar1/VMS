@@ -34,13 +34,16 @@ namespace IMS.Models.ViewModel
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
-
+        public int Primary_OfficeId { get; set; }
+        public SelectList Primary_OfficeLists { get; set; }
         public OfficeMaster()
         {
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             TypeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=1 And IsActive=1"), "Id", "Value");
             GSTNatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10006 And Sub_Type=2 And IsActive=1"), "Id", "Value");
             Loginid = CommonUtility.GetLoginID();
+            Primary_OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_ID", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+            Primary_OfficeId = 0;
         }
 
         public OfficeMaster OfficeMaster_InsertUpdate(OfficeMaster officeMaster)
@@ -63,6 +66,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@ContactPerson", officeMaster.ContactPerson));
                 SqlParameters.Add(new SqlParameter("@Remarks", Convert.ToString(officeMaster.Remarks)));
                 SqlParameters.Add(new SqlParameter("@Loginid", officeMaster.Loginid));
+                SqlParameters.Add(new SqlParameter("@Primary_OfficeId", officeMaster.Primary_OfficeId));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Office_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {

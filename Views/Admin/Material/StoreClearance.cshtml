@@ -72,7 +72,8 @@
                                     <thead>
                                         <tr>
                                             <th class="tbl-heading">Item</th>
-                                            <th class="tbl-heading">O-Qty</th>
+                                            <th class="tbl-heading">At</th>
+                                            <th class="tbl-heading">Order-Qty</th>
                                             <th class="tbl-heading">Unit</th>
                                         </tr>
                                     </thead>
@@ -108,7 +109,6 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-
         $("body").on("click", "#btnSubmit", function () {
             let StoreLineValues = [];
             let isValid = true;
@@ -119,7 +119,9 @@
                     let itemId = parseInt($(this)[0].attributes[1].value);                    
                     oMapping.Line_Id = parseInt($(this)[0].attributes[3].value);
                     oMapping.SaleLine_Id = $(this)[0].attributes[2].value;
+                    oMapping.GatePass_Office_Id = $(this)[0].attributes[5].value;
                     let GPID = parseInt($(this)[0].attributes[4].value);
+
                     //if (GPID > 0) {
                     //    $("#GatePass_Id").val(GPID.toString());
                     //}
@@ -152,24 +154,12 @@
 
                         var fields = [
                              { name: "Item_Id", css: "hidden" },
-                             { name: "ItemName", type: "text", Width:200, title: "Item Name", sorting: true, filtering: false},
+                            { name: "ItemName", type: "text", Width: 250, title: "Item Name", sorting: true, filtering: false },
+                            { name: "ItemAt", type: "text",  title: "AT", sorting: true, filtering: false },
                             { name: "Order_Qty", type: "text", title: "Order Qty", sorting: true, filtering: false },
                             { name: "Available_Qty", type: "text", title: "Available Qty", sorting: true, filtering: false }
 
-                             //{ name: "HSN_SAC", type: "text", title: "HSN SAC", sorting: true, filtering: false },
-                             //{ name: "Unit", type: "text", title: "Unit", sorting: true, filtering: false},
-                             //{ name: "LastPurchaseRate", type: "text", title: "Last Rate", sorting: true, filtering: false },
-                             //{ name: "Order_Rate", type: "text", title: "Order Rate", sorting: true, filtering: false },
-                             //{ name: "Amount", type: "text", title: "Amount", sorting: true, filtering: false },
-                             //{ name: "Discount_1", type: "text", title: "Discount 1(%)", sorting: true, filtering: false },
-                             //{ name: "Discount_2", type: "text", title: "Discount 2(%)", sorting: true, filtering: false },
-                             //{ name: "Taxable_Amount", type: "text", title: "Taxable Amount", sorting: true, filtering: false },
-                             //{ name: "GST", type: "text", title: "GST", sorting: true, filtering: false },
-                             //{ name: "CGST", type: "text", title: "CGST", sorting: true, filtering: false },
-                             //{ name: "SGST", type: "text", title: "SGST", sorting: true, filtering: false },
-                             //{ name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
-                             //{ name: "IGST", type: "text", title: "IGST", sorting: true, filtering: false },
-                             //{ name: "TotalAmount", type: "text", title: "Total Amount", sorting: true, filtering: false }
+                            
                         ];
                         var options = {
                             filtering: true,
@@ -203,19 +193,14 @@
         function BindGatePassData() {
             IMSC.ajaxCall("GET", "/Material/Material_GatePass_GetRecord?SaleId=" + @Model.SaleId + "&AppToken=" + '@AppToken', {}, "text", function (d) {
                 var res = JSON.parse(d);
+                debugger;
                 if (res !== null) {
                     var result = res;
                     if (result.length > 0) {
                         let bIsValid = true;
-                        $("#tbodyid [id^='trRow_']").each(function () {
-                            let itemId = parseInt($(this)[0].attributes[1].value);
-                            if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
-                                bIsValid = false;
-                            }
-                        });
-                        if (bIsValid) {
-                            //Get the reference of the Table's TBODY element.
-                            var tBody = $("#tblMaterialStoreData > TBODY")[0];
+                      //Get the reference of the Table's TBODY element.
+                        var tBody = $("#tblMaterialStoreData > TBODY")[0];
+                        for (var i = 0; i < result.length; i++) {
                             //Add Row.
                             var row = tBody.insertRow(-1);
                             $(row).attr('id', 'trRow_' + result[0].Item_Id);
@@ -223,10 +208,15 @@
                             $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
                             $(row).attr('data-Line_Id', result[0].Line_Id);
                             $(row).attr('data-GatePass_Id', result[0].GatePass_Id);
+                            $(row).attr('data-SaleOffice_Id', result[0].OfficeID);
                             //Add Item cell.
                             let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
                             cell = $(row.insertCell(-1));
                             cell.append(lblItem);
+                          //Add Item Location cell.
+                            let lblItemAt = `<label id="lblItemAt_${result[0].Item_Id}">${result[0].ItemAt}</label>`;
+                            cell = $(row.insertCell(-1));
+                            cell.append(lblItemAt);
                             //Add Quantity.
                             let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
                             cell = $(row.insertCell(-1));
@@ -235,11 +225,11 @@
                             let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblSaleunit);
-                        } else {
-                            //$('#alertModal').modal('show');
-                            //$('#msg').html("Item is already mapped!!!");
+                            //} else {
+                            //    //$('#alertModal').modal('show');
+                            //    //$('#msg').html("Item is already mapped!!!");
+                            //}
                         }
-
                         $("td").each(function () {
                             $(this).addClass("tbl-css");
                         });
@@ -268,7 +258,8 @@
                                 let bIsValid = true;
                                 $("#tbodyid [id^='trRow_']").each(function () {
                                     let itemId = parseInt($(this)[0].attributes[1].value);
-                                    if (parseInt(itemId) === parseInt(result[0].Item_Id)) {
+                                    let OfficeId = parseInt($(this)[0].attributes[5].value);
+                                    if ((parseInt(itemId) === parseInt(result[0].Item_Id)) && (parseInt(OfficeId) === parseInt(result[0].OfficeID))) {
                                         bIsValid = false;
                                     }
                                 });
@@ -282,15 +273,20 @@
                                     $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
                                     $(row).attr('data-Line_Id', result[0].Line_Id);
                                     $(row).attr('data-GatePass_Id', result[0].GatePass_Id);
+                                    $(row).attr('data-SaleOffice_Id', result[0].OfficeID);
                                     //Add Item cell.
                                     let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
                                     cell = $(row.insertCell(-1));
                                     cell.append(lblItem);
+                                    //Add Item Location cell.
+                                    let lblItemAt = `<label id="lblItemAt_${result[0].Item_Id}">${result[0].ItemAt}</label>`;
+                                    cell = $(row.insertCell(-1));
+                                    cell.append(lblItemAt);
                                     //Add Quantity.
                                     let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
                                     cell = $(row.insertCell(-1));
                                     cell.append(lblQuantity);
-                                    //Add Unit cell.
+                                    //Add Item Location cell.
                                     let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
                                     cell = $(row.insertCell(-1));
                                     cell.append(lblSaleunit);

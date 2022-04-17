@@ -32,7 +32,9 @@ namespace IMS.Models.ViewModel
             DataTable dt = new DataTable();
             try
             {
-                dt = DBManager.ExecuteDataTable("Material_Sale_GatePass_Data", CommandType.StoredProcedure);
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@OfficeID", OfficeId));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GatePass_Data", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }

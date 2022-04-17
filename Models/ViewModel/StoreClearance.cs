@@ -42,10 +42,10 @@ namespace IMS.Models.ViewModel
                 {
                     sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @"""  SaleLine_Id=""" + Convert.ToString(item.SaleLine_Id) + @""" 
                                    Item_Id=""" + Convert.ToString(item.Item_Id) + @"""  Quantity=""" + Convert.ToString(item.Quantity) + @"""
-                                   Unit_Id=""" + Convert.ToString(item.Sale_Unit) + @""" />");
+                                   Unit_Id=""" + Convert.ToString(item.Sale_Unit) + @"""  GatePass_Office_Id=""" + Convert.ToString(item.GatePass_Office_Id) + @""" />");
                 }
                 StoreData = "<Line>" + sb + "</Line>";
-                GatePass_Id = 0;
+               // GatePass_Id = 0;
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Sale_Id", SaleId));
                 SqlParameters.Add(new SqlParameter("@Store_Line", StoreData));
@@ -71,6 +71,7 @@ namespace IMS.Models.ViewModel
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@SaleId", SaleId));
+                SqlParameters.Add(new SqlParameter("@OfficeID", OfficeId));
                 dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetStore_Data", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
@@ -100,6 +101,7 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@barcoadID", ItemId));
                 SqlParameters.Add(new SqlParameter("@saleID", SaleId));
+                SqlParameters.Add(new SqlParameter("@OfficeID", OfficeId));
                 dt = DBManager.ExecuteDataTableWithParameter("Sale_Item_ForBarcodegun", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
@@ -117,5 +119,7 @@ namespace IMS.Models.ViewModel
         public string Item_Id { get; set; }
         public string Sale_Unit { get; set; }
         public string Quantity { get; set; }
+        public string GatePass_Office_Id { get; set; }
+        
     }
 }

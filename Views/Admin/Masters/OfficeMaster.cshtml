@@ -115,6 +115,12 @@
                                     @Html.TextAreaFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control" })
                                 </div>
                             </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Primary Office</label>
+                                    @Html.DropDownListFor(m => m.Primary_OfficeId, new SelectList(Model.Primary_OfficeLists, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
                             <div class="clearfix"></div>
                             <div class="col-md-10"></div>
                             <div class="col-md-1 form-group pull-right">
@@ -214,6 +220,7 @@
             $("#Remarks").val(OfficeMaster.Remarks);
             $("#TypeId").val(OfficeMaster.Type_Id);
             $("#LocationId").val(OfficeMaster.Location_Id);
+            $("#Primary_OfficeId").val(OfficeMaster.PrimaryOffice_Id);
             $("#btnSubmit").text("Update")
         }
         else {
