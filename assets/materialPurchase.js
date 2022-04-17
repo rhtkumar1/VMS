@@ -425,6 +425,7 @@
                         $("#Remarks").val(result[0].Remarks);
                         $("#PurchaseId").val(result[0].Purchase_Id)
                         $("#AgentId").val(result[0].AgentId);
+                        $("#PurchaseAmount").val(result[0].Purchase_Amount);
                         $("#tbodyid").empty(Purchase_Id);
                         let amount = 0;
                         $.each(result, function (index, value) {
