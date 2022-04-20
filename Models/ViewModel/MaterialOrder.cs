@@ -62,8 +62,8 @@ namespace IMS.Models.ViewModel
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
-            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + Office_Id.ToString();
-            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
+            //string PartyListWhereClouse = "And IsActive=1 and Office_id =" + Office_Id.ToString();
+            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             MaterialOrderLines = new List<MaterialOrderLine>();
@@ -180,7 +180,7 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
                 SqlParameters.Add(new SqlParameter("@PO_No", PO_No));
-                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetOrder", CommandType.StoredProcedure, SqlParameters);
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetAllOrder", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }

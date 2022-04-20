@@ -3,6 +3,7 @@
     scope.materialOrderCreation = function () {
         $("#drpParty").select2();
         $("#drpOrder").select2();
+        
 
         $("body").on("click", "#btnReset", function (e) {
             e.preventDefault();
