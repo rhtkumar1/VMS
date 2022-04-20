@@ -59,6 +59,7 @@
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
                         let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
                         let itemname = $("#lblItem_" + index)[0].innerText
+                        
                         if (poLineId === 0) {
                             if (isItemType === 16) {
                                 isValid = true;
@@ -74,7 +75,7 @@
                             if (isItemType === 16) {
                                 isValid = true;
                             } else {
-                                if (qty !== NaN && qty > 0 && qty > availableQty) {
+                                if (qty !== NaN && qty > 0 && qty > availableQty && parseInt($("#hdnLineId_" + index).val()) == 0) {
                                     msg = "Please check the quantity for Item: " + itemname + "!!!";
                                     isValid = false;
                                     return false;
