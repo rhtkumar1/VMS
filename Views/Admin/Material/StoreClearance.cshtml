@@ -209,26 +209,26 @@
                         for (var i = 0; i < result.length; i++) {
                             //Add Row.
                             var row = tBody.insertRow(-1);
-                            $(row).attr('id', 'trRow_' + result[0].Item_Id);
-                            $(row).attr('data-index', result[0].Item_Id);
-                            $(row).attr('data-SaleLine_Id', result[0].SaleLine_Id);
-                            $(row).attr('data-Line_Id', result[0].Line_Id);
-                            $(row).attr('data-GatePass_Id', result[0].GatePass_Id);
-                            $(row).attr('data-SaleOffice_Id', result[0].OfficeID);
+                            $(row).attr('id', 'trRow_' + result[i].Item_Id);
+                            $(row).attr('data-index', result[i].Item_Id);
+                            $(row).attr('data-SaleLine_Id', result[i].SaleLine_Id);
+                            $(row).attr('data-Line_Id', result[i].Line_Id);
+                            $(row).attr('data-GatePass_Id', result[i].GatePass_Id);
+                            $(row).attr('data-SaleOffice_Id', result[i].OfficeID);
                             //Add Item cell.
-                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[0].Item_Id}">${result[0].Title}</label> `;
+                            let lblItem = `<label id="lblItem_${result[0].Item_Id}" data-Item="${result[i].Item_Id}">${result[i].Title}</label> `;
                             cell = $(row.insertCell(-1));
                             cell.append(lblItem);
                           //Add Item Location cell.
-                            let lblItemAt = `<label id="lblItemAt_${result[0].Item_Id}">${result[0].ItemAt}</label>`;
+                            let lblItemAt = `<label id="lblItemAt_${result[i].Item_Id}">${result[i].ItemAt}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblItemAt);
                             //Add Quantity.
-                            let lblQuantity = `<label id="lblQuantity_${result[0].Item_Id}">${result[0].Quantity}</label>`;
+                            let lblQuantity = `<label id="lblQuantity_${result[i].Item_Id}">${result[i].Quantity}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblQuantity);
                             //Add Unit cell.
-                            let lblSaleunit = `<label id="lblSaleunit_${result[0].Item_Id}">${result[0].Saleunit}</label>`;
+                            let lblSaleunit = `<label id="lblSaleunit_${result[i].Item_Id}">${result[i].Saleunit}</label>`;
                             cell = $(row.insertCell(-1));
                             cell.append(lblSaleunit);
                             //} else {
