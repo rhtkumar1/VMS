@@ -24,7 +24,7 @@ namespace IMS.Controllers
                     if (ObjAuthenticate.IsAuthenticated)
                     {
                         Session["FYYears"] = new FinancialMaster().FYList(ObjAuthenticate.CompanyID);
-                        Session["OpenFYID"] = 1;
+                        Session["OpenFYID"] = 3;
                         Session["Menu_Master_Role_Wise"] = ObjAuthenticate.ObjMenu_Master_Role_Wise;
                         ObjAuthenticate.ObjMenu_Master_Role_Wise = null;
                         Session["SYSSOFTECHSession"] = ObjAuthenticate;
