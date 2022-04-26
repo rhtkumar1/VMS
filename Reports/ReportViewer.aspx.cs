@@ -31,7 +31,7 @@ namespace IMS.Reports
             }
             if (ReportId > 0)
             {
-                if (ReportId == 1)
+                if (ReportId < 100)
                 {
                     MapQueryStringParams(querystring);
                 }
