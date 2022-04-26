@@ -466,6 +466,21 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialSales.cshtml", (materialSales.IsSucceed ? newMaterialSales : materialSales));
         }
 
+        [HttpGet]
+        public ActionResult DeleteMatrialSalesLine(int SaleId, int ItemID, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            MaterialSalesMapping MaterialSalesLine = new MaterialSalesMapping();
+            ReturnObject objR;
+            try
+            {
+                objR = MaterialSalesLine.MaterialSalesLine_Delete(SaleId, ItemID);
+            }
+            catch(Exception Ex)
+            { throw Ex; }
+            return Content(JsonConvert.SerializeObject(objR));
+        }
+
         [HttpPost]
         public ActionResult ManageMateriaSales(MaterialSales materialSales)
         {

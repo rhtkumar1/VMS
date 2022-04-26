@@ -9,6 +9,12 @@ using IMS.Models.CommonModel;
 
 namespace IMS.Models.ViewModel
 {
+    public class ReturnObject
+    {
+        public int Id;
+        public bool IsSucceed;
+        public string ActionMsg;
+    }
     public class MaterialSales
     {
         public int SaleId { get; set; }
@@ -232,6 +238,31 @@ namespace IMS.Models.ViewModel
         public string IGST { get; set; }
         public string Total_Amount { get; set; }
         public string IsUpdate { get; set; }
- 
+       
+        public ReturnObject MaterialSalesLine_Delete(int SaleLineId,int ItemID)
+        {
+            ReturnObject obj = new ReturnObject();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@SaleId", SaleLineId));
+                SqlParameters.Add(new SqlParameter("@ItemID", ItemID));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_Line_Delete", CommandType.StoredProcedure, SqlParameters);
+               
+                foreach (DataRow dr in dt.Rows)
+                {
+                    obj.Id = Convert.ToInt32(dr[0]);
+                    obj.IsSucceed = Convert.ToBoolean(dr[1]);
+                    obj.ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                obj.ActionMsg = ex.Message.ToString();
+                //throw ex;
+            }
+            return obj;
+        }
+
     }
 }
