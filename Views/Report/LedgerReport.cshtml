@@ -79,8 +79,6 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        $("#ddlItem").select2();
-        searchData();
         });
 
     $('#FromDate, #ToDate').datepicker({
@@ -92,7 +90,32 @@
     }).datepicker();
 
     $("#btnSearch").click(function (e) {
-        searchData();
+        var isValid = true;
+        if (parseInt($("#ddlGroup").val()) === 0) {
+            isValid = false;
+            msg = "Please select Group!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        else if ($('#FromDate').val() == "") {
+            isValid = false;
+            msg = "Please select From Date!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        else if ($('#ToDate').val() == "") {
+            isValid = false;
+            msg = "Please select To Date!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        if (isValid) {
+            searchData();
+        }
+        
     });
 
     $("#ddlGroup").change(function () {
@@ -113,13 +136,16 @@
 
 
     function searchData() {
+
+
         let ReportID = parseInt(4);
+        let GroupId = $("#ddlGroup").val();
         var fromDate = $('#FromDate').val();
         var toDate = $('#ToDate').val();
         var Ledger_Ids = ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
         let frame_src = document.getElementById('LedgerReportView').src;
         const OperationatSRC = frame_src.split("?");
-        var Reportquerystring = "Ledger_Ids:" + Ledger_Ids.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
+        var Reportquerystring = "GroupId:"+GroupId.toString()+",Ledger_Ids:" + Ledger_Ids.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
         var Href = OperationatSRC[0] + "?ReportId=" + ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
         $("#LedgerReportView").attr("src", Href);
     }

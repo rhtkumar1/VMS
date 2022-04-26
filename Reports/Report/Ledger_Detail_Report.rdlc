@@ -10,7 +10,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="DataSet1">
+    <DataSet Name="Ledger_Detail_Report">
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <QueryParameters>
@@ -478,7 +478,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -763,7 +762,7 @@
                               </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <DataSetName>DataSet1</DataSetName>
+                          <DataSetName>Ledger_Detail_Report</DataSetName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -1677,7 +1676,7 @@
             </TablixRowHierarchy>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <KeepTogether>true</KeepTogether>
-            <DataSetName>DataSet1</DataSetName>
+            <DataSetName>Ledger_Detail_Report</DataSetName>
             <Left>0.025in</Left>
             <Height>1.48333in</Height>
             <Width>7.65833in</Width>
