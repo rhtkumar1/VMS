@@ -1,4 +1,4 @@
-﻿@model IMS.Models.ViewModel.ReportInterFace
+﻿@model IMS.Models.ViewModel.LedgerReport
 @{
     ViewBag.Title = "Report InterFace";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
@@ -21,21 +21,22 @@
             <div class="blank">
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
-                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "ReportInterface" }))
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "LedgerReport" }))
                     {
                         @Html.HiddenFor(m => m.AppToken)
-                    <div class="styled-input">
-                        <div class="col-md-3 form-group">
-                            <label>Report Name</label>
-                            @Html.DropDownList("ddlReportName", new SelectList(Model.Report_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlReportName", @class = "form-control" })
-                        </div>
-                    </div>
 
                         <div class="styled-input">
                             <div class="col-md-3 form-group">
-                                <label>Item</label>
-                                @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
-                                
+                                <label>Group</label>
+                                @Html.DropDownList("ddlGroup", new SelectList(Model.LedgerGroupLists, "Value", "Text"), htmlAttributes: new { @id = "ddlGroup", @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Ledger</label>
+                                <select id="drpLedger" name="drpLedger" class="form-control"></select>
+
                             </div>
                         </div>
 
@@ -58,11 +59,11 @@
                             </div>
                         </div>
                     }
-                <div id="Ifream">
-                    <iframe id="ReportInterfaceView" src="~/Reports/ReportViewer.aspx?ReportId=0"  width="900" height="500">
-                    </iframe>
-                   
-                </div>
+                    <div id="Ifream">
+                        <iframe id="LedgerReportView" src="~/Reports/ReportViewer.aspx?ReportId=0" width="900" height="500">
+                        </iframe>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,13 +72,13 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#ddlItem").select2();
+        $("#drpLedger").select2();
+        $("#ddlGroup").select2();
+        
         if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        $("#ddlItem").select2();
-        searchData();
         });
 
     $('#FromDate, #ToDate').datepicker({
@@ -89,20 +90,64 @@
     }).datepicker();
 
     $("#btnSearch").click(function (e) {
-        searchData();
+        var isValid = true;
+        if (parseInt($("#ddlGroup").val()) === 0) {
+            isValid = false;
+            msg = "Please select Group!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        else if ($('#FromDate').val() == "") {
+            isValid = false;
+            msg = "Please select From Date!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        else if ($('#ToDate').val() == "") {
+            isValid = false;
+            msg = "Please select To Date!!!";
+            $('#alertModal').modal('show');
+            $('#msg').html(msg);
+            return false;
+        }
+        if (isValid) {
+            searchData();
+        }
+        
     });
+
+    $("#ddlGroup").change(function () {
+        
+        let Group_Id = parseInt($('#ddlGroup').val());
+        //$('#PartyId').val(Party_Id);
+        IMSC.ajaxCall("GET", "/Report/GetLedger?Group_Id=" + Group_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            $("#drpLedger").empty();
+            $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+            if (result.length > 0) {
+                $.each(result, function (index, value) {
+                    $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
+                });
+            }
+        });
+    }).change();
+
 
     function searchData() {
 
-        let ReportID = parseInt($('#ddlReportName').val());
-        let ItemID = parseInt($('#ddlItem').val());
+
+        let ReportID = parseInt(4);
+        let GroupId = $("#ddlGroup").val();
         var fromDate = $('#FromDate').val();
         var toDate = $('#ToDate').val();
-        let frame_src = document.getElementById('ReportInterfaceView').src;
+        var Ledger_Ids = ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
+        let frame_src = document.getElementById('LedgerReportView').src;
         const OperationatSRC = frame_src.split("?");
-        var Reportquerystring = "ItemID:" + ItemID.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
+        var Reportquerystring = "GroupId:"+GroupId.toString()+",Ledger_Ids:" + Ledger_Ids.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
         var Href = OperationatSRC[0] + "?ReportId=" + ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
-        $("#ReportInterfaceView").attr("src", Href);         
-           };
+        $("#LedgerReportView").attr("src", Href);
+    }
 
 </script>
