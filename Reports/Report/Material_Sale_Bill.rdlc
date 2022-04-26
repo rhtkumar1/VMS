@@ -5863,7 +5863,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Performa Invoice</Value>
+                      <Value>Estimate Invoice</Value>
                       <Style>
                         <FontFamily>calibri</FontFamily>
                         <FontWeight>Bold</FontWeight>
