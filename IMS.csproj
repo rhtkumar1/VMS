@@ -209,6 +209,7 @@
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\DashBoard.cs" />
+    <Compile Include="Models\ViewModel\LedgerReport.cs" />
     <Compile Include="Models\ViewModel\ReportInterFace.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
@@ -356,6 +357,7 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
+    <Content Include="Reports\Report\Ledger_Detail_Report.rdlc" />
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
@@ -366,6 +368,7 @@
     <Content Include="Views\Admin\Masters\ChangePassword.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Report\ReportInterFace.cshtml" />
+    <Content Include="Views\Report\LedgerReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
