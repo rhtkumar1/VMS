@@ -53,6 +53,8 @@ namespace IMS.Models.ViewModel
         public int MENU_Id { get; set; }
         public SelectList UnitLists { get; set; }
         public string VoucherNumber { get; set; }
+        public int Item_Office_Id { get; set; }
+        public SelectList OfficeAvailableQty { get; set; }
 
         public MaterialSales()
         {
@@ -67,6 +69,7 @@ namespace IMS.Models.ViewModel
             CompanyId = CommonUtility.GetCompanyID();
             MaterialSalesMappings = new List<MaterialSalesMapping>();
             MaterialMappingList = new List<MaterialSalesMapping>();
+            OfficeAvailableQty = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_ID", "OfficeName", "VW_StockAsOnDateOfficeWiseFor_Material_Order", "And ItemID=0"), "Id", "Value");
         }
         public MaterialSales MaterialSales_InsertUpdate()
         {
@@ -238,6 +241,7 @@ namespace IMS.Models.ViewModel
         public string IGST { get; set; }
         public string Total_Amount { get; set; }
         public string IsUpdate { get; set; }
+
        
         public ReturnObject MaterialSalesLine_Delete(int SaleLineId,int ItemID)
         {

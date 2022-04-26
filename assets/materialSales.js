@@ -108,6 +108,7 @@
                             oMapping.PO_Id = $("#hdnPOId_" + index).val();
                             oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
                             oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
+                            //oMapping.Order_OfficeID = 0;
                             PurchaseLineValues.push(oMapping);
                             isValid = true;
                         }
@@ -149,7 +150,8 @@
             $("#hdnTotalAmount").val("");
             $("#Discount_1_Amount").val("");
             $("#Discount_2_Amount").val("");
-
+            ResetStockQty(false);
+            $("#AvailableQuantity").val("")
         });
 
         $("#btnAdd").click(function (e) {
@@ -223,7 +225,7 @@
                 let lblItem = `<label id="lblItem_${itemId}">${$("#ItemSearch").val()}</label>
                               <input type="hidden" id="hdnItemId_${itemId}" name="hdnItemId_${itemId}" value="${itemId}" />
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
-                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0}" />
+                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0 + "-" + $("#ddlAvailableQty").val()}" />
                               <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
                               <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
                               <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
@@ -318,7 +320,7 @@
                 $("#hdnTotalAmount").val("");
                 $("#hdnRowId").val("");
                 $("#hdnLastRate").val("0")
-
+                ResetStockQty(false);
                 $("[id^='lblTotal_Amount_Row_']").each(function () {
                     amount += parseFloat($("#" + this.id).text());
                 });
@@ -495,7 +497,18 @@
                 });
             }
         });
-
+        $("#ddlAvailableQty").change(function () {
+            var Stockvalue = $("#ddlAvailableQty option:selected").text();
+            var tempval;
+            try {
+                tempval = parseInt(Stockvalue.split("-")[1].split(")")[0]);
+            }
+            catch (ex) {
+                tempval = 0;
+            }
+            $("#AvailableQuantity").val(tempval);
+            
+        })
         $("#SearchParty").autocomplete({
             source: function (request, response) {
                 IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
@@ -655,7 +668,7 @@
                 let Office_Id = parseInt($("#OfficeId").val());
                 let P_State_Id = parseInt($("#SupplyStateId").val());
                 if (Item_Id > 0 && isValid) {
-                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail_Sale?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                         var result = JSON.parse(d);
                         if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
                             $("#Hsn_Sac").val(result[0].HSN_SAC);
@@ -666,6 +679,18 @@
                             $("#AvailableQuantity").val(result[0].Available_Qty);
                             $("#Unit_Id").val(result[0].UnitId);
                             $("#GST").change();
+                            ResetStockQty(false);
+                            $.each(result, function (data, value) {
+                                if (value.Office_ID > 0) {
+                                    $("#ddlAvailableQty").append($("<option></option>").val(value.Office_ID).html(value.OfficeName));
+                                }
+                            })
+                            try {
+                                $("#ddlAvailableQty").val(result[0].Office_ID);
+                            }
+                            catch (ex) {
+                               // $("#ddlAvailableQty").val(result[0].Office_ID);
+                            }
                         } else {
                             $("#Hsn_Sac").val("");
                             $("#GST").val("0");
@@ -687,6 +712,7 @@
             $("#lblTotalAmount").text("Total : 0.00");
             $("#IsUpdateMaterialSales").val(0);
             $("#SaleAmount").val("0");
+            ResetStockQty(false);
         }
 
         ResetFromOfficeChange();
@@ -698,6 +724,13 @@
     };
     return scope;
 })(IMSMaterialSales || {});
+function ResetStockQty(Setval) {
+    $('#ddlAvailableQty').empty();
+    if (Setval) {
+        $("#ddlAvailableQty").append($("<option></option>").val(0).html("--Select--"));
+    }
+    
+}
 function CalculateAmount() {
     let bIsDiscount = false;
     let isValidate = true;

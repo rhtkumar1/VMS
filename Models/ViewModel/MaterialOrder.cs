@@ -151,6 +151,23 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
+        public DataTable GetHSN_Detail(int Item_Id, int Office_Id, int P_State_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
+                SqlParameters.Add(new SqlParameter("@Office_Id", Office_Id));
+                SqlParameters.Add(new SqlParameter("@P_State_Id", P_State_Id));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Sale_GetHSN_Detail", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
         public MaterialOrder MaterialOrder_Delete(int POId)
         {
             try

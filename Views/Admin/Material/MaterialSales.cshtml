@@ -164,6 +164,7 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Ava-Quantity</label>
+                                    @Html.DropDownList("ddlAvailableQty", new SelectList(Model.OfficeAvailableQty, "Value", "Text"), htmlAttributes: new { @id = "ddlAvailableQty", @class = "form-control", })
                                     @Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
