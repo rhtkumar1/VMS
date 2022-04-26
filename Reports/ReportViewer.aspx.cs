@@ -21,6 +21,7 @@ namespace IMS.Reports
         string ReportName;
         string SPName;
         string QueryType;
+        int ReportType;
         protected void Page_Load(object sender, EventArgs e)
         {
             string querystring = "";
@@ -31,17 +32,20 @@ namespace IMS.Reports
             }
             if (ReportId > 0)
             {
-                if (ReportId < 100)
-                {
-                    MapQueryStringParams(querystring);
-                }
-                else
-                {
-                    Reportquerystring= Convert.ToString(Request.QueryString["Reportquerystring"]);
-                    MapReportquerystring(Reportquerystring);
-                }
                 MapReportConfig(ReportId);
-
+                switch(ReportType)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        MapQueryStringParams(querystring);
+                        break;
+                    case 2:
+                        Reportquerystring = Convert.ToString(Request.QueryString["Reportquerystring"]);
+                        MapReportquerystring(Reportquerystring);
+                        break;
+                }
+                
                 ReportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;//ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/" + ReportName + ".rdlc");
                 DataTable reportdt = GetReportData();
@@ -135,6 +139,7 @@ namespace IMS.Reports
                     ReportName = Convert.ToString(dr["ReportName"]);
                     QueryType = Convert.ToString(dr["QueryType"]);
                     SPName = Convert.ToString(dr["Query"]);
+                    ReportType = Convert.ToInt32(dr["ReportType"]);
                     string[] strparam = dr["Params"].ToString().Split(',');
                     for (int i = 0; i < strparam.Count(); i++)
                     {

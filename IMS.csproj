@@ -378,6 +378,7 @@
     <Folder Include="ItemBarCode\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Report\Material_Sale_Gatepass.rdlc" />
     <EmbeddedResource Include="Reports\Report\Stock_Movement.rdlc" />
   </ItemGroup>
   <PropertyGroup>
