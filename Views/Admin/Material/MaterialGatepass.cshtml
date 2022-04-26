@@ -52,8 +52,9 @@
                              title: "Action",
                              width: 80,
                              itemTemplate: function (value, args) {
-                                 var $btnProcessed = `<a href="/Material/StoreClearance?SaleId=${args.Sale_Id}&AppToken=${'@Model.AppToken'}" id="btnProcessed" name="btnProcessed" class="btncustome">Processed</a>`;
-                                 return $("<div class='display-flex'></div>").append($btnProcessed);
+                                 var $customePrintButton = `<a target="_blank" href="/Reports/ReportViewer.aspx?ReportId=3&SaleId=${args.Sale_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
+                                 var $btnProcessed = `<a href="/Material/StoreClearance?SaleId=${args.Sale_Id}&AppToken=${'@Model.AppToken'}" id="btnProcessed" name="btnProcessed" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                 return $("<div class='display-flex'></div>").append($customePrintButton,$btnProcessed);
                              }
                          },
                          { name: "Sale_Id", css: "hidden" },

@@ -849,11 +849,21 @@ function Remove(button) {
     $("#IsUpdateMaterialSales").val(0);
     var row = $(button).closest("TR");
     var name = $("TD", row).eq(0).text();
+    var index = row[0].rowIndex;    
     if (confirm("Do you want to remove this Item.", "Remove")) {
-        //Get the reference of the Table.
-        var table = $("#tblMaterialSales")[0];
-        //Delete the Table row using it's Index.
-        table.deleteRow(row[0].rowIndex);
+    //Get the reference of the Table.
+    var table = $("#tblMaterialSales")[0];
+    //Delete the Table row using it's Index.
+    table.deleteRow(index);
+    // pass SaleId and ItemID
+        //IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + 0 + "&ItemID=" + 0 + "&AppToken=" + scope.AppToken , {}, "text", function (d) {
+        //    var result = JSON.parse(d);
+        //    //if (result.length > 0) {
+        //    //    $("#tbodyid").empty();
+        //    //    BindGrid(result, 0, 1);
+        //    //}
+          
+        //});
     }
     let sumOfTotal = 0;
     $("#tblMaterialSales TBODY TR").each(function () {
