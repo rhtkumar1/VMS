@@ -896,8 +896,7 @@ function Remove(button) {
             var result = JSON.parse(d);
             if (result.IsSucceed) {
                 alert(result.ActionMsg);
-                //$("#tbodyid").empty();
-                //BindGrid(result, 0, 1);
+                
             }
 
         });
