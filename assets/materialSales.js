@@ -218,7 +218,7 @@
                 var row = tBody.insertRow(-1);
                 let itemId = $("#Item_Id").val();
                 let itemType = $("#hdnItemType").val();
-                let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" data-item-index="${itemId}" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
                 cell = $(row.insertCell(-1));
                 cell.append(htmlEditBtn);
                 //Add Item cell.
@@ -879,6 +879,9 @@ function setCaluValuew(index, bIsDiscount, quantity, poLineId) {
 }
 function Remove(button) {
     //Determine the reference of the Row using the Button.
+    // pass SaleId and ItemID
+    let SaleId = parseInt($("#SaleId").val());
+    let itemId = parseInt($(button).attr('data-item-index'));
     $("#IsUpdateMaterialSales").val(0);
     var row = $(button).closest("TR");
     var name = $("TD", row).eq(0).text();
@@ -888,15 +891,14 @@ function Remove(button) {
     var table = $("#tblMaterialSales")[0];
     //Delete the Table row using it's Index.
     table.deleteRow(index);
-    // pass SaleId and ItemID
-        //IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + 0 + "&ItemID=" + 0 + "&AppToken=" + scope.AppToken , {}, "text", function (d) {
-        //    var result = JSON.parse(d);
-        //    //if (result.length > 0) {
-        //    //    $("#tbodyid").empty();
-        //    //    BindGrid(result, 0, 1);
-        //    //}
-          
-        //});
+    //IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + scope.AppToken , {}, "text", function (d) {
+    //    var result = JSON.parse(d);
+    //    //if (result.length > 0) {
+    //    //    $("#tbodyid").empty();
+    //    //    BindGrid(result, 0, 1);
+    //    //}
+      
+    //});
     }
     let sumOfTotal = 0;
     $("#tblMaterialSales TBODY TR").each(function () {
@@ -979,7 +981,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
         $(row).attr('id', 'trRow_' + value.Line_Id);
         //Add Button cell.
         //let htmlEditBtn = `<input type="button" onclick="Remove(this);" value="Remove"/>`;
-        let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+        let htmlEditBtn = `<a class="btn btn-danger" style="padding: 2px 5px 2px 5px; margin-bottom:0px" data-item-index="${value.Item_Id}" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlEditBtn);
         //Add Item cell.
