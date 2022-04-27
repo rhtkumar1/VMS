@@ -895,8 +895,9 @@ function Remove(button) {
         IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + apptoken, {}, "text", function (d) {
             var result = JSON.parse(d);
             if (result.IsSucceed) {
-                $("#tbodyid").empty();
-                BindGrid(result, 0, 1);
+                alert(result.ActionMsg);
+                //$("#tbodyid").empty();
+                //BindGrid(result, 0, 1);
             }
 
         });
