@@ -47,7 +47,7 @@
                 $('#msg').html(msg);
                 return false;
             }
-            
+
             if (isValid) {
                 if ($("#tblMaterialSales TBODY TR").length > 0) {
                     $("#tblMaterialSales TBODY TR [id^='hdnItemId_']").each(function () {
@@ -59,7 +59,7 @@
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
                         let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
                         let itemname = $("#lblItem_" + index)[0].innerText
-                        
+
                         if (poLineId === 0) {
                             if (isItemType === 16) {
                                 isValid = true;
@@ -104,7 +104,7 @@
                             oMapping.SGST = $("#lblSGST_" + index).text();
                             oMapping.IGST = $("#lblIGST_" + index).text();
                             oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
-                            
+
                             oMapping.PO_Id = $("#hdnPOId_" + index).val();
                             oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
                             oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
@@ -211,7 +211,7 @@
             }
 
             if (bAdded) {
-                
+
                 //Get the reference of the Table's TBODY element.
                 var tBody = $("#tblMaterialSales > TBODY")[0];
                 //Add Row.
@@ -250,7 +250,7 @@
                 cell = $(row.insertCell(-1));
                 cell.append(lblAvailable_Qty);
                 //Add Unit cell.
-                let lblUnit = `<label id="lblUnit_${itemId}" data-Unit_Id="${!isSpecialService ? $("#Unit_Id").val() : "0"}" data-index="${itemId}" >${!isSpecialService ? $("#Unit_Id :selected").text():""}</label>`;
+                let lblUnit = `<label id="lblUnit_${itemId}" data-Unit_Id="${!isSpecialService ? $("#Unit_Id").val() : "0"}" data-index="${itemId}" >${!isSpecialService ? $("#Unit_Id :selected").text() : ""}</label>`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblUnit);
                 //Add Last Rate cell.
@@ -507,7 +507,7 @@
                 tempval = 0;
             }
             $("#AvailableQuantity").val(tempval);
-            
+
         })
         $("#SearchParty").autocomplete({
             source: function (request, response) {
@@ -528,12 +528,12 @@
                 let PartyId = parseInt(i.item.value);
                 $("#SearchOrderNo").removeAttr('disabled');
                 let OfficeId = parseInt($('#OfficeId').val());
-                
+
                 $("#PartyId").val(PartyId);
                 if (PartyId > 0) {
                     $("#tbodyid").empty();
                     IMSC.ajaxCall("GET", "/Material/GetStateSales?PartyId=" + PartyId + "&OfficeId=" + OfficeId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
-                        
+
                         var result = JSON.parse(d);
                         if (result !== null) {
                             $("#StateId").empty();
@@ -689,7 +689,7 @@
                                 $("#ddlAvailableQty").val(result[0].Office_ID);
                             }
                             catch (ex) {
-                               // $("#ddlAvailableQty").val(result[0].Office_ID);
+                                // $("#ddlAvailableQty").val(result[0].Office_ID);
                             }
                         } else {
                             $("#Hsn_Sac").val("");
@@ -729,7 +729,7 @@ function ResetStockQty(Setval) {
     if (Setval) {
         $("#ddlAvailableQty").append($("<option></option>").val(0).html("--Select--"));
     }
-    
+
 }
 function CalculateAmount() {
     let bIsDiscount = false;
@@ -882,23 +882,24 @@ function Remove(button) {
     // pass SaleId and ItemID
     let SaleId = parseInt($("#SaleId").val());
     let itemId = parseInt($(button).attr('data-item-index'));
+    let apptoken = $("#hdnApptoken").val();
     $("#IsUpdateMaterialSales").val(0);
     var row = $(button).closest("TR");
     var name = $("TD", row).eq(0).text();
-    var index = row[0].rowIndex;    
+    var index = row[0].rowIndex;
     if (confirm("Do you want to remove this Item.", "Remove")) {
-    //Get the reference of the Table.
-    var table = $("#tblMaterialSales")[0];
-    //Delete the Table row using it's Index.
-    table.deleteRow(index);
-    //IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + scope.AppToken , {}, "text", function (d) {
-    //    var result = JSON.parse(d);
-    //    //if (result.length > 0) {
-    //    //    $("#tbodyid").empty();
-    //    //    BindGrid(result, 0, 1);
-    //    //}
-      
-    //});
+        //Get the reference of the Table.
+        var table = $("#tblMaterialSales")[0];
+        //Delete the Table row using it's Index.
+        table.deleteRow(index);
+        IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + apptoken, {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result.IsSucceed) {
+                $("#tbodyid").empty();
+                BindGrid(result, 0, 1);
+            }
+
+        });
     }
     let sumOfTotal = 0;
     $("#tblMaterialSales TBODY TR").each(function () {
@@ -926,48 +927,48 @@ function BindGrid(result, isqtydisabled, sourceid) {
         let Texable_Amount = 0;
         let discount_1 = parseFloat(value.Order_Disc1);
         let discount_2 = parseFloat(value.Order_Disc2);
-        
+
         //if (amount > 0) {
-            if (sourceid === 1) {
-                if (quantity > 0 && rate > 0) {
-                    amount = quantity * rate;
-                    
-                }
-                if (amount > 0) {
-                    let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
-                    Texable_Amount = amount;
-                    if (discount_1 > 0) {
-                        Texable_Amount = (amount - (amount * discount_1 / 100)).toFixed(2);
-                    }
-                    if (discount_2 > 0) {
-                        Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
-                    }
-                    gstAmount = (Texable_Amount * gst / 100).toFixed(2);
-                    if (is_SameState) {
-                        cgst = parseFloat(gstAmount / 2).toFixed(2)
-                        sgst = parseFloat(gstAmount / 2).toFixed(2)
-                        igst = parseFloat(0).toFixed(2);
-                    } else {
-                        cgst = parseFloat(0).toFixed(2)
-                        sgst = parseFloat(0).toFixed(2)
-                        igst = parseFloat(gstAmount).toFixed(2);
-                    }
-                    
-                    tamount = (parseFloat(Texable_Amount) + parseFloat(gstAmount)).toFixed(2);;
-                }
+        if (sourceid === 1) {
+            if (quantity > 0 && rate > 0) {
+                amount = quantity * rate;
+
             }
-            else {
-                cgst = value.CGST;
-                sgst = value.SGST;;
-                igst = value.IGST;;
-                discount_1 = parseInt(value.Discount_1);
-                discount_2 = parseInt(value.Discount_2);
-                amount = value.Amount;
-                //let disamt = amount * (discount_1 + discount_2) / 100;
-                //Texable_Amount = amount - disamt;
-                Texable_Amount = value.Taxable_Amount;
-                tamount = value.TotalAmount;
+            if (amount > 0) {
+                let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
+                Texable_Amount = amount;
+                if (discount_1 > 0) {
+                    Texable_Amount = (amount - (amount * discount_1 / 100)).toFixed(2);
+                }
+                if (discount_2 > 0) {
+                    Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
+                }
+                gstAmount = (Texable_Amount * gst / 100).toFixed(2);
+                if (is_SameState) {
+                    cgst = parseFloat(gstAmount / 2).toFixed(2)
+                    sgst = parseFloat(gstAmount / 2).toFixed(2)
+                    igst = parseFloat(0).toFixed(2);
+                } else {
+                    cgst = parseFloat(0).toFixed(2)
+                    sgst = parseFloat(0).toFixed(2)
+                    igst = parseFloat(gstAmount).toFixed(2);
+                }
+
+                tamount = (parseFloat(Texable_Amount) + parseFloat(gstAmount)).toFixed(2);;
             }
+        }
+        else {
+            cgst = value.CGST;
+            sgst = value.SGST;;
+            igst = value.IGST;;
+            discount_1 = parseInt(value.Discount_1);
+            discount_2 = parseInt(value.Discount_2);
+            amount = value.Amount;
+            //let disamt = amount * (discount_1 + discount_2) / 100;
+            //Texable_Amount = amount - disamt;
+            Texable_Amount = value.Taxable_Amount;
+            tamount = value.TotalAmount;
+        }
 
 
         //}
@@ -985,7 +986,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell = $(row.insertCell(-1));
         cell.append(htmlEditBtn);
         //Add Item cell.
-        
+
         let lblItem = `<label id="lblItem_${value.Item_Id}">${value.ItemName}</label>
                             <input type="hidden" id="hdnItemId_${value.Item_Id}" name="hdnItemId_${value.Item_Id}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />

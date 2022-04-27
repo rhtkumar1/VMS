@@ -279,6 +279,7 @@
                                     <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
                                     <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
                                     <input type="hidden" id="hdnLastRate" value="0" name="hdnLastRate" />
+                                    <input type="hidden" id="hdnApptoken" value="0" name="hdnApptoken" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
@@ -308,6 +309,7 @@
             $('#msg').html("@ViewBag.Msg");
         }
         IMSMaterialSales.AppToken = '@Model.AppToken';
+        $("#hdnApptoken").val(IMSMaterialSales.AppToken);
         IMSMaterialSales.materialSales();
     });
 </script>
