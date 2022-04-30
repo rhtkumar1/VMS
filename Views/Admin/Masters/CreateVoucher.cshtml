@@ -482,14 +482,15 @@
                     if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
-
+                        debugger;
                         $("[id^='#hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
                             let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (party === "cash" || party === "bank") {
+                            debugger;
+                            if (party.includes("cash") || party.includes("bank")) {
                                 if (enterytype === "dr" || enterytype==="cr") {
-                                    msg = "In case of Payment VocherType atleast one Cash or bank ledger must be entered with CR";
+                                    msg = "In this VocherType no Cash or bank ledger allowed";
                                     isValid = false;
                                     $('#alertModal').modal('show');
                                     $('#msg').html(msg);
@@ -504,7 +505,7 @@
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
                             let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (enterytype === "cr" && (party === "cash" || party === "bank")) {
+                            if (enterytype === "cr" && (party.includes("cash") || party.includes("bank"))) {
                                 return true;
                             } else {
                                 msg = "In case of Payment VocherType atleast one Cash or bank ledger must be entered with CR";
@@ -521,7 +522,7 @@
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
                             let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (enterytype === "dr" && (party === "cash" || party === "bank")) {
+                            if (enterytype === "dr" && (party.includes("cash") || party.includes("bank"))) {
                                 return true;
                             } else {
                                 msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
@@ -531,6 +532,27 @@
                                 return false;
                             }
                         });
+                    }
+
+                    if ($("#Constant_Id :selected").text().toLowerCase().trim() === "contra") {
+                        $("[id^='hdnPartyId_']").each(function () {
+                            let index = parseInt($(this).attr('data-party-id'));
+                            let party = $(this).val().toLowerCase().trim();
+                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
+                            if (enterytype === "dr" && (party.includes("cash") || party.includes("bank"))) {
+                                return true;
+                            }
+                            else if (enterytype === "cr" && (party.includes("cash") || party.includes("bank"))) {
+                                return true;
+                            } else {
+                                isValid = false;
+                                msg = "In case of Contra VocherType Cash or bank ledger must be entered in both DR & CR";
+                                $('#alertModal').modal('show');
+                                $('#msg').html(msg);
+                                return false;
+                            }
+                        });
+
                     }
                     
                     $("[id^='hdnAmount_']").each(function () {
