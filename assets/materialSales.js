@@ -892,14 +892,16 @@ function Remove(button) {
         var table = $("#tblMaterialSales")[0];
         //Delete the Table row using it's Index.
         table.deleteRow(index);
-        IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + apptoken, {}, "text", function (d) {
-            var result = JSON.parse(d);
-            if (result.IsSucceed) {
-                alert(result.ActionMsg);
-                
-            }
+        if (SaleId > 0) {
+            IMSC.ajaxCall("GET", "/Material/DeleteMatrialSalesLine?SaleId=" + SaleId + "&ItemID=" + itemId + "&AppToken=" + apptoken, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result.IsSucceed) {
+                    alert(result.ActionMsg);
 
-        });
+                }
+
+            });
+        }
     }
     let sumOfTotal = 0;
     $("#tblMaterialSales TBODY TR").each(function () {

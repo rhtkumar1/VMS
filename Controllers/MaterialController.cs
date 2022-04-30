@@ -471,8 +471,8 @@ namespace IMS.Controllers
             DataTable dt = new DataTable();
             try
             {
-                MaterialOrder materialPurchase = new MaterialOrder();
-                dt = materialPurchase.GetHSN_Detail(Item_Id, Office_Id, P_State_Id);
+                MaterialOrder ObjMaterialOrder = new MaterialOrder();
+                dt = ObjMaterialOrder.GetHSN_Detail(Item_Id, Office_Id, P_State_Id);
             }
             catch (Exception)
             {
