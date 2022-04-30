@@ -482,12 +482,10 @@
                     if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
-                        debugger;
                         $("[id^='#hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
                             let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            debugger;
                             if (party.includes("cash") || party.includes("bank")) {
                                 if (enterytype === "dr" || enterytype==="cr") {
                                     msg = "In this VocherType no Cash or bank ledger allowed";
@@ -588,6 +586,12 @@
                             VoucherLine.push(oMapping);
                         });
                         $("#VoucherLine").val(JSON.stringify(VoucherLine));
+                    }
+
+                    if (isValid) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 } else {
                     msg = "Please add at least 1 voucher.";
