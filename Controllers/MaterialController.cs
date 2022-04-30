@@ -465,6 +465,21 @@ namespace IMS.Controllers
             // to reset fields only in case of added or updated.
             return View("~/Views/Admin/Material/MaterialSales.cshtml", (materialSales.IsSucceed ? newMaterialSales : materialSales));
         }
+        [HttpGet]
+        public ActionResult GetHSN_Detail_Sale(int Item_Id, int Office_Id, int P_State_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                MaterialOrder ObjMaterialOrder = new MaterialOrder();
+                dt = ObjMaterialOrder.GetHSN_Detail(Item_Id, Office_Id, P_State_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
 
         [HttpGet]
         public ActionResult DeleteMatrialSalesLine(int SaleId, int ItemID, string AppToken = "")

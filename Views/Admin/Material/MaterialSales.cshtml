@@ -69,6 +69,7 @@
                             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
                             @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
                             @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
+
                             @Html.HiddenFor(m => m.SaleAmount, htmlAttributes: new { @id = "SaleAmount" })
                             <div class="heading">
                                 <h4>
@@ -164,6 +165,7 @@
                                 </div>
                                 <div class="col-md-2 form-group">
                                     <label>Ava-Quantity</label>
+                                    @Html.DropDownList("ddlAvailableQty", new SelectList(Model.OfficeAvailableQty, "Value", "Text"), htmlAttributes: new { @id = "ddlAvailableQty", @class = "form-control", })
                                     @Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-md-2 form-group">
@@ -278,6 +280,7 @@
                                     <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
                                     <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
                                     <input type="hidden" id="hdnLastRate" value="0" name="hdnLastRate" />
+                                    <input type="hidden" id="hdnApptoken" value="0" name="hdnApptoken" />
                                     <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
                                 </div>
                             </div>
@@ -307,6 +310,7 @@
             $('#msg').html("@ViewBag.Msg");
         }
         IMSMaterialSales.AppToken = '@Model.AppToken';
+        $("#hdnApptoken").val(IMSMaterialSales.AppToken);
         IMSMaterialSales.materialSales();
     });
 </script>
