@@ -878,5 +878,17 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialGatepass.cshtml", gatePass);
         }
         #endregion
+
+        #region StoreTransfer
+        public ActionResult StoreTransfer(int SaleId, string AppToken = "")
+        {
+            StoreTransfer ObjStoreTransfer = new StoreTransfer();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            ObjStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
+            ObjStoreTransfer.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/StoreTransfer.cshtml", ObjStoreTransfer);
+        }
+        #endregion
+
     }
 }

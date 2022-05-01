@@ -40,18 +40,18 @@
                     $('#msg').html(msg);
                     return false;
                 }
-            }
-            //if (bAdded) {
-            //    if (parseInt($("#txtOrderQty").val()) <= parseInt($("#lblAvailableQty").text())) {
-            //        bAdded = true;
-            //    } else {
-            //        msg = "Order qty grater then available qty!!!";
-            //        bAdded = false;
-            //        $('#alertModal').modal('show');
-            //        $('#msg').html(msg);
-            //        return false;
-            //    }
-            //}
+                let ListP = ($("#lblListPrice").text() !== "" ? $("#lblListPrice").text() : 0);
+                if (ListP > 0) {
+                    if ($("#txtOrderRate").val() < ListP) {                        
+                        msg = "Order Rate Should be greater than List Price";
+                        bAdded = false;
+                        $('#alertModal').modal('show');
+                        $('#msg').html(msg);
+                        $("#txtOrderRate").focus();
+                        return false;
+                    }
+                }
+            }          
             if (bAdded) {
                 //Reference the Party and Location ddl.
                 if ($("#tblOrderCreation TBODY TR").length > 0) {
@@ -72,27 +72,6 @@
             }
 
             if (bAdded) {
-                //if ($("#hdnRowId").val() !== "" && parseInt($("#hdnRowId").val()) > 0) {
-                //    let trId = "#trRow_" + parseInt($("#hdnRowId").val());
-                //    var row = $(trId).closest("TR").find('td');
-                //    row[1].textContent = $("#ItemSearch").text();
-                //    row[1].setAttribute('data-item-id', $("#Item_Id").val());
-                //    row[1].setAttribute('data-line-Id', $("#hdnLineId").val());
-                //    row[1].setAttribute('data-index', $("#Item_Id").val());
-                //    row[2].textContent = $("#Unit_Id").val();
-                //    row[3].textContent = $("#lblAvailableQty").text();
-                //    row[4].textContent = $("#lblLastRate").text();
-                //    row[5].textContent = $("#lblLastDist1").text();
-                //    row[6].textContent = $("#lblLastDist2").text();
-                //    row[7].textContent = $("#lblListPrice").text();
-                //    row[8].textContent = $("#txtOrderQty").val();
-                //    row[9].textContent = $("#txtOrderRate").val();
-                //    row[10].textContent = parseFloat(parseFloat($("#txtOrderQty").val()) * parseFloat($("#txtOrderRate").val())).toFixed(2);
-                //    row[11].textContent = $("#txtRemark").val();
-                //    $("#hdnRowId").val("");
-                //    $("#hdnLineId").val("");
-                //    $("#btnAdd").val("Add");
-                //} else {
                 //Get the reference of the Table's TBODY element.
                 var tBody = $("#tblOrderCreation > TBODY")[0];
                 //Add Row.

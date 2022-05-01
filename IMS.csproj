@@ -211,6 +211,7 @@
     <Compile Include="Models\ViewModel\DashBoard.cs" />
     <Compile Include="Models\ViewModel\LedgerReport.cs" />
     <Compile Include="Models\ViewModel\ReportInterFace.cs" />
+    <Compile Include="Models\ViewModel\StoreTransfer.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
@@ -369,6 +370,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Report\ReportInterFace.cshtml" />
     <Content Include="Views\Report\LedgerReport.cshtml" />
+    <Content Include="Views\Admin\Material\StoreTransfer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
