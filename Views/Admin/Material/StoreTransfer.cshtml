@@ -1,7 +1,343 @@
-﻿
+﻿@model IMS.Models.ViewModel.StoreTransfer
 @{
-    ViewBag.Title = "StoreTransfer";
+    ViewBag.Title = "Store Transfer";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
 }
 
-<h2>StoreTransfer</h2>
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
 
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Store Transfer</span>
+            </h2>
+        </div>-->
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("StoreTransfer", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StoreTransfer" }))
+                        {
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.StoreLine, htmlAttributes: new { @id = "StoreLine" })
+                            <div class="heading">
+                                <h4>
+                                    Store Transfer
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>From Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.FromOffice_Id, new SelectList(Model.FromOfficeLists, "Value", "Text"), htmlAttributes: new { @id = "FromOfficeId", @placeholder = "From Office", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>To Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.ToOffice_Id, new SelectList(Model.ToOfficeLists, "Value", "Text"), htmlAttributes: new { @id = "ToOfficeId", @placeholder = "To Office", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Date, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @class = "form-control clsDate", @id = "Date" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Refrence Number<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.RefrenceNumber, htmlAttributes: new { @placeholder = "Refrence Number", @class = "form-control", @id = "RefrenceNumber" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Remarks", @class = "form-control", @id = "Remarks" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div class="styled-input">
+                                    <div class="heading">
+                                        <h4>
+                                            Add/Update Store Transfer
+                                        </h4>
+                                    </div>
+                                    <br />
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-2 form-group">
+                                        <label>Item<span class="mandatory">*</span></label>
+                                        @Html.DropDownList("ItemId", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ItemId", @placeholder = "Select Item", @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Unit</label>
+                                        @Html.DropDownList("UnitId", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @id = "UnitId", @placeholder = "Select Unit", @class = "form-control" })
+
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Avaliable Qty<span class="mandatory">*</span></label>
+                                        @Html.TextBox("AvaliableQty", "", htmlAttributes: new { @placeholder = "Avaliable Qty", @id = "AvaliableQty", @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Transfer Qty<span class="mandatory">*</span></label>
+                                        @Html.DropDownList("TransferQty", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @id = "TransferQty", @class = "form-control", @disabled = "disabled" })
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label>Action</label>
+                                        <br />
+                                        <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                        <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="table-responsive">
+                                    <table id="tblStoreTransfer" class="table table-striped" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th class="tbl-heading">Action</th>
+                                                <th class="tbl-heading">Item</th>
+                                                <th class="tbl-heading">Unit</th>
+                                                <th class="tbl-heading">Avaliable Qty</th>
+                                                <th class="tbl-heading">Transfer Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyid"></tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+         if ('@ViewBag.Msg' != "") {
+                $('#alertModal').modal('show');
+                $('#msg').html("@ViewBag.Msg");
+         }
+        $("#FromOfficeId").select2();
+        $("#ToOfficeId").select2();
+        $("#ItemId").select2();
+
+        $("body").on("click", "#btnReset", function (e) {
+            e.preventDefault();
+            $("#ItemId").val($("#Item_Id option:first").val());
+            $('#ItemId').select2().trigger('change');
+            $('#UnitId').val("");
+            $("#AvaliableQty").val("");
+            $("#TransferQty").val("");
+            $("#btnAdd").val("Add");
+
+            $("#btnAdd").click(function (e) {
+                e.preventDefault();
+                let bAdded = true;
+                let msg = "";
+
+                if ($("#ItemId").val() === "0" || $("#ItemId").val() === "") {
+                    msg = "Please select item.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#UnitId").val() === "0" || $("#UnitId").val() === "") {
+                    msg = "Please select unit.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#AvaliableQty").val() === "") {
+                    msg = "Please enter avaliable qty.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#TransferQty").val() === "") {
+                    msg = "Please enter transfer qty.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+
+                if (bAdded) {
+                    if ($("#tblStoreTransfer TBODY TR").length > 0) {
+                        $("[id^='hdnItemId_']").each(function () {
+                            let index = parseInt($(this).val());
+                            let currentitemId = parseInt($(`#ItemId`).val());
+                            let itemId = parseInt($(`#hdnItemId_${index}`).val());
+                            if (currentitemId === itemId) {
+                                msg = "Dulicate item not allowed";
+                                bAdded = false;
+                                $('#alertModal').modal('show');
+                                $('#msg').html(msg);
+                                return false;
+                            }
+                        });
+                    }
+                }
+
+                if (bAdded) {
+                    let ItemId = parseInt($("#ItemId").val());
+                    var tBody = $("#tblStoreTransfer > TBODY")[0];
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
+                                         <input type="hidden" id="hdnItemId_${ItemId}" name="hdnItemId_${ItemId}" value="${$("#ItemId :selected").val()}" />
+                                         <input type="hidden" id="hdnUnitId_${ItemId}" name="hdnUnitId_${ItemId}" value="${$("#UnitId :selected").val()}" />
+                                         <input type="hidden" id="hdnAvaliableQty_${ItemId}" name="hdnAvaliableQty_${ItemId}" value="${$("#AvaliableQty").val()}" />
+                                         <input type="hidden" id="hdnTransferQty_${ItemId}" name="hdnTransferQty_${ItemId}" value="${$("#TransferQty").val()}" />
+                                     `;
+                    cell.append(btnRemove);
+
+                    //Add Entry Type cell.
+                    var cell = $(row.insertCell(-1));
+                    cell.html($("#ItemId :selected").text());
+
+                    //Add Party cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#UnitId :selected").text());
+                    //Add Office cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#AvaliableQty").val());
+                    //Add Amount cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#TransferQty").val());
+
+                    //Set Default
+                    $("#FromOfficeId").val($("#FromOfficeId option:first").val());
+                    $('#FromOfficeId').select2().trigger('change');
+                    $("#ToOfficeId").val($("#ToOfficeId option:first").val());
+                    $('#ToOfficeId').select2().trigger('change');
+                    $("#Date").val("");
+                    $("#RefrenceNumber").val("");
+                    $("#Remarks").val("");
+
+                    $("#ItemId").val($("#Item_Id option:first").val());
+                    $('#ItemId').select2().trigger('change');
+                    $('#UnitId').val("");
+                    $("#AvaliableQty").val("");
+                    $("#TransferQty").val("");
+                    $("#btnAdd").val("Add");
+
+                    $("td").each(function () {
+                        $(this).addClass("tbl-css");
+                    });
+                }
+
+                if (bAdded) {
+                    return true;
+                } else {
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+            });
+
+            $("body").on("click", "#btnSubmit", function () {
+                //Loop through the Table rows and build a JSON array.
+                let StoreTransferLineValues = [];
+                let isValid = true;
+                let msg = "";
+                if ($("#hdnItemId_ TBODY TR").length > 0) {
+                    $("#hdnItemId_ TBODY TR").each(function () {
+                        let index = parseInt($(this).val());
+                        let oMapping = {};
+                        oMapping.ItemId = index;
+                        oMapping.UnitId = parseInt($(`#hdnUnitId_${ItemId}`).val());
+                        oMapping.AvailableQty = parseFloat($(`#hdnAvaliableQty_${ItemId}`).val());
+                        oMapping.TransferQty = parseInt($(`#hdnTransferQty_${ItemId}`).val());
+                        StoreTransferLineValues.push(oMapping);
+                    });
+                    $("#StoreLine").val(JSON.stringify(StoreTransferLineValues));
+                } else {
+                    msg = "Please add at least 1 item.";
+                    isValid = false;
+                }
+                if ($("#FromOfficeId").val() === "0" || $("#FromOfficeId").val() === "") {
+                    msg = "Please Select From Office Id.";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#ToOffice_Id").val() === "0" || $("#ToOffice_Id").val() === "") {
+                    msg = "Please Select To Office Id.";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#Date").val() === "") {
+                    msg = "Please select date.";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                } else if ($("#RefrenceNumber").val() === "") {
+                    msg = "Please enter refrence number.";
+                    isValid = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+                if (isValid) {
+                    return true;
+                } else {
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+            });
+
+            $("#ItemId").change(function () {
+                let Item_Id = parseInt($("#ItemId").val());
+                if (Item_Id >0) {
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                        var result = JSON.parse(d);
+                        if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
+                            $("#Hsn_Sac").val(result[0].HSN_SAC);
+                            $("#GST").val(result[0].GST);
+                            $("#hdnIs_SameState").val(result[0].Is_SameState);
+                            $("#GST").change();
+                        } else {
+                            $("#Hsn_Sac").val("");
+                            $("#GST").val("0");
+                            $("#hdnIs_SameState").val(0);
+                            $("#GST").change();
+                        }
+                    });
+                }
+             });
+        });
+    });
+</script>

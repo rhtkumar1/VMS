@@ -1,6 +1,8 @@
 ﻿using IMS.Models.CommonModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,27 +15,28 @@ namespace IMS.Models.ViewModel
         public SelectList ToOfficeLists { get; set; }
         public int FromOffice_Id { get; set; }
         public SelectList FromOfficeLists { get; set; }
-        public List<StoreTransferList> StoreTransferList { get; set; }
         public string Date { get; set; }
         public string Remarks { get; set; }
+        public string StoreLine { get; set; }
+        public string RefrenceNumber { get; set; }
 
         public SelectList Item_Lists { get; set; }
         public SelectList UnitLists { get; set; }
         public int AvailableQty { get; set; }
         public decimal LastPrice { get; set; }
         public int OrderQty { get; set; }
-
+       
 
         public int FinId { get; set; }
         public int CompanyId { get; set; }
         public int Loginid { get; set; }
-        public string MaterialLine { get; set; }
         public bool IsActive { get; set; }
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
         public bool IsSucceed { get; set; }
         public int MENU_Id { get; set; }
+        public List<StoreTransferLine> StoreTransferLines { get; set; }
 
         public StoreTransfer()
         {
@@ -44,19 +47,70 @@ namespace IMS.Models.ViewModel
             FromOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1 AND Office_Id !=" + ToOffice_Id.ToString()), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
-            StoreTransferList = new List<StoreTransferList>();
+            StoreTransferLines = new List<StoreTransferLine>();
             
         }
+        public StoreTransfer StoreOrder_InsertUpdate()
+        {
+            try
+            {
+                var sb = new System.Text.StringBuilder();
+                foreach (var item in StoreTransferLines)
+                {
+                    sb.AppendLine(@"<listnode Item_Id=""" + item.ItemId + @""" AvailableQty=""" + item.AvailableQty + @"""   
+                                    UnitId=""" + item.UnitId + @""" OrderQty=""" + item.TransferQty + @""" />");
+                }
+                StoreLine = "<Line>" + sb + "</Line>";
 
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@FromOfficeId", FromOffice_Id));
+                SqlParameters.Add(new SqlParameter("@ToOfficeId", ToOffice_Id));
+                SqlParameters.Add(new SqlParameter("@Date", Date));
+                SqlParameters.Add(new SqlParameter("@RefrenceNumber", RefrenceNumber));
+                SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
+                SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
+                SqlParameters.Add(new SqlParameter("@Store_Line", StoreLine));
+                SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
+                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
+                SqlParameters.Add(new SqlParameter("@Office_Id", CommonUtility.GetDefault_OfficeID()));
+
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("Store_Transfer_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
+
+        public DataTable GetItemDetail(int Item_Id, int Party_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
+                SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
+                SqlParameters.Add(new SqlParameter("@OfficeID", CommonUtility.GetDefault_OfficeID()));
+                dt = DBManager.ExecuteDataTableWithParameter("Material_Order_GetItemDetail", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
     }
 
-    public class StoreTransferList
+    public class StoreTransferLine
     {
-        public int ItemId { get; set; }
-        public int AvailableQty { get; set; }
-        public decimal LastPrice { get; set; }
-        public int OrderQty { get; set; }
-
-
+        public string ItemId { get; set; }
+        public string UnitId { get; set; }
+        public string AvailableQty { get; set; }
+        public string TransferQty { get; set; }
     }
 }
