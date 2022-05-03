@@ -1750,13 +1750,12 @@ namespace IMS.Controllers
             {
                 ViewBag.Msg = ex.Message.ToString();
             }
-            //VoucherMaster newVoucherMaster = new VoucherMaster();
+            VoucherMaster newVoucherMaster = new VoucherMaster();
             AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-            //newVoucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
-            //newVoucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            newVoucherMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newVoucherMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             // to reset fields only in case of added or updated.
-            //return View("~/Views/Admin/Masters/CreateVoucher.cshtml", (objVoucherMaster.IsSucceed ? newVoucherMaster : voucherMaster));
-           return RedirectToAction("ManageVoucher", new { appToken = AppToken });
+            return View("~/Views/Admin/Masters/CreateVoucher.cshtml", (objVoucherMaster.IsSucceed ? newVoucherMaster : voucherMaster));
         }
 
         #endregion
