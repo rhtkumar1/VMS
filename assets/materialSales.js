@@ -934,7 +934,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
 
         //if (amount > 0) {
         if (sourceid === 1) {
-            debugger;
+            
             if (quantity > 0 && rate > 0) {
                 amount = quantity * rate;
 
