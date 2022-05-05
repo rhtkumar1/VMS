@@ -64,17 +64,16 @@ namespace IMS.Models.ViewModel
                 StoreLine = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@FromOfficeId", FromOffice_Id));
-                SqlParameters.Add(new SqlParameter("@ToOfficeId", ToOffice_Id));
-                SqlParameters.Add(new SqlParameter("@Date", Date));
+                SqlParameters.Add(new SqlParameter("@TransfarID", FromOffice_Id));
                 SqlParameters.Add(new SqlParameter("@RefrenceNumber", RefrenceNumber));
+                SqlParameters.Add(new SqlParameter("@FromOffice_ID", FromOffice_Id));
+                SqlParameters.Add(new SqlParameter("@ToOffice_ID", ToOffice_Id));
+                SqlParameters.Add(new SqlParameter("@TransationDate", Date));
                 SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                SqlParameters.Add(new SqlParameter("@USERID", Loginid));
+                SqlParameters.Add(new SqlParameter("@Material_Line", StoreLine));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
-                SqlParameters.Add(new SqlParameter("@Store_Line", StoreLine));
-                SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
-                SqlParameters.Add(new SqlParameter("@Office_Id", CommonUtility.GetDefault_OfficeID()));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Store_Transfer_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
