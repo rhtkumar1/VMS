@@ -59,7 +59,7 @@ namespace IMS.Models.ViewModel
                 foreach (var item in StoreTransferLines)
                 {
                     sb.AppendLine(@"<listnode Item_Id=""" + item.ItemId + @""" AvailableQty=""" + item.AvailableQty + @"""   
-                                    UnitId=""" + item.UnitId + @""" OrderQty=""" + item.TransferQty + @""" />");
+                                    UnitId=""" + item.UnitId + @""" OrderQty=""" + item.TransferQty + @""" Amount=""" + item.TransferAmount + @""" />");
                 }
                 StoreLine = "<Line>" + sb + "</Line>";
 
