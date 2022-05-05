@@ -17,7 +17,7 @@
                 <i class="fa fa-angle-right"></i>
                 <span>Store Transfer</span>
             </h2>
-        </div>-->
+        </div>
         <!--//banner-->
         <!--content-->
         <div id="modelForm">
@@ -71,13 +71,13 @@
                                 <div class="styled-input">
                                     <div class="heading">
                                         <h4>
-                                            Add/Update Store Transfer
+                                            Store Transfer Item
                                         </h4>
                                     </div>
                                     <br />
                                 </div>
                                 <div class="styled-input">
-                                    <div class="col-md-2 form-group">
+                                    <div class="col-md-4 form-group">
                                         <label>Item<span class="mandatory">*</span></label>
                                         @Html.DropDownList("ItemId", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ItemId", @placeholder = "Select Item", @class = "form-control" })
                                     </div>
@@ -88,13 +88,17 @@
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Avaliable Qty<span class="mandatory">*</span></label>
-                                        @Html.TextBox("AvaliableQty", "", htmlAttributes: new { @placeholder = "Avaliable Qty", @id = "AvaliableQty", @class = "form-control" })
+                                        @Html.TextBox("AvaliableQty", "", htmlAttributes: new { @placeholder = "Avaliable Qty", @id = "AvaliableQty", @class = "form-control", @disabled = "disabled" })
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Transfer Qty<span class="mandatory">*</span></label>
-                                        @Html.DropDownList("TransferQty", new SelectList(Model.UnitLists, "Value", "Text"), htmlAttributes: new { @id = "TransferQty", @class = "form-control", @disabled = "disabled" })
+                                        @Html.TextBox("TransferQty", "", htmlAttributes: new { @placeholder = "Transfer Qty", @id = "TransferQty", @class = "form-control" })
                                     </div>
                                     <div class="col-md-2 form-group">
+                                        <label>Amount</label>
+                                        @Html.TextBox("TransferAmount", "", htmlAttributes: new { @placeholder = "Amount", @id = "TransferAmount", @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-12 form-group">
                                         <label>Action</label>
                                         <br />
                                         <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
@@ -111,6 +115,7 @@
                                                 <th class="tbl-heading">Unit</th>
                                                 <th class="tbl-heading">Avaliable Qty</th>
                                                 <th class="tbl-heading">Transfer Qty</th>
+                                                <th class="tbl-heading">Transfer Amt</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tbodyid"></tbody>
@@ -157,6 +162,9 @@
             $("#AvaliableQty").val("");
             $("#TransferQty").val("");
             $("#btnAdd").val("Add");
+            $("#TransferAmount").val("");
+        });
+       
 
             $("#btnAdd").click(function (e) {
                 e.preventDefault();
@@ -169,25 +177,28 @@
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
                     return false;
-                } else if ($("#UnitId").val() === "0" || $("#UnitId").val() === "") {
-                    msg = "Please select unit.";
-                    bAdded = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                } else if ($("#AvaliableQty").val() === "") {
-                    msg = "Please enter avaliable qty.";
-                    bAdded = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                } else if ($("#TransferQty").val() === "") {
-                    msg = "Please enter transfer qty.";
-                    bAdded = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
                 }
+                //else if ($("#UnitId").val() === "0" || $("#UnitId").val() === "") {
+                //    msg = "Please select unit.";
+                //    bAdded = false;
+                //    $('#alertModal').modal('show');
+                //    $('#msg').html(msg);
+                //    return false;
+                //}
+                //else if ($("#AvaliableQty").val() === "") {
+                //    msg = "There is no avaliable qty.";
+                //    bAdded = false;
+                //    $('#alertModal').modal('show');
+                //    $('#msg').html(msg);
+                //    return false;
+                //}
+                //else if ($("#TransferQty").val() === "") {
+                //    msg = "Please enter transfer qty.";
+                //    bAdded = false;
+                //    $('#alertModal').modal('show');
+                //    $('#msg').html(msg);
+                //    return false;
+                //}
 
                 if (bAdded) {
                     if ($("#tblStoreTransfer TBODY TR").length > 0) {
@@ -218,6 +229,7 @@
                                          <input type="hidden" id="hdnUnitId_${ItemId}" name="hdnUnitId_${ItemId}" value="${$("#UnitId :selected").val()}" />
                                          <input type="hidden" id="hdnAvaliableQty_${ItemId}" name="hdnAvaliableQty_${ItemId}" value="${$("#AvaliableQty").val()}" />
                                          <input type="hidden" id="hdnTransferQty_${ItemId}" name="hdnTransferQty_${ItemId}" value="${$("#TransferQty").val()}" />
+                                         <input type="hidden" id="hdnTransferAmt_${ItemId}" name="hdnTransferAmt_${ItemId}" value="${$("#TransferAmount").val()}" />
                                      `;
                     cell.append(btnRemove);
 
@@ -231,24 +243,29 @@
                     //Add Office cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#AvaliableQty").val());
-                    //Add Amount cell.
+                    //Add Qty cell.
                     cell = $(row.insertCell(-1));
                     cell.html($("#TransferQty").val());
 
-                    //Set Default
-                    $("#FromOfficeId").val($("#FromOfficeId option:first").val());
-                    $('#FromOfficeId').select2().trigger('change');
-                    $("#ToOfficeId").val($("#ToOfficeId option:first").val());
-                    $('#ToOfficeId').select2().trigger('change');
-                    $("#Date").val("");
-                    $("#RefrenceNumber").val("");
-                    $("#Remarks").val("");
+                    //Add Amount cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#TransferAmount").val());
 
+                    //Set Default
+                    //$("#FromOfficeId").val($("#FromOfficeId option:first").val());
+                    //$('#FromOfficeId').select2().trigger('change');
+                    //$("#ToOfficeId").val($("#ToOfficeId option:first").val());
+                    //$('#ToOfficeId').select2().trigger('change');
+                    //$("#Date").val("");
+                    //$("#RefrenceNumber").val("");
+                    //$("#Remarks").val("");
+                    //Set Default
                     $("#ItemId").val($("#Item_Id option:first").val());
                     $('#ItemId').select2().trigger('change');
                     $('#UnitId').val("");
                     $("#AvaliableQty").val("");
                     $("#TransferQty").val("");
+                    $("#TransferAmount").val("");
                     $("#btnAdd").val("Add");
 
                     $("td").each(function () {
@@ -265,79 +282,78 @@
                 }
             });
 
-            $("body").on("click", "#btnSubmit", function () {
+        $("body").on("click", "#btnSubmit", function () {
+            if ($("#FromOfficeId").val() === "0" || $("#FromOfficeId").val() === "") {
+                msg = "Please Select From Office Id.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            } else if ($("#ToOffice_Id").val() === "0" || $("#ToOffice_Id").val() === "") {
+                msg = "Please Select To Office Id.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            } else if ($("#Date").val() === "") {
+                msg = "Please select date.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            } else if ($("#RefrenceNumber").val() === "") {
+                msg = "Please enter refrence number.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+           
                 //Loop through the Table rows and build a JSON array.
                 let StoreTransferLineValues = [];
                 let isValid = true;
                 let msg = "";
-                if ($("#hdnItemId_ TBODY TR").length > 0) {
-                    $("#hdnItemId_ TBODY TR").each(function () {
+                if ($("#tblStoreTransfer TBODY TR").length > 0) {
+                    $("#tblStoreTransfer TBODY TR").each(function () {
                         let index = parseInt($(this).val());
                         let oMapping = {};
                         oMapping.ItemId = index;
                         oMapping.UnitId = parseInt($(`#hdnUnitId_${ItemId}`).val());
                         oMapping.AvailableQty = parseFloat($(`#hdnAvaliableQty_${ItemId}`).val());
                         oMapping.TransferQty = parseInt($(`#hdnTransferQty_${ItemId}`).val());
+                        oMapping.TransferAmount = parseInt($(`#hdnTransferAmt_${ItemId}`).val());
                         StoreTransferLineValues.push(oMapping);
                     });
                     $("#StoreLine").val(JSON.stringify(StoreTransferLineValues));
                 } else {
                     msg = "Please add at least 1 item.";
                     isValid = false;
-                }
-                if ($("#FromOfficeId").val() === "0" || $("#FromOfficeId").val() === "") {
-                    msg = "Please Select From Office Id.";
-                    isValid = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                } else if ($("#ToOffice_Id").val() === "0" || $("#ToOffice_Id").val() === "") {
-                    msg = "Please Select To Office Id.";
-                    isValid = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                } else if ($("#Date").val() === "") {
-                    msg = "Please select date.";
-                    isValid = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                } else if ($("#RefrenceNumber").val() === "") {
-                    msg = "Please enter refrence number.";
-                    isValid = false;
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                }
-                if (isValid) {
-                    return true;
-                } else {
-                    $('#alertModal').modal('show');
-                    $('#msg').html(msg);
-                    return false;
-                }
+            }
+            if (isValid) {
+                return true;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+                
             });
 
             $("#ItemId").change(function () {
                 let Item_Id = parseInt($("#ItemId").val());
+                let FromOfficeId = parseInt($("#FromOfficeId").val());
                 if (Item_Id >0) {
-                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    IMSC.ajaxCall("GET", "/Material/GetItem_Detail?Item_Id=" + Item_Id + "&Office_Id=" + FromOfficeId + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
                         var result = JSON.parse(d);
-                        if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
-                            $("#Hsn_Sac").val(result[0].HSN_SAC);
-                            $("#GST").val(result[0].GST);
-                            $("#hdnIs_SameState").val(result[0].Is_SameState);
-                            $("#GST").change();
+                        if (result !== "null") {
+                            $("#AvaliableQty").val(result[0].AvailableQty);
+                            $('#UnitId').val(result[0].BaseUnit_Id);
                         } else {
-                            $("#Hsn_Sac").val("");
-                            $("#GST").val("0");
-                            $("#hdnIs_SameState").val(0);
-                            $("#GST").change();
+                            $("#AvaliableQty").val(0);
+                            $('#UnitId').val("");
                         }
                     });
                 }
              });
-        });
     });
 </script>

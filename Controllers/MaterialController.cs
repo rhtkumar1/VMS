@@ -894,7 +894,7 @@ namespace IMS.Controllers
             StoreTransfer objStoreTransfer = new StoreTransfer();
             try
             {
-                objStoreTransfer.StoreTransferLines = JsonConvert.DeserializeObject<List<StoreTransferLine>>(ObjStoreTransfer.StorelLine);
+                objStoreTransfer.StoreTransferLines = JsonConvert.DeserializeObject<List<StoreTransferLine>>(ObjStoreTransfer.StoreLine);
                 objStoreTransfer = objStoreTransfer.StoreOrder_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 objStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -948,6 +948,22 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         #endregion
+
+        [HttpGet]
+        public ActionResult GetItem_Detail(int Item_Id, int Office_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {               
+                dt = new StoreTransfer().GetItem_Detail(Item_Id, Office_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
 
     }
 }

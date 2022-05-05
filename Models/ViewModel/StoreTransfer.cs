@@ -41,15 +41,15 @@ namespace IMS.Models.ViewModel
 
         public StoreTransfer()
         {
-            ToOffice_Id = CommonUtility.GetDefault_OfficeID();
+            FromOffice_Id = CommonUtility.GetDefault_OfficeID();
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
-            ToOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
-            FromOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1 AND Office_Id !=" + ToOffice_Id.ToString()), "Id", "Value");
+            ToOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1 AND Office_Id !=" + FromOffice_Id.ToString()), "Id", "Value");
+            FromOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             StoreTransferLines = new List<StoreTransferLine>();
-            
+            Date = DateTime.Now.ToString("dd-MM-yyyy");
         }
         public StoreTransfer StoreOrder_InsertUpdate()
         {
@@ -84,7 +84,11 @@ namespace IMS.Models.ViewModel
                 }
             }
             catch (Exception ex)
-            { throw ex; }
+            {
+                IsSucceed = false;
+                ActionMsg = ex.Message;
+                throw ex; }
+            return this;
 
     }
 
@@ -104,6 +108,22 @@ namespace IMS.Models.ViewModel
 
             return dt;
         }
+
+        public DataTable GetItem_Detail(int Item_Id, int Office_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_Id", Item_Id));
+                SqlParameters.Add(new SqlParameter("@Office_Id", Office_Id));              
+                dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Stock", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
     }
 
     public class StoreTransferLine
@@ -112,5 +132,6 @@ namespace IMS.Models.ViewModel
         public string UnitId { get; set; }
         public string AvailableQty { get; set; }
         public string TransferQty { get; set; }
+        public string TransferAmount { get; set; }
     }
 }
