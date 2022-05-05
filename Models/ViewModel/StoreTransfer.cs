@@ -38,6 +38,7 @@ namespace IMS.Models.ViewModel
         public bool IsSucceed { get; set; }
         public int MENU_Id { get; set; }
         public List<StoreTransferLine> StoreTransferLines { get; set; }
+        public int OfficeId { get; set; }
 
         public StoreTransfer()
         {
@@ -50,6 +51,7 @@ namespace IMS.Models.ViewModel
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             StoreTransferLines = new List<StoreTransferLine>();
             Date = DateTime.Now.ToString("dd-MM-yyyy");
+            OfficeId = CommonUtility.GetDefault_OfficeID();
         }
         public StoreTransfer StoreOrder_InsertUpdate()
         {
@@ -74,7 +76,7 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@Material_Line", StoreLine));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
-
+                SqlParameters.Add(new SqlParameter("@OfficeId", OfficeId));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Store_Transfer_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
