@@ -880,13 +880,72 @@ namespace IMS.Controllers
         #endregion
 
         #region StoreTransfer
-        public ActionResult StoreTransfer(int SaleId, string AppToken = "")
+        public ActionResult StoreTransfer()
         {
             StoreTransfer ObjStoreTransfer = new StoreTransfer();
             AppToken = Request.QueryString["AppToken"].ToString();
             ObjStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
             ObjStoreTransfer.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Material/StoreTransfer.cshtml", ObjStoreTransfer);
+        }
+        [HttpPost]
+        public ActionResult StoreTransfer(StoreTransfer ObjStoreTransfer)
+        {
+            StoreTransfer objStoreTransfer = new StoreTransfer();
+            try
+            {
+                objStoreTransfer.StoreTransferLines = JsonConvert.DeserializeObject<List<StoreTransferLine>>(ObjStoreTransfer.StorelLine);
+                objStoreTransfer = objStoreTransfer.StoreOrder_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                objStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
+                objStoreTransfer.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objStoreTransfer != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objStoreTransfer.IsSucceed)
+                    {
+                        ViewBag.Msg = objStoreTransfer.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objStoreTransfer.IsSucceed && objStoreTransfer.CompanyId != -1)
+                    {
+                        ViewBag.Msg = objStoreTransfer.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            StoreTransfer newStoreTransfer = new StoreTransfer();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
+            newStoreTransfer.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/StoreTransfer.cshtml", (objStoreTransfer.IsSucceed ? newStoreTransfer : objStoreTransfer));
+
+        }
+
+        public ActionResult GetItemDetailStoreTransfer(int Item_Id, int Party_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            StoreTransfer storeTransfer = new StoreTransfer();
+            try
+            {
+                dt = storeTransfer.GetItemDetail(Item_Id, Party_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
         }
         #endregion
 

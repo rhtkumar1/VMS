@@ -12,8 +12,13 @@
 <body>
     <form id="form1" runat="server">
     <asp:ScriptManager runat="server"></asp:ScriptManager>        
-        <rsweb:ReportViewer ID="ReportViewer1" runat="server" AsyncRendering="false" Width="100%">
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" CssClass="reportviewer" Font-Names="Verdana" BorderColor="Black" ShowBackButton="true" ShowPrintButton="true" ShowRefreshButton="true"
+        BorderStyle="None" Font-Size="8pt" InteractiveDeviceInfos="(Collection)" WaitMessageFont-Names="Verdana" AsyncRendering="false" SizeToReportContent="true" 
+        WaitMessageFont-Size="14pt" Height="100%" Width="100%" ProcessingMode="Local">
         </rsweb:ReportViewer>
+
+        
+
     </form>
 </body></html>
 

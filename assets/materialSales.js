@@ -929,9 +929,12 @@ function BindGrid(result, isqtydisabled, sourceid) {
         let Texable_Amount = 0;
         let discount_1 = parseFloat(value.Order_Disc1);
         let discount_2 = parseFloat(value.Order_Disc2);
+        let discount_1_Amt = 0;
+        let discount_2_Amt = 0;
 
         //if (amount > 0) {
         if (sourceid === 1) {
+            
             if (quantity > 0 && rate > 0) {
                 amount = quantity * rate;
 
@@ -941,9 +944,11 @@ function BindGrid(result, isqtydisabled, sourceid) {
                 Texable_Amount = amount;
                 if (discount_1 > 0) {
                     Texable_Amount = (amount - (amount * discount_1 / 100)).toFixed(2);
+                    discount_1_Amt = parseFloat((amount * discount_1 / 100)).toFixed(2);
                 }
                 if (discount_2 > 0) {
                     Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
+                    discount_2_Amt = parseFloat((amount - discount_1_Amt)*discount_2 / 100).toFixed(2);
                 }
                 gstAmount = (Texable_Amount * gst / 100).toFixed(2);
                 if (is_SameState) {
@@ -957,6 +962,8 @@ function BindGrid(result, isqtydisabled, sourceid) {
                 }
 
                 tamount = (parseFloat(Texable_Amount) + parseFloat(gstAmount)).toFixed(2);;
+                value.Discount_1_Amount = discount_1_Amt;
+                value.Discount_2_Amount = discount_2_Amt;
             }
         }
         else {

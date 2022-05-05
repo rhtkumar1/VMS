@@ -95,7 +95,7 @@
                                         <option value="DR">DR</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label>Party</label>
                                     @Html.DropDownListFor(m => m.PartyId, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "PartyId", @class = "form-control" })
                                 </div>
@@ -192,6 +192,7 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
+        $("#PartyId").select2();
         $("#VoucherDate").val("");
         $("#VoucherDate").attr('placeholder', 'dd/mm/yyyy');
         $("#CheckDate").val("");
@@ -297,73 +298,6 @@
             }
             
 
-            //if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
-            //    $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
-            //    $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
-
-            //    if ($("#PartyId :selected").text().toLowerCase().trim() === "cash" ||
-            //        $("#PartyId :selected").text().toLowerCase().trim() === "bank") {
-
-            //        if ($("#ddlEnteryType :selected").text().toLowerCase().trim() === "dr" ||
-            //            $("#ddlEnteryType :selected").text().toLowerCase().trim() === "cr") {
-            //            msg = "In case of JV / Sales / Purchase VoucherType any Cash / Bank ledger with Dr or CR will not allowed";
-            //            bAdded = false;
-            //            $('#alertModal').modal('show');
-            //            $('#msg').html(msg);
-            //            return false;
-            //        }
-            //    }
-            //}
-
-            //if ($("#Constant_Id :selected").text().toLowerCase().trim() === "payment") {
-            //    if ($("[id^='#hdnPartyId_']").length > 0) {
-            //        $("[id^='#hdnPartyId_']").each(function () {
-            //            let index = parseInt($(this).attr('data-party-id'));
-            //            let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
-            //            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-            //            if (enterytype === "cr" && (party === "cash" || party === "bank")) {
-            //                return true;
-            //            } else {
-            //                msg = "In case of Payment VocherType at least one Cash or bank ledger must be entered with CR";
-            //                bAdded = false;
-            //                $('#alertModal').modal('show');
-            //                $('#msg').html(msg);
-            //                return false;
-            //            }
-            //        });
-            //    } else {
-            //        msg = "In case of Payment VocherType at least one Cash or bank ledger must be entered with CR";
-            //        bAdded = false;
-            //        $('#alertModal').modal('show');
-            //        $('#msg').html(msg);
-            //        return false;
-            //    }
-            //}
-
-            //if ($("#Constant_Id :selected").text().toLowerCase().trim() === "receipt") {
-            //    if ($("[id^='hdnPartyId_']").length > 0) {
-            //        $("[id^='hdnPartyId_']").each(function () {
-            //            let index = parseInt($(this).attr('data-party-id'));
-            //            let party = $(`#hdnPartyId_${index}`).text().toLowerCase().trim();
-            //            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-            //            if (enterytype === "dr" && (party === "cash" || party === "bank")) {
-            //                return true;
-            //            } else {
-            //                msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
-            //                bAdded = false;
-            //                $('#alertModal').modal('show');
-            //                $('#msg').html(msg);
-            //                return false;
-            //            }
-            //        });
-            //    } else {
-            //        msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
-            //        bAdded = false;
-            //        $('#alertModal').modal('show');
-            //        $('#msg').html(msg);
-            //        return false;
-            //    }
-            //}
             //Reference the Party and Location ddl.
             if (bAdded) {
                 if ($("#tblVoucher TBODY TR").length > 0) {
@@ -482,12 +416,12 @@
                     if ($("#Constant_Id :selected").text().toLowerCase().trim() === "jv" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "sales" ||
                         $("#Constant_Id :selected").text().toLowerCase().trim() === "purchase") {
-                        $("[id^='#hdnPartyId_']").each(function () {
+                        $("[id^='hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
-                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
+                            let enterytype = $("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim();
                             if (party.includes("cash") || party.includes("bank")) {
-                                if (enterytype === "dr" || enterytype==="cr") {
+                                if (enterytype === "dr" || enterytype === "cr") {
                                     msg = "In this VocherType no Cash or bank ledger allowed";
                                     isValid = false;
                                     $('#alertModal').modal('show');
@@ -496,16 +430,15 @@
                                 }
                             }
                         });
+                        
                     }
-
+                    
                     if ($("#Constant_Id :selected").text().toLowerCase().trim() === "payment") {
-                        $("[id^='#hdnPartyId_']").each(function () {
+                        $("[id^='hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
-                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (enterytype === "cr" && (party.includes("cash") || party.includes("bank"))) {
-                                return true;
-                            } else {
+                            let enterytype = $("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim();
+                            if (enterytype === "cr" && !(party.includes("cash") || party.includes("bank"))) {
                                 msg = "In case of Payment VocherType atleast one Cash or bank ledger must be entered with CR";
                                 isValid = false;
                                 $('#alertModal').modal('show');
@@ -519,10 +452,8 @@
                         $("[id^='hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
-                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (enterytype === "dr" && (party.includes("cash") || party.includes("bank"))) {
-                                return true;
-                            } else {
+                            let enterytype = $("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim();
+                            if (enterytype === "dr" && !(party.includes("cash") || party.includes("bank"))) {
                                 msg = "In case of Receipt VocherType atleast one Cash or bank ledger must be entered with DR";
                                 isValid = false;
                                 $('#alertModal').modal('show');
@@ -536,13 +467,8 @@
                         $("[id^='hdnPartyId_']").each(function () {
                             let index = parseInt($(this).attr('data-party-id'));
                             let party = $(this).val().toLowerCase().trim();
-                            let enterytype = $(`#hdnEnteryType_${index}`).text().toLowerCase().trim();
-                            if (enterytype === "dr" && (party.includes("cash") || party.includes("bank"))) {
-                                return true;
-                            }
-                            else if (enterytype === "cr" && (party.includes("cash") || party.includes("bank"))) {
-                                return true;
-                            } else {
+                            let enterytype = $("#hdnEnteryType_" + index).val().toLocaleLowerCase().trim();
+                            if ((enterytype === "dr" && !(party.includes("cash") || party.includes("bank"))) || (enterytype === "cr" && !(party.includes("cash") || party.includes("bank"))) ) {
                                 isValid = false;
                                 msg = "In case of Contra VocherType Cash or bank ledger must be entered in both DR & CR";
                                 $('#alertModal').modal('show');
