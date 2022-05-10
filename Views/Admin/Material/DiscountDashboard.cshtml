@@ -165,15 +165,15 @@
                 { name: "Invoice_No", type: "text", title: "Invoice No", sorting: true, filtering: false},
                 { name: "Bill_Date", title: "Bill Date", sorting: true, filtering: false},
                 { name: "Bill_Discount", title: "Discount(%)", sorting: true, filtering: false},
-                { name: "Bill_DiscountAmount", title: "Discount Amount", sorting: true, filtering: false},
+                { name: "Bill_DiscountAmount", title: "Achieved Point", sorting: true, filtering: false},
                 {
-                    title: "Received Amount", sorting: true, filtering: false,
+                    title: "Reedemed Point", sorting: true, filtering: false,
                     itemTemplate: function (i,o) {
                         return ` <input type="text" id="ReceivedAmount_${o.Sale_Id}" placeholder = "Received-Amount" value="${o.ReceivedDiscount}"  name="ReceivedAmount_${o.Sale_Id}" class="form-control" />`;
                     }
                 },
                 {
-                    title: "Received Date", sorting: true, filtering: false,
+                    title: "Reedemed Date", sorting: true, filtering: false,
                     itemTemplate: function (i, o) {
                         return `<input type="text" id="ReceivedDate_${o.Sale_Id}" placeholder = "dd/mm/yyyy" name="ReceivedDate_${o.Sale_Id}" class="form-control clsDate" />`;
                     }
