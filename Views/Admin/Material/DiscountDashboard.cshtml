@@ -47,6 +47,9 @@
                     <div class="col-md-1 form-group pull-left">
                         <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
                     </div>
+                    <div class="col-md-1 form-group pull-left">
+                        <button type="button" style="margin-top: 26px;" name="btnPrint" id="btnPrint" class="btncustome pull-right">Print</button>
+                    </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                         @using (Html.BeginForm("ManageDiscountDashboard", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "MaterialOrder" }))
                         {
@@ -92,6 +95,7 @@
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
+        $("#drpParty").select2();
         var listItems = [];
 
         $("#drpParty").change(function () {
@@ -196,6 +200,35 @@
             e.preventDefault();
             loadData();
         });
+        $("#btnPrint").click(function (e) {
+            e.preventDefault();
+            let fromdate = "";
+            let todate = "";
+            if (parseInt($("#drpParty").val()) == 0) {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select party");
+                return;
+            }
+            if ($("#FromDate").val() == "") {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select from-date.");
+                return;
+            }
+            if ($("#ToDate").val() == "") {
+                $('#alertModal').modal('show');
+                $('#msg').html("Please select to-date.");
+                return;
+            }
+            debugger;
+            fromdate = $("#FromDate").val().replace('/', '-').replace('/', '-');
+            todate = $("#ToDate").val().replace('/', '-').replace('/', '-');
+            //fromdate = fdate[2] + '-' + fdate[1] + '-' + fdate[0].slice(-2);
+            //todate = tdate[2] + '-' + tdate[1] + '-' + tdate[0].slice(-2);
+
+            window.open("/Reports/ReportViewer.aspx?ReportId=5&Party_Id=" + $("#drpParty").val() + "&From_Date=" + fromdate + "&To_Date=" + todate +"");
+        });
+        
+
         $("body").on("click", "#btnSubmit", function () {
             let DisDash = [];
             let isValid = true;
@@ -211,7 +244,7 @@
                     let BalAmount = 0;
                     let ReceivedAmount = 0;
                     let Bill_DiscountAmount = 0;
-
+                    
                     if ($("#ReceivedAmount_" + index).val() === "") {
                         isValid = false;
                         msg = "Please enter received amount!!!";

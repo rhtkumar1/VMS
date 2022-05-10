@@ -359,6 +359,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
     <Content Include="Reports\Report\Ledger_Detail_Report.rdlc" />
+    <Content Include="Reports\Report\Discount_Point_Details.rdlc" />
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
