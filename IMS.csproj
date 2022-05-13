@@ -115,6 +115,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\admin\css\bootstrap-datepicker3.css" />
+    <Content Include="assets\admin\css\jquery-ui192.css" />
+    <Content Include="assets\admin\js\bootstrap-datepicker.min.js" />
+    <Content Include="assets\admin\css\bootstrap-iso.css" />
     <Content Include="assets\admin\css\bootstrap.min.css" />
     <Content Include="assets\admin\css\custom.css" />
     <Content Include="assets\admin\css\font-awesome.css" />
@@ -122,6 +126,7 @@
     <Content Include="assets\admin\css\jsgrid-theme.min.css" />
     <Content Include="assets\admin\css\jsgrid.min.css" />
     <Content Include="assets\admin\css\normalize.css" />
+    <Content Include="assets\admin\css\select2.min.css" />
     <Content Include="assets\admin\css\style.css" />
     <Content Include="assets\admin\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\admin\images\loading-square.gif" />
@@ -137,6 +142,7 @@
     <Content Include="assets\admin\js\jquery.nicescroll.js" />
     <Content Include="assets\admin\js\screenfull.js" />
     <Content Include="assets\admin\js\scripts.js" />
+    <Content Include="assets\admin\js\select2.min.js" />
     <Content Include="assets\admin\js\skycons.js" />
     <Content Include="assets\materiaOrderCreation.js" />
     <Content Include="assets\materialPurchase.js" />
@@ -356,10 +362,8 @@
     <Content Include="Views\Admin\Material\MaterialOrder.cshtml" />
     <Content Include="Views\Admin\Material\OrderCreation.cshtml" />
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Admin\Material\DiscountDashboard.cshtml" />
     <Content Include="Reports\Report\Ledger_Detail_Report.rdlc" />
-    <Content Include="Reports\Report\Discount_Point_Details.rdlc" />
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />
@@ -382,6 +386,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="ItemBarCode\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\Report\Material_Sale_Gatepass.rdlc" />

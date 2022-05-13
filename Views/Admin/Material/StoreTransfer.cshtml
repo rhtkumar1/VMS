@@ -92,11 +92,11 @@
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Transfer Qty<span class="mandatory">*</span></label>
-                                        @Html.TextBox("TransferQty", "", htmlAttributes: new { @placeholder = "Transfer Qty", @id = "TransferQty", @class = "form-control" })
+                                        @Html.TextBox("TransferQty", "", htmlAttributes: new { @placeholder = "Transfer Qty", @type = "number", @id = "TransferQty", @class = "form-control" })
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>Amount</label>
-                                        @Html.TextBox("TransferAmount", "", htmlAttributes: new { @placeholder = "Amount", @id = "TransferAmount", @class = "form-control" })
+                                        @Html.TextBox("TransferAmount", "", htmlAttributes: new { @placeholder = "Amount", @type = "number", @id = "TransferAmount", @class = "form-control" })
                                     </div>
                                     <div class="col-md-12 form-group">
                                         <label>Action</label>
@@ -153,6 +153,13 @@
         $("#FromOfficeId").select2();
         $("#ToOfficeId").select2();
         $("#ItemId").select2();
+       // $("#FromOfficeId").val($("#FromOfficeId option:first").val());
+        //$('#FromOfficeId').select2().trigger('change');
+        //$("#ToOfficeId").val($("#ToOfficeId option:first").val());
+        //$('#ToOfficeId').select2().trigger('change');
+        //$("#Date").val("");
+        $("#RefrenceNumber").val("");
+        $("#Remarks").val("");
 
         $("body").on("click", "#btnReset", function (e) {
             e.preventDefault();
@@ -164,9 +171,9 @@
             $("#btnAdd").val("Add");
             $("#TransferAmount").val("");
         });
-       
 
-            $("#btnAdd").click(function (e) {
+
+       $("#btnAdd").click(function (e) {
                 e.preventDefault();
                 let bAdded = true;
                 let msg = "";
@@ -174,17 +181,17 @@
                 if ($("#ItemId").val() === "0" || $("#ItemId").val() === "") {
                     msg = "Please select item.";
                     bAdded = false;
+                    $('#lertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
+                else if ($("#UnitId").val() === "0" || $("#UnitId").val() === "") {
+                    msg = "Please select unit.";
+                    bAdded = false;
                     $('#alertModal').modal('show');
                     $('#msg').html(msg);
                     return false;
                 }
-                //else if ($("#UnitId").val() === "0" || $("#UnitId").val() === "") {
-                //    msg = "Please select unit.";
-                //    bAdded = false;
-                //    $('#alertModal').modal('show');
-                //    $('#msg').html(msg);
-                //    return false;
-                //}
                 //else if ($("#AvaliableQty").val() === "") {
                 //    msg = "There is no avaliable qty.";
                 //    bAdded = false;
@@ -192,13 +199,29 @@
                 //    $('#msg').html(msg);
                 //    return false;
                 //}
-                //else if ($("#TransferQty").val() === "") {
-                //    msg = "Please enter transfer qty.";
-                //    bAdded = false;
-                //    $('#alertModal').modal('show');
-                //    $('#msg').html(msg);
-                //    return false;
-                //}
+                else if ($("#TransferQty").val() === "") {
+                    msg = "Please enter transfer qty.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    $("#TransferQty").focus();
+                    return false;
+                }
+                else if ($("#TransferAmount").val() === "") {
+                    msg = "Please enter Amount.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    $("#TransferAmount").focus();
+                    return false;
+                }
+                else if ($("#AvaliableQty").val() < $("#TransferAmount").val()) {
+                    msg = "There is no avaliable qty.";
+                    bAdded = false;
+                    $('#alertModal').modal('show');
+                    $('#msg').html(msg);
+                    return false;
+                }
 
                 if (bAdded) {
                     if ($("#tblStoreTransfer TBODY TR").length > 0) {
@@ -262,7 +285,7 @@
                     //Set Default
                     $("#ItemId").val($("#Item_Id option:first").val());
                     $('#ItemId').select2().trigger('change');
-                    $('#UnitId').val("");
+                    $('#UnitId').val("0");
                     $("#AvaliableQty").val("");
                     $("#TransferQty").val("");
                     $("#TransferAmount").val("");
@@ -282,14 +305,17 @@
                 }
             });
 
-        $("body").on("click", "#btnSubmit", function () {
-            if ($("#FromOfficeId").val() === "0" || $("#FromOfficeId").val() === "") {
+      $("body").on("click", "#btnSubmit", function () {
+          let StoreTransferLineValues = [];
+          let isValid = true;
+          let msg = "";
+          if ($("#FromOfficeId").val() === "0" || $("#FromOfficeId").val() === "") {
                 msg = "Please Select From Office Id.";
-                isValid = false;
+                isVald = false;
                 $('#alertModal').modal('show');
                 $('#msg').html(msg);
                 return false;
-            } else if ($("#ToOffice_Id").val() === "0" || $("#ToOffice_Id").val() === "") {
+          } else if ($("#ToOfficeId").val() === "0" || $("#ToOffice_Id").val() === "") {
                 msg = "Please Select To Office Id.";
                 isValid = false;
                 $('#alertModal').modal('show');
@@ -308,20 +334,19 @@
                 $('#msg').html(msg);
                 return false;
             }
-           
+
                 //Loop through the Table rows and build a JSON array.
-                let StoreTransferLineValues = [];
-                let isValid = true;
-                let msg = "";
+                
                 if ($("#tblStoreTransfer TBODY TR").length > 0) {
-                    $("#tblStoreTransfer TBODY TR").each(function () {
+                    $("[id^='hdnItemId_']").each(function () {
                         let index = parseInt($(this).val());
                         let oMapping = {};
-                        oMapping.ItemId = index;
-                        oMapping.UnitId = parseInt($(`#hdnUnitId_${ItemId}`).val());
-                        oMapping.AvailableQty = parseFloat($(`#hdnAvaliableQty_${ItemId}`).val());
-                        oMapping.TransferQty = parseInt($(`#hdnTransferQty_${ItemId}`).val());
-                        oMapping.TransferAmount = parseInt($(`#hdnTransferAmt_${ItemId}`).val());
+                        let itemId = parseInt($(`#hdnItemId_${index}`).val());
+                        oMapping.ItemId = itemId;
+                        oMapping.UnitId = parseInt($(`#hdnUnitId_${itemId}`).val());
+                        oMapping.AvailableQty = parseFloat($(`#hdnAvaliableQty_${itemId}`).val());
+                        oMapping.TransferQty = parseInt($(`#hdnTransferQty_${itemId}`).val());
+                        oMapping.TransferAmount = parseInt($(`#hdnTransferAmt_${itemId}`).val());
                         StoreTransferLineValues.push(oMapping);
                     });
                     $("#StoreLine").val(JSON.stringify(StoreTransferLineValues));
@@ -336,7 +361,7 @@
                 $('#msg').html(msg);
                 return false;
             }
-                
+
             });
 
             $("#ItemId").change(function () {

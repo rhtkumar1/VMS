@@ -45,7 +45,7 @@ namespace IMS.Models.ViewModel
             FromOffice_Id = CommonUtility.GetDefault_OfficeID();
             Loginid = CommonUtility.GetLoginID();
             MENU_Id = CommonUtility.GetActiveMenuID();
-            ToOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1 AND Office_Id !=" + FromOffice_Id.ToString()), "Id", "Value");
+            ToOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             FromOfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
@@ -66,18 +66,20 @@ namespace IMS.Models.ViewModel
                 StoreLine = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@TransfarID", FromOffice_Id));
-                SqlParameters.Add(new SqlParameter("@RefrenceNumber", RefrenceNumber));
+                SqlParameters.Add(new SqlParameter("@TransfarID", TransfarID));                
                 SqlParameters.Add(new SqlParameter("@FromOffice_ID", FromOffice_Id));
                 SqlParameters.Add(new SqlParameter("@ToOffice_ID", ToOffice_Id));
-                SqlParameters.Add(new SqlParameter("@TransationDate", Date));
-                SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                if (!string.IsNullOrEmpty(Date))
+                    SqlParameters.Add(new SqlParameter("@TransationDate", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Date))));
+                //SqlParameters.Add(new SqlParameter("@TransationDate", Date));                
                 SqlParameters.Add(new SqlParameter("@USERID", Loginid));
                 SqlParameters.Add(new SqlParameter("@Material_Line", StoreLine));
                 SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
                 SqlParameters.Add(new SqlParameter("@OfficeId", OfficeId));
-                DataTable dt = DBManager.ExecuteDataTableWithParameter("Store_Transfer_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@Number", RefrenceNumber));
+                SqlParameters.Add(new SqlParameter("@Comment", Remarks));
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("StoreTransfar_InsertUpdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
                     IsSucceed = Convert.ToBoolean(dr[1]);
