@@ -3171,7 +3171,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>="Indian Rupees "&amp; Code.changeToWords(CStr(Sum(Fields!TotalAmount.Value, "Material_Sale_Bill")))</Value>
+                                  <Value>=Code.SpellNumber(Sum(Fields!TotalAmount.Value, "Material_Sale_Bill"))</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -4125,7 +4125,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>="Indian Rupees "&amp; Code.changeToWords(ReportItems!Textbox115.Value)</Value>
+                                                <Value>=Code.SpellNumber(ReportItems!Textbox115.Value)</Value>
                                                 <Style>
                                                   <FontFamily>calibri</FontFamily>
                                                   <FontWeight>Bold</FontWeight>
@@ -4148,6 +4148,7 @@
                                         </Style>
                                       </Textbox>
                                       <ColSpan>5</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -5925,213 +5926,186 @@
       <NumberOfRows>2</NumberOfRows>
     </GridLayoutDefinition>
   </ReportParametersLayout>
-  <Code>Public Shared Function changeToWords(ByVal numb As [String]) As [String]
-    Dim val As [String] = "", wholeNo As [String] = numb, points As [String] = "", andStr As [String] = "", pointStr As [String] = ""
-    Dim endStr As [String] = ""
-    Try
-        Dim decimalPlace As Integer = numb.IndexOf(".")
-        If decimalPlace &gt; 0 Then
-            wholeNo = numb.Substring(0, decimalPlace)
-            points = numb.Substring(decimalPlace + 1)
-            If Convert.ToInt32(points) &gt; 0 Then
-                andStr = "point"
-                'just to separate whole numbers from points
-                pointStr = translateCents(points)
+  <Code>Function SpellNumber(ByVal MyNumber)
+          Dim Rupees, Paise, Temp
+          Dim DPlace, Count As Integer
+          Dim Places(9) As String
+          Places(2) = " Thousand "
+          Places(3) = " Lakh "
+          Places(4) = " Crore "
+          ' String representation of amount.
+          MyNumber = Trim(Str(MyNumber))
+          ' Position of decimal place 0 if none.
+          DPlace = InStr(MyNumber, ".")
+         '  Convert Paise and set MyNumber to dollar amount.
+           If DPlace &gt; 0 Then
+           Paise = GetTens(Left(Mid(MyNumber, DPlace + 1) &amp; "00", 2))
+           MyNumber = Trim(Left(MyNumber, DPlace - 1))
+           End If
+           Count = 1
+           Do While MyNumber &lt;&gt; ""
+           If Count &lt;&gt; 1 Then
+           Temp = GetHundreds(Right(MyNumber, 2))
+           If Temp &lt;&gt; "" Then Rupees = Temp &amp; Places(Count) &amp; Rupees
+           If Len(MyNumber) &gt; 2 Then
+           MyNumber = Left(MyNumber, Len(MyNumber) - 2)
+           Else
+           MyNumber = ""
+           End If
+           Else
+           Temp = GetHundreds(Right(MyNumber, 3))
+           If Temp &lt;&gt; "" Then Rupees = Temp &amp; Places(Count) &amp; Rupees
+           If Len(MyNumber) &gt; 3 Then
+               MyNumber = Left(MyNumber, Len(MyNumber) - 3)
+            Else
+               MyNumber = ""
             End If
-        End If
-        val = [String].Format("{0} {1}{2} {3}", translateWholeNumber(wholeNo).Trim(), andStr, pointStr, endStr)
-    Catch
-        
+           End If
+           Count = Count + 1
+           Loop
+           Select Case Rupees
+           Case ""
+              Rupees = " "
+           Case "One"
+              Rupees = "One Rupees "
+           Case Else
+              Rupees = Rupees &amp;  " Rupees " 
+           End Select
+         Select Case Paise
+          Case ""
+            Paise = " Zero Paise "
+          Case "One"
+              Paise = " and Paise One"
+          Case Else
+            Paise =   Paise  &amp; " Paise "
+          End Select
 
-    End Try
-    Return val
-End Function
-Private Shared Function translateWholeNumber(ByVal number As [String]) As [String]
-    Dim word As String = ""
-    Try
-        Dim beginsZero As Boolean = False
-        'tests for 0XX
-        Dim isDone As Boolean = False
-        'test if already translated
-        Dim dblAmt As Double = (Convert.ToDouble(number))
-        'if ((dblAmt &gt; 0) &amp;&amp; number.StartsWith("0"))
-        If dblAmt &gt; 0 Then
-            'test for zero or digit zero in a nuemric
-            beginsZero = number.StartsWith("0")
-            
-            Dim numDigits As Integer = number.Length
-            Dim pos As Integer = 0
-            'store digit grouping
-            Dim place As [String] = ""
-            'digit grouping name:hundres,thousand,etc...
-            Select Case numDigits
-                Case 1
-                    'ones' range
-                    word = ones(number)
-                    isDone = True
-                    Exit Select
-                Case 2
-                    'tens' range
-                    word = tens(number)
-                    isDone = True
-                    Exit Select
-                Case 3
-                    'hundreds' range
-                    pos = (numDigits Mod 3) + 1
-                    place = " Hundred "
-                    Exit Select
-                'thousands' range
-                Case 4, 5, 6
-                    pos = (numDigits Mod 4) + 1
-                    place = " Thousand "
-                    Exit Select
-                'millions' range
-                Case 7, 8, 9
-                    pos = (numDigits Mod 7) + 1
-                    place = " Million "
-                    Exit Select
-                Case 10
-                    'Billions's range
-                    pos = (numDigits Mod 10) + 1
-                    place = " Billion "
-                    Exit Select
-                Case Else
-                    'add extra case options for anything above Billion...
-                    isDone = True
-                    Exit Select
+          If Rupees &lt;&gt; " " Then Paise = " and " &amp; Paise
+          SpellNumber = " " &amp; Rupees &amp; Paise &amp; " Only "
+          End Function
+          
+            ' For us Doller in words       
+                   Function SpellNumberInDollars(ByVal MyNumber)
+                   Dim Dollars, Cents, Temp
+                   Dim DecimalPlace, Count
+                   Dim Place(9) As String
+                   Place(2) = " Thousand "
+                   Place(3) = " Million "
+                   Place(4) = " Billion "
+                   Place(5) = " Trillion "
+                   ' String representation of amount.                        
+                   MyNumber = Trim(Str(MyNumber))                          
+                  ' Position of decimal place 0 if none.
+                    DecimalPlace = InStr(MyNumber, ".")
+                           ' Convert cents and set MyNumber to dollar amount.
+                  If DecimalPlace &gt; 0 Then
+                  Cents = GetTens(Left(Mid(MyNumber, DecimalPlace + 1) &amp; "00", 2))
+                  MyNumber = Trim(Left(MyNumber, DecimalPlace - 1))                   
+                            End If
+                   Do While MyNumber &lt;&gt; ""
+                   Temp = GetHundreds(Right(MyNumber, 3)) 
+                   If Temp &lt;&gt; "" Then Dollars = Temp &amp; Place(Count) &amp; Dollars
+                   If Len(MyNumber) &gt; 3 Then
+                   MyNumber = Left(MyNumber, Len(MyNumber) - 3)      
+                            Else
+                   MyNumber = ""
+                            End If
+                   Count = Count + 1 
+                                 
+          Loop
+
+          Select Case Dollars
+              Case ""                   
+              Dollars = "No Dollars"          
+              Case "One"           
+              Dollars = "One Dollar"                  
+              Case Else
+              Dollars = Dollars &amp; " Dollars"
+
+           End Select
+           Select Case Cents
+            Case ""
+            Cents = " and No Cents"
+            Case "One"
+            Cents = " and One Cent"
+            Case Else
+            Cents = " and " &amp; Cents &amp; " Cents"        
             End Select
-            If Not isDone Then
-                'if transalation is not done, continue...(Recursion comes in now!!)
-                word = translateWholeNumber(number.Substring(0, pos)) + place + translateWholeNumber(number.Substring(pos))
-                'check for trailing zeros
-                If beginsZero Then
-                    word = " and " &amp; word.Trim()
-                End If
-            End If
-            'ignore digit grouping names
-            If word.Trim().Equals(place.Trim()) Then
-                word = ""
-            End If
-        End If
-    Catch
-        
 
-    End Try
-    Return word.Trim()
-End Function
-Private Shared Function tens(ByVal digit As [String]) As [String]
-    Dim digt As Integer = Convert.ToInt32(digit)
-    Dim name As [String] = Nothing
-    Select Case digt
-        Case 10
-            name = "Ten"
-            Exit Select
-        Case 11
-            name = "Eleven"
-            Exit Select
-        Case 12
-            name = "Twelve"
-            Exit Select
-        Case 13
-            name = "Thirteen"
-            Exit Select
-        Case 14
-            name = "Fourteen"
-            Exit Select
-        Case 15
-            name = "Fifteen"
-            Exit Select
-        Case 16
-            name = "Sixteen"
-            Exit Select
-        Case 17
-            name = "Seventeen"
-            Exit Select
-        Case 18
-            name = "Eighteen"
-            Exit Select
-        Case 19
-            name = "Nineteen"
-            Exit Select
-        Case 20
-            name = "Twenty"
-            Exit Select
-        Case 30
-            name = "Thirty"
-            Exit Select
-        Case 40
-            name = "Fourty"
-            Exit Select
-        Case 50
-            name = "Fifty"
-            Exit Select
-        Case 60
-            name = "Sixty"
-            Exit Select
-        Case 70
-            name = "Seventy"
-            Exit Select
-        Case 80
-            name = "Eighty"
-            Exit Select
-        Case 90
-            name = "Ninety"
-            Exit Select
-        Case Else
-            If digt &gt; 0 Then
-                name = (tens(digit.Substring(0, 1) &amp; "0") &amp; " ") + ones(digit.Substring(1))
-            End If
-            Exit Select
-    End Select
-    Return name
-End Function
-Private Shared Function ones(ByVal digit As [String]) As [String]
-    Dim digt As Integer = Convert.ToInt32(digit)
-    Dim name As [String] = ""
-    Select Case digt
-        Case 1
-            name = "One"
-            Exit Select
-        Case 2
-            name = "Two"
-            Exit Select
-        Case 3
-            name = "Three"
-            Exit Select
-        Case 4
-            name = "Four"
-            Exit Select
-        Case 5
-            name = "Five"
-            Exit Select
-        Case 6
-            name = "Six"
-            Exit Select
-        Case 7
-            name = "Seven"
-            Exit Select
-        Case 8
-            name = "Eight"
-            Exit Select
-        Case 9
-            name = "Nine"
-            Exit Select
-    End Select
-    Return name
-End Function
-Private Shared Function translateCents(ByVal cents As [String]) As [String]
-    Dim cts As [String] = "", digit As [String] = "", engOne As [String] = ""
-    For i As Integer = 0 To cents.Length - 1
-        digit = cents(i).ToString()
-        If digit.Equals("0") Then
-            engOne = "Zero"
-        Else
-            engOne = ones(digit)
-        End If
-        cts += " " &amp; engOne
-    Next
-    Return cts
-End Function</Code>
+           SpellNumberInDollars = Dollars &amp; Cents
+           End Function
+
+                                 
+                         
+
+         ' Converts a number from 100-999 into text
+          Function GetHundreds(ByVal MyNumber)
+          Dim Result As String
+          If Val(MyNumber) = 0 Then Exit Function
+           MyNumber = Right("000" &amp; MyNumber, 3)
+         ' Convert the hundreds place.
+         If Mid(MyNumber, 1, 1) &lt;&gt; "0" Then
+            Result = GetDigit(Mid(MyNumber, 1, 1)) &amp; " Hundred "
+         End If
+         ' Convert the tens and ones place.
+          If Mid(MyNumber, 2, 1) &lt;&gt; "0" Then
+           Result = Result &amp; GetTens(Mid(MyNumber, 2))
+          Else
+           Result = Result &amp; GetDigit(Mid(MyNumber, 3))
+          End If
+         GetHundreds = Result
+          End Function
+        
+         ' Converts a number from 10 to 99 into text.
+          Function GetTens(TensText)
+          Dim Result As String
+          Result = ""          
+          If Val(Left(TensText, 1)) = 1 Then  
+           Select Case Val(TensText)
+            Case 10: Result = "Ten"
+            Case 11: Result = "Eleven"
+            Case 12: Result = "Twelve"
+            Case 13: Result = "Thirteen"
+            Case 14: Result = "Fourteen"
+            Case 15: Result = "Fifteen"
+            Case 16: Result = "Sixteen"
+            Case 17: Result = "Seventeen"
+            Case 18: Result = "Eighteen"
+            Case 19: Result = "Nineteen"
+            Case Else
+           End Select
+         Else  ' If value between 20-99...
+          Select Case Val(Left(TensText, 1))
+            Case 2: Result = "Twenty "
+            Case 3: Result = "Thirty "
+            Case 4: Result = "Forty "
+            Case 5: Result = "Fifty "
+            Case 6: Result = "Sixty "
+            Case 7: Result = "Seventy "
+            Case 8: Result = "Eighty "
+            Case 9: Result = "Ninety "
+            Case Else
+          End Select
+          Result = Result &amp; GetDigit _
+            (Right(TensText, 1))  ' Retrieve ones place.
+          End  If
+          GetTens = Result
+           End Function
+                    ' Converts a number from 1 to 9 into text.
+          Function GetDigit(Digit)
+          Select Case Val(Digit)
+          Case 1: GetDigit = "One"
+          Case 2: GetDigit = "Two"
+          Case 3: GetDigit = "Three"
+          Case 4: GetDigit = "Four"
+          Case 5: GetDigit = "Five"
+          Case 6: GetDigit = "Six"
+          Case 7: GetDigit = "Seven"
+          Case 8: GetDigit = "Eight"
+          Case 9: GetDigit = "Nine"
+          Case Else: GetDigit = ""
+          End Select
+          End Function</Code>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>b01ef9d4-2c79-4d36-887f-ead92839ef9c</rd:ReportID>

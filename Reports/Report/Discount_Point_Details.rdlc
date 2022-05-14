@@ -28,6 +28,10 @@
         <CommandText>Report_Discount2_Detail</CommandText>
       </Query>
       <Fields>
+        <Field Name="RID">
+          <DataField>RID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
         <Field Name="Sale_Id">
           <DataField>Sale_Id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -677,7 +681,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!AchievedPoint.Value)</Value>
+                                  <Value>=SUM(CDec(IIF(Fields!RID.Value = 1,Fields!AchievedPoint.Value,0)))</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
@@ -857,7 +861,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=SUM(Fields!AchievedPoint.Value) - SUM(Fields!ReedemedPoint.Value)</Value>
+                                  <Value>=SUM(CDec(IIF(Fields!RID.Value = 1,Fields!AchievedPoint.Value,0))) - SUM(Fields!ReedemedPoint.Value)</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
