@@ -16,6 +16,7 @@ namespace IMS.Models.ViewModel
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public int OfficeId { get; set; }
+        public SelectList OfficeLists { get; set; }
         public SelectList PartyLists { get; set; }
         public int ItemId { get; set; }
         public SelectList Item_Lists { get; set; }
@@ -32,10 +33,11 @@ namespace IMS.Models.ViewModel
             FromDate = DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy");
             ToDate = DateTime.Now.ToString("dd/MM/yyyy");
             OfficeId = CommonUtility.GetDefault_OfficeID();
-            string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
+            string PartyListWhereClouse = "And IsActive=1 ";
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", PartyListWhereClouse), "Id", "Value");
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             Report_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Report_Id", "ReportName", "Report_Config", "And IsActive=1 and ReportType=2"), "Id", "Value");
+            OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
         }
         public DataTable Report_StockMovement()
         {
@@ -83,5 +85,6 @@ namespace IMS.Models.ViewModel
         //    catch (Exception ex)
         //    { throw ex; }
         //}
+       
     }
 }
