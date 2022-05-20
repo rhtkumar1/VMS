@@ -894,8 +894,8 @@ namespace IMS.Controllers
             StoreTransfer objStoreTransfer = new StoreTransfer();
             try
             {
-                objStoreTransfer.StoreTransferLines = JsonConvert.DeserializeObject<List<StoreTransferLine>>(ObjStoreTransfer.StoreLine);
-                objStoreTransfer = objStoreTransfer.StoreOrder_InsertUpdate();
+                ObjStoreTransfer.StoreTransferLines = JsonConvert.DeserializeObject<List<StoreTransferLine>>(ObjStoreTransfer.StoreLine);
+                objStoreTransfer = ObjStoreTransfer.StoreOrder_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 objStoreTransfer.AppToken = CommonUtility.URLAppToken(AppToken);
                 objStoreTransfer.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();

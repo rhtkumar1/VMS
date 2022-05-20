@@ -211,8 +211,8 @@ public static class CommonUtility
         }
         return true;
     }
-                
-         
+
+
     //public static bool GenerateQrcode(string Data, string Location)
     //{
     //    try
@@ -237,4 +237,20 @@ public static class CommonUtility
     //        return false;
     //    }
     //}
+
+    public static DataTable GetReportConfigData(int ReportId)
+    {
+        DataTable dt = new DataTable();
+        try
+        {
+            string sql = "Report_Config_GetData";
+            List<SqlParameter> SqlParameters = new List<SqlParameter>();
+            SqlParameters.Add(new SqlParameter("@Report_Id", ReportId));
+            dt = DBManager.ExecuteDataTableWithParameter(sql, CommandType.StoredProcedure, SqlParameters);
+
+        }
+        catch (Exception ex)
+        { throw ex; }
+        return dt;
+    }
 }

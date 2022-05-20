@@ -23,7 +23,12 @@ namespace IMS.Controllers
                 return View("~/Views/Home/Index.cshtml");
             }
         }
-
+        [HttpGet]
+        public ActionResult GetReportConfigData(int ReportId)
+        {
+            DataTable DT = CommonUtility.GetReportConfigData(ReportId);
+            return Content(JsonConvert.SerializeObject(DT));
+        }
         public ActionResult LedgerReport()
         {
             if (Session["UserName"] != null)

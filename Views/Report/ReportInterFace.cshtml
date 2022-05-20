@@ -24,21 +24,12 @@
                     @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "ReportInterface" }))
                     {
                         @Html.HiddenFor(m => m.AppToken)
-                    <div class="styled-input">
-                        <div class="col-md-3 form-group">
-                            <label>Report Name</label>
-                            @Html.DropDownList("ddlReportName", new SelectList(Model.Report_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlReportName", @class = "form-control" })
-                        </div>
-                    </div>
-
                         <div class="styled-input">
                             <div class="col-md-3 form-group">
-                                <label>Item</label>
-                                @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
-                                
+                                <label>Report Name</label>
+                                @Html.DropDownList("ddlReportName", new SelectList(Model.Report_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlReportName", @class = "form-control" })
                             </div>
                         </div>
-
                         <div class="styled-input">
                             <div class="col-md-2 form-group">
                                 <label>From Date</label>
@@ -51,6 +42,28 @@
                                 @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                             </div>
                         </div>
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Office</label>
+                                @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "ddlOffice", @placeholder = "From Office", @class = "form-control" })
+                              
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Party</label>
+                                @Html.DropDownList("ddlParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "ddlParty", @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Item</label>
+                                @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
+
+                            </div>
+                        </div>
+
                         <div class="col-md-2 form-group pull-right">
                             <div class="appointment-btn text-lg-right">
                                 <br />
@@ -58,11 +71,11 @@
                             </div>
                         </div>
                     }
-                <div id="Ifream">
-                    <iframe id="ReportInterfaceView" src="~/Reports/ReportViewer.aspx?ReportId=0"  width="900" height="500">
-                    </iframe>
-                   
-                </div>
+                    <div id="Ifream">
+                        <iframe id="ReportInterfaceView" src="~/Reports/ReportViewer.aspx?ReportId=0" width="900" height="500">
+                        </iframe>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,16 +106,90 @@
     });
 
     function searchData() {
-
         let ReportID = parseInt($('#ddlReportName').val());
-        let ItemID = parseInt($('#ddlItem').val());
-        var fromDate = $('#FromDate').val();
-        var toDate = $('#ToDate').val();
-        let frame_src = document.getElementById('ReportInterfaceView').src;
-        const OperationatSRC = frame_src.split("?");
-        var Reportquerystring = "ItemID:" + ItemID.toString() + ",FromDate:" + fromDate.toString() + ",todate:" + toDate.toString();
-        var Href = OperationatSRC[0] + "?ReportId=" + ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
-        $("#ReportInterfaceView").attr("src", Href);         
-           };
+        
+        if (ReportID > 0) {
+            IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== "null" && result !== "") {
+                    const Par = result[0].Params.split(",");
+                    var Reportquerystring= "";
+                    let _ReportID = parseInt($('#ddlReportName').val());
+                    for (var Counter = 0; Counter < Par.length  ;Counter++)
+                    {
+                        var V = Par[Counter].toString();
+                        switch (V) {
+                            case "ItemID":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + $('#ddlItem').val().toString();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $('#ddlItem').val().toString();
+                                }
+                                break;
+                            case "FromDate":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + $('#FromDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $('#FromDate').val();
+                                }
+                                break;
+                            case "ToDate":
+                            case "todate":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + $('#ToDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $('#ToDate').val();
+                                }
+                                break;
+                            case "PartyID":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + $('#ddlParty').val();
+
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $('#ddlParty').val();
+                                }
+                                break;
+                            case "OfficeID":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + $('#ddlOffice').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," +V + ":" + $('#ddlOffice').val();
+                                }
+                                break;
+                            case "GroupId":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + "";//$('#ToDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + ","+  V + ":" + "";
+                                }
+                                break;
+                            case "Ledger_Ids":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + "";//$('#ToDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," +  V + ":" + "";
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    let frame_src = document.getElementById('ReportInterfaceView').src;
+                    const OperationatSRC = frame_src.split("?");
+                    var Href = OperationatSRC[0] + "?ReportId=" + _ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
+                    $("#ReportInterfaceView").attr("src", Href);
+                }
+                
+            });
+            
+        }
+    };
 
 </script>
