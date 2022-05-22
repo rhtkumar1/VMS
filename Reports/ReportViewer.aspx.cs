@@ -29,6 +29,11 @@ namespace IMS.Reports
             {
                 querystring = Request.QueryString.ToString();
                 ReportId = Convert.ToInt32(Request.QueryString["ReportId"]);
+                if(ReportId==0)
+                {
+                    ReportViewer1.LocalReport.ReportPath = "";
+                    ReportViewer1.LocalReport.Refresh();
+                }
             }
             if (ReportId > 0)
             {
@@ -55,6 +60,7 @@ namespace IMS.Reports
                 ReportViewer1.LocalReport.Refresh();
                 //ReportViewer1.RefreshReport(); // refresh report
             }
+           
         }
 
         public DataTable GetReportData()

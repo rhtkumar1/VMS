@@ -98,14 +98,14 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#ddlItem").select2();
+        //$("#ddlItem").select2();
         if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        $("#ddlItem").select2();
-        $("#drpLedger").select2();
-        $("#ddlGroup").select2();
+        //$("#ddlItem").select2();
+        //$("#drpLedger").select2();
+        //$("#ddlGroup").select2();
         searchData();
         });
 
@@ -160,15 +160,12 @@
                 }
 
             });
-
-        }
-        else {
-
             let frame_src = document.getElementById('ReportInterfaceView').src;
             const OperationatSRC = frame_src.split("?");
             var Href = OperationatSRC[0] + "?ReportId=0";
             $("#ReportInterfaceView").attr("src", Href);
         }
+        
     }).change();
     $("#ddlGroup").change(function () {
 
