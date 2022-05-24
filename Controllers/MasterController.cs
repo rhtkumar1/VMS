@@ -1766,9 +1766,10 @@ namespace IMS.Controllers
         {
             try
             {
-                BarCodePrint ObjBarCodePrint = new BarCodePrint(item_Id);
-                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
                 
+                BarCodePrint ObjBarCodePrint = new BarCodePrint(item_Id, Server.MapPath("~/ItemBarCode") + "\\");
+                ObjBarCodePrint.BarCodeImage = Request.Url.Scheme + "://" + Request.Url.Authority + "/ItemBarCode/" + Convert.ToString(item_Id) + ".jpeg";
+                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }                
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 ObjBarCodePrint.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
                 ObjBarCodePrint.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();

@@ -65,6 +65,8 @@ namespace IMS.Models.ViewModel
         public bool IsNewEntery;
         public int OpeningQty { get; set; }
         public string BarCoadID { get; set; }
+        public string BarCoadQty { get; set; }
+        public string BarCoadUnit { get; set; }
         public ItemMaster()
         {
             //GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
@@ -129,6 +131,10 @@ namespace IMS.Models.ViewModel
                 SqlParameters.Add(new SqlParameter("@ItemLocationId", ItemLocationId));
                 if (!string.IsNullOrEmpty(BarCoadID))
                     SqlParameters.Add(new SqlParameter("@BarCoadID", BarCoadID));
+                if (!string.IsNullOrEmpty(BarCoadQty))
+                    SqlParameters.Add(new SqlParameter("@BarcodeQty", BarCoadQty));
+                if (!string.IsNullOrEmpty(BarCoadUnit))
+                    SqlParameters.Add(new SqlParameter("@BarcodeUnit", BarCoadUnit));
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("Item_Master_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -257,6 +263,8 @@ namespace IMS.Models.ViewModel
                     OpeningQty = Convert.ToInt32(dr["OpeningQty"]);
                     ItemLocationId = Convert.ToInt32(dr["ItemLocationId"]);
                     BarCoadID = dr["BarCoadID"].ToString();
+                    BarCoadQty = dr["BarcodeQty"].ToString();
+                    BarCoadUnit = dr["BarcodeUnit"].ToString();
                     //Loginid = Convert.ToInt32(dr["LoginId"]);
                 }
             }

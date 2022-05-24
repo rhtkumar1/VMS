@@ -61,7 +61,14 @@ namespace IMS.Reports
                 {
                     string valID = paramcol["itemid"];
                     BarCodePrint Obj = new BarCodePrint(Convert.ToInt32(valID));
-                     Obj.GenerateBarcoad();
+                    Obj.BarCodeImage = Request.Url.Scheme + "://" + Request.Url.Authority + "/ItemBarCode/" + Convert.ToString(valID) + ".jpeg";
+                    string FileName = "~/ItemBarCode" + "\\" + Convert.ToString(valID) + ".jpeg";
+                    Obj.BarCodeLocation = new Uri(Server.MapPath(FileName)).AbsoluteUri;
+                    //   Server.MapPath(FileName) + ;
+                    //ReportParameter parameter = new ReportParameter("ImagePath", Obj.BarCodeLocation);
+                    //ReportViewer1.LocalReport.SetParameters(parameter);
+                    ReportViewer1.LocalReport.EnableExternalImages = true;
+                    Obj.GenerateBarcoad();
                     reportdt = Obj.BarCodaPrint;
                 }
                 else {

@@ -176,8 +176,20 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
+                                    <label>BarCoad Qty</label>
+                                    @Html.TextAreaFor(m => m.BarCoadQty, htmlAttributes: new { @placeholder = "BarCoad Qty", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>BarCoad Unit</label>
+                                    @Html.TextAreaFor(m => m.BarCoadUnit, htmlAttributes: new { @placeholder = "BarCoad Unit", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
                                     <label>BarCode</label>
-                                    <img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".gif" )" alt="" />
+                                    <img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".jpeg" )" alt="" />
 
                                 </div>
                             </div>

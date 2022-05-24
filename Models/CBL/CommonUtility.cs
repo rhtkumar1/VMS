@@ -189,21 +189,22 @@ public static class CommonUtility
             writter.Options.Margin = int.Parse("0");
             writter.Options.PureBarcode = false;
             Bitmap Image = writter.Write(Data);
-            Bitmap NewBitMap = new Bitmap(Image.Width+60, (Image.Height + 60));
-            using (Graphics graphic = Graphics.FromImage(NewBitMap))
-            {
-                Font newfont = new Font("IDAutomationHC39M", 10, FontStyle.Regular);
-                PointF point = new PointF(0, 5);
-                SolidBrush black = new SolidBrush(Color.Black);
-                SolidBrush white = new SolidBrush(Color.White);
-                // graphic
-                // graphic.FillRectangle(white, 0, Image.Height - 20, Image.Width, Image.Height);
-                graphic.DrawString(" Code" + " : "+ Code, newfont, black, point);
-                graphic.DrawString(" MRP      " + " : " + MRP, newfont, black, new PointF(0, 25));
-                graphic.DrawImage(Image, new PointF(0, 50));
-            }
+            Image.Save(Location);
+            //Bitmap NewBitMap = new Bitmap(Image.Width+60, (Image.Height + 60));
+            //using (Graphics graphic = Graphics.FromImage(NewBitMap))
+            //{
+            //    Font newfont = new Font("IDAutomationHC39M", 10, FontStyle.Regular);
+            //    PointF point = new PointF(0, 5);
+            //    SolidBrush black = new SolidBrush(Color.Black);
+            //    SolidBrush white = new SolidBrush(Color.White);
+            //    // graphic
+            //    // graphic.FillRectangle(white, 0, Image.Height - 20, Image.Width, Image.Height);
+            //    graphic.DrawString(" Code" + " : "+ Code, newfont, black, point);
+            //    graphic.DrawString(" MRP      " + " : " + MRP, newfont, black, new PointF(0, 25));
+            //    graphic.DrawImage(Image, new PointF(0, 50));
+            //}
 
-            NewBitMap.Save(Location);            
+                        
         }
         catch (Exception ex)
         {

@@ -26,37 +26,23 @@ namespace IMS.Models.ViewModel
         public DataTable BarCodaPrint = new DataTable();
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
+        public string BarCodeLocation { get; set; }
+        public string BarCodeImage { get; set; }
+        public string Imported { get; set; }
         public void GenerateBarcoad()
         {             
             CreateDatatable();
             try
             {
-                if (String.IsNullOrWhiteSpace(TextVal)) return;
-
-                BarcodeWriter writter = new BarcodeWriter()
-                {
-                    Format = BarcodeFormat.CODE_128
-                };
-                writter.Options.Width = int.Parse("100");
-                writter.Options.Height = int.Parse("40");
-                writter.Options.Margin = int.Parse("0");
-                writter.Options.PureBarcode = false;
-                Bitmap Image = writter.Write(TextVal);
-                Bitmap NewBitMap = new Bitmap(Image.Width + 60, (Image.Height + 90));
-                using (Graphics graphic = Graphics.FromImage(NewBitMap))
-                {                  
-                    string data = "";
-                    
-                    // Insert Reord in DataTable
-                    InsertOneRecordInDataTable(ItemName, Image);
-                    InsertOneRecordInDataTable(NetQty, Image);
-                    if (IsmrpPrint)
-                        InsertOneRecordInDataTable(MRP, Image);
-                    InsertOneRecordInDataTable("Help  : " + HelpLine, Image);
-                    InsertOneRecordInDataTable("Email : " + email, Image);
-                    // End record 
-                    
-                }
+                // Insert Reord in DataTable
+                InsertOneRecordInDataTable(ItemName);
+                InsertOneRecordInDataTable(NetQty);
+                if (IsmrpPrint)
+                    InsertOneRecordInDataTable(MRP);
+                InsertOneRecordInDataTable(HelpLine);
+                InsertOneRecordInDataTable(email);
+                InsertOneRecordInDataTable(Imported);
+                // End record
             }
             catch (Exception ex)
             {
@@ -64,12 +50,12 @@ namespace IMS.Models.ViewModel
             }
         }
 
-        private void InsertOneRecordInDataTable(string TEXT, Bitmap Image)
+        private void InsertOneRecordInDataTable(string TEXT)
         {
             DataRow ObjDataRow = BarCodaPrint.NewRow();
-            ObjDataRow["ID"] = 1;
+            ObjDataRow["ID"] = ItemID;
             ObjDataRow["TEXT"] = TEXT;
-            ObjDataRow["Image"] = Image;
+            ObjDataRow["BarCodeImage"] = BarCodeLocation;
             BarCodaPrint.Rows.Add(ObjDataRow);
         }
 
@@ -96,15 +82,24 @@ namespace IMS.Models.ViewModel
             dtColumn.ReadOnly = false;
             dtColumn.Unique = false;
             BarCodaPrint.Columns.Add(dtColumn);
-            // Create Image column.
+            // Create Image Location column.
             dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(Bitmap);
-            dtColumn.ColumnName = "Image";
-            dtColumn.Caption = "Image";
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "BarCodeImage";
+            dtColumn.Caption = "BarCodeImage";
             dtColumn.AutoIncrement = false;
             dtColumn.ReadOnly = false;
             dtColumn.Unique = false;
-            BarCodaPrint.Columns.Add(dtColumn);
+            BarCodaPrint.Columns.Add(dtColumn); 
+            //// Create Image column.
+            //dtColumn = new DataColumn();
+            //dtColumn.DataType = typeof(Bitmap);
+            //dtColumn.ColumnName = "Image";
+            //dtColumn.Caption = "Image";
+            //dtColumn.AutoIncrement = false;
+            //dtColumn.ReadOnly = false;
+            //dtColumn.Unique = false;
+            //BarCodaPrint.Columns.Add(dtColumn);
             // return ObjDT;
         }
         public BarCodePrint(int item_Id)
@@ -119,17 +114,72 @@ namespace IMS.Models.ViewModel
                 {
                     ItemCode = dr["Code"].ToString();
                     ItemName = dr["Title"].ToString();
-                    MRP = dr["MRP"].ToString();                    
-                    BaseUnit = dr["BaseUnit"].ToString();                    
-                    HelpLine = dr["HelpLine"].ToString();
-                    email = dr["Email"].ToString();
+                    MRP = dr["MRP"].ToString();
+                    BaseUnit = dr["BaseUnit"].ToString();
+                    HelpLine = "Help  : " + dr["HelpLine"].ToString();
+                    email = "Email : " + dr["Email"].ToString();
                     NetQty = dr["BarcodeQty"].ToString();
                     Unit = dr["BarcodeUnit"].ToString();
                     TextVal = dr["BARCOADID"].ToString();
                     NetQty = "NetQty :  " + NetQty + " " + BaseUnit + " In " + Unit;
-                    MRP = "MRP    :  " + MRP + " Per " + BaseUnit;
+                    MRP = "MRP    :  " + MRP + " Per " + BaseUnit +  "(inclusive of all Taxes)";
+                    Imported = dr["Imported"].ToString();
+                    IsmrpPrint = Convert.ToBoolean(dr["IsMRPPrint"]);
+
                 }
             }
+
+            catch (Exception ex)
+            { throw ex; }
+
+        }
+        public BarCodePrint(int item_Id,string _BarCodeLocation)
+        {
+            ItemID = item_Id.ToString();
+            BarCodeLocation = _BarCodeLocation;
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@ItemID", item_Id));
+                DataSet ds = DBManager.ExecuteDataSetWithParameter("Item_Master_Getdata_ForBarcodePrint_Web", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    ItemCode = dr["Code"].ToString();
+                    ItemName = dr["Title"].ToString();
+                    MRP = dr["MRP"].ToString();
+                    BaseUnit = dr["BaseUnit"].ToString();
+                    HelpLine = "Help  : " + dr["HelpLine"].ToString();
+                    email = "Email : " + dr["Email"].ToString();
+                    NetQty = dr["BarcodeQty"].ToString();
+                    Unit = dr["BarcodeUnit"].ToString();
+                    TextVal = dr["BARCOADID"].ToString();
+                    NetQty = "NetQty :  " + NetQty + " " + BaseUnit + " In " + Unit;
+                    MRP = "MRP    :  " + MRP + " Per " + BaseUnit + "(inclusive of all Taxes)";
+                    Imported = dr["Imported"].ToString();
+                    IsmrpPrint = Convert.ToBoolean(dr["IsMRPPrint"]);
+                }
+
+                string BarCodeString;
+                if (string.IsNullOrEmpty(TextVal))
+                {
+                    BarCodeString = "SYS";
+                    for (int i = item_Id.ToString().Length + 3; i < 11; i++)
+                    {
+                        BarCodeString = BarCodeString + "0";
+                    }
+                    BarCodeString = BarCodeString + "X" + ItemID;
+
+
+                }
+                else
+                { BarCodeString = TextVal; }
+                if (!string.IsNullOrEmpty(_BarCodeLocation))
+                {
+                    BarCodeLocation = BarCodeLocation + Convert.ToString(ItemID) + ".jpeg";
+                    CommonUtility.GenerateBarCode(Convert.ToString(BarCodeString), BarCodeLocation, "", "" + " ");
+                }
+            }
+
             catch (Exception ex)
             { throw ex; }
 

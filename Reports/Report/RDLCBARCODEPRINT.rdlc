@@ -13,7 +13,7 @@
     <DataSet Name="RDLCBARCODEPRINT">
       <Query>
         <DataSourceName>RDLCBARCODEPRINT</DataSourceName>
-        <CommandText>Select 1 AS ID, 'Text' AS TEXT, 'T' AS Image from Item_Master</CommandText>
+        <CommandText>Select 1 AS ID, 'Text' AS TEXT, 'T' AS BarCodeImage from Item_Master</CommandText>
       </Query>
       <Fields>
         <Field Name="ID">
@@ -24,8 +24,8 @@
           <DataField>TEXT</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Image">
-          <DataField>Image</DataField>
+        <Field Name="BarCodeImage">
+          <DataField>BarCodeImage</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -39,47 +39,12 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>5.38889in</Width>
+                  <Width>2.15972in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.25in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox1">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox1</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.1528in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -91,42 +56,46 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!TEXT.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontFamily>calibri</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>TEXT</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.17361in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Image Name="Image1">
-                          <Source>Database</Source>
-                          <Value>=Fields!Image.Value</Value>
-                          <MIMEType>image/bmp</MIMEType>
+                        <Image Name="Barcode">
+                          <Source>External</Source>
+                          <Value>=Fields!BarCodeImage.Value</Value>
                           <Sizing>FitProportional</Sizing>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <PaddingLeft>15pt</PaddingLeft>
                           </Style>
                         </Image>
                       </CellContents>
@@ -142,7 +111,6 @@
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
-                <TablixMember />
                 <TablixMember>
                   <Group Name="Image">
                     <GroupExpressions>
@@ -166,44 +134,27 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>RDLCBARCODEPRINT</DataSetName>
-            <Height>0.75in</Height>
-            <Width>5.38889in</Width>
+            <Height>0.32641in</Height>
+            <Width>2.15972in</Width>
             <Style>
               <Border>
+                <Color>White</Color>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
-          <Image Name="Image2">
-            <Source>Database</Source>
-            <Value>=First(Fields!Image.Value, "RDLCBARCODEPRINT")</Value>
-            <MIMEType>image/bmp</MIMEType>
-            <Sizing>FitProportional</Sizing>
-            <Top>1.33556in</Top>
-            <Left>3.63417in</Left>
-            <Height>0.5in</Height>
-            <Width>0.5in</Width>
-            <ZIndex>1</ZIndex>
-            <ToolTip>=First(Fields!Image.Value, "RDLCBARCODEPRINT")</ToolTip>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Image>
         </ReportItems>
-        <Height>2in</Height>
+        <Height>0.98778cm</Height>
         <Style />
       </Body>
-      <Width>6.38889in</Width>
+      <Width>5.4857cm</Width>
       <Page>
-        <PageHeight>4in</PageHeight>
-        <PageWidth>4in</PageWidth>
-        <LeftMargin>0.7874in</LeftMargin>
-        <RightMargin>0.7874in</RightMargin>
-        <TopMargin>0.7874in</TopMargin>
-        <BottomMargin>0.7874in</BottomMargin>
-        <ColumnSpacing>0.05118in</ColumnSpacing>
+        <PageHeight>4cm</PageHeight>
+        <PageWidth>6cm</PageWidth>
+        <LeftMargin>0cm</LeftMargin>
+        <RightMargin>0cm</RightMargin>
+        <TopMargin>0cm</TopMargin>
+        <ColumnSpacing>0.13cm</ColumnSpacing>
         <Style />
       </Page>
     </ReportSection>
@@ -214,6 +165,6 @@
       <NumberOfRows>2</NumberOfRows>
     </GridLayoutDefinition>
   </ReportParametersLayout>
-  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>843fe9d4-4b23-4242-8bb5-9722bd148a49</rd:ReportID>
 </Report>
