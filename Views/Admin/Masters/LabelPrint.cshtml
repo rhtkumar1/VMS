@@ -1,4 +1,4 @@
-﻿@model IMS.Models.ViewModel.ItemMaster
+﻿@model IMS.Models.ViewModel.BarCodePrint
 @{
     ViewBag.Title = "Lebels";
     Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
@@ -25,11 +25,28 @@
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     <div>
-                        <button class="btn pull-left" id="btnPrint" onclick="printContent('printarea');">Print Label</button>
+                        @Html.HiddenFor(m => m.ItemID, htmlAttributes: new { @id = "ItemID" })
+                        @Html.HiddenFor(m => m.AppToken)
                     </div>
                     <div class="clearfix"></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                        @Model.ItemName
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                        NetQty :  @Model.NetQty 
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                        @Model.MRP
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                        @Model.HelpLine
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                        @Model.email
+                    </div>
                     <div id="printarea" class="col-lg-4 col-md-4 col-sm-12 col-xs-12 form-group pull-right">
-                        <img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".gif" )" alt="" />
+                        <button class="btn pull-left" id="btnPrint" onclick="GenerateLable();">Generate Label</button>
+                        @*<img src="~/ItemBarCode/@Url.Content(@Model.ItemId.ToString() + ".gif" )" alt="" />*@
                     </div>
                 </div>
             </div>
@@ -46,6 +63,9 @@
         $('body').empty().html(printcontent);
         window.print();
         $('body').html(restorepage);
+    }
+    function GenerateLable() {
+        window.open("/Reports/ReportViewer.aspx?ReportId=9&ItemID=" + $('#ItemID').val() + "");
     }
 </script>
 <style>

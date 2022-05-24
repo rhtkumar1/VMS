@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using IMS.Models.ViewModel;
 using Microsoft.Reporting.WebForms;
 
 
@@ -42,6 +43,7 @@ namespace IMS.Reports
                 {
                     case 0:
                         break;
+                    case 3:
                     case 1:
                         MapQueryStringParams(querystring);
                         break;
@@ -49,11 +51,22 @@ namespace IMS.Reports
                         Reportquerystring = Convert.ToString(Request.QueryString["Reportquerystring"]);
                         MapReportquerystring(Reportquerystring);
                         break;
+                    
                 }
                 
                 ReportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;//ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/" + ReportName + ".rdlc");
-                DataTable reportdt = GetReportData();
+                DataTable reportdt;
+                if (ReportType == 3)
+                {
+                    string valID = paramcol["itemid"];
+                    BarCodePrint Obj = new BarCodePrint(Convert.ToInt32(valID));
+                     Obj.GenerateBarcoad();
+                    reportdt = Obj.BarCodaPrint;
+                }
+                else {
+                    reportdt = GetReportData();
+                }
                 ReportDataSource ReportDataSource = new ReportDataSource(ReportName, reportdt);
                 ReportViewer1.LocalReport.DataSources.Clear();
                 ReportViewer1.LocalReport.DataSources.Add(ReportDataSource);//new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));

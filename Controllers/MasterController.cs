@@ -1760,24 +1760,19 @@ namespace IMS.Controllers
 
         #endregion
 
-        #region
+        #region BarCode
         [HttpGet]
         public ActionResult LebelPrint(int item_Id = 0, string appToken = "", string sMsg = "")
         {
             try
             {
+                BarCodePrint ObjBarCodePrint = new BarCodePrint(item_Id);
                 if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
-                ItemMaster itemMaster = new ItemMaster();
-
-                if (item_Id > 0)
-                {
-                    itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode/" + item_Id + ".gif");
-                    itemMaster.ItemId = item_Id;
-                }
+                
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-                itemMaster.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
-                itemMaster.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
-                return View("~/Views/Admin/Masters/LabelPrint.cshtml", itemMaster);
+                ObjBarCodePrint.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+                ObjBarCodePrint.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+                return View("~/Views/Admin/Masters/LabelPrint.cshtml", ObjBarCodePrint);
             }
             catch (Exception ex)
             {
