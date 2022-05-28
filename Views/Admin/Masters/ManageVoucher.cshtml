@@ -81,7 +81,10 @@
                      loadData: function (filter) {
                          return $.grep(this.VoucherLists, function (VoucherList) {
                              return ((!filter.Voucher_No || VoucherList.Voucher_No.toLowerCase().indexOf(filter.Voucher_No.toLowerCase()) > -1)
-                                 && (!filter.Voucher_Type || VoucherList.Voucher_Type.toLowerCase().indexOf(filter.Voucher_Type.toLowerCase()) > -1));
+                                 && (!filter.Voucher_Type || VoucherList.Voucher_Type.toLowerCase().indexOf(filter.Voucher_Type.toLowerCase()) > -1)
+                                 && (!filter.LedgerList || VoucherList.LedgerList.toLowerCase().indexOf(filter.LedgerList.toLowerCase()) > -1)
+                                 && (!filter.Voucher_Date || VoucherList.Voucher_Date.toLowerCase().indexOf(filter.Voucher_Date.toLowerCase()) > -1)
+                             );
                          });
                      }
                  },
