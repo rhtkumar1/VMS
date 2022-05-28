@@ -46,7 +46,7 @@
                             <div class="col-md-3 form-group">
                                 <label>Office</label>
                                 @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "ddlOffice", @placeholder = "From Office", @class = "form-control" })
-                              
+
                             </div>
                         </div>
                         <div id="DivddlParty" class="styled-input">
@@ -58,7 +58,7 @@
                         </div>
                         <div id="DivddlItem" class="styled-input">
                             <div class="col-md-3 form-group">
-                                <label>Item       </label>
+                                <label>Item</label>
                                 @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
 
                             </div>
@@ -70,13 +70,13 @@
 
                             </div>
                         </div>
+                        <div id="clearfix" class="clearfix"></div>
                         <div id="DivdrpLedger" class="styled-input">
                             <div class="col-md-3 form-group">
                                 <label>Ledger</label>
                                 <select id="drpLedger" name="drpLedger" class="form-control"></select>
-
                             </div>
-                            
+
                         </div>
                         <div class="col-md-2 form-group pull-right">
                             <div class="appointment-btn text-lg-right">
@@ -98,14 +98,11 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        //$("#ddlItem").select2();
+
         if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        //$("#ddlItem").select2();
-        //$("#drpLedger").select2();
-        //$("#ddlGroup").select2();
         searchData();
         });
 
@@ -123,6 +120,12 @@
     $("#ddlReportName").change(function () {
         HideAll();
         let ReportID = parseInt($('#ddlReportName').val());
+        if (ReportID == 8) {
+            $("#clearfix").hide();
+        }
+        else {
+            $("#clearfix").show();
+        }
         if (ReportID > 0) {
             IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
                 var result = JSON.parse(d);
@@ -133,6 +136,7 @@
                         switch (V) {
                             case "ItemID":
                                 $("#DivddlItem").show();
+                                $("#ddlItem").select2();
                                 break;
                             case "FromDate":
                                 $('#DivFromDate').show();
@@ -141,22 +145,25 @@
                             case "todate":
                                 $('#DivToDate').show();
                                 break;
-                            case "PartyID":                               
+                            case "PartyID":
                                 $('#DivddlParty').show();
+                                $("#ddlParty").select2();
                                 break;
                             case "OfficeID":
                                 $('#DivddlOffice').show();
                                 break;
                             case "GroupId":
                                 $("#DivddlGroup").show();
+                                $("#ddlGroup").select2();
                                 break;
                             case "Ledger_Ids":
                                 $("#DivdrpLedger").show();
+                                $("#drpLedger").select2();
                                 break;
                             default:
                                 break;
                         }
-                    }                    
+                    }
                 }
 
             });
@@ -165,7 +172,7 @@
             var Href = OperationatSRC[0] + "?ReportId=0";
             $("#ReportInterfaceView").attr("src", Href);
         }
-        
+
     }).change();
     $("#ddlGroup").change(function () {
 
@@ -183,7 +190,7 @@
         });
     }).change();
     function HideAll() {
- 
+
         $('#DivFromDate').hide();
         $('#DivToDate').hide();
         $('#DivddlOffice').hide();
@@ -277,7 +284,7 @@
 
         }
         else {
-            
+
             let frame_src = document.getElementById('ReportInterfaceView').src;
             const OperationatSRC = frame_src.split("?");
             var Href = OperationatSRC[0] + "?ReportId=" + "0";

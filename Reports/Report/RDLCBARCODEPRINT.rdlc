@@ -77,7 +77,6 @@
                             <PaddingRight>2pt</PaddingRight>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -90,7 +89,6 @@
                         <Image Name="Barcode">
                           <Source>External</Source>
                           <Value>=Fields!BarCodeImage.Value</Value>
-                          <Sizing>FitProportional</Sizing>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -98,6 +96,7 @@
                             <PaddingLeft>15pt</PaddingLeft>
                           </Style>
                         </Image>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

@@ -40,7 +40,7 @@ namespace IMS.Models.ViewModel
                 if (IsmrpPrint)
                     InsertOneRecordInDataTable(MRP);
                 InsertOneRecordInDataTable(HelpLine);
-                InsertOneRecordInDataTable(email);
+                //InsertOneRecordInDataTable(email);
                 InsertOneRecordInDataTable(Imported);
                 // End record
             }
@@ -116,8 +116,8 @@ namespace IMS.Models.ViewModel
                     ItemName = dr["Title"].ToString();
                     MRP = dr["MRP"].ToString();
                     BaseUnit = dr["BaseUnit"].ToString();
-                    HelpLine = "Help  : " + dr["HelpLine"].ToString();
-                    email = "Email : " + dr["Email"].ToString();
+                    HelpLine = "Help-" + dr["HelpLine"].ToString() + "/" + dr["Email"].ToString();
+                    //email = "Email : " + dr["Email"].ToString();
                     NetQty = dr["BarcodeQty"].ToString();
                     Unit = dr["BarcodeUnit"].ToString();
                     TextVal = dr["BARCOADID"].ToString();
@@ -148,8 +148,8 @@ namespace IMS.Models.ViewModel
                     ItemName = dr["Title"].ToString();
                     MRP = dr["MRP"].ToString();
                     BaseUnit = dr["BaseUnit"].ToString();
-                    HelpLine = "Help  : " + dr["HelpLine"].ToString();
-                    email = "Email : " + dr["Email"].ToString();
+                    HelpLine = "Help-" + dr["HelpLine"].ToString()+ "/" + dr["Email"].ToString();
+                    //email = "Email : " ;
                     NetQty = dr["BarcodeQty"].ToString();
                     Unit = dr["BarcodeUnit"].ToString();
                     TextVal = dr["BARCOADID"].ToString();
