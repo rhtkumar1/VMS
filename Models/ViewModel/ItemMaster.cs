@@ -69,16 +69,8 @@ namespace IMS.Models.ViewModel
         public string BarCoadUnit { get; set; }
         public ItemMaster()
         {
-            //GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
-            UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
-            HSN_SAC_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("HSN_SACID", "HSN_SAC", "VW_HSN_SAC_Master", "And IsActive=1"), "Id", "Value");
-            LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
-            PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
-            GroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "item_group_master", "And IsActive=1"), "Id", "Value");
-            NatureLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And IsActive=1 And Sub_Type=1"), "Id", "Value");
-            ItemLocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10010 And Sub_Type=2 And IsActive=1"), "Id", "Value");
-            Unit_In_Lists = UnitLists;
-            Unit_Out_Lists = UnitLists;
+            
+            GetPageLodeData();
             Loginid = CommonUtility.GetLoginID();
             ItemMappingList = new List<dynamic>();
             PartyAndLocationMapping = new List<PartyAndLocationMapping>();
@@ -86,6 +78,67 @@ namespace IMS.Models.ViewModel
             
         }
         
+        public void GetPageLodeData()
+        {
+            int ID = 1;
+            var sb = new System.Text.StringBuilder();
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select Unit_Id AS Id,Title AS Value from Unit_Master where IsActive=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select HSN_SACID AS Id,HSN_SAC AS Value from VW_HSN_SAC_Master where IsActive=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select location_Id AS Id,Title AS Value from Location_Master where IsActive=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select Party_Id AS Id,Title AS Value from Party_Master where IsActive=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select Group_Id AS Id,Title AS Value from item_group_master where IsActive=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select Constant_Id AS Id,Constant_Value AS Value from Constant_Values where Menu_Id=10010 And IsActive=1 And Sub_Type=1" + @""" /> ");
+            ID++;
+            sb.Append(@"<listnode ID=""" + ID.ToString() + @""" SelectVal=""" + "Select Constant_Id AS Id,Constant_Value AS Value from Constant_Values where Menu_Id=10010 And Sub_Type=2 And IsActive=1" + @""" /> ");
+
+
+            List<SqlParameter> SqlParameters = new List<SqlParameter>();
+            SqlParameters.Add(new SqlParameter("@XML", ("<TABLES>" + sb + "</TABLES>")));
+            DataSet DSet = DBManager.ExecuteDataSetWithParameter("DDLValue_Dynamic_MultipulTable", CommandType.StoredProcedure, SqlParameters);
+            int RID = 1;
+            foreach (DataTable DTS in DSet.Tables)
+            {
+                List<DDLSELECT> PD = new List<DDLSELECT>();
+                PD.Add(new DDLSELECT(0, "--Select--"));
+                foreach (DataRow DT in DTS.Rows)
+                {
+                    PD.Add(new DDLSELECT(Convert.ToInt32(DT["ID"]), Convert.ToString(DT["Value"])));
+                }
+                switch (RID)
+                {
+                    case 1:
+                        UnitLists = new SelectList(PD, "Id", "Value");
+                        Unit_In_Lists = UnitLists;
+                        Unit_Out_Lists = UnitLists;
+                        break;
+                    case 2:
+                        HSN_SAC_Lists = new SelectList(PD, "Id", "Value");
+                        break;
+                    case 3:
+                        LocationLists = new SelectList(PD, "Id", "Value");
+                        break;
+                    case 4:
+                        PartyLists = new SelectList(PD, "Id", "Value");
+                        break;
+                    case 5:
+                        GroupLists = new SelectList(PD, "Id", "Value");
+                        break;
+                    case 6:
+                        NatureLists = new SelectList(PD, "Id", "Value");
+                        break;
+                    case 7:
+                        ItemLocationLists = new SelectList(PD, "Id", "Value");
+                        break;
+                    
+                }
+                RID++;
+            }
+        }
 
         public ItemMaster ItemMaster_InsertUpdate()
         {
@@ -99,7 +152,7 @@ namespace IMS.Models.ViewModel
                 string sString = string.Empty;
                 foreach (var item in PartyAndLocationMapping)
                 {
-                    sString += @"<listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" Party_Id=""" + Convert.ToString(item.PartyId) + @"""/>";
+                    sString += @" < listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" Party_Id=""" + Convert.ToString(item.PartyId) + @"""/>";
                 }
                 ItemMapping = "<ItemMaping>" + sString + "</ItemMaping>";
 
