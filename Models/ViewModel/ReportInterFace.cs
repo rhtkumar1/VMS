@@ -25,7 +25,7 @@ namespace IMS.Models.ViewModel
         public string AppToken { get; set; }
         public string AuthMode { get; set; }
         public string ActionMsg { get; set; }
-
+        public SelectList LedgerGroupLists { get; set; }
 
 
         public ReportInterFace()
@@ -38,6 +38,7 @@ namespace IMS.Models.ViewModel
             Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
             Report_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Report_Id", "ReportName", "Report_Config", "And IsActive=1 and ReportType=2"), "Id", "Value");
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
+            LedgerGroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
         }
         public DataTable Report_StockMovement()
         {

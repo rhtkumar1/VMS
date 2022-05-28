@@ -30,40 +30,54 @@
                                 @Html.DropDownList("ddlReportName", new SelectList(Model.Report_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlReportName", @class = "form-control" })
                             </div>
                         </div>
-                        <div class="styled-input">
-                            <div class="col-md-2 form-group">
+                        <div id="DivFromDate" class="styled-input">
+                            <div class="col-md-3 form-group">
                                 <label>From Date</label>
                                 @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                             </div>
                         </div>
-                        <div class="styled-input">
-                            <div class="col-md-2 form-group">
+                        <div id="DivToDate" class="styled-input">
+                            <div class="col-md-3 form-group">
                                 <label>To Date</label>
                                 @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                             </div>
                         </div>
-                        <div class="styled-input">
+                        <div id="DivddlOffice" class="styled-input">
                             <div class="col-md-3 form-group">
                                 <label>Office</label>
                                 @Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "ddlOffice", @placeholder = "From Office", @class = "form-control" })
-                              
+
                             </div>
                         </div>
-                        <div class="styled-input">
+                        <div id="DivddlParty" class="styled-input">
                             <div class="col-md-3 form-group">
                                 <label>Party</label>
                                 @Html.DropDownList("ddlParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "ddlParty", @class = "form-control" })
 
                             </div>
                         </div>
-                        <div class="styled-input">
+                        <div id="DivddlItem" class="styled-input">
                             <div class="col-md-3 form-group">
                                 <label>Item</label>
                                 @Html.DropDownList("ddlItem", new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "ddlItem", @class = "form-control" })
 
                             </div>
                         </div>
+                        <div id="DivddlGroup" class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Group</label>
+                                @Html.DropDownList("ddlGroup", new SelectList(Model.LedgerGroupLists, "Value", "Text"), htmlAttributes: new { @id = "ddlGroup", @class = "form-control" })
 
+                            </div>
+                        </div>
+                        <div id="clearfix" class="clearfix"></div>
+                        <div id="DivdrpLedger" class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Ledger</label>
+                                <select id="drpLedger" name="drpLedger" class="form-control"></select>
+                            </div>
+
+                        </div>
                         <div class="col-md-2 form-group pull-right">
                             <div class="appointment-btn text-lg-right">
                                 <br />
@@ -84,12 +98,11 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#ddlItem").select2();
+
         if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
             $('#msg').html("@ViewBag.Msg");
         }
-        $("#ddlItem").select2();
         searchData();
         });
 
@@ -104,19 +117,99 @@
     $("#btnSearch").click(function (e) {
         searchData();
     });
-
-    function searchData() {
+    $("#ddlReportName").change(function () {
+        HideAll();
         let ReportID = parseInt($('#ddlReportName').val());
-        
+        if (ReportID == 8) {
+            $("#clearfix").hide();
+        }
+        else {
+            $("#clearfix").show();
+        }
         if (ReportID > 0) {
             IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
                 var result = JSON.parse(d);
                 if (result !== "null" && result !== "") {
                     const Par = result[0].Params.split(",");
-                    var Reportquerystring= "";
+                    for (var Counter = 0; Counter < Par.length; Counter++) {
+                        var V = Par[Counter].toString();
+                        switch (V) {
+                            case "ItemID":
+                                $("#DivddlItem").show();
+                                $("#ddlItem").select2();
+                                break;
+                            case "FromDate":
+                                $('#DivFromDate').show();
+                                break;
+                            case "ToDate":
+                            case "todate":
+                                $('#DivToDate').show();
+                                break;
+                            case "PartyID":
+                                $('#DivddlParty').show();
+                                $("#ddlParty").select2();
+                                break;
+                            case "OfficeID":
+                                $('#DivddlOffice').show();
+                                break;
+                            case "GroupId":
+                                $("#DivddlGroup").show();
+                                $("#ddlGroup").select2();
+                                break;
+                            case "Ledger_Ids":
+                                $("#DivdrpLedger").show();
+                                $("#drpLedger").select2();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+            });
+            let frame_src = document.getElementById('ReportInterfaceView').src;
+            const OperationatSRC = frame_src.split("?");
+            var Href = OperationatSRC[0] + "?ReportId=0";
+            $("#ReportInterfaceView").attr("src", Href);
+        }
+
+    }).change();
+    $("#ddlGroup").change(function () {
+
+        let Group_Id = parseInt($('#ddlGroup').val());
+        //$('#PartyId').val(Party_Id);
+        IMSC.ajaxCall("GET", "/Report/GetLedger?Group_Id=" + Group_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            $("#drpLedger").empty();
+            $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+            if (result.length > 0) {
+                $.each(result, function (index, value) {
+                    $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
+                });
+            }
+        });
+    }).change();
+    function HideAll() {
+
+        $('#DivFromDate').hide();
+        $('#DivToDate').hide();
+        $('#DivddlOffice').hide();
+        $('#DivddlParty').hide();
+        $("#DivddlItem").hide();
+        $("#DivddlGroup").hide();
+        $("#DivdrpLedger").hide();
+    }
+    function searchData() {
+        let ReportID = parseInt($('#ddlReportName').val());
+
+        if (ReportID > 0) {
+            IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result !== "null" && result !== "") {
+                    const Par = result[0].Params.split(",");
+                    var Reportquerystring = "";
                     let _ReportID = parseInt($('#ddlReportName').val());
-                    for (var Counter = 0; Counter < Par.length  ;Counter++)
-                    {
+                    for (var Counter = 0; Counter < Par.length; Counter++) {
                         var V = Par[Counter].toString();
                         switch (V) {
                             case "ItemID":
@@ -158,23 +251,23 @@
                                     Reportquerystring = Reportquerystring + V + ":" + $('#ddlOffice').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," +V + ":" + $('#ddlOffice').val();
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $('#ddlOffice').val();
                                 }
                                 break;
                             case "GroupId":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + "";//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + $("#ddlGroup").val();//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + ","+  V + ":" + "";
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + $("#ddlGroup").val();
                                 }
                                 break;
                             case "Ledger_Ids":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + "";//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," +  V + ":" + "";
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
                                 }
                                 break;
                             default:
@@ -186,9 +279,16 @@
                     var Href = OperationatSRC[0] + "?ReportId=" + _ReportID.toString() + "&Reportquerystring=" + Reportquerystring.toString();
                     $("#ReportInterfaceView").attr("src", Href);
                 }
-                
+
             });
-            
+
+        }
+        else {
+
+            let frame_src = document.getElementById('ReportInterfaceView').src;
+            const OperationatSRC = frame_src.split("?");
+            var Href = OperationatSRC[0] + "?ReportId=" + "0";
+            $("#ReportInterfaceView").attr("src", Href);
         }
     };
 

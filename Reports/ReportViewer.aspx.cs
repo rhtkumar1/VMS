@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using IMS.Models.ViewModel;
 using Microsoft.Reporting.WebForms;
 
 
@@ -29,6 +30,11 @@ namespace IMS.Reports
             {
                 querystring = Request.QueryString.ToString();
                 ReportId = Convert.ToInt32(Request.QueryString["ReportId"]);
+                if(ReportId==0)
+                {
+                    ReportViewer1.LocalReport.ReportPath = "";
+                    ReportViewer1.LocalReport.Refresh();
+                }
             }
             if (ReportId > 0)
             {
@@ -37,6 +43,7 @@ namespace IMS.Reports
                 {
                     case 0:
                         break;
+                    case 3:
                     case 1:
                         MapQueryStringParams(querystring);
                         break;
@@ -44,17 +51,36 @@ namespace IMS.Reports
                         Reportquerystring = Convert.ToString(Request.QueryString["Reportquerystring"]);
                         MapReportquerystring(Reportquerystring);
                         break;
+                    
                 }
                 
                 ReportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Local;//ProcessingMode.Local;
                 ReportViewer1.LocalReport.ReportPath = Server.MapPath("/Reports/Report/" + ReportName + ".rdlc");
-                DataTable reportdt = GetReportData();
+                DataTable reportdt;
+                if (ReportType == 3)
+                {
+                    string valID = paramcol["itemid"];
+                    BarCodePrint Obj = new BarCodePrint(Convert.ToInt32(valID));
+                    Obj.BarCodeImage = Request.Url.Scheme + "://" + Request.Url.Authority + "/ItemBarCode/" + Convert.ToString(valID) + ".jpeg";
+                    string FileName = "~/ItemBarCode" + "\\" + Convert.ToString(valID) + ".jpeg";
+                    Obj.BarCodeLocation = new Uri(Server.MapPath(FileName)).AbsoluteUri;
+                    //   Server.MapPath(FileName) + ;
+                    //ReportParameter parameter = new ReportParameter("ImagePath", Obj.BarCodeLocation);
+                    //ReportViewer1.LocalReport.SetParameters(parameter);
+                    ReportViewer1.LocalReport.EnableExternalImages = true;
+                    Obj.GenerateBarcoad();
+                    reportdt = Obj.BarCodaPrint;
+                }
+                else {
+                    reportdt = GetReportData();
+                }
                 ReportDataSource ReportDataSource = new ReportDataSource(ReportName, reportdt);
                 ReportViewer1.LocalReport.DataSources.Clear();
                 ReportViewer1.LocalReport.DataSources.Add(ReportDataSource);//new Microsoft.Reporting.WebForms.ReportDataSource(ReportName, reportdt));
                 ReportViewer1.LocalReport.Refresh();
                 //ReportViewer1.RefreshReport(); // refresh report
             }
+           
         }
 
         public DataTable GetReportData()

@@ -211,6 +211,7 @@
     <Compile Include="Models\SendEmail.cs" />
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
+    <Compile Include="Models\ViewModel\BarCodePrint.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
