@@ -89,7 +89,41 @@
 
 
 <script type="text/javascript">
+    function IsDate(txtDate) {
+        var currVal = txtDate;
+        if (currVal == '') {
+            return false;
+        }
 
+        //Declare Regex  
+        var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+        var dtArray = currVal.match(rxDatePattern); // is format OK?
+
+        if (dtArray == null) {
+            return false;
+        }
+
+        //Checks for dd/mm/yyyy format.
+        dtDay = dtArray[1];
+        dtMonth = dtArray[3];
+        dtYear = dtArray[5];
+
+        if (dtMonth < 1 || dtMonth > 12) {
+            return false;
+        }
+        else if (dtDay < 1 || dtDay > 31) {
+            return false;
+        }
+        else if ((dtMonth == 4 || dtMonth == 6 || dtMonth == 9 || dtMonth == 11) && dtDay == 31) {
+            return false;
+        }
+        else if (dtMonth == 2) {
+            var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+            if (dtDay > 29 || (dtDay == 29 && !isleap))
+                return false;
+        }
+        return true;
+    };
     $(document).ready(function () {
          if ('@ViewBag.Msg' != "") {
             $('#alertModal').modal('show');
@@ -219,7 +253,7 @@
                 $('#msg').html("Please select to-date.");
                 return;
             }
-            debugger;
+            
             fromdate = $("#FromDate").val().replace('/', '-').replace('/', '-');
             todate = $("#ToDate").val().replace('/', '-').replace('/', '-');
             //fromdate = fdate[2] + '-' + fdate[1] + '-' + fdate[0].slice(-2);
@@ -228,6 +262,11 @@
             window.open("/Reports/ReportViewer.aspx?ReportId=5&Party_Id=" + $("#drpParty").val() + "&From_Date=" + fromdate + "&To_Date=" + todate +"");
         });
 
+        
+
+        
+        
+    
 
         $("body").on("click", "#btnSubmit", function () {
             let DisDash = [];
@@ -244,17 +283,21 @@
                     let BalAmount = 0;
                     let ReceivedAmount = 0;
                     let Bill_DiscountAmount = 0;
-
-                    if ($("#ReceivedAmount_" + index).val() === "") {
+                    
+                    if (parseFloat($("#ReceivedAmount_" + index).val()) === 0 || parseFloat($("#ReceivedAmount_" + index).val()) < 0 || $("#ReceivedAmount_" + index).val().trim() === "") {
                         isValid = false;
                         msg = "Please enter received amount!!!";
                         return false;
                     }
-                    if ($("#ReceivedDate_" + index).val() === "") {
+                    
+                    var ReceivedDate = $("#ReceivedDate_" + index).val().trim();
+                    if (!IsDate(ReceivedDate)) {
                         isValid = false;
-                        msg = "Please select received date!!!";
+                        msg = "Please enter valid received date!!!";
                         return false;
                     }
+                    
+
                     if (isValid) {
                         ReceivedAmount = parseFloat($("#ReceivedAmount_" + index).val());
                         Bill_DiscountAmount = parseFloat($("#" + this.id).attr('data-Bill_DiscountAmount'));
