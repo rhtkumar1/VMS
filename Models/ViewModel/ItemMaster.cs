@@ -152,7 +152,7 @@ namespace IMS.Models.ViewModel
                 string sString = string.Empty;
                 foreach (var item in PartyAndLocationMapping)
                 {
-                    sString += @" < listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" Party_Id=""" + Convert.ToString(item.PartyId) + @"""/>";
+                    sString += @" <listnode Location_Id=""" + Convert.ToString(item.LocationId) + @""" Party_Id=""" + Convert.ToString(item.PartyId) + @"""/>";
                 }
                 ItemMapping = "<ItemMaping>" + sString + "</ItemMaping>";
 

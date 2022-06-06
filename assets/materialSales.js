@@ -1005,6 +1005,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
                             <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
                             <input type="hidden" id="hdnDiscount_1_Amt_${value.Item_Id}" name="hdnDiscount_1_Amt_${value.Item_Id}" value="${value.Discount_1_Amount === undefined ? "0" : value.Discount_1_Amount}" />
                             <input type="hidden" id="hdnDiscount_2_Amt_${value.Item_Id}" name="hdnDiscount_2_Amt_${value.Item_Id}" value="${value.Discount_2_Amount === undefined ? "0" : value.Discount_1_Amount}" />
+                            <input type="hidden" id="hdnItemRequestQty_${value.Item_Id}" name="hdnItemRequestQty_${value.Item_Id}" value="${quantity}" />
                           `;
         cell = $(row.insertCell(-1));
         cell.append(lblItem);
@@ -1087,18 +1088,22 @@ function Calculate(value) {
     $("#IsUpdateMaterialSales").val(1);
     let index = parseInt($('#' + value.id).attr('data-index'));
     let bIsDiscount = false;
+    let POQty = parseFloat($("#hdnItemRequestQty_" + index).val() !== "" ? $("#hdnItemRequestQty_" + index).val() : 0);
     let quantity = parseFloat($("#txtOrder_Qty_" + index).val() !== "" ? $("#txtOrder_Qty_" + index).val() : 0);
     let aQuantity = parseFloat(parseInt($("#lblAvailable_Qty_" + index).text()));
     let poLineId = parseInt($("#hdnPOLineId_" + index).val());
     if (poLineId === 0) {
         setCaluValuew(index, bIsDiscount, quantity, poLineId);
     } else {
-        if (quantity <= aQuantity) {
+        if ((quantity <= aQuantity) && (quantity <= POQty)) {
             setCaluValuew(index, bIsDiscount, quantity, poLineId);
         }
-        else {
+        else if (quantity > aQuantity) {
             $('#alertModal').modal('show');
             $('#msg').html("Please check available quantity!!!");
         }
+        else if (quantity > POQty) {
+            $('#alertModal').modal('show');
+            $('#msg').html("quantity must be less or equal to order quantity!!!"); }
     }
 }
