@@ -18,7 +18,7 @@
             <Value>1096</Value>
           </QueryParameter>
           <QueryParameter Name="@BillFormat">
-            <Value>1</Value>
+            <Value>2</Value>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -2079,7 +2079,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Disc.1</Value>
+                                  <Value>Disc</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
@@ -2131,7 +2131,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Disc</Value>
+                                  <Value>Spl.Disc</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
@@ -4148,7 +4148,6 @@
                                         </Style>
                                       </Textbox>
                                       <ColSpan>5</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -4710,7 +4709,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>="You saved total Rs. "+ (CStr(SUM(Fields!Discount_2_Amount.Value)))+" in this Bill"</Value>
+                                  <Value>="You saved extra Rs. "+ (CStr(SUM(Fields!Discount_2_Amount.Value)))+" in this Bill"</Value>
                                   <Style>
                                     <FontFamily>calibri</FontFamily>
                                     <FontSize>9pt</FontSize>
