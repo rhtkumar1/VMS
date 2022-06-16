@@ -151,6 +151,7 @@
             $("#Discount_1_Amount").val("");
             $("#Discount_2_Amount").val("");
             ResetStockQty(false);
+            ResetSaleOrder(false);
             $("#AvailableQuantity").val("")
         });
 
@@ -321,6 +322,7 @@
                 $("#hdnRowId").val("");
                 $("#hdnLastRate").val("0")
                 ResetStockQty(false);
+                ResetSaleOrder(false);
                 $("[id^='lblTotal_Amount_Row_']").each(function () {
                     amount += parseFloat($("#" + this.id).text());
                 });
@@ -679,6 +681,7 @@
                             $("#AvailableQuantity").val(result[0].Available_Qty);
                             $("#Unit_Id").val(result[0].UnitId);
                             $("#GST").change();
+                            ResetSaleOrder(false);
                             ResetStockQty(false);
                             $.each(result, function (data, value) {
                                 if (value.Office_ID > 0) {
@@ -713,6 +716,7 @@
             $("#IsUpdateMaterialSales").val(0);
             $("#SaleAmount").val("0");
             ResetStockQty(false);
+            ResetSaleOrder(false);
         }
 
         ResetFromOfficeChange();
@@ -731,6 +735,14 @@ function ResetStockQty(Setval) {
     }
 
 }
+function ResetSaleOrder(Setval) {
+    $('#ddlAvailableSaleOrder').empty();
+    if (Setval) {
+        $("#ddlAvailableSaleOrder").append($("<option></option>").val(0).html("--Select--"));
+    }
+
+}
+
 function CalculateAmount() {
     let bIsDiscount = false;
     let isValidate = true;

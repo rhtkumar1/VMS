@@ -151,6 +151,23 @@ namespace IMS.Models.ViewModel
             return dt;
         }
 
+        public DataTable GetItemDetail_PartyWise(int Item_Id, int Party_Id)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Item_id", Item_Id));
+                SqlParameters.Add(new SqlParameter("@Party_Id", Party_Id));
+                SqlParameters.Add(new SqlParameter("@OfficeID", CommonUtility.GetDefault_OfficeID()));
+                dt = DBManager.ExecuteDataTableWithParameter("Pending_Material_Order_PartyItemWise", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+
         public DataTable GetHSN_Detail(int Item_Id, int Office_Id, int P_State_Id)
         {
             DataTable dt = new DataTable();

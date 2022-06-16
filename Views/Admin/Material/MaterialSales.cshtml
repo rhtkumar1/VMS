@@ -160,6 +160,10 @@
                                     <input type="hidden" id="Item_Id" name="Item_Id" value="" />
                                 </div>
                                 <div class="col-md-2 form-group">
+                                    <label>Order</label>
+                                    @Html.DropDownList("ddlAvailableSaleOrder", new SelectList(Model.POLists, "Value", "Text"), htmlAttributes: new { @id = "ddlAvailableSaleOrder", @class = "form-control", })
+                                </div>
+                                <div class="col-md-2 form-group">
                                     <label>HSN/SAC</label>
                                     @Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })
                                 </div>
