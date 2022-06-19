@@ -321,6 +321,11 @@
                 let lblTotal_Amount = `<label id="lblTotal_Amount_Row_${itemId}">${$("#hdnTotalAmount").val()}</label>`;
                 cell = $(row.insertCell(-1));
                 cell.append(lblTotal_Amount);
+                //Add Remarks cell.
+                let Test = "Na";
+                let lblRemarks_ = `<label id="lblRemarks_Row_${itemId}">${Test}</label>`;
+                cell = $(row.insertCell(-1));
+                cell.append(lblRemarks_);
 
                 //Set Default
                 $("#Item_Id").val("");
@@ -1118,7 +1123,10 @@ function BindGrid(result, isqtydisabled, sourceid) {
         let lblTotal_Amount = `<label id="lblTotal_Amount_Row_${value.Item_Id}">${tamount}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblTotal_Amount);
-
+        //Add Remarks cell.
+        let lblRemarks = `<label id="lblRemarks_Row_${value.Item_Id}">${value.Remarks}</label>`;
+        cell = $(row.insertCell(-1));
+        cell.append(lblRemarks);
     });
     $("[id^='lblTotal_Amount_Row_']").each(function () {
         totalAmount += parseFloat($("#" + this.id).text());
