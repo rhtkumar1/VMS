@@ -193,7 +193,21 @@
                 if (!isSpecialService && parseInt($("#Quantity").val()) > parseInt($("#AvailableQuantity").val())) {
                     msg = "Please correct quantity that must not be greater than Available Quantity!!!";
                     bAdded = false;
+                    $("#Quantity").focus();
                     break;
+                }
+                if ($("#ddlAvailableSaleOrder").val() != "") {
+                    var TempPo = $("#ddlAvailableSaleOrder option:selected");
+                    let POText = TempPo.text();
+                    if (TempPo.val() != "0" ) {
+                        let POQty = parseInt(POText.split(":")[1]);
+                        if (!isSpecialService && parseInt($("#Quantity").val()) > POQty) {
+                            msg = "Please correct quantity that must not be greater than PO Quantity!!!";
+                            bAdded = false;
+                            $("#Quantity").focus();
+                            break;
+                        }
+                    }
                 }
                 break;
             }
@@ -223,11 +237,20 @@
                 cell = $(row.insertCell(-1));
                 cell.append(htmlEditBtn);
                 //Add Item cell.
+                let BPoId = 0;
+                let BPoLineId = 0;
+                var BTempPo = $("#ddlAvailableSaleOrder option:selected");
+                if (BTempPo.val() != "0") {
+                    var BPOText = BTempPo.val();
+                    var BPORecord = BPOText.split(":");
+                    BPoId = BPORecord[0];
+                    BPoLineId = BPORecord[1];
+                }
                 let lblItem = `<label id="lblItem_${itemId}">${$("#ItemSearch").val()}</label>
                               <input type="hidden" id="hdnItemId_${itemId}" name="hdnItemId_${itemId}" value="${itemId}" />
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
-                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${0 + "-" + $("#ddlAvailableQty").val()}" />
-                              <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
+                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${BPoLineId + "-" + $("#ddlAvailableQty").val()}" />
+                              <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${BPoId}" />
                               <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
                               <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
                               <input type="hidden" id="hdnDiscount_1_Amt_${itemId}" name="hdnDiscount_1_Amt_${itemId}" value="${$("#Discount_1_Amount").val()}" />
@@ -668,10 +691,13 @@
                 let Item_Id = parseInt(i.item.value);
                 $("#Item_Id").val(Item_Id);
                 let Office_Id = parseInt($("#OfficeId").val());
+                let Party_Id = parseInt($("#PartyId").val());
                 let P_State_Id = parseInt($("#SupplyStateId").val());
                 if (Item_Id > 0 && isValid) {
-                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail_Sale?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
-                        var result = JSON.parse(d);
+                    IMSC.ajaxCall("GET", "/Material/GetHSN_Detail_Sale?Item_Id=" + Item_Id + "&Office_Id=" + Office_Id + "&P_State_Id=" + P_State_Id + "&Party_Id=" + Party_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                        var Recivedresult = JSON.parse(d);
+                        var result = Recivedresult.ItemDetail
+                        var POresult = Recivedresult.PODetail
                         if (result[0].HSN_SAC !== null && result[0].GST !== null && result[0].Is_SameState !== null) {
                             $("#Hsn_Sac").val(result[0].HSN_SAC);
                             $("#GST").val(result[0].GST);
@@ -680,14 +706,19 @@
                             $("#hdnLastRate").val(result[0].LastPurchaseRate);
                             $("#AvailableQuantity").val(result[0].Available_Qty);
                             $("#Unit_Id").val(result[0].UnitId);
-                            $("#GST").change();
-                            ResetSaleOrder(false);
+                            $("#GST").change();                           
                             ResetStockQty(false);
                             $.each(result, function (data, value) {
                                 if (value.Office_ID > 0) {
                                     $("#ddlAvailableQty").append($("<option></option>").val(value.Office_ID).html(value.OfficeName));
                                 }
                             })
+                            ResetSaleOrder(true);
+                            if (POresult.length > 0) {
+                                $.each(POresult, function (data, value) {
+                                    $("#ddlAvailableSaleOrder").append($("<option></option>").val(value.POID).html(value.PONumber));
+                                })
+                            }
                             try {
                                 $("#ddlAvailableQty").val(result[0].Office_ID);
                             }
@@ -946,7 +977,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
 
         //if (amount > 0) {
         if (sourceid === 1) {
-            
+
             if (quantity > 0 && rate > 0) {
                 amount = quantity * rate;
 
@@ -960,7 +991,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
                 }
                 if (discount_2 > 0) {
                     Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
-                    discount_2_Amt = parseFloat((amount - discount_1_Amt)*discount_2 / 100).toFixed(2);
+                    discount_2_Amt = parseFloat((amount - discount_1_Amt) * discount_2 / 100).toFixed(2);
                 }
                 gstAmount = (Texable_Amount * gst / 100).toFixed(2);
                 if (is_SameState) {
@@ -1116,6 +1147,7 @@ function Calculate(value) {
         }
         else if (quantity > POQty) {
             $('#alertModal').modal('show');
-            $('#msg').html("quantity must be less or equal to order quantity!!!"); }
+            $('#msg').html("quantity must be less or equal to order quantity!!!");
+        }
     }
 }

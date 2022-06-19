@@ -466,19 +466,27 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialSales.cshtml", (materialSales.IsSucceed ? newMaterialSales : materialSales));
         }
         [HttpGet]
-        public ActionResult GetHSN_Detail_Sale(int Item_Id, int Office_Id, int P_State_Id, string AppToken = "")
+        public ActionResult GetHSN_Detail_Sale(int Item_Id, int Office_Id, int P_State_Id,int Party_Id, string AppToken = "")
         {
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("ItemDetail");
+            DataTable dt2 = new DataTable("PODetail");
             try
             {
                 MaterialOrder ObjMaterialOrder = new MaterialOrder();
                 dt = ObjMaterialOrder.GetHSN_Detail(Item_Id, Office_Id, P_State_Id);
+                dt2 = ObjMaterialOrder.GetItemDetail_PartyWise(Item_Id, Party_Id);
             }
             catch (Exception)
             {
                 throw;
             }
-            return Content(JsonConvert.SerializeObject(dt));
+            DataSet ObjDataset = new DataSet();
+            ObjDataset.Tables.Add(dt);
+            ObjDataset.Tables[0].TableName = "ItemDetail";
+            ObjDataset.Tables.Add(dt2);
+            ObjDataset.Tables[1].TableName = "PODetail";
+            //return Content(JsonConvert.SerializeObject(dt));
+            return Content(JsonConvert.SerializeObject(ObjDataset));
         }
 
         [HttpGet]

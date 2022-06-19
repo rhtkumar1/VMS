@@ -63,6 +63,7 @@ namespace IMS.Models.ViewModel
             //string PartyListWhereClouse = "And IsActive=1 and Office_id =" + OfficeId.ToString();
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
+            POLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=5"), "Id", "Value");
             MENU_Id = CommonUtility.GetActiveMenuID();
             Loginid = CommonUtility.GetLoginID();
             FinId = CommonUtility.GetFYID();
