@@ -57,6 +57,21 @@ namespace IMS.Controllers
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
+        [HttpGet]
+        public ActionResult GetPartyCityWise(string City, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                ReportInterFace reportInterFace = new ReportInterFace();
+                dt = reportInterFace.GetPartyCityWise(City);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
 
     }
 }

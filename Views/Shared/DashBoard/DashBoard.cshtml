@@ -27,7 +27,7 @@
                                 <label>Party</label>
                                 @Html.DropDownList("drpParty", new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "drpParty", @class = "form-control" })
                             </div>
-                        </div> 
+                        </div>
 
                         <div class="styled-input">
                             <div class="col-md-3 form-group">
@@ -41,12 +41,21 @@
                                 @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "dd/mm/yyyy", @required = "required", @class = "form-control clsDate" })
                             </div>
                         </div>
-                        <div class="col-md-3 form-group pull-right">
+                        <div class="col-md-1 form-group pull-right">
+                            <div class="appointment-btn text-lg-right">
+                                @Html.HiddenFor(m => m.OfficeId, htmlAttributes: new { @id = "OfficeId" })
+                                <br />
+                                <button type="button" name="btnPrint" id="btnPrint" class="btncustome">Print</button>
+                            </div>
+                        </div>
+                        <div class="col-md-1 form-group pull-right">
                             <div class="appointment-btn text-lg-right">
                                 <br />
                                 <button type="button" name="btnSearch" id="btnSearch" class="btncustome">Search</button>
                             </div>
                         </div>
+
+
                     }
                     <div id="listGrid"></div>
                 </div>
@@ -75,6 +84,14 @@
 
     $("#btnSearch").click(function (e) {
         searchData();
+    });
+
+    $("#btnPrint").click(function (e) {
+        let Party_Id = parseInt($('#drpParty').val());
+        var fromDate = $('#FromDate').val().replace("/","-").replace("/","-");
+        var toDate = $('#ToDate').val().replace("/", "-").replace("/", "-");
+        let OfficeId = parseInt($("#OfficeId").val());
+        window.open("/Reports/ReportViewer.aspx?ReportId=11&FromDate=" + fromDate + "&ToDate=" + toDate + "&PartyId=" + Party_Id + "&OfficeID=" + OfficeId+"");
     });
 
      function searchData() {

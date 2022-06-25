@@ -70,11 +70,24 @@
 
                             </div>
                         </div>
+                        <div id="DivddlCityList" class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>City</label>
+                                @Html.DropDownList("ddlCity", new SelectList(Model.CityLists, "Value", "Text"), htmlAttributes: new { @id = "ddlCity", @class = "form-control" })
+                            </div>
+                        </div>
                         <div id="clearfix" class="clearfix"></div>
                         <div id="DivdrpLedger" class="styled-input">
                             <div class="col-md-3 form-group">
                                 <label>Ledger</label>
                                 <select id="drpLedger" name="drpLedger" class="form-control"></select>
+                            </div>
+
+                        </div>
+                        <div id="DivdrpSalesMan" class="styled-input">
+                            <div class="col-md-3 form-group">
+                                <label>Sales Man</label>
+                                <select id="ddlSalesMan" name="ddlSalesMan" class="form-control"></select>
                             </div>
 
                         </div>
@@ -104,7 +117,23 @@
             $('#msg').html("@ViewBag.Msg");
         }
         searchData();
-        });
+        $("#ddlCity").change(function () {
+            debugger;
+            let cityname = $('#ddlCity option:selected').text();
+            IMSC.ajaxCall("GET", "/Report/GetPartyCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                debugger;
+                var result = JSON.parse(d);
+                $("#drpLedger").empty();
+                $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+                if (result.length > 0) {
+                    $.each(result, function (index, value) {
+                        $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
+                    });
+                }
+            });
+        }).change();
+
+    });
 
     $('#FromDate, #ToDate').datepicker({
         autoclose: true,
@@ -117,78 +146,87 @@
     $("#btnSearch").click(function (e) {
         searchData();
     });
-    $("#ddlReportName").change(function () {
-        HideAll();
-        let ReportID = parseInt($('#ddlReportName').val());
-        if (ReportID == 8) {
-            $("#clearfix").hide();
-        }
-        else {
-            $("#clearfix").show();
-        }
-        if (ReportID > 0) {
-            IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
-                var result = JSON.parse(d);
-                if (result !== "null" && result !== "") {
-                    const Par = result[0].Params.split(",");
-                    for (var Counter = 0; Counter < Par.length; Counter++) {
-                        var V = Par[Counter].toString();
-                        switch (V) {
-                            case "ItemID":
-                                $("#DivddlItem").show();
-                                $("#ddlItem").select2();
-                                break;
-                            case "FromDate":
-                                $('#DivFromDate').show();
-                                break;
-                            case "ToDate":
-                            case "todate":
-                                $('#DivToDate').show();
-                                break;
-                            case "PartyID":
-                                $('#DivddlParty').show();
-                                $("#ddlParty").select2();
-                                break;
-                            case "OfficeID":
-                                $('#DivddlOffice').show();
-                                break;
-                            case "GroupId":
-                                $("#DivddlGroup").show();
-                                $("#ddlGroup").select2();
-                                break;
-                            case "Ledger_Ids":
-                                $("#DivdrpLedger").show();
-                                $("#drpLedger").select2();
-                                break;
-                            default:
-                                break;
+        $("#ddlReportName").change(function () {
+            HideAll();
+            let ReportID = parseInt($('#ddlReportName').val());
+            if (ReportID == 8) {
+                $("#clearfix").hide();
+            }
+            else {
+                $("#clearfix").show();
+            }
+            if (ReportID > 0) {
+                IMSC.ajaxCall("GET", "/Report/GetReportConfigData?ReportId=" + ReportID, {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== "null" && result !== "") {
+                        const Par = result[0].Params.split(",");
+                        for (var Counter = 0; Counter < Par.length; Counter++) {
+                            var V = Par[Counter].toString();
+                            switch (V) {
+                                case "ItemID":
+                                    $("#DivddlItem").show();
+                                    $("#ddlItem").select2();
+                                    break;
+                                case "FromDate":
+                                    $('#DivFromDate').show();
+                                    break;
+                                case "ToDate":
+                                case "todate":
+                                    $('#DivToDate').show();
+                                    break;
+                                case "PartyID":
+                                    $('#DivddlParty').show();
+                                    $("#ddlParty").select2();
+                                    break;
+                                case "OfficeID":
+                                    $('#DivddlOffice').show();
+                                    break;
+                                case "GroupId":
+                                    $("#DivddlGroup").show();
+                                    $("#ddlGroup").select2();
+                                    break;
+                                case "Ledger_Ids":
+                                    $("#DivdrpLedger").show();
+                                    $("#drpLedger").select2();
+                                    break;
+                                case "City":
+                                    $("#DivddlCityList").show();
+                                    $("#DivdrpLedger").show();
+                                    $("#DivdrpSalesMan").show();
+                                    $("#ddlCity").select2();
+                                    $("#drpLedger").select2();
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
-                }
 
-            });
-            let frame_src = document.getElementById('ReportInterfaceView').src;
-            const OperationatSRC = frame_src.split("?");
-            var Href = OperationatSRC[0] + "?ReportId=0";
-            $("#ReportInterfaceView").attr("src", Href);
-        }
-
-    }).change();
-    $("#ddlGroup").change(function () {
-
-        let Group_Id = parseInt($('#ddlGroup').val());
-        //$('#PartyId').val(Party_Id);
-        IMSC.ajaxCall("GET", "/Report/GetLedger?Group_Id=" + Group_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-            var result = JSON.parse(d);
-            $("#drpLedger").empty();
-            $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
-            if (result.length > 0) {
-                $.each(result, function (index, value) {
-                    $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
                 });
+                let frame_src = document.getElementById('ReportInterfaceView').src;
+                const OperationatSRC = frame_src.split("?");
+                var Href = OperationatSRC[0] + "?ReportId=0";
+                $("#ReportInterfaceView").attr("src", Href);
             }
-        });
-    }).change();
+
+        }).change();
+        $("#ddlGroup").change(function () {
+            let Group_Id = parseInt($('#ddlGroup').val());
+            //$('#PartyId').val(Party_Id);
+            IMSC.ajaxCall("GET", "/Report/GetLedger?Group_Id=" + Group_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                $("#drpLedger").empty();
+                $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+                if (result.length > 0) {
+                    $.each(result, function (index, value) {
+                        $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
+                    });
+                }
+            });
+        }).change();
+
+
+
     function HideAll() {
 
         $('#DivFromDate').hide();
@@ -198,6 +236,8 @@
         $("#DivddlItem").hide();
         $("#DivddlGroup").hide();
         $("#DivdrpLedger").hide();
+        $("#DivddlCityList").hide();
+        $("#DivdrpSalesMan").hide();
     }
     function searchData() {
         let ReportID = parseInt($('#ddlReportName').val());
@@ -263,6 +303,14 @@
                                 }
                                 break;
                             case "Ledger_Ids":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());//$('#ToDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
+                                }
+                                break;
+                            case "City":
                                 if (Reportquerystring == "") {
                                     Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());//$('#ToDate').val();
                                 }
