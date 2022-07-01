@@ -367,6 +367,7 @@
     <Content Include="Reports\Report\Ledger_Detail_Report.rdlc" />
     <Content Include="Reports\Report\Ledger_Outstanding_Report.rdlc" />
     <Content Include="Reports\Report\Discount_Point_Details.rdlc" />
+    <Content Include="Reports\Report\Ledger_Outstanding_Summary.rdlc" />
     <None Include="Reports\Report\Material_Sale_Bill.rdlc" />
     <Content Include="Views\Admin\Material\MaterialGatepass.cshtml" />
     <Content Include="Views\Admin\Material\StoreClearance.cshtml" />

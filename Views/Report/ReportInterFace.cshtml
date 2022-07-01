@@ -118,19 +118,36 @@
         }
         searchData();
         $("#ddlCity").change(function () {
-            debugger;
             let cityname = $('#ddlCity option:selected').text();
-            IMSC.ajaxCall("GET", "/Report/GetPartyCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
-                debugger;
-                var result = JSON.parse(d);
-                $("#drpLedger").empty();
-                $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
-                if (result.length > 0) {
-                    $.each(result, function (index, value) {
-                        $("#drpLedger").append($("<option></option>").val(value.Ledger_Id).html(value.Ledger));
+            if (cityname != "--Select--") {
+                
+                IMSC.ajaxCall("GET", "/Report/GetPartyCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+
+                    IMSC.ajaxCall("GET", "/Report/GetSalesManCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d1) {
+
+                        var result = JSON.parse(d);
+                        $("#drpLedger").empty();
+                        $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+                        if (result.length > 0) {
+                            $.each(result, function (index, value) {
+                                $("#drpLedger").append($("<option></option>").val(value.Party_Id).html(value.PartyName));
+                            });
+                        }
+
+                        var result1 = JSON.parse(d1);
+                        $("#ddlSalesMan").empty();
+                        $("#ddlSalesMan").append($("<option></option>").val("0").html("Select Salesman"));
+                        if (result1.length > 0) {
+                            $.each(result1, function (index, value) {
+                                $("#ddlSalesMan").append($("<option></option>").val(value.User_Id).html(value.UserName));
+                            });
+                        }
                     });
-                }
-            });
+
+                    
+                });
+
+            }
         }).change();
 
     });
@@ -194,6 +211,7 @@
                                     $("#DivdrpLedger").show();
                                     $("#DivdrpSalesMan").show();
                                     $("#ddlCity").select2();
+                                    $("#ddlSalesMan").select2();
                                     $("#drpLedger").select2();
                                     break;
                                 default:
@@ -251,6 +269,7 @@
                     let _ReportID = parseInt($('#ddlReportName').val());
                     for (var Counter = 0; Counter < Par.length; Counter++) {
                         var V = Par[Counter].toString();
+                        
                         switch (V) {
                             case "ItemID":
                                 if (Reportquerystring == "") {
@@ -312,10 +331,18 @@
                                 break;
                             case "City":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "0" : $('#ddlCity option:selected').text());//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "0" : $('#ddlCity option:selected').text());
+                                }
+                                break;
+                            case "SalesmanId":
+                                if (Reportquerystring == "") {
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlSalesMan').val() == "" ? "0" : $('#ddlSalesMan').val());//$('#ToDate').val();
+                                }
+                                else {
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlSalesMan').val() == "" ? "0" : $('#ddlSalesMan').val());
                                 }
                                 break;
                             default:

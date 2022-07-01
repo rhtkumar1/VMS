@@ -40,7 +40,7 @@ namespace IMS.Models.ViewModel
             Report_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Report_Id", "ReportName", "Report_Config", "And IsActive=1 and ReportType=2"), "Id", "Value");
             OfficeLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             LedgerGroupLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Group_Id", "Title", "Group_Master", "And IsActive=1"), "Id", "Value");
-            CityLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "City", "Party_Master", "And IsActive=1"), "Id", "Value");
+            CityLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("0", "City", "Party_Master", "And IsActive=1"), "Id", "Value");
         }
         public DataTable Report_StockMovement()
         {
@@ -69,6 +69,20 @@ namespace IMS.Models.ViewModel
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@CityName", cityname));
                 dt = DBManager.ExecuteDataTableWithParameter("GetPartyCityWise", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return dt;
+        }
+        public DataTable GetSalesManCityWise(string cityname)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@CityName", cityname));
+                dt = DBManager.ExecuteDataTableWithParameter("GetSalesManCityWise", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
