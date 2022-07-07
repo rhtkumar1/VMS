@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+    var fileName = HttpContext.Current.Request.QueryString["fileName"];
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DownloadFile</title>
+</head>
+<body>
+    <a id="downloadLink" href="~/Brochure/@fileName" download></a>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById('downloadLink').click();
+        }
+    </script>
+</body>
+</html>
