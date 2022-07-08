@@ -381,6 +381,7 @@
     <Content Include="Views\Report\LedgerReport.cshtml" />
     <Content Include="Views\Admin\Material\StoreTransfer.cshtml" />
     <Content Include="Reports\Report\Sale_Order_Dashboard.rdlc" />
+    <Content Include="Views\Home\DownloadBrochure.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

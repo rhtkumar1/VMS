@@ -65,7 +65,7 @@ namespace IMS.Controllers
             //}
             //else
             //{
-                return View("~/Views/Home/Index.cshtml");
+            return View("~/Views/Home/Index.cshtml");
             //}
         }
         public ActionResult Index()
@@ -82,7 +82,7 @@ namespace IMS.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
-            
+
             return View("~/Views/Home/Index.cshtml");
         }
 
@@ -91,6 +91,11 @@ namespace IMS.Controllers
             DataTable dt = new DataTable();
             Session["OpenFYID"] = FYID;
             return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        public ActionResult DownloadBrowser(string fileName)
+        {
+            return View("~/Views/Home/DownloadBrochure.cshtml");
         }
     }
 }
