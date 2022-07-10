@@ -120,7 +120,7 @@
         $("#ddlCity").change(function () {
             let cityname = $('#ddlCity option:selected').text();
             if (cityname != "--Select--") {
-                
+
                 IMSC.ajaxCall("GET", "/Report/GetPartyCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
 
                     IMSC.ajaxCall("GET", "/Report/GetSalesManCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d1) {
@@ -144,13 +144,46 @@
                         }
                     });
 
-                    
+
                 });
 
             }
         }).change();
-
+        fillPartyCityWise();
     });
+
+    function fillPartyCityWise() {
+        var cityname = "";
+        IMSC.ajaxCall("GET", "/Report/GetPartyCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+
+            IMSC.ajaxCall("GET", "/Report/GetSalesManCityWise?City=" + cityname + "&AppToken=" + '@Model.AppToken', {}, "text", function (d1) {
+
+                var result = JSON.parse(d);
+                $("#drpLedger").empty();
+                $("#drpLedger").append($("<option></option>").val("0").html("Select Ledger"));
+                if (result.length > 0) {
+                    $.each(result, function (index, value) {
+                        $("#drpLedger").append($("<option></option>").val(value.Party_Id).html(value.PartyName));
+                    });
+                }
+
+                var result1 = JSON.parse(d1);
+                $("#ddlSalesMan").empty();
+                $("#ddlSalesMan").append($("<option></option>").val("0").html("Select Salesman"));
+                if (result1.length > 0) {
+                    $.each(result1, function (index, value) {
+                        $("#ddlSalesMan").append($("<option></option>").val(value.User_Id).html(value.UserName));
+                    });
+                }
+            });
+
+
+        });
+
+    }
+
+
+
 
     $('#FromDate, #ToDate').datepicker({
         autoclose: true,
@@ -269,7 +302,6 @@
                     let _ReportID = parseInt($('#ddlReportName').val());
                     for (var Counter = 0; Counter < Par.length; Counter++) {
                         var V = Par[Counter].toString();
-                        
                         switch (V) {
                             case "ItemID":
                                 if (Reportquerystring == "") {
@@ -323,26 +355,26 @@
                                 break;
                             case "Ledger_Ids":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#drpLedger').val() == "" || $('#drpLedger').val() == null ? "0" : $('#drpLedger').val());//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#drpLedger').val() == "" ? "0" : $('#drpLedger').val());
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#drpLedger').val() == "" || $('#drpLedger').val() == null ? "0" : $('#drpLedger').val());
                                 }
                                 break;
                             case "City":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "0" : $('#ddlCity option:selected').text());//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "" : $('#ddlCity option:selected').text());//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "0" : $('#ddlCity option:selected').text());
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlCity option:selected').text() == "--Select--" ? "" : $('#ddlCity option:selected').text());
                                 }
                                 break;
                             case "SalesmanId":
                                 if (Reportquerystring == "") {
-                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlSalesMan').val() == "" ? "0" : $('#ddlSalesMan').val());//$('#ToDate').val();
+                                    Reportquerystring = Reportquerystring + V + ":" + ($('#ddlSalesMan').val() == "" || $('#ddlSalesMan').val() == null ? "0" : $('#ddlSalesMan').val());//$('#ToDate').val();
                                 }
                                 else {
-                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlSalesMan').val() == "" ? "0" : $('#ddlSalesMan').val());
+                                    Reportquerystring = Reportquerystring + "," + V + ":" + ($('#ddlSalesMan').val() == "" || $('#ddlSalesMan').val() == null ? "0" : $('#ddlSalesMan').val());
                                 }
                                 break;
                             default:
