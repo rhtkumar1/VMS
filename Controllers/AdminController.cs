@@ -1,4 +1,5 @@
-﻿using IMS.Models.CBL;
+﻿using IMS.Models;
+using IMS.Models.CBL;
 using IMS.Models.ViewModel;
 using Newtonsoft.Json;
 using System;
@@ -18,6 +19,7 @@ namespace IMS.Controllers
             if (Session["UserName"] != null)
             {
                 DashBoard dashBoard = new DashBoard();
+                dashBoard.AppToken = URLEncryption.Encrypt(string.Format("MID={0};AuthMode={1}", "40006", "3"));
                 return View("~/Views/Shared/DashBoard/DashBoard.cshtml", dashBoard);
             }
             else

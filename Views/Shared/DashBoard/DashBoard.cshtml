@@ -102,7 +102,14 @@
                     var result = JSON.parse(d);
                     if (result !== "null" && result !== "") {
                         var fields = [
-
+                            {
+                             title: "Action",
+                             width: 80,
+                             itemTemplate: function (value, args) {
+                                 var $btnProcessed = `<a href="/Material/StoreClearance?SaleId=${args.Sale_Id}&AppToken=${'@Model.AppToken'}" id="btnProcessed" name="btnProcessed" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                 return $("<div class='display-flex'></div>").append($btnProcessed);
+                             }
+                         },
                             { name: "PO_Id", css: "hidden", },
                             { name: "OfficeName", title: "Office", sorting: true, filtering: true },
                             { name: "PO_No", type: "text", title: "PO No", sorting: true, filtering: true, width: 100 },
