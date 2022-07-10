@@ -237,8 +237,8 @@
                 cell = $(row.insertCell(-1));
                 cell.append(htmlEditBtn);
                 //Add Item cell.
-                let BPoId = 0;
-                let BPoLineId = 0;
+                let BPoId = "0";
+                let BPoLineId = "0";
                 var BTempPo = $("#ddlAvailableSaleOrder option:selected");
                 if (BTempPo.val() != "0") {
                     var BPOText = BTempPo.val();
@@ -249,7 +249,7 @@
                 let lblItem = `<label id="lblItem_${itemId}">${$("#ItemSearch").val()}</label>
                               <input type="hidden" id="hdnItemId_${itemId}" name="hdnItemId_${itemId}" value="${itemId}" />
                               <input type="hidden" id="hdnLineId_${itemId}" name="hdnLineId_${itemId}" value="${0}" />
-                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${BPoLineId + "-" + $("#ddlAvailableQty").val()}" />
+                              <input type="hidden" id="hdnPOLineId_${itemId}" name="hdnPOLineId_${itemId}" value="${BPoLineId}" />
                               <input type="hidden" id="hdnPOId_${itemId}" name="hdnLineId_${itemId}" value="${BPoId}" />
                               <input type="hidden" id="hdnItemTypeGrid_${itemId}" name="hdnItemTypeGrid_${itemId}" value="${itemType}" />
                               <input type="hidden" id="hdnIs_SameStateGrid_${itemId}" name="hdnIs_SameStateGrid_${itemId}" value="${$("#hdnIs_SameState").val()}" />
