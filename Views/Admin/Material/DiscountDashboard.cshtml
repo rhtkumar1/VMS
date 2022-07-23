@@ -74,6 +74,11 @@
                             </div>
                             <div class="col-md-1 form-group pull-right">
                                 <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnUpdate" id="btnUpdate" class="btncustome">Update</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
                                     <button name="btnReset" id="btnReset" class="btncustome">Reset</button>
                                 </div>
                             </div>
@@ -384,6 +389,78 @@
         });
 
 
+        $("body").on("click", "#btnUpdate", function () {
+            let DisDash = [];
+            let isValid = true;
+            let msg = "";
+            let isanyitemchecked = false;
+            $("[id^='hdnSaleId_']").each(function () {
+
+                let index = parseInt($("#" + this.id).val());
+
+                if ($("#chk_" + index).prop('checked') === true) {
+                    
+                    isanyitemchecked = true;
+                    let oMapping = {};
+                    let BalAmount = 0;
+                    let ReceivedAmount = 0;
+                    let Bill_DiscountAmount = 0;
+
+                    if (parseFloat($("#ReceivedAmount_" + index).val()) === 0 || parseFloat($("#ReceivedAmount_" + index).val()) < 0 || $("#ReceivedAmount_" + index).val().trim() === "") {
+                        isValid = false;
+                        msg = "Please enter received amount!!!";
+                        return false;
+                    }
+
+                    var ReceivedDate = $("#ReceivedDate_" + index).val().trim();
+                    if (!IsDate(ReceivedDate)) {
+                        isValid = false;
+                        msg = "Please enter valid received date!!!";
+                        return false;
+                    }
+
+
+                    if (isValid) {
+                        ReceivedAmount = parseFloat($("#ReceivedAmount_" + index).val());
+                        Bill_DiscountAmount = parseFloat($("#" + this.id).attr('data-Bill_DiscountAmount'));
+                        BalAmount = parseFloat($("#" + this.id).attr('data-BalanceAmount'));
+                        if (BalAmount == Bill_DiscountAmount) {
+                            BalAmount = Bill_DiscountAmount - ReceivedAmount;
+                        }
+                        else {
+                            BalAmount = BalAmount - ReceivedAmount;
+                        }
+
+
+                        oMapping.Sale_Id = index;
+                        oMapping.Invoice_No = "";
+                        oMapping.Office_Id = "0";
+                        oMapping.Party_Id = "0";
+                        oMapping.Transaction_Date = $("#ReceivedDate_" + index).val();
+                        oMapping.DiscountAmount = ReceivedAmount;
+                        oMapping.BalAmount = BalAmount;
+                        oMapping.Remarks = "";
+                        oMapping.Is_Disc2_Settled = "2";
+                        DisDash.push(oMapping);
+                    }
+
+                }
+                $("#DisDash").val(JSON.stringify(DisDash));
+            });
+
+            if (!isanyitemchecked) {
+                isValid = false;
+                msg = "Please select record!!!";
+            }
+
+            if (isValid) {
+                return true;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+        });
 
 
         $("#chkAll").change(function () {
