@@ -144,6 +144,7 @@
     <Content Include="assets\admin\js\scripts.js" />
     <Content Include="assets\admin\js\select2.min.js" />
     <Content Include="assets\admin\js\skycons.js" />
+    <Content Include="assets\consignment.js" />
     <Content Include="assets\materiaOrderCreation.js" />
     <Content Include="assets\materialPurchase.js" />
     <Content Include="assets\materialSales.js" />
@@ -177,10 +178,6 @@
     <Content Include="net47\zxing.XML" />
     <Content Include="Reports\ReportViewer.aspx" />
     <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll" />
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll" />
-    <Content Include="SqlServerTypes\x86\msvcr120.dll" />
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll" />
     <Content Include="Views\Admin\Masters\CompanyMaster.cshtml" />
     <Content Include="Views\Admin\Masters\RoleMaster.cshtml" />
     <Content Include="Views\web.config" />
@@ -213,6 +210,7 @@
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\BarCodePrint.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
+    <Compile Include="Models\ViewModel\Consignment.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\DashBoard.cs" />
@@ -382,6 +380,7 @@
     <Content Include="Views\Admin\Material\StoreTransfer.cshtml" />
     <Content Include="Reports\Report\Sale_Order_Dashboard.rdlc" />
     <Content Include="Views\Home\DownloadBrochure.cshtml" />
+    <Content Include="Views\Admin\Material\Consignment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -393,6 +392,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="ItemBarCode\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="SqlServerTypes\x64\" />
+    <Folder Include="SqlServerTypes\x86\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\Report\Material_Sale_Gatepass.rdlc" />

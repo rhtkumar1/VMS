@@ -466,7 +466,7 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/MaterialSales.cshtml", (materialSales.IsSucceed ? newMaterialSales : materialSales));
         }
         [HttpGet]
-        public ActionResult GetHSN_Detail_Sale(int Item_Id, int Office_Id, int P_State_Id,int Party_Id, string AppToken = "")
+        public ActionResult GetHSN_Detail_Sale(int Item_Id, int Office_Id, int P_State_Id, int Party_Id, string AppToken = "")
         {
             DataTable dt = new DataTable("ItemDetail");
             DataTable dt2 = new DataTable("PODetail");
@@ -499,7 +499,7 @@ namespace IMS.Controllers
             {
                 objR = MaterialSalesLine.MaterialSalesLine_Delete(SaleId, ItemID);
             }
-            catch(Exception Ex)
+            catch (Exception Ex)
             { throw Ex; }
             return Content(JsonConvert.SerializeObject(objR));
         }
@@ -811,7 +811,7 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
         [HttpGet]
-        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, string ItemId,int officeID, string AppToken = "")
+        public ActionResult Material_Sale_Item_ForBarcodegun(int SaleId, string ItemId, int officeID, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
@@ -962,7 +962,7 @@ namespace IMS.Controllers
         {
             DataTable dt = new DataTable();
             try
-            {               
+            {
                 dt = new StoreTransfer().GetItem_Detail(Item_Id, Office_Id);
             }
             catch (Exception)
@@ -972,6 +972,76 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
 
+        #region Consignment
+        public ActionResult ConsignmentIndex()
+        {
+            Consignment consignment = new Consignment();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            consignment.AppToken = CommonUtility.URLAppToken(AppToken);
+            consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
+        }
+
+        [HttpGet]
+        public ActionResult Consignment_Get(string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                Consignment consignment = new Consignment();
+                dt = consignment.Consignment_Get();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult ManageConsignment(Consignment consignment)
+        {
+            Consignment objConsignment = new Consignment();
+            try
+            {
+                objConsignment = consignment.Consignment_InsertUpdate(consignment);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                consignment.AppToken = CommonUtility.URLAppToken(AppToken);
+                consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objConsignment != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objConsignment.IsSucceed)
+                    {
+                        ViewBag.Msg = objConsignment.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objConsignment.IsSucceed)
+                    {
+                        ViewBag.Msg = objConsignment.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            Consignment oconsignment = new Consignment();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            oconsignment.AppToken = CommonUtility.URLAppToken(AppToken);
+            oconsignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/Consignment.cshtml", (objConsignment.IsSucceed ? oconsignment : consignment));
+        }
+        #endregion
 
     }
 }
