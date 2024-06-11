@@ -1,0 +1,238 @@
+﻿@model IMS.Models.ViewModel.Consignment
+@{
+    ViewBag.Title = "Consignment";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+<script src="~/assets/consignment.js"></script>
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+
+
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Cinsigment Dashboard</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                <div class="col-lg-12"><p id="pMessage" style="color:forestgreen;text-align:center"></p></div>
+                <div class="blank-page">
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col-md-2">
+                            <label>From Date</label>
+                            @*<input type="date" class="form-control form-control-sm" id="fromdate" />*@
+                            @Html.TextBoxFor(m => m.Advance_Date, htmlAttributes: new { @id = "fromdate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.AddDays(-6).ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+
+                        </div>
+                        <div class="col-md-2">
+                            <label>To Date</label>
+                            @*<input type="date" class="form-control" id="Todate" />*@
+                            @Html.TextBoxFor(m => m.GR_Date, htmlAttributes: new { @id = "Todate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+
+                        </div>
+                        <div class="col-md-2">
+                            <label>Billing Party</label>
+                            @*<input type="text" class="form-control form-control-sm" id="billingparty" />*@
+                            @Html.DropDownListFor(m => m.Consignee_Id, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "billingparty", @class = "form-control" })
+
+                        </div>
+                        <div class="col-md-2">
+                            <label>GR Office</label>
+                            @*<input type="text" class="form-control" id="groffice" />*@
+                            @Html.DropDownListFor(m => m.GR_OfficeId, new SelectList(Model.Office_List, "Value", "Text"), htmlAttributes: new { @id = "groffice", @class = "form-control" })
+
+                        </div>
+                        <div class="col-md-2">
+                            <label>GR No</label>
+                            <input type="text" class="form-control" id="grno" />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Vehicle No</label>
+                            @*<input type="text" class="form-control" id="Vehicleno" />*@
+                            @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Vehicleno", @class = "form-control" })
+
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col-md-6 ">
+                            <a href="/Material/ConsignmentIndex?appToken=@Model.AppToken" title="Add Item" name="AddItem" id="Create" class="btn btn-success"><i class="fa fa-plus"></i> Create </a>
+
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" id="btnsearch" class="btn btn-success pull-right"><i class="fa fa-search"></i> Search </button>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="margin-bottom:10px; padding:0px">
+
+                        <div class="clearfix"></div>
+                        <div id="listGrid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <!--//content-->
+        <!---->
+    </div>
+
+    <script type="text/javascript">
+       
+    $(document).ready(function () {
+         if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        var fromdate = $('#fromdate').val();
+        var todate = $('#Todate').val();
+        var billingparty = $('#billingparty').val();
+        var groffice = $('#groffice').val();
+        var grno = $('#grno').val();
+        var Vehicleno = $('#Vehicleno').val();
+        GetRecord(fromdate, todate, billingparty, groffice, grno, Vehicleno);
+
+
+        });
+
+
+        var deleteFormData = function (dialogType, Consignment) {
+            var result = confirm("Do you want to delete?");
+            if (result == true) {
+                IMSC.ajaxCall("POST", "/Material/DeleteConsignment?gr_Id=" + Consignment.GR_Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    if (result !== "null" && result !== "") {
+                        window.location.reload();
+                    }
+                });
+            }
+            else {
+                return false;
+             }
+         };
+
+        $('#btnsearch').click(function () {
+            var fromdate = $('#fromdate').val();
+            var todate = $('#Todate').val();
+            var billingparty = $('#billingparty').val();
+            var groffice = $('#groffice').val();
+            var grno = $('#grno').val();
+            var Vehicleno = $('#Vehicleno').val();
+
+            if (billingparty == 0) {
+                alert("Please select billing party");
+                return false;
+            }
+            if (groffice == 0) {
+                alert("Please select GR Office");
+                return false;
+            }
+            if (grno == "") {
+                alert("Please Enter grno");
+                return false;
+            }
+            if (Vehicleno == 0) {
+               alert("Please select Vehicleno");
+                return false;
+            }
+
+            GetRecord(fromdate, todate, billingparty, groffice, grno, Vehicleno);
+           //alert(fromdate);
+           //alert(todate);
+           //alert( billingparty);
+           //alert( groffice);
+           //alert(grno);
+           //alert( Vehicleno);
+
+        });
+
+        function GetRecord(fromdate, todate, billingparty, groffice, grno, Vehicleno)
+        {
+            IMSC.ajaxCall("GET", "/Material/Consignment_Get_Bydate?fromdate=" + fromdate + "&todate=" + todate + "&GR_No=" + grno + "&GR_OfficeId=" + groffice + "&Vehicle_Id=" + Vehicleno + "&Billing_OfficeId=" + billingparty +"&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                var ItemLists = JSON.parse(d);
+               if (ItemLists !== "null") {
+             var fields = [
+                 {
+                            title: "Action",
+                            width: 120,
+                            itemTemplate: function (value, args) {
+                                switch (@Model.AuthMode) {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        break;
+                                    case 2:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
+                                        var $customeEditButton = `<a href="/Material/GetConsigmentData?GR_Id=${args.GR_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton);
+                                    case 3:
+                                        $('#btnSubmit').removeClass("hidden");
+                                        var $customePrintButton = `<a href="/master/LebelPrint?item_Id=${args.Item_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-print"></i></a>`;
+                                        var $customeEditButton = `<a href="/Material/GetConsigmentData?GR_Id=${args.GR_Id}&appToken=@Model.AppToken" class="btn btn-success" style="margin-right:5px;padding: 2px 5px 2px 5px"><i class="fa fa-edit"></i></a>`;
+                                        var $customeDeleteButton = $('<a class="btn btn-danger" style="padding: 2px 5px 2px 5px"><i class="fa fa-trash"></i></a>')
+                                            .click(function (e) {
+                                                deleteFormData("Delete",args);
+                                                return false;
+                                            });
+                                        return $("<div class='display-flex'></div>").append($customePrintButton, $customeEditButton, $customeDeleteButton);
+                                    default:
+                                        break;
+                                }
+                            }
+                        },
+                 { name: "GR_Id", css: "hidden" },
+                 { name: "GR_Title", type: "text", title: "GR Type", sorting: true, filtering: true},
+                 { name: "Client_Name", type: "text", title: "Client_Name", sorting: true, filtering: true},
+                 { name: "Office_Names", type: "text", title: "Office_Names", sorting: true, filtering: true},
+                 { name: "GR_No", type: "text", title: "GR_No", sorting: true, filtering: true, width: 50 },
+                 { name: "GR_Date", type: "text", title: "GR_Date", sorting: true, filtering: true, width: 100 },
+                 { name: "Total_Basic_Freight", type: "text", title: "Total_Basic_Freight", sorting: true, filtering: true, width: 150 },
+                 { name: "Loading", type: "text", title: "Loading", sorting: true, filtering: true},
+                 { name: "Unloading", type: "text", title: "Unloading", sorting: true, filtering: false},
+                 { name: "Detention", type: "text", title: "Destination", sorting: true, filtering: false},
+                 { name: "Other_Charge", type: "text", title: "Other_Charge", sorting: true, filtering: false},
+                 { name: "Two_Point_Delivery", type: "text", title: "Two_Point_Delivery", sorting: true, filtering: false},
+                 { name: "Pickup", type: "text", title: "Pickup", sorting: true, filtering: false},
+                 { name: "Local_Delivery", type: "text", title: "Local_Delivery", sorting: true, filtering: false},
+                 { name: "Hamali", type: "text", title: "Hamali", sorting: true, filtering: false},
+                 { name: "Labour", type: "text", title: "Labour", sorting: true, filtering: false},
+                 { name: "Total_Freight", type: "text", title: "Total_Freight", sorting: true, filtering: false},
+                 { name: "Advance_Amount", type: "text", title: "Advance_Amount", sorting: true, filtering: false},
+                 { name: "Advance_Date", type: "text", title: "Advance_Date", sorting: true, filtering: false},
+                 //{ name: "Type_Id", css: "hidden" },
+                 //{ name: "Remarks", css: "hidden" },
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     ItemLists: ItemLists,
+                     loadData: function (filter) {
+                         return $.grep(this.ItemLists, function (ItemList) {
+                             return ((!filter.Title || ItemList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                 && (!filter.Code || ItemList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        }
+    </script>

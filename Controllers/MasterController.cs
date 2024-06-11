@@ -122,6 +122,227 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Vehicle_Master
+
+        public ActionResult VehicleIndex()
+        {
+            VehicleMaster vehicleMaster = new VehicleMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            vehicleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            vehicleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/VehicleMaster.cshtml", vehicleMaster);
+        }
+
+        [HttpPost]
+        public ActionResult ManageVehicleMaster(VehicleMaster vehicleMaster)
+        {
+
+
+            VehicleMaster objvehicleMaster = new VehicleMaster();
+            try
+            {
+                if(vehicleMaster.UploadFile.FileName != null)
+                {
+                    string strdatetime = DateTime.Now.ToString("ddMMyyyyHHMMss");
+                    string path = "\\UploadFile\\" + strdatetime + vehicleMaster.UploadFile.FileName;
+                    vehicleMaster.UploadFile.SaveAs(Server.MapPath("~") + path);
+                    vehicleMaster.Vehicle_Img = path;
+                }
+                
+
+                objvehicleMaster = vehicleMaster.VehicleMaster_InsertUpdate(vehicleMaster);
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
+                vehicleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                vehicleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objvehicleMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objvehicleMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objvehicleMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objvehicleMaster.IsSucceed && objvehicleMaster.Id != -1)
+                    {
+                        ViewBag.Msg = objvehicleMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            VehicleMaster newvehicleMaster = new VehicleMaster();
+            //StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newvehicleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newvehicleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/VehicleMaster.cshtml", (objvehicleMaster.IsSucceed ? newvehicleMaster : vehicleMaster));
+        }
+
+        [HttpGet]
+        public ActionResult GetVehicleMaster(VehicleMaster vehicleMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = vehicleMaster.VehicleMaster_Get();
+                dt.TableName = "StateLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteVehicleMaster(VehicleMaster vehicleMaster, int id)
+        {
+            try
+            {
+                vehicleMaster.Id = id;
+                VehicleMaster objVehicleMaster = vehicleMaster.VehicleMaster_Delete(vehicleMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                vehicleMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                vehicleMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objVehicleMaster != null)
+                {
+                    if (objVehicleMaster.Id > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/VehicleMaster.cshtml", vehicleMaster);
+        }
+
+        #endregion
+
+        #region Vehicle_Model_Master
+        public ActionResult VehicleModelIndex()
+        {
+            VehicleModelMaster vehicleModelMaster = new VehicleModelMaster();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            vehicleModelMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            vehicleModelMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Masters/VehicleModelMaster.cshtml", vehicleModelMaster);
+        }
+
+        [HttpPost]
+        public ActionResult ManageVehicleModelMaster(VehicleModelMaster vehicleModelMaster)
+        {
+            VehicleModelMaster objvehicleModelMaster = new VehicleModelMaster();
+            try
+            {
+                objvehicleModelMaster = vehicleModelMaster.VehicleModelMaster_InsertUpdate(vehicleModelMaster);
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
+                vehicleModelMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                vehicleModelMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objvehicleModelMaster != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objvehicleModelMaster.IsSucceed)
+                    {
+                        ViewBag.Msg = objvehicleModelMaster.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objvehicleModelMaster.IsSucceed && objvehicleModelMaster.Id != -1)
+                    {
+                        ViewBag.Msg = objvehicleModelMaster.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            VehicleModelMaster newvehicleModelMaster = new VehicleModelMaster();
+            //StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newvehicleModelMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+            newvehicleModelMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Masters/VehicleModelMaster.cshtml", (objvehicleModelMaster.IsSucceed ? newvehicleModelMaster : vehicleModelMaster));
+        }
+
+        [HttpGet]
+        public ActionResult GetVehicleModelMaster(VehicleModelMaster vehicleModelMaster, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = vehicleModelMaster.VehicleModelMaster_Get();
+                dt.TableName = "StateLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteVehicleModelMaster(VehicleModelMaster vehicleModelMaster, int id)
+        {
+            try
+            {
+                vehicleModelMaster.Id = id;
+                VehicleModelMaster objVehicleModelMaster = vehicleModelMaster.VehicleModelMaster_Delete(vehicleModelMaster);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                vehicleModelMaster.AppToken = CommonUtility.URLAppToken(AppToken);
+                vehicleModelMaster.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objVehicleModelMaster != null)
+                {
+                    if (objVehicleModelMaster.Id > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Masters/VehicleModelMaster.cshtml", vehicleModelMaster);
+        }
+        #endregion
+
         #region State Master
         public ActionResult StateIndex()
         {

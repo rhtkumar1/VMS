@@ -29,6 +29,8 @@
                             @*@Html.HiddenFor(m => m.SaleId, htmlAttributes: new { @id = "SaleId" })*@
                             @Html.HiddenFor(m => m.AppToken)
                             @Html.HiddenFor(m => m.IsUpdateConsignment, htmlAttributes: new { @id = "IsUpdateConsignment" })
+                            @Html.HiddenFor(m => m.CSGLine, htmlAttributes: new { @id = "ConsignmentLines" })
+
                             @*@Html.HiddenFor(m => m.IsUpdateMaterialSales, htmlAttributes: new { @id = "IsUpdateMaterialSales", @value = "0" })
             @Html.HiddenFor(m => m.SaleLine, htmlAttributes: new { @id = "SaleLine" })
             @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
@@ -82,7 +84,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>GR Date<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.GR_Date, htmlAttributes: new { @id = "GR_Date", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.GR_Date, htmlAttributes: new { @id = "GR_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"),  @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -95,6 +97,7 @@
                                 <div class="col-md-4 form-group">
                                     <label>GR NO<span class="mandatory">*</span></label>
                                     @Html.DropDownListFor(m => m.GR_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "GR_No", @class = "form-control" })
+                                    @*@Html.TextBox("GR_No", "", htmlAttributes: new { @placeholder = "GR_No", @id = "GR_No", @class = "form-control" })*@
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -237,8 +240,8 @@
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
-                                    <label>DETENTION <span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Detention, htmlAttributes: new { @placeholder = "Detention", @id = "Detention", @class = "form-control" })
+                                    <label>DETENTION  <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Detention, htmlAttributes: new { @placeholder = "detention", @id = "detention", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -251,13 +254,13 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>OTHER CHARGE <span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Other_Charge, htmlAttributes: new { @placeholder = "Other Charge", @id = "Pickup", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Other_Charge, htmlAttributes: new { @placeholder = "Other Charge", @id = "Other_Charge", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>HAMALI <span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Hamali, htmlAttributes: new { @placeholder = "Hamali", @id = "Detention", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Hamali, htmlAttributes: new { @placeholder = "Hamali", @id = "Hamali", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -289,7 +292,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>ADVANCE DATE <span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Advance_Date, htmlAttributes: new { @id = "Advance_Date", @placeholder = "dd/mm/yyyy", @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.Advance_Date, htmlAttributes: new { @id = "Advance_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -358,5 +361,24 @@
         IMSConsignment.AppToken = '@Model.AppToken';
         $("#hdnApptoken").val(IMSConsignment.AppToken);
         IMSConsignment.Consignment();
+    });
+    
+    $("#Labour").change(function () {
+        debugger
+        alert("The text has been changed.");
+        var loding = $('#Loading').val();
+        var tpd = $('#Two_Point_Delivery').val();
+        var Unloading = $('#Unloading').val();
+        var Pickup = $('#Pickup').val();
+        var destination = $('#destination').val();
+        var localdelevery = $('#Local_Delivery').val();
+        var othercharge = $('#Other_Charge').val();
+        var hamali = $('#Hamali').val();
+        var labour = $('#Labour').val();
+
+        var total = parseFloat(loding) + parseFloat(tpd) + parseFloat(Unloading) + parseFloat(Pickup) + parseFloat(destination)  + parseFloat(localdelevery) + parseFloat(othercharge) + parseFloat(hamali) + parseFloat(labour);
+        $('#Total_Freight').val(total);
+        $('#Total_Freight').prop('readonly', true);
+
     });
 </script>

@@ -160,6 +160,7 @@
     <Content Include="assets\home\webfonts\fa-solid-900.svg" />
     <Content Include="assets\jquery.validate.js" />
     <Content Include="assets\shared.js" />
+    <Content Include="assets\Vehiclemodelmaster.js" />
     <Content Include="fonts\DashBoard\fontawesome-webfont.svg" />
     <Content Include="fonts\font-awesome-4.7.0\css\font-awesome.css" />
     <Content Include="fonts\font-awesome-4.7.0\css\font-awesome.min.css" />
@@ -209,6 +210,7 @@
     <Compile Include="Models\SendSMS.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\BarCodePrint.cs" />
+    <Compile Include="Models\ViewModel\BillCreation.cs" />
     <Compile Include="Models\ViewModel\CompanyMaster.cs" />
     <Compile Include="Models\ViewModel\Consignment.cs" />
     <Compile Include="Models\ViewModel\DiscountDashboard.cs" />
@@ -217,6 +219,8 @@
     <Compile Include="Models\ViewModel\LedgerReport.cs" />
     <Compile Include="Models\ViewModel\ReportInterFace.cs" />
     <Compile Include="Models\ViewModel\StoreTransfer.cs" />
+    <Compile Include="Models\ViewModel\VehicleMaster.cs" />
+    <Compile Include="Models\ViewModel\VehicleModelMaster.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
     <Compile Include="Models\ViewModel\StoreClearance.cs" />
     <Compile Include="Models\ViewModel\GatePass.cs" />
@@ -381,6 +385,10 @@
     <Content Include="Reports\Report\Sale_Order_Dashboard.rdlc" />
     <Content Include="Views\Home\DownloadBrochure.cshtml" />
     <Content Include="Views\Admin\Material\Consignment.cshtml" />
+    <Content Include="Views\Admin\Material\ConsignmentDashboard.cshtml" />
+    <Content Include="Views\Admin\Masters\VehicleModelMaster.cshtml" />
+    <Content Include="Views\Admin\Masters\VehicleMaster.cshtml" />
+    <Content Include="Views\Admin\Material\BillCreation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -394,6 +402,7 @@
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="SqlServerTypes\x64\" />
     <Folder Include="SqlServerTypes\x86\" />
+    <Folder Include="UploadFile\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\Report\Material_Sale_Gatepass.rdlc" />

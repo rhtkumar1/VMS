@@ -344,6 +344,19 @@ namespace IMS.Controllers
         }
         #endregion
 
+        #region Bill Creation
+        public ActionResult BillCreation()
+        {
+            BillCreation billCreation = new BillCreation();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            billCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+            billCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/BillCreation.cshtml", billCreation);
+        }
+
+        #endregion
+
+
         #region Material Sales
         public ActionResult MaterialSales()
         {
@@ -981,15 +994,40 @@ namespace IMS.Controllers
             consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
         }
+        public ActionResult ConsignmentDashboard()
+        {
+            Consignment consignment = new Consignment();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            consignment.AppToken = CommonUtility.URLAppToken(AppToken);
+            consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/ConsignmentDashboard.cshtml", consignment);
+        }
+
+
+        //[HttpGet]
+        //public ActionResult Consignment_Get(string AppToken = "")
+        //{
+        //    DataTable dt = new DataTable();
+        //    try
+        //    {
+        //        Consignment consignment = new Consignment();
+        //        dt = consignment.Consignment_Get();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return Content(JsonConvert.SerializeObject(dt));
+        //}
 
         [HttpGet]
-        public ActionResult Consignment_Get(string AppToken = "")
+        public ActionResult Consignment_Get_Bydate(DateTime fromdate, DateTime todate, string GR_No, int? GR_OfficeId, int? Vehicle_Id, int? Billing_OfficeId, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
                 Consignment consignment = new Consignment();
-                dt = consignment.Consignment_Get();
+                dt = consignment.Consignment_Get_BydateFilter(fromdate, todate, GR_No, GR_OfficeId, Vehicle_Id, Billing_OfficeId);
             }
             catch (Exception)
             {
@@ -998,13 +1036,55 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
 
+        //[HttpGet]
+        //public ActionResult GetConsigmentData(int GR_Id = 0, string appToken = "", string sMsg = "")
+        //{
+        //    try
+        //    {
+        //        if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
+        //        Consignment consignment = new Consignment();
+        //        //        itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
+        //        if (GR_Id > 0)
+        //        {
+        //            consignment = consignment.GetConsigmentData_By_Id(GR_Id);
+        //        }
+        //        AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+        //        consignment.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+        //        consignment.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+        //        return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        //[HttpGet]
+        //public ActionResult GetConsigmentData(int GR_Id, string AppToken = "")
+        //{
+        //    //DataSet ds = new DataSet();
+        //    //try
+        //    //{
+        //    //    Consignment consignment = new Consignment();
+        //    //    ds = consignment.GetConsigmentData_By_Id(GR_Id);
+        //    //}
+        //    //catch (Exception)
+        //    //{
+        //    //    throw;
+        //    //}
+        //    return View("~/Views/Admin/Material/Consignment.cshtml", Content(JsonConvert.SerializeObject(ds)));
+        //    //return Content(JsonConvert.SerializeObject(ds));
+        //}
+
+
         [HttpPost]
         public ActionResult ManageConsignment(Consignment consignment)
         {
             Consignment objConsignment = new Consignment();
             try
             {
-                objConsignment = consignment.Consignment_InsertUpdate(consignment);
+                consignment.ConsignmentLines = JsonConvert.DeserializeObject<List<ConsignmentLine>>(consignment.CSGLine);
+                objConsignment = consignment.Consignment_InsertUpdate();
                 AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
                 consignment.AppToken = CommonUtility.URLAppToken(AppToken);
                 consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
@@ -1041,6 +1121,41 @@ namespace IMS.Controllers
             // to reset fields only in case of added or updated.
             return View("~/Views/Admin/Material/Consignment.cshtml", (objConsignment.IsSucceed ? oconsignment : consignment));
         }
+
+        [HttpPost]
+        public ActionResult DeleteConsignment(Consignment consignment, int gr_Id)
+        {
+            try
+            {
+                //financialMaster.FinancialId = financialId;
+                Consignment objConsignment = consignment.Consignment_Delete(consignment);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                consignment.AppToken = CommonUtility.URLAppToken(AppToken);
+                consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objConsignment != null)
+                {
+                    if (objConsignment.GR_Id > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Material/ConsignmentDashboard.cshtml", consignment);
+        }
+
+        
         #endregion
 
     }

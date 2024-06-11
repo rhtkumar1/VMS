@@ -41,55 +41,55 @@
             let msg = "";
             let amount = 0.0;
 
-            if ($("#Item_Id").val() === "0" || $("#Item_Id").val() === "" || $("#ItemSearch").val() === "") {
-                msg = "Please select Material.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Actual_Weight").val() === "") {
-                msg = "Please enter Actual Weight.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if (parseInt($("#Unit").val()) === 0) {
-                msg = "Please select Unit.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Charge_Weight").val() === "") {
-                msg = "Please Please enter Charge Weight.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Pcs").val() === "") {
-                msg = "Please Please enter Pcs.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Rate_Type").val() === "") {
-                msg = "Please Please enter Rate Type.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Rate").val() === "") {
-                msg = "Please Please enter Rate.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } else if ($("#Basic_Freight").val() === "") {
-                msg = "Please Please enter Basic Freight.";
-                bAdded = false;
-                $('#alertModal').modal('show');
-                $('#msg').html(msg);
-                return false;
-            } 
+            //if ($("#Item_Id").val() === "0" || $("#Item_Id").val() === "" || $("#ItemSearch").val() === "") {
+            //    msg = "Please select Material.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Actual_Weight").val() === "") {
+            //    msg = "Please enter Actual Weight.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if (parseInt($("#Unit").val()) === 0) {
+            //    msg = "Please select Unit.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Charge_Weight").val() === "") {
+            //    msg = "Please Please enter Charge Weight.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Pcs").val() === "") {
+            //    msg = "Please Please enter Pcs.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Rate_Type").val() === "") {
+            //    msg = "Please Please enter Rate Type.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Rate").val() === "") {
+            //    msg = "Please Please enter Rate.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} else if ($("#Basic_Freight").val() === "") {
+            //    msg = "Please Please enter Basic Freight.";
+            //    bAdded = false;
+            //    $('#alertModal').modal('show');
+            //    $('#msg').html(msg);
+            //    return false;
+            //} 
 
             //Reference the Party and Location ddl.
             if (bAdded) {
@@ -181,6 +181,70 @@
                 return false;
             }
         });
+
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            let OrderLineValues = [];
+            let isValid = true;
+            totalAmount = 0.0;
+            let msg = "";
+            if ($("#PartyId").val() === "0" || $("#PartyId").val() === "") {
+                msg = "Please fill party.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+            if ($("#tblConsignment TBODY TR").length > 0) {
+                $("#tblConsignment TBODY TR").each(function () {
+                    let row = $(this).find('td');
+                    let oMapping = {};
+
+                    oMapping.Line_Id = row.eq(1).attr('data-line-Id');
+                    oMapping.Item_Id = row.eq(1).attr('data-item-id');
+                    
+                    oMapping.Item_Id = "1";
+                    oMapping.GR_Id = "1";
+                    oMapping.Actual_Weights = row.eq(2).attr('data-unit-id');
+                    oMapping.Actual_Weight = row[2].innerText;
+                    oMapping.Charge_Weight = row[3].innerText;
+                    oMapping.Stock_Office_Id = row.eq(3).attr('data-StockOffice-id');
+
+                    oMapping.Quantity = row[4].innerText;
+                   // oMapping.Unit_Id = row[5].innerText;
+
+                    oMapping.Unit_Id = "2";
+
+                    oMapping.Rate_TypeId = row[6].innerText;
+                    oMapping.Rate = row[7].innerText;
+                   // oMapping. = row[8].innerText;
+                    oMapping.Basic_Freight = row[8].innerText;
+
+                    //oMapping.Amount = Calculation(parseFloat(row[6].innerText) * parseFloat(row[7].innerText), parseFloat(row[8].innerText), parseFloat(row[9].innerText));
+                    //totalAmount += parseFloat(oMapping.Amount);
+                  //  oMapping.Remarks = row[11].innerText
+                    oMapping.IsUpdate = $("#IsUpdate").val();
+                    OrderLineValues.push(oMapping);
+                });
+                $("#TotalAmount").val(totalAmount.toFixed(2));
+                $("#ConsignmentLines").val(JSON.stringify(OrderLineValues));
+            } else {
+                msg = "Please add at least 1 matrial order.";
+                isValid = false;
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+
+            if (isValid) {
+                return true;
+            } else {
+                $('#alertModal').modal('show');
+                $('#msg').html(msg);
+                return false;
+            }
+        });
+
     };
     return scope;
 })(IMSConsignment || {});
@@ -253,3 +317,4 @@ function Remove(button) {
     //});
     //$("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
 };
+

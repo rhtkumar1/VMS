@@ -1,0 +1,304 @@
+﻿@model IMS.Models.ViewModel.VehicleMaster
+@{
+    ViewBag.Title = "Vehicle Master";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Vehicle Master</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageVehicleMaster", "Master", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StateMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.Id, htmlAttributes: new { @id = "Id" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="heading">
+                                <h4>
+                                    Vehicle Detail
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle No<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Vehicle_No, htmlAttributes: new { @placeholder = "Enter Vehicle No", @id = "Vehicle_No", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Chassis No</label>
+                                    @Html.TextBoxFor(m => m.Chassis_No, htmlAttributes: new { @placeholder = "Enter Chassis No", @id = "Chassis_No",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Ac Fuel Consumption</label>
+                                    @Html.TextBoxFor(m => m.Ac_Fuel_Consumption, htmlAttributes: new { @placeholder = "Enter Ac Fuel Consumption", @id = "Ac_Fuel_Consumption",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle Owner<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Vehicle_Owner_Id, new SelectList(Model.Vehicle_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Owner", @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Engine No</label>
+                                    @Html.TextBoxFor(m => m.Engine_No, htmlAttributes: new { @placeholder = "Enter Engine No ", @id = "Engine_No",  @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Fuel Avg</label>
+                                    @Html.TextBoxFor(m => m.Fuel_Avg, htmlAttributes: new { @placeholder = "Enter Fuel Avg ", @id = "Fuel_Avg",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle Model<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Vehicle_Model_Id, new SelectList(Model.Vehicle_Model_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Model_Id", @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Trolly No</label>
+                                    @Html.TextBoxFor(m => m.Trolly_No, htmlAttributes: new { @placeholder = "Enter Trolly No ", @id = "Trolly_No",  @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Fuel Avg Empty</label>
+                                    @Html.TextBoxFor(m => m.Fuel_Avg_Empty, htmlAttributes: new { @placeholder = "Enter Fuel Avg Empty ", @id = "Fuel_Avg_Empty",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Registration No<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Registration_No, htmlAttributes: new { @placeholder = "Enter Registration_No ", @id = "Registration_No", @required = "required", @class = "form-control" })
+                                    @*@Html.DropDownListFor(m => m.Oem_Id, new SelectList(Model.Oem_List, "Value", "Text"), htmlAttributes: new { @id = "Oem_Id", @class = "form-control" })*@
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Gross Weight</label>
+                                    @Html.TextBoxFor(m => m.Gross_Weight, htmlAttributes: new { @placeholder = "Enter Gross Weight ", @id = "Gross_Weight",  @class = "form-control" })
+                                  @Html.ValidationMessageFor(m =>m.Gross_Weight)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Purchase Date</label>
+                                    @Html.TextBoxFor(m => m.Purchase_Date, htmlAttributes: new { @id = "Purchase_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Registration Date</label>
+                                    @Html.TextBoxFor(m => m.Registration_Date, htmlAttributes: new { @id = "Registration_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                  </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Unload Weight</label>
+                                    @Html.TextBoxFor(m => m.Unload_Weight, htmlAttributes: new { @placeholder = "Enter Unload_Weight ", @id = "Unload_Weight",  @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Purchase Amount</label>
+                                    @Html.TextBoxFor(m => m.Purchase_Amount, htmlAttributes: new { @placeholder = "Enter Purchase Amount ", @id = "Purchase_Amount",  @class = "form-control" })
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Manufacturing year<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Manufacturing_year, htmlAttributes: new { @id = "Manufacturing_year", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle Type <span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Vehicle_Type_Id, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Type", @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Sold Date</label>
+                                    @Html.TextBoxFor(m => m.Sold_Date, htmlAttributes: new { @id = "Sold_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.Office_List, "Value", "Text"), htmlAttributes: new { @id = "Office", @class = "form-control" })
+                                    </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Installment</label>
+                                    @Html.TextBoxFor(m => m.Installment, htmlAttributes: new { @placeholder = "Enter Installment ", @id = "Installment", @type = "number", @min = "0", @required = "required", @class = "form-control" })
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Sold Amount</label>
+                                    @Html.TextBoxFor(m => m.Sold_Amount, htmlAttributes: new { @placeholder = "Enter Sold Amount ", @id = "Sold_Amount",  @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-4 form-group">
+                                <label>Attach Image</label>
+                                <input type="file" name="UploadFile" class="form-control" />
+                            </div>
+
+                     
+                            <div class="col-md-4" style="margin-top:28px;">
+
+                                <div class="col-md-6 form-group pull-right">
+                                    <div class="appointment-btn ">
+                                        <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group pull-left">
+                                    <div class="appointment-btn ">
+                                        <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        IMSC.ajaxCall("GET", "/Master/GetVehicleMaster?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var StateLists = JSON.parse(d);
+         if (StateLists !== "null") {
+             var fields = [
+                 {
+                     title: "Action",
+                     width: 80,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 },
+                 { name: "Id", css: "hidden" },
+                 { name: "Vehicle_No", type: "text", title: "Vehicle No", sorting: true, filtering: true, width: 150 },
+                 { name: "Registration_No", type: "text", title: "Registration No", sorting: true, filtering: false, width: 100 },
+                 /*{ name: "Oem_Id", css: "hidden" },*/
+                 { name: "Registration_Date", type: "text", title: "Registration Date", sorting: true, filtering: false, width: 100 },
+                 { name: "Manufacturing_year", type: "text", title: "Manufacturing year", sorting: true, filtering: false, width: 100 },
+                 { name: "Chassis_No", type: "text", title: "Chassis No", sorting: true, filtering: false, width: 150 },
+                 { name: "Engine_No", type: "text", title: "Engine No", sorting: true, filtering: false, width: 150 },
+                 { name: "Trolly_No", type: "text", title: "Trolly No", sorting: true, filtering: false, width: 150 },
+                 { name: "Gross_Weight", type: "text", title: "Gross Weight", sorting: true, filtering: false},
+                 { name: "Unload_Weight", type: "text", title: "Unload Weight", sorting: true, filtering: false},
+                 { name: "Installment", type: "text", title: "Installment", sorting: true, filtering: false},
+                 { name: "Ac_Fuel_Consumption", type: "text", title: "Ac Fuel Consumption", sorting: true, filtering: false},
+                 { name: "Fuel_Avg", type: "text", title: "Fuel Avg", sorting: true, filtering: false},
+                 { name: "Fuel_Avg_Empty", type: "text", title: "Fuel Avg Empty", sorting: true, filtering: false},
+                 { name: "Purchase_Date", type: "text", title: "Purchase Date", sorting: true, filtering: false},
+                 { name: "Purchase_Amount", type: "text", title: "Purchase Amount", sorting: true, filtering: false},
+                 { name: "Sold_Date", type: "text", title: "Sold Date", sorting: true, filtering: false},
+                 { name: "Sold_Amount", type: "text", title: "Sold Amount", sorting: true, filtering: false },
+                 {
+                     title: "image",
+                     type: "text",
+                     width: 50,
+                     itemTemplate: function (value, item) {
+                         if (item.Vehicle_img) {
+                             return '<img src="/img/"' + item.Vehicle_img + '" "width="42" height="42">';
+                         }
+                         return '';
+                     }
+                 }
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     StateLists: StateLists,
+                     loadData: function (filter) {
+                         return $.grep(this.StateLists, function (StateList) {
+                             return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                                 && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        });
+        var editFormData = function (dilogType, VehicleMaster) {
+            $("msg").text = "";
+            if (VehicleMaster.Id > 0) {
+                $("#Id").val(VehicleMaster.Id);
+                $("#Vehicle_No").val(VehicleMaster.Vehicle_No);
+                $("#Chassis_No").val(VehicleMaster.Chassis_No);
+                $("#Ac_Fuel_Consumption").val(VehicleMaster.Ac_Fuel_Consumption);
+
+                $("#Vehicle_Owner").val(VehicleMaster.Vehicle_Owner_Id);
+                $("#Engine_No").val(VehicleMaster.Engine_No);
+                $("#Fuel_Avg").val(VehicleMaster.Fuel_Avg);
+                $("#Vehicle_Model_Id").val(VehicleMaster.Vehicle_Model_Id);
+                $("#Trolly_No").val(VehicleMaster.Trolly_No);
+                $("#Fuel_Avg_Empty").val(VehicleMaster.Fuel_Avg_Empty);
+                $("#Registration_No").val(VehicleMaster.Registration_No);
+                $("#Gross_Weight").val(VehicleMaster.Gross_Weight);
+                $("#Purchase_Date").val(VehicleMaster.Purchase_Date);
+                $("#Registration_Date").val(VehicleMaster.Registration_Date);
+                $("#Unload_Weight").val(VehicleMaster.Unload_Weight);
+                $("#Purchase_Amount").val(VehicleMaster.Purchase_Amount);
+                $("#Manufacturing_year").val(VehicleMaster.Manufacturing_year);
+                $("#Vehicle_Type").val(VehicleMaster.Vehicle_Type_Id);
+                $("#Sold_Date").val(VehicleMaster.Sold_Date);
+                $("#Office").val(VehicleMaster.Office_Id);
+                $("#Installment").val(VehicleMaster.Installment);
+                $("#Sold_Amount").val(VehicleMaster.Sold_Amount);
+
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#Id").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
+
+        var deleteFormData = function (dialogType, VehicleMaster) {
+            var result = confirm("Want to delete?");
+            if (result == true) {
+                IMSC.ajaxCall("POST", "/Master/DeleteVehicleMaster?id=" + VehicleMaster.Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result !== "null" && result !== "") {
+                window.location.reload();
+            }
+        });
+            } else {
+                return false;
+            }
+    };
+</script>
