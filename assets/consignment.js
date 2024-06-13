@@ -18,6 +18,23 @@
         $("#GR_Date").attr('placeholder', 'dd/mm/yyyy');
         $("#Advance_Date").attr('placeholder', 'dd/mm/yyyy');
 
+
+
+        IMSC.ajaxCall("GET", "/Material/GetConsignmentData?AppToken=" + scope.AppToken, {}, "text", function (d) {
+            var result = JSON.parse(d);
+            if (result.length === 0) {
+                $("#empty-message").text("No results found");
+                return response({ label: "No results found", value: 0 });
+            } else {
+                response($.map(result, function (item) {
+                    return { label: item.Title, value: item.Item_Id };
+                    $("#Item_Id").val(Item_Id);
+                }))
+            }
+        });
+
+
+
         $("#ItemSearch").autocomplete({
             source: function (request, response) {
                 IMSC.ajaxCall("GET", "/Material/SearchItem?Item=" + request.term + "&AppToken=" + scope.AppToken, {}, "text", function (d) {

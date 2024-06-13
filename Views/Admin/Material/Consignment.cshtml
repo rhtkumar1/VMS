@@ -110,7 +110,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>VEHICLE NO<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Id", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.Vehicle_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Id", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">

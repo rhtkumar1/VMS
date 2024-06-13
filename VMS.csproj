@@ -145,6 +145,7 @@
     <Content Include="assets\admin\js\select2.min.js" />
     <Content Include="assets\admin\js\skycons.js" />
     <Content Include="assets\consignment.js" />
+    <Content Include="assets\billcreation.js" />
     <Content Include="assets\materiaOrderCreation.js" />
     <Content Include="assets\materialPurchase.js" />
     <Content Include="assets\materialSales.js" />

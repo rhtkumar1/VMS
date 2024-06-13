@@ -10,6 +10,8 @@
         $("#StateId").append($("<option></option>").val("0").html("Select State"));
         $("#StateId").attr('disabled', 'disabled');
 
+
+
         $("body").on("click", "#btnSubmit", function () {
             let PurchaseLineValues = [];
             let isValid = true;
@@ -379,6 +381,18 @@
             $("#SupplyStateId").val(parseInt($(this).val()));
         });
 
+        $(document).on('change', '#Client_Id', function () {
+            debugger;
+            var id = $('#Client_Id').val();
+            var Client_Id = 2300;
+            IMSC.ajaxCall("GET", "/Material/GetBillcreationdata?Client_Id=" + Client_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                var res = JSON.parse(d);
+                if (res !== null) {
+                    BindGrid(res, 1, 0);
+                }
+            });
+        });
+
         $("#drpParty").change(function () {
             let Party_Id = parseInt($('#drpParty').val());
             $('#PartyId').val(Party_Id);
@@ -411,7 +425,6 @@
         });
 
         $("#btnSearch").click(function (e) {
-            debugger;
             e.preventDefault();
             var SaleId = parseInt($("#SaleId").val());
             $("#SaleId").val(SaleId);
@@ -445,7 +458,6 @@
                             $("#Marka").val(result[0].Marka);
                             $("#tbodyid").empty();
                             $("#SaleAmount").val("0");
-                            debugger;
                             BindGrid(result, 1, 0);
                             $("td").each(function () {
                                 $(this).addClass("tbl-css");
@@ -543,7 +555,7 @@
         })
         $("#SearchParty").autocomplete({
             source: function (request, response) {
-                IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#Billing_OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                     var result = JSON.parse(d);
                     if (result.length === 0) {
                         $("#empty-message").text("No results found");
@@ -963,6 +975,7 @@ function Remove(button) {
     $("#IsUpdateMaterialSales").val(1);
 };
 function BindGrid(result, isqtydisabled, sourceid) {
+    debugger;
     let totalAmount = 0;
     $.each(result, function (index, value) {
         let quantity = parseFloat(value.Order_Qty);
@@ -1046,21 +1059,21 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell.append(htmlEditBtn);
         //Add Item cell.
 
-        let lblItem = `<label id="lblItem_${value.Item_Id}">${value.ItemName}</label>
-                            <input type="hidden" id="hdnItemId_${value.Item_Id}" name="hdnItemId_${value.Item_Id}" value="${value.Item_Id}" />
-                            <input type="hidden" id="hdnLineId_${value.Item_Id}" name="hdnLineId_${value.Item_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
-                            <input type="hidden" id="hdnPOLineId_${value.Item_Id}" name="hdnPOLineId_${value.Item_Id}" value="${value.POLine_Id}" />
-                            <input type="hidden" id="hdnPOId_${value.Item_Id}" name="hdnPOId_${value.Item_Id}" value="${value.PO_Id}" />
-                            <input type="hidden" id="hdnItemTypeGrid_${value.Item_Id}" name="hdnItemTypeGrid_${value.Item_Id}" value="${value.ItemNature}" />
-                            <input type="hidden" id="hdnIs_SameStateGrid_${value.Item_Id}" name="hdnIs_SameStateGrid_${value.Item_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
-                            <input type="hidden" id="hdnDiscount_1_Amt_${value.Item_Id}" name="hdnDiscount_1_Amt_${value.Item_Id}" value="${value.Discount_1_Amount === undefined ? "0" : value.Discount_1_Amount}" />
-                            <input type="hidden" id="hdnDiscount_2_Amt_${value.Item_Id}" name="hdnDiscount_2_Amt_${value.Item_Id}" value="${value.Discount_2_Amount === undefined ? "0" : value.Discount_1_Amount}" />
-                            <input type="hidden" id="hdnItemRequestQty_${value.Item_Id}" name="hdnItemRequestQty_${value.Item_Id}" value="${quantity}" />
+        let lblItem = `<label id="lblItem_${value.GR_Id}">${value.Gr_no}</label>
+                            <input type="hidden" id="hdnItemId_${value.GR_Id}" name="hdnItemId_${value.GR_Id}" value="${value.Item_Id}" />
+                            <input type="hidden" id="hdnLineId_${value.GR_Id}" name="hdnLineId_${value.GR_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
+                            <input type="hidden" id="hdnPOLineId_${value.GR_Id}" name="hdnPOLineId_${value.GR_Id}" value="${value.POLine_Id}" />
+                            <input type="hidden" id="hdnPOId_${value.GR_Id}" name="hdnPOId_${value.GR_Id}" value="${value.PO_Id}" />
+                            <input type="hidden" id="hdnItemTypeGrid_${value.GR_Id}" name="hdnItemTypeGrid_${value.GR_Id}" value="${value.ItemNature}" />
+                            <input type="hidden" id="hdnIs_SameStateGrid_${value.GR_Id}" name="hdnIs_SameStateGrid_${value.GR_Id}" value="${value.Is_SameState === undefined ? "0" : value.Is_SameState}" />
+                            <input type="hidden" id="hdnDiscount_1_Amt_${value.GR_Id}" name="hdnDiscount_1_Amt_${value.GR_Id}" value="${value.Discount_1_Amount === undefined ? "0" : value.Discount_1_Amount}" />
+                            <input type="hidden" id="hdnDiscount_2_Amt_${value.GR_Id}" name="hdnDiscount_2_Amt_${value.GR_Id}" value="${value.Discount_2_Amount === undefined ? "0" : value.Discount_1_Amount}" />
+                            <input type="hidden" id="hdnItemRequestQty_${value.GR_Id}" name="hdnItemRequestQty_${value.GR_Id}" value="${quantity}" />
                           `;
         cell = $(row.insertCell(-1));
         cell.append(lblItem);
         //Add Order Date.
-        let lblOrderDate = `<label id="lblOrderDate_${value.Item_Id}">${value.OrderDate !== undefined ? value.OrderDate : "N/A"}</label>`;
+        let lblOrderDate = `<label id="lblOrderDate_${value.GR_Id}">${value.GR_Date !== undefined ? value.GR_Date : "N/A"}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblOrderDate);
         //Add Hsn_Sac cell.
@@ -1073,42 +1086,32 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell = $(row.insertCell(-1));
         cell.append(htmlOrder_Qty);
         //Add Available_Qty cell.
-        let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.Item_Id}" style="background-color: lightgreen;">${value.Available_Qty === null ? "0" : value.Available_Qty}</label>`;
+        let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.GR_Id}" style="background-color: lightgreen;">${value.vehicle_No === null ? "0" : value.vehicle_No}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblAvailable_Qty);
         //Add Unit cell.
-        let lblUnit = `<label id="lblUnit_${value.Item_Id}" data-Unit_Id="${value.UnitId}" data-index="${value.Item_Id}" >${value.Unit}</label>`;
+        let lblUnit = `<label id="lblUnit_${value.GR_Id}" data-Unit_Id="${value.GR_Id}" data-index="${value.GR_Id}" >${value.consignee_id}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblUnit);
         //Add Last Rate cell.
-        let htmlLastRate = `<label id="lblLastRate_${value.Item_Id}" data-index="${value.Item_Id}" >${value.LastPurchaseRate === undefined ? "0" : value.LastPurchaseRate}</label>`;
+        let htmlLastRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.origin_id === undefined ? "0" : value.origin_id}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlLastRate);
         //Add Rate cell.
-        let htmlRate = `<input type="text" id="txtRate_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtRate_${value.Item_Id}" onchange="Calculate(this);" value="${rate}"  tp-type="numeric" style="width:40px;"/>`;
+        let htmlRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.origin_id === undefined ? "0" : value.Total_Freight}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlRate);
         //Add Amount cell.
-        let lblAmount = `<label id="lblAmount_${value.Item_Id}">${amount}</label>`;
+        let lblAmount = `<label id="lblAmount_${value.GR_Id}">${value.other_charge}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblAmount);
         //Add Discount_1 cell.
         //let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : discount_1}"  tp-type="numeric" style="width:30px;"/>`;
-        let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${discount_1}"  tp-type="numeric" style="width:30px;"/>`;
-        cell = $(row.insertCell(-1));
-        cell.append(htmlDiscount1);
-        //Add Discount_2 cell.
-        let htmlDiscount2 = `<input type="text" id="txtDiscount2_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount2_${value.Item_Id}" onchange="Calculate(this);" value="${discount_2}"  tp-type="numeric" style="width:30px;"/>`;
-        cell = $(row.insertCell(-1));
-        cell.append(htmlDiscount2);
-        //Add Taxable_Amount cell.
-        let lblTaxable_Amount = `<label id="lblTaxable_Amount_${value.Item_Id}">${Texable_Amount}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblTaxable_Amount);
+        
         //Add GST cell.
-        let lblGST = `<label id="lblGST_${value.Item_Id}">${gst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblGST);
+        //let lblGST = `<label id="lblGST_${value.Item_Id}">${gst}</label>`;
+        //cell = $(row.insertCell(-1));
+        //cell.append(lblGST);
         //Add CGST cell.
         let lblCGST = `<label id="lblCGST_${value.Item_Id}">${cgst}</label>`;
         cell = $(row.insertCell(-1));
@@ -1122,13 +1125,7 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell = $(row.insertCell(-1));
         cell.append(lblIGST);
         //Add Total_Amount cell.
-        let lblTotal_Amount = `<label id="lblTotal_Amount_Row_${value.Item_Id}">${tamount}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblTotal_Amount);
-        //Add Remarks cell.
-        let lblRemarks = `<label id="lblRemarks_Row_${value.Item_Id}">${value.Remarks}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblRemarks);
+      
     });
     $("[id^='lblTotal_Amount_Row_']").each(function () {
         totalAmount += parseFloat($("#" + this.id).text());
@@ -1161,3 +1158,11 @@ function Calculate(value) {
         }
     }
 }
+
+
+//$("#Client_Id").change(function () {
+//    //var id = $('#Client_Id').val();
+//    alert(id);
+//    alert("hello");
+
+//});

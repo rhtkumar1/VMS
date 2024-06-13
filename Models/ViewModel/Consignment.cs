@@ -100,6 +100,9 @@ namespace IMS.Models.ViewModel
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             Driver_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("User_Id", "UserName", "User_Master", "And IsActive =1"), "Id", "Value");
+
+            Vehicle_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Id", "Vehicle_No", "VEHICLE_MASTER", "And IsActive=1"), "Id", "Value");
+
             ConsignmentLines = new List<ConsignmentLine>();
             Loginid = CommonUtility.GetLoginID();
         }

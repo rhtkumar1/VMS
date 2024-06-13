@@ -354,6 +354,22 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/BillCreation.cshtml", billCreation);
         }
 
+        [HttpGet]
+        public ActionResult GetBillcreationdata(int Client_Id, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                BillCreation billCreation = new BillCreation();
+                dt = billCreation.Getbillcreationdata(Client_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
         #endregion
 
 
@@ -1004,22 +1020,6 @@ namespace IMS.Controllers
         }
 
 
-        //[HttpGet]
-        //public ActionResult Consignment_Get(string AppToken = "")
-        //{
-        //    DataTable dt = new DataTable();
-        //    try
-        //    {
-        //        Consignment consignment = new Consignment();
-        //        dt = consignment.Consignment_Get();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    return Content(JsonConvert.SerializeObject(dt));
-        //}
-
         [HttpGet]
         public ActionResult Consignment_Get_Bydate(DateTime fromdate, DateTime todate, string GR_No, int? GR_OfficeId, int? Vehicle_Id, int? Billing_OfficeId, string AppToken = "")
         {
@@ -1036,28 +1036,47 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(dt));
         }
 
-        //[HttpGet]
-        //public ActionResult GetConsigmentData(int GR_Id = 0, string appToken = "", string sMsg = "")
-        //{
-        //    try
-        //    {
-        //        if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
-        //        Consignment consignment = new Consignment();
-        //        //        itemMaster.BarCodeLocation = Server.MapPath("~/ItemBarCode") + "\\";
-        //        if (GR_Id > 0)
-        //        {
-        //            consignment = consignment.GetConsigmentData_By_Id(GR_Id);
-        //        }
-        //        AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
-        //        consignment.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
-        //        consignment.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
-        //        return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+        [HttpGet]
+        public ActionResult GetConsigmentDetail(int GR_Id = 0, string appToken = "", string sMsg = "")
+        {
+            try
+            {
+                if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
+                Session["GR_ID"] = "";
+                Consignment consignment = new Consignment();
+                Session["GR_ID"] = GR_Id;
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                consignment.AppToken = CommonUtility.URLAppToken(AppToken != null ? AppToken : appToken);
+                consignment.AuthMode = CommonUtility.GetAuthMode(AppToken != null ? AppToken : appToken).ToString();
+                return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult GetConsignmentData(string appToken = "", string sMsg = "")
+        {
+            DataSet ds = new DataSet();
+            Consignment consignment = new Consignment();
+            try
+            {
+                int GR_ID = 0;
+                if (!string.IsNullOrEmpty(Session["GR_ID"] as string)) {
+                    GR_ID = Convert.ToInt32(Session["GR_ID"]);
+                }
+                ds = consignment.GetConsigmentData_By_Id(GR_ID);
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(ds));
+        }
 
         //[HttpGet]
         //public ActionResult GetConsigmentData(int GR_Id, string AppToken = "")
