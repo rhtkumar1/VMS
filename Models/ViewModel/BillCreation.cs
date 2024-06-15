@@ -14,14 +14,14 @@ namespace IMS.Models.ViewModel
 
         public int Bill_Id { get; set; }
         public string Bill_No { get; set; }
-        public DateTime Bill_Date { get; set; }
+        public string Bill_Date { get; set; }
         public int Type_Id { get; set; }
         public int Billing_OfficeId { get; set; }
         public int Client_Id { get; set; }
         public int SupplyState_Id { get; set; }
         public int GST_TypeId { get; set; }
         public int HSN_SAC { get; set; }
-        public DateTime Transaction_Date { get; set; }
+        public string Transaction_Date { get; set; }
         public decimal Basic_Freight { get; set; }
         public decimal Other_Charges { get; set; }
         public decimal Total_Freight { get; set; }
@@ -79,6 +79,7 @@ namespace IMS.Models.ViewModel
         public SelectList Item_Lists { get; set; }
         public SelectList Vehicle_Model_List { get; set; }
 
+        public int MENU_Id { get; set; }
         public string SaleLine { get; set; }
 
         public List<GoodRecieptBillLine> GoodRecieptBillLineList { get; set; }
@@ -100,10 +101,10 @@ namespace IMS.Models.ViewModel
            LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
            Item_Lists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Item_Id", "Title", "Item_Master", "And IsActive=1"), "Id", "Value");
            Vehicle_Model_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Id", "Model_Name", "vehicle_model_master", "And IsActive=1"), "Id", "Value");
-
-
-
             Loginid = CommonUtility.GetLoginID();
+            MENU_Id = CommonUtility.GetActiveMenuID();
+            Fin_Id = CommonUtility.GetFYID();
+            Company_Id = CommonUtility.GetCompanyID();
         }
 
         public DataSet Getbillcreationdata(int Client_Id, int HSN,int OfficeId)
@@ -128,8 +129,8 @@ namespace IMS.Models.ViewModel
             try
             {
                 var sb = new System.Text.StringBuilder();
-                foreach (var item in GoodRecieptBillLineList)
-                {
+                //foreach (var item in GoodRecieptBillLineList)
+                //{
                     //sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
                     //                PO_Id=""" + Convert.ToString(item.PO_Id) + @""" POLine_Id=""" + Convert.ToString(item.POLine_Id) + @"""
                     //                Quantity=""" + Convert.ToString(item.Quantity) + @""" HSN_SAC=""" + Convert.ToString(item.HSN_SAC) + @"""   
@@ -141,30 +142,39 @@ namespace IMS.Models.ViewModel
                     //                UnitId=""" + Convert.ToString(item.Unit_Id) + @""" Discount_1_Amount=""" + Convert.ToString(item.Discount_1_Amount) + @"""
                     //                Discount_2_Amount=""" + Convert.ToString(item.Discount_2_Amount) + @""" Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" 
                     //                LastPurchaseRate=""" + Convert.ToString(item.LastRate) + @""" />");
-                }
+               // }
                 SaleLine = "<Line>" + sb + "</Line>";
 
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Bill_Id", Bill_Id));
-
-                //SqlParameters.Add(new SqlParameter("@Invoice_No", InvoiceNo));
-                //SqlParameters.Add(new SqlParameter("@Voucher_No", VoucherNumber));
-                //SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
-                //SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
-                //SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
-                //if (!string.IsNullOrEmpty(TransactionDate))
-                //    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(TransactionDate))));
-                //if (!string.IsNullOrEmpty(Dispatch_Date))
-                //    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Dispatch_Date))));
-                //SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
-                //SqlParameters.Add(new SqlParameter("@Marka", Marka));
-                //SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));
-                //SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
-                //SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
-                //SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
-                //SqlParameters.Add(new SqlParameter("@Sale_Line", SaleLine));
-                //SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
-                //SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
+                SqlParameters.Add(new SqlParameter("@Bill_No", Bill_No));
+                // SqlParameters.Add(new SqlParameter("@Bill_Date", Bill_Date));
+                if (!string.IsNullOrEmpty(Bill_Date))
+                    SqlParameters.Add(new SqlParameter("@Bill_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Bill_Date))));
+                SqlParameters.Add(new SqlParameter("@Type_Id", Type_Id));
+                SqlParameters.Add(new SqlParameter("@Billing_OfficeId", Billing_OfficeId));
+                SqlParameters.Add(new SqlParameter("@Client_Id", Client_Id));
+                SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyState_Id));
+                SqlParameters.Add(new SqlParameter("@GST_TypeId", GST_TypeId));
+                SqlParameters.Add(new SqlParameter("@HSN_SAC", HSN_SAC));
+                //SqlParameters.Add(new SqlParameter("@Transaction_Date", Transaction_Date));
+                SqlParameters.Add(new SqlParameter("@Basic_Freight", Basic_Freight));
+                SqlParameters.Add(new SqlParameter("@Other_Charges", Other_Charges));
+                SqlParameters.Add(new SqlParameter("@Total_Freight", Total_Freight));
+                SqlParameters.Add(new SqlParameter("@GST", GST));
+                SqlParameters.Add(new SqlParameter("@CGST", CGST));
+                SqlParameters.Add(new SqlParameter("@SGST", SGST));
+                SqlParameters.Add(new SqlParameter("@IGST", IGST));
+                SqlParameters.Add(new SqlParameter("@BillAmount", BillAmount));
+                if (!string.IsNullOrEmpty(Transaction_Date))
+                    SqlParameters.Add(new SqlParameter("Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Transaction_Date))));
+                //SqlParameters.Add(new SqlParameter("@Fin_Id", Fin_Id));
+                SqlParameters.Add(new SqlParameter("@Fin_Id", 5));
+                SqlParameters.Add(new SqlParameter("@Company_Id", Company_Id));
+                SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                SqlParameters.Add(new SqlParameter("@Sale_Line", SaleLine));
+                SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
+                SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
 
                 DataTable dt = DBManager.ExecuteDataTableWithParameter("BillCreation_Insertupdate", CommandType.StoredProcedure, SqlParameters);
                 foreach (DataRow dr in dt.Rows)

@@ -28,7 +28,10 @@
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
                     @using (Html.BeginForm("ManageBillCreation", "Material", FormMethod.Post, new { @id = "BillCreation" }))
                     {
+                        @Html.HiddenFor(m => m.Bill_Id, htmlAttributes: new { @id = "Bill_Id" })
                         @Html.HiddenFor(m => m.AppToken)
+                        @Html.HiddenFor(m => m.SaleLine, htmlAttributes: new { @id = "SaleLine" })
+
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
                             <div class="heading">
                                 <h4>
@@ -57,14 +60,14 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>Bill Date<span class="mandatory">*</span></label>
-                                    @Html.TextBoxFor(m => m.Bill_Date, htmlAttributes: new { @id = "Purchase_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                    @Html.TextBoxFor(m => m.Bill_Date, htmlAttributes: new { @id = "Bill_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
 
                                 </div>
                             </div>
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>BILL No<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.Bill_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @required = "required", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.Bill_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "Bill_No", @required = "required", @class = "form-control" })
 
                                 </div>
                             </div>

@@ -13,6 +13,7 @@
 
 
         $("body").on("click", "#btnSubmit", function () {
+            debugger;
             let PurchaseLineValues = [];
             let isValid = true;
             let msg = "";
@@ -60,7 +61,7 @@
                         let qty = parseInt($("#txtOrder_Qty_" + index).val());
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
                         let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
-                        let itemname = $("#lblItem_" + index)[0].innerText
+                        //let itemname = $("#lblItem_" + index)[0].innerText
 
                         if (poLineId === 0) {
                             if (isItemType === 16) {
@@ -87,21 +88,32 @@
                         if (isValid) {
                             oMapping.Line_Id = $("#hdnLineId_" + index).val();
                             oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
+
+                           // oMapping.UnitTitle = $("#lblUnit_" + index).text();
+                            //Line_Id
+                            //Bill_Id
+                            //GST
+                            //CGST
+                            //SGST
+                            //IGST
+
                             oMapping.UnitTitle = $("#lblUnit_" + index).text();
                             oMapping.Available_Qty = availableQty;
                             oMapping.Item_Id = $("#hdnItemId_" + index).val();
                             oMapping.ItemTitle = $("#lblItem_" + index).text();
-                            oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
-                            oMapping.Quantity = ($("#txtOrder_Qty_" + index).val() === "" ? "0" : $("#txtOrder_Qty_" + index).val());
-                            oMapping.Rate = $("#txtRate_" + index).val();
-                            oMapping.LastRate = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
-                            oMapping.Amount = $("#lblAmount_" + index).text();
-                            oMapping.Discount_1 = ($("#txtDiscount1_" + index).val() === "" ? "0" : $("#txtDiscount1_" + index).val());
-                            oMapping.Discount_2 = ($("#txtDiscount2_" + index).val() === "" ? "0" : $("#txtDiscount2_" + index).val());
-                            oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
-                            oMapping.Discount_1_Amount = ($("#hdnDiscount_1_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_1_Amt_" + index).val());
-                            oMapping.Discount_2_Amount = ($("#hdnDiscount_2_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_2_Amt_" + index).val());
-                            oMapping.GST = $("#lblGST_" + index).text();
+                            //oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
+                            //oMapping.Quantity = ($("#txtOrder_Qty_" + index).val() === "" ? "0" : $("#txtOrder_Qty_" + index).val());
+                            //oMapping.Rate = $("#txtRate_" + index).val();
+                            //oMapping.LastRate = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
+                            //oMapping.Amount = $("#lblAmount_" + index).text();
+                            //oMapping.Discount_1 = ($("#txtDiscount1_" + index).val() === "" ? "0" : $("#txtDiscount1_" + index).val());
+                            //oMapping.Discount_2 = ($("#txtDiscount2_" + index).val() === "" ? "0" : $("#txtDiscount2_" + index).val());
+                            //oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
+                            //oMapping.Discount_1_Amount = ($("#hdnDiscount_1_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_1_Amt_" + index).val());
+                            //oMapping.Discount_2_Amount = ($("#hdnDiscount_2_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_2_Amt_" + index).val());
+
+                            //lblIGST_
+                            //oMapping.GST = $("#lblGST_" + index).text();
                             oMapping.CGST = $("#lblCGST_" + index).text();
                             oMapping.SGST = $("#lblSGST_" + index).text();
                             oMapping.IGST = $("#lblIGST_" + index).text();
@@ -961,7 +973,7 @@ function setCaluValuew(index, bIsDiscount, quantity, poLineId) {
         $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     }
 }
-function Remove(button) {
+function Removes(button) {
     //Determine the reference of the Row using the Button.
     // pass SaleId and ItemID
     let SaleId = parseInt($("#SaleId").val());
@@ -1139,7 +1151,7 @@ function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid
         cell.append(htmlEditBtn);
         //Add Item cell.
 
-        let lblItem = `<label id="lblItem_${value.GR_Id}">${value.Gr_no}</label>
+        let lblItem = `<label id="lblItem_${value.GR_Id}">${value.GR_Id}</label>
                             <input type="hidden" id="hdnItemId_${value.GR_Id}" name="hdnItemId_${value.GR_Id}" value="${value.Item_Id}" />
                             <input type="hidden" id="hdnLineId_${value.GR_Id}" name="hdnLineId_${value.GR_Id}" value="${value.Line_Id === undefined ? "0" : value.Line_Id}" />
                             <input type="hidden" id="hdnPOLineId_${value.GR_Id}" name="hdnPOLineId_${value.GR_Id}" value="${value.POLine_Id}" />
