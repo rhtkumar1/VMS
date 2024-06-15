@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Web;
 using System.Web.Mvc;
+using static IMS.Models.ViewModel.BillCreation;
 //using System.Web.Script.Serialization;
 
 namespace IMS.Controllers
@@ -355,20 +356,65 @@ namespace IMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetBillcreationdata(int Client_Id, string AppToken = "")
+        public ActionResult GetBillcreationdata(int Client_Id,int HSN,int OfficeId, string AppToken = "")
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 BillCreation billCreation = new BillCreation();
-                dt = billCreation.Getbillcreationdata(Client_Id);
+                ds = billCreation.Getbillcreationdata(Client_Id, HSN, OfficeId);
             }
             catch (Exception)
             {
                 throw;
             }
-            return Content(JsonConvert.SerializeObject(dt));
+            return Content(JsonConvert.SerializeObject(ds));
         }
+
+        [HttpPost]
+        public ActionResult ManageBillCreation(BillCreation billCreation)
+        {
+            BillCreation objBillCreation = new BillCreation();
+            try
+            {
+               // billCreation.GoodRecieptBillLineList = JsonConvert.DeserializeObject<List<GoodRecieptBillLine>>(billCreation.SaleLine);
+                objBillCreation = billCreation.BillCreation_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                billCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+                billCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objBillCreation != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objBillCreation.IsSucceed)
+                    {
+                        ViewBag.Msg = objBillCreation.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objBillCreation.IsSucceed && objBillCreation.Bill_Id != -1)
+                    {
+                        ViewBag.Msg = objBillCreation.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            BillCreation newBillCreation = new BillCreation();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newBillCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+            newBillCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/BillCreation.cshtml", (newBillCreation.IsSucceed ? newBillCreation : billCreation));
+        }
+
 
         #endregion
 

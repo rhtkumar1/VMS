@@ -79,6 +79,11 @@ namespace IMS.Models.ViewModel
         public SelectList Item_Lists { get; set; }
         public SelectList Vehicle_Model_List { get; set; }
 
+        public string SaleLine { get; set; }
+
+        public List<GoodRecieptBillLine> GoodRecieptBillLineList { get; set; }
+        public List<GoodRecieptBillLine> GoodRecieptBillLines { get; set; }
+
 
         public DateTime? Fromdate { get; set; }
         public DateTime? Todate { get; set; }
@@ -101,19 +106,91 @@ namespace IMS.Models.ViewModel
             Loginid = CommonUtility.GetLoginID();
         }
 
-        public DataTable Getbillcreationdata(int Client_Id)
+        public DataSet Getbillcreationdata(int Client_Id, int HSN,int OfficeId)
         {
-            DataTable dt = new DataTable();
+            DataSet ds = new DataSet();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
                 SqlParameters.Add(new SqlParameter("@Client_Id", Client_Id));
-                dt = DBManager.ExecuteDataTableWithParameter("GETBillCReation_Data", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@Hsn_id", HSN));
+                SqlParameters.Add(new SqlParameter("@OfficeId", OfficeId));
+                ds = DBManager.ExecuteDataSetWithParameter("GETBillCReation_Data", CommandType.StoredProcedure, SqlParameters);
             }
             catch (Exception ex)
             { throw ex; }
 
-            return dt;
+            return ds;
+        }
+
+        public BillCreation BillCreation_InsertUpdate()
+        {
+            try
+            {
+                var sb = new System.Text.StringBuilder();
+                foreach (var item in GoodRecieptBillLineList)
+                {
+                    //sb.AppendLine(@"<listnode Line_Id=""" + Convert.ToString(item.Line_Id) + @""" Item_Id=""" + Convert.ToString(item.Item_Id) + @"""   
+                    //                PO_Id=""" + Convert.ToString(item.PO_Id) + @""" POLine_Id=""" + Convert.ToString(item.POLine_Id) + @"""
+                    //                Quantity=""" + Convert.ToString(item.Quantity) + @""" HSN_SAC=""" + Convert.ToString(item.HSN_SAC) + @"""   
+                    //                Rate=""" + Convert.ToString(item.Rate) + @""" Amount=""" + Convert.ToString(item.Amount) + @"""   
+                    //                Discount_1=""" + Convert.ToString(item.Discount_1) + @""" Discount_2=""" + Convert.ToString(item.Discount_2) + @"""  
+                    //                IsUpdate=""" + Convert.ToString(IsUpdateMaterialSales) + @""" GST=""" + Convert.ToString(item.GST) + @"""   
+                    //                CGST=""" + Convert.ToString(item.CGST) + @""" SGST=""" + Convert.ToString(item.SGST) + @"""   
+                    //                IGST=""" + Convert.ToString(item.IGST) + @""" Total_Amount=""" + Convert.ToString(item.Total_Amount) + @"""  
+                    //                UnitId=""" + Convert.ToString(item.Unit_Id) + @""" Discount_1_Amount=""" + Convert.ToString(item.Discount_1_Amount) + @"""
+                    //                Discount_2_Amount=""" + Convert.ToString(item.Discount_2_Amount) + @""" Taxable_Amount=""" + Convert.ToString(item.Taxable_Amount) + @""" 
+                    //                LastPurchaseRate=""" + Convert.ToString(item.LastRate) + @""" />");
+                }
+                SaleLine = "<Line>" + sb + "</Line>";
+
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Bill_Id", Bill_Id));
+
+                //SqlParameters.Add(new SqlParameter("@Invoice_No", InvoiceNo));
+                //SqlParameters.Add(new SqlParameter("@Voucher_No", VoucherNumber));
+                //SqlParameters.Add(new SqlParameter("@Office_Id", OfficeId));
+                //SqlParameters.Add(new SqlParameter("@Party_Id", PartyId));
+                //SqlParameters.Add(new SqlParameter("@SupplyState_Id", SupplyStateId));
+                //if (!string.IsNullOrEmpty(TransactionDate))
+                //    SqlParameters.Add(new SqlParameter("@Transaction_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(TransactionDate))));
+                //if (!string.IsNullOrEmpty(Dispatch_Date))
+                //    SqlParameters.Add(new SqlParameter("@Dispatch_Date", Convert.ToDateTime(CommonUtility.GetDateYYYYMMDD(Dispatch_Date))));
+                //SqlParameters.Add(new SqlParameter("@SaleAmount", SaleAmount));
+                //SqlParameters.Add(new SqlParameter("@Marka", Marka));
+                //SqlParameters.Add(new SqlParameter("@Transporter", Transporter == null ? "" : Transporter));
+                //SqlParameters.Add(new SqlParameter("@Fin_Id", FinId));
+                //SqlParameters.Add(new SqlParameter("@Company_Id", CompanyId));
+                //SqlParameters.Add(new SqlParameter("@Remarks", Remarks));
+                //SqlParameters.Add(new SqlParameter("@Sale_Line", SaleLine));
+                //SqlParameters.Add(new SqlParameter("@LoginId", Loginid));
+                //SqlParameters.Add(new SqlParameter("@MENU_Id", MENU_Id));
+
+                DataTable dt = DBManager.ExecuteDataTableWithParameter("BillCreation_Insertupdate", CommandType.StoredProcedure, SqlParameters);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    Bill_Id = Convert.ToInt32(dr[0]);
+                    IsSucceed = Convert.ToBoolean(dr[1]);
+                    ActionMsg = dr[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return this;
+        }
+
+
+        public class GoodRecieptBillLine
+        {
+            public string Line_Id { get; set; }
+            public string Bill_Id { get; set; }
+            public string GST { get; set; }
+            public string CGST { get; set; }
+            public string SGST { get; set; }
+            public string IGST { get; set; }
+            public string Remarks { get; set; }
+
         }
     }
 }

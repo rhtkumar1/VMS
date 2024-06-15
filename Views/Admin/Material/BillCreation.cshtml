@@ -23,190 +23,194 @@
         <!--content-->
         <div id="modelForm">
             <div class="blank">
+               
                 <div class="blank-page">
                     @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
-                        <div class="heading">
-                            <h4>
-                                Basic Detail
-                            </h4>
-                        </div>
-                        <div class="col-md-12">
-                            <p style="color: red;display:none" id="pMsgSearch"></p>
-                        </div>
-                        <br />
-
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Bill Type<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.Type_Id, new SelectList(Model.BillTypeLists, "Value", "Text"), htmlAttributes: new { @id = "Type_Id", @required = "required", @class = "form-control" })
-                                @*@Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "OfficeId", @class = "form-control" })*@
+                    @using (Html.BeginForm("ManageBillCreation", "Material", FormMethod.Post, new { @id = "BillCreation" }))
+                    {
+                        @Html.HiddenFor(m => m.AppToken)
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                            <div class="heading">
+                                <h4>
+                                    Basic Detail
+                                </h4>
                             </div>
-                        </div>
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Bill Office<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.Billing_OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "Billing_OfficeId", @required = "required", @class = "form-control" })
+                            <div class="col-md-12">
+                                <p style="color: red;display:none" id="pMsgSearch"></p>
                             </div>
-                        </div>
+                            <br />
 
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Bill Date<span class="mandatory">*</span></label>
-                                @Html.TextBoxFor(m => m.Bill_Date, htmlAttributes: new { @id = "Purchase_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
-
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Bill Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Type_Id, new SelectList(Model.BillTypeLists, "Value", "Text"), htmlAttributes: new { @id = "Type_Id", @required = "required", @class = "form-control" })
+                                    @*@Html.DropDownListFor(m => m.OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "OfficeId", @class = "form-control" })*@
+                                </div>
                             </div>
-                        </div>
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>BILL No<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.Bill_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @required = "required", @class = "form-control" })
-
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Bill Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Billing_OfficeId, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "Billing_OfficeId", @required = "required", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Client Name<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.Client_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @required = "required", @class = "form-control" })
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Bill Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Bill_Date, htmlAttributes: new { @id = "Purchase_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>State Of Supply<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.SupplyState_Id, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @id = "SupplyState_Id", @required = "required", @class = "form-control" })
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>BILL No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Bill_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @required = "required", @class = "form-control" })
+
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>GST Type<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.GST_TypeId, new SelectList(Model.GSTTypeLists, "Value", "Text"), htmlAttributes: new { @id = "GST_TypeId", @required = "required", @class = "form-control" })
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>GST Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.GST_TypeId, new SelectList(Model.GSTTypeLists, "Value", "Text"), htmlAttributes: new { @id = "GST_TypeId", @required = "required", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>HSN Code<span class="mandatory">*</span></label>
-                                @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Value", "Text"), htmlAttributes: new { @id = "HSN_SAC", @required = "required", @class = "form-control" })
-                                @*<span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select party first</span>
-                <input type="text" id="SearchOrderNo" name="SearchOrderNo" placeholder="Search Order No" class="form-control" />*@
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>HSN Code<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.HSN_SAC, new SelectList(Model.HSN_SAC_Lists, "Value", "Text"), htmlAttributes: new { @id = "HSN_SAC", @required = "required", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="styled-input">
-                            <div class="col-md-4 form-group">
-                                <label>Submition Date</label>
-                                @Html.TextBoxFor(m => m.Transaction_Date, htmlAttributes: new { @id = "Transaction_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
-
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Client Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Client_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @required = "required", @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="styled-input">
-                            <div class="col-md-12 form-group">
-                                <label>Remark</label>
-                                @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Enter Remarks", @id = "Remarks", @class = "form-control" })
+                            <div class="styled-input">
+                                @*<div class="col-md-4 form-group">
+                        <label>State Of Supply<span class="mandatory">*</span></label>
+                        @Html.DropDownListFor(m => m.SupplyState_Id, new SelectList(Model.StateLists, "Value", "Text"), htmlAttributes: new { @id = "SupplyState_Id", @required = "required", @class = "form-control" })
+                    </div>*@
+                                <div class="col-md-4 form-group">
+                                    <label>State Of Supply<span class="mandatory">*</span></label>
+                                    <span id="spanOrderNo" style="margin-left: 15px;font-size: 11px;color: red;">Please select party first</span>
+                                    <select id="StateId" name="StateId" class="form-control"></select>
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Submition Date</label>
+                                    @Html.TextBoxFor(m => m.Transaction_Date, htmlAttributes: new { @id = "Transaction_Date", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+
+                                </div>
+                            </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-12 form-group">
+                                    <label>Remark</label>
+                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Enter Remarks", @id = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
 
 
 
-                        <div class="clearfix"></div>
-                        @using (Html.BeginForm("ManageMateriaSales", "Material", FormMethod.Post, new { @id = "MaterialSales" }))
-                        {
+                            <div class="clearfix"></div>
+
                             @*@Html.HiddenFor(m => m.SaleId, htmlAttributes: new { @id = "SaleId" })
-            @Html.HiddenFor(m => m.AppToken)
-            @Html.HiddenFor(m => m.IsUpdateMaterialSales, htmlAttributes: new { @id = "IsUpdateMaterialSales", @value = "0" })
-            @Html.HiddenFor(m => m.SaleLine, htmlAttributes: new { @id = "SaleLine" })
-            @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
-            @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
-            @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
+                @Html.HiddenFor(m => m.AppToken)
+                @Html.HiddenFor(m => m.IsUpdateMaterialSales, htmlAttributes: new { @id = "IsUpdateMaterialSales", @value = "0" })
+                @Html.HiddenFor(m => m.SaleLine, htmlAttributes: new { @id = "SaleLine" })
+                @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
+                @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+                @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
 
-            @Html.HiddenFor(m => m.SaleAmount, htmlAttributes: new { @id = "SaleAmount" })*@
+                @Html.HiddenFor(m => m.SaleAmount, htmlAttributes: new { @id = "SaleAmount" })*@
 
                             @*<div class="accordion" id="accordionExample">
-                              
-                                <div class="card">
-                                    <div class="card-header" id="headingThree">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                Collapsible Group Item #3
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="heading">
-                                                <h4>
-                                                    + GR FILTER
-                                                </h4>
-                                            </div>
-                                            <br />
 
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Consignee</label>
-                                                    @Html.DropDownListFor(m => m.Consignee_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Origin</label>
-                                                    @Html.DropDownListFor(m => m.Origin_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Origin_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Destination</label>
-                                                    @Html.DropDownListFor(m => m.Destination_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>From Date</label>
-                                                    @Html.TextBoxFor(m => m.Fromdate, htmlAttributes: new { @id = "Fromdate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
-                                                </div>
-                                            </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Collapsible Group Item #3
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="heading">
+                                    <h4>
+                                        + GR FILTER
+                                    </h4>
+                                </div>
+                                <br />
 
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>To Date</label>
-                                                    @Html.TextBoxFor(m => m.Todate, htmlAttributes: new { @id = "Todate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
-                                                </div>
-                                            </div>
-
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Consigner</label>
-                                                    @Html.DropDownListFor(m => m.Consigner_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Meterial</label>
-                                                    @Html.DropDownListFor(m => m.Item_Id, new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "Item_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>Vehicle</label>
-                                                    @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.Vehicle_Model_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="styled-input">
-                                                <div class="col-md-3 form-group">
-                                                    <label>GR Office</label>
-                                                    @Html.DropDownListFor(m => m.GRoffice_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "GRoffice_Id", @class = "form-control" })
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-1 form-group pull-right">
-                                                <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
-                                            </div>
-                                        </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Consignee</label>
+                                        @Html.DropDownListFor(m => m.Consignee_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
                                     </div>
                                 </div>
-                            </div>*@
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Origin</label>
+                                        @Html.DropDownListFor(m => m.Origin_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Origin_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Destination</label>
+                                        @Html.DropDownListFor(m => m.Destination_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>From Date</label>
+                                        @Html.TextBoxFor(m => m.Fromdate, htmlAttributes: new { @id = "Fromdate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                    </div>
+                                </div>
+
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>To Date</label>
+                                        @Html.TextBoxFor(m => m.Todate, htmlAttributes: new { @id = "Todate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                    </div>
+                                </div>
+
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Consigner</label>
+                                        @Html.DropDownListFor(m => m.Consigner_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Meterial</label>
+                                        @Html.DropDownListFor(m => m.Item_Id, new SelectList(Model.Item_Lists, "Value", "Text"), htmlAttributes: new { @id = "Item_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>Vehicle</label>
+                                        @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.Vehicle_Model_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="col-md-3 form-group">
+                                        <label>GR Office</label>
+                                        @Html.DropDownListFor(m => m.GRoffice_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "GRoffice_Id", @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1 form-group pull-right">
+                                    <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
 
 
                             <p>
@@ -214,8 +218,8 @@
                                     GR FILTER
                                 </a>
                                 @*<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Button with data-target
-                </button>*@
+                        Button with data-target
+                    </button>*@
                             </p>
                             <br />
                             <div class="collapse" id="collapseExample">
@@ -286,9 +290,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-1 form-group pull-right">
-                                        <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
-                                    </div>
+                                    @*<div class="col-md-1 form-group pull-right">
+                            <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
+                        </div>*@
 
 
                                 </div>
@@ -299,9 +303,9 @@
 
                             <div class="clearfix"></div>
                             @*<div class="styled-input">
-                <br />
-                <label id="lblTotalAmount">Total : 0.00</label>
-            </div>*@
+                    <br />
+                    <label id="lblTotalAmount">Total : 0.00</label>
+                </div>*@
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <table id="tblMaterialSales" class="table table table-striped" cellpadding="0" cellspacing="0">
@@ -344,22 +348,24 @@
                                     @Html.TextBoxFor(m => m.Basic_Freight, htmlAttributes: new { @id = "Basic_Freight", @class = "form-control" })
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label>Total Freigth</label>
-                                    @Html.TextBoxFor(m => m.Total_Freight, htmlAttributes: new { @id = "Total_Freight", @class = "form-control" })
-
-                                    @*@Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })*@
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>SGST</label>
-                                    @Html.TextBoxFor(m => m.SGST, htmlAttributes: new { @id = "SGST", @class = "form-control" })
-                                    @*@Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST", @id = "SGST", @class = "form-control", @readonly = "readonly" })*@
-                                </div>
-                                <div class="col-md-4 form-group">
                                     <label>Other Charge</label>
                                     @Html.TextBoxFor(m => m.Other_Charges, htmlAttributes: new { @id = "Other_Charges", @class = "form-control" })
 
                                     @*@Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })*@
                                 </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Total Freigth</label>
+                                    @Html.TextBoxFor(m => m.Total_Freight, htmlAttributes: new { @id = "Total_Freight", @class = "form-control" })
+
+                                    @*@Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })*@
+                                </div>
+
+                                <div class="col-md-4 form-group">
+                                    <label>SGST</label>
+                                    @Html.TextBoxFor(m => m.SGST, htmlAttributes: new { @id = "SGST", @class = "form-control" })
+                                    @*@Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST", @id = "SGST", @class = "form-control", @readonly = "readonly" })*@
+                                </div>
+
                                 <div class="col-md-4 form-group">
                                     <label>CGST</label>
                                     @Html.TextBoxFor(m => m.CGST, htmlAttributes: new { @id = "CGST", @class = "form-control" })
@@ -384,11 +390,11 @@
 
 
                                 @*<div class="col-md-2 form-group">
-                    <label>Action</label>
-                    <br />
-                    <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                    <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
-                </div>*@
+                        <label>Action</label>
+                        <br />
+                        <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                        <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                    </div>*@
                             </div>
 
                             <div class="clearfix"></div>
@@ -415,9 +421,11 @@
                                     <button type="button" name="btnDelete" id="btnDelete" class="btncustome">Delete</button>
                                 </div>
                             </div>
-                        }
-                    </div>
+
+                        </div>
+                    }
                 </div>
+                
                 <div class="blank-page">
                     <div id="listGrid"></div>
                 </div>

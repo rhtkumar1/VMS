@@ -162,6 +162,7 @@
     <Content Include="assets\jquery.validate.js" />
     <Content Include="assets\shared.js" />
     <Content Include="assets\Vehiclemodelmaster.js" />
+    <Content Include="favicon.ico" />
     <Content Include="fonts\DashBoard\fontawesome-webfont.svg" />
     <Content Include="fonts\font-awesome-4.7.0\css\font-awesome.css" />
     <Content Include="fonts\font-awesome-4.7.0\css\font-awesome.min.css" />

@@ -383,12 +383,34 @@
 
         $(document).on('change', '#Client_Id', function () {
             debugger;
-            var id = $('#Client_Id').val();
-            var Client_Id = 2300;
-            IMSC.ajaxCall("GET", "/Material/GetBillcreationdata?Client_Id=" + Client_Id + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+            var Client_Id = $(this).val();
+           
+            var Billing_OfficeId = $('#Billing_OfficeId').val();
+            var gsttypeid = $('#GST_TypeId').val();
+            var hsncode = $('#HSN_SAC').val();
+            
+
+            IMSC.ajaxCall("GET", "/Material/GetBillcreationdata?Client_Id=" + Client_Id + "&HSN=" + hsncode + "&OfficeId=" + Billing_OfficeId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                 var res = JSON.parse(d);
                 if (res !== null) {
-                    BindGrid(res, 1, 0);
+
+                    var result = res.Table;
+                    var hsn = res.Table2;
+                    var OfficestateId = res.Table3;
+                    var clientstateid = res.Table1;
+                    $("#StateId").empty();
+
+                    if (res.Table1.length > 0) {
+                        $("#StateId").removeAttr('disabled');
+                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                        $.each(res.Table1, function (index, value) {
+                            $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                        });
+                    } else {
+                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                    }
+
+                    BindGrid(result, 1, 0, hsn, OfficestateId, gsttypeid, clientstateid);
                 }
             });
         });
@@ -974,8 +996,9 @@ function Remove(button) {
     $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     $("#IsUpdateMaterialSales").val(1);
 };
-function BindGrid(result, isqtydisabled, sourceid) {
+function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid, clientstateid) {
     debugger;
+    
     let totalAmount = 0;
     $.each(result, function (index, value) {
         let quantity = parseFloat(value.Order_Qty);
@@ -995,52 +1018,109 @@ function BindGrid(result, isqtydisabled, sourceid) {
         let discount_1_Amt = 0;
         let discount_2_Amt = 0;
 
+       
+
+        //RCM
+        if (gsttypeid == 58) {
+            var officestateid = OfficestateId[0].State_Id;
+            var clntstateid = clientstateid[0].State_Id;
+            var HSNapply = hsn[0].Tax_Slab;
+
+            //if both state same
+            if (officestateid == clntstateid) {
+                var total = value.Total_Freight + value.other_charge;
+                var addhsn =  (total * HSNapply) / 100;
+                var totaldiv = (addhsn) / 2;
+                cgst = totaldiv;
+                sgst = totaldiv;
+
+            }
+            //if both state not same
+            else {
+                var total = value.Total_Freight + value.other_charge;
+                var addhsn = total * HSNapply / 100;
+               // var totaldiv = total + addhsn;
+                igst = addhsn;
+                
+            }
+        }
+        //FCM
+        if (gsttypeid == 59) {
+            var officestateid = OfficestateId[0].State_Id;
+            var clntstateid = clientstateid[0].State_Id;
+            var HSNapply = hsn[0].Tax_Slab;
+
+            //if both state same
+            if (officestateid == clntstateid) {
+                var total = value.Total_Freight + value.other_charge;
+                var addhsn = (total * HSNapply) / 100;
+                var totaldiv = (total + addhsn) / 2;
+                cgst = totaldiv;
+                sgst = totaldiv;
+
+            }
+            //if both state not same
+            else {
+                var total = value.Total_Freight + value.other_charge;
+                var addhsn = total * HSNapply / 100;
+                var totaldiv = total + addhsn;
+                igst = totaldiv;
+
+            }
+        }
+        //EXEMPTED
+        if (gsttypeid == 60) {
+            cgst = 0;
+            sgst = 0;
+            igst = 0;
+        }
+
         //if (amount > 0) {
-        if (sourceid === 1) {
+        //if (sourceid === 1) {
 
-            if (quantity > 0 && rate > 0) {
-                amount = quantity * rate;
+        //    if (quantity > 0 && rate > 0) {
+        //        amount = quantity * rate;
 
-            }
-            if (amount > 0) {
-                let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
-                Texable_Amount = amount;
-                if (discount_1 > 0) {
-                    Texable_Amount = (amount - (amount * discount_1 / 100)).toFixed(2);
-                    discount_1_Amt = parseFloat((amount * discount_1 / 100)).toFixed(2);
-                }
-                if (discount_2 > 0) {
-                    Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
-                    discount_2_Amt = parseFloat((amount - discount_1_Amt) * discount_2 / 100).toFixed(2);
-                }
-                gstAmount = (Texable_Amount * gst / 100).toFixed(2);
-                if (is_SameState) {
-                    cgst = parseFloat(gstAmount / 2).toFixed(2)
-                    sgst = parseFloat(gstAmount / 2).toFixed(2)
-                    igst = parseFloat(0).toFixed(2);
-                } else {
-                    cgst = parseFloat(0).toFixed(2)
-                    sgst = parseFloat(0).toFixed(2)
-                    igst = parseFloat(gstAmount).toFixed(2);
-                }
+        //    }
+        //    if (amount > 0) {
+        //        let is_SameState = value.Is_SameState.toString() === "1" ? true : false;
+        //        Texable_Amount = amount;
+        //        if (discount_1 > 0) {
+        //            Texable_Amount = (amount - (amount * discount_1 / 100)).toFixed(2);
+        //            discount_1_Amt = parseFloat((amount * discount_1 / 100)).toFixed(2);
+        //        }
+        //        if (discount_2 > 0) {
+        //            Texable_Amount = (Texable_Amount - (Texable_Amount * discount_2 / 100)).toFixed(2);
+        //            discount_2_Amt = parseFloat((amount - discount_1_Amt) * discount_2 / 100).toFixed(2);
+        //        }
+        //        gstAmount = (Texable_Amount * gst / 100).toFixed(2);
+        //        if (is_SameState) {
+        //            cgst = parseFloat(gstAmount / 2).toFixed(2)
+        //            sgst = parseFloat(gstAmount / 2).toFixed(2)
+        //            igst = parseFloat(0).toFixed(2);
+        //        } else {
+        //            cgst = parseFloat(0).toFixed(2)
+        //            sgst = parseFloat(0).toFixed(2)
+        //            igst = parseFloat(gstAmount).toFixed(2);
+        //        }
 
-                tamount = (parseFloat(Texable_Amount) + parseFloat(gstAmount)).toFixed(2);;
-                value.Discount_1_Amount = discount_1_Amt;
-                value.Discount_2_Amount = discount_2_Amt;
-            }
-        }
-        else {
-            cgst = value.CGST;
-            sgst = value.SGST;;
-            igst = value.IGST;;
-            discount_1 = parseInt(value.Discount_1);
-            discount_2 = parseInt(value.Discount_2);
-            amount = value.Amount;
-            //let disamt = amount * (discount_1 + discount_2) / 100;
-            //Texable_Amount = amount - disamt;
-            Texable_Amount = value.Taxable_Amount;
-            tamount = value.TotalAmount;
-        }
+        //        tamount = (parseFloat(Texable_Amount) + parseFloat(gstAmount)).toFixed(2);;
+        //        value.Discount_1_Amount = discount_1_Amt;
+        //        value.Discount_2_Amount = discount_2_Amt;
+        //    }
+        //}
+        //else {
+        //    cgst = value.CGST;
+        //    sgst = value.SGST;;
+        //    igst = value.IGST;;
+        //    discount_1 = parseInt(value.Discount_1);
+        //    discount_2 = parseInt(value.Discount_2);
+        //    amount = value.Amount;
+        //    //let disamt = amount * (discount_1 + discount_2) / 100;
+        //    //Texable_Amount = amount - disamt;
+        //    Texable_Amount = value.Taxable_Amount;
+        //    tamount = value.TotalAmount;
+        //}
 
 
         //}
@@ -1077,12 +1157,12 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell = $(row.insertCell(-1));
         cell.append(lblOrderDate);
         //Add Hsn_Sac cell.
-        let lblHSN_SAC = `<label id="lblHSN_SAC_${value.Item_Id}">${value.HSN_SAC}</label>`;
+        let lblHSN_SAC = `<label id="lblHSN_SAC_${value.GR_Id}">${value.Total_Charge_Weight}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblHSN_SAC);
 
         //Add Quantity cell.
-        let htmlOrder_Qty = `<input type="text" id="txtOrder_Qty_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" style="background-color: ${value.Order_Qty <= value.Available_Qty ? 'lightgreen' : 'indianred'};width:40px;" name="txtOrder_Qty_${value.Item_Id}" onchange="Calculate(this);" value="${quantity}"  tp-type="numeric" />`;
+        let htmlOrder_Qty = `<label id="lblHSN_SAC_${value.GR_Id}">${value.Total_Quantity}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlOrder_Qty);
         //Add Available_Qty cell.
@@ -1090,11 +1170,11 @@ function BindGrid(result, isqtydisabled, sourceid) {
         cell = $(row.insertCell(-1));
         cell.append(lblAvailable_Qty);
         //Add Unit cell.
-        let lblUnit = `<label id="lblUnit_${value.GR_Id}" data-Unit_Id="${value.GR_Id}" data-index="${value.GR_Id}" >${value.consignee_id}</label>`;
+        let lblUnit = `<label id="lblUnit_${value.GR_Id}" data-Unit_Id="${value.GR_Id}" data-index="${value.GR_Id}" >${value.consignee_name}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblUnit);
         //Add Last Rate cell.
-        let htmlLastRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.origin_id === undefined ? "0" : value.origin_id}</label>`;
+        let htmlLastRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.Title === undefined ? "0" : value.Title}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlLastRate);
         //Add Rate cell.
@@ -1112,18 +1192,21 @@ function BindGrid(result, isqtydisabled, sourceid) {
         //let lblGST = `<label id="lblGST_${value.Item_Id}">${gst}</label>`;
         //cell = $(row.insertCell(-1));
         //cell.append(lblGST);
-        //Add CGST cell.
-        let lblCGST = `<label id="lblCGST_${value.Item_Id}">${cgst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblCGST);
-        //Add SGST cell.
-        let lblSGST = `<label id="lblSGST_${value.Item_Id}">${sgst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblSGST);
         //Add IGST cell.
         let lblIGST = `<label id="lblIGST_${value.Item_Id}">${igst}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblIGST);
+
+        //Add SGST cell.
+        let lblSGST = `<label id="lblSGST_${value.Item_Id}">${sgst}</label>`;
+        cell = $(row.insertCell(-1));
+        cell.append(lblSGST);
+        //Add CGST cell.
+        let lblCGST = `<label id="lblCGST_${value.Item_Id}">${cgst}</label>`;
+        cell = $(row.insertCell(-1));
+        cell.append(lblCGST);
+       
+       
         //Add Total_Amount cell.
       
     });
@@ -1159,6 +1242,13 @@ function Calculate(value) {
     }
 }
 
+//$(document).ready(function () {
+//    $(document).on('change', '#Client_Id', function () {
+//        debugger;
+//        var id = $(this).val(); // Using $(this) to refer to the element that triggered the event
+//        alert(id)
+//    });
+//});
 
 //$("#Client_Id").change(function () {
 //    //var id = $('#Client_Id').val();
