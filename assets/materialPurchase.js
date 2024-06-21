@@ -557,6 +557,8 @@
     };
     return scope;
 })(IMSMaterialPurchase || {});
+
+
 function Calculate() {
     let bIsDiscount = false;
     let quantity = parseFloat($("#Quantity").val() !== "" ? $("#Quantity").val() : 0);

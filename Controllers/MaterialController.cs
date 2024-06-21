@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using static IMS.Models.ViewModel.BillCreation;
+using static IMS.Models.ViewModel.TripCreation;
 //using System.Web.Script.Serialization;
 
 namespace IMS.Controllers
@@ -344,6 +346,309 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(ds));
         }
         #endregion
+
+        #region AdvanceExpenseType
+        public ActionResult AdvanceExpenseType()
+        {
+            AdvanceExpenseType advanceExpenseType = new AdvanceExpenseType();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            advanceExpenseType.AppToken = CommonUtility.URLAppToken(AppToken);
+            advanceExpenseType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/AdvanceExpenseType.cshtml", advanceExpenseType);
+        }
+
+        [HttpPost]
+        public ActionResult ManageAdvanceExpenseType(AdvanceExpenseType advanceExpenseType)
+        {
+            AdvanceExpenseType objadvanceExpenseType = new AdvanceExpenseType();
+            try
+            {
+                objadvanceExpenseType = advanceExpenseType.AdvanceExpenseType_InsertUpdate(advanceExpenseType);
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
+                advanceExpenseType.AppToken = CommonUtility.URLAppToken(AppToken);
+                advanceExpenseType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objadvanceExpenseType != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objadvanceExpenseType.IsSucceed)
+                    {
+                        ViewBag.Msg = objadvanceExpenseType.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objadvanceExpenseType.IsSucceed && objadvanceExpenseType.Id != -1)
+                    {
+                        ViewBag.Msg = objadvanceExpenseType.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            AdvanceExpenseType newadvanceExpenseType  = new AdvanceExpenseType();
+            //StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newadvanceExpenseType.AppToken = CommonUtility.URLAppToken(AppToken);
+            newadvanceExpenseType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/AdvanceExpenseType.cshtml", (objadvanceExpenseType.IsSucceed ? newadvanceExpenseType : advanceExpenseType));
+        }
+
+        [HttpGet]
+        public ActionResult GetAdvanceExpenseType(AdvanceExpenseType advanceExpenseType, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = advanceExpenseType.AdvanceExpenseType_Get();
+                dt.TableName = "StateLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAdvanceExpenseType(AdvanceExpenseType advanceExpenseType, int id)
+        {
+            try
+            {
+                advanceExpenseType.Id = id;
+                AdvanceExpenseType objAdvanceExpenseType = advanceExpenseType.AdvanceExpenseType_Delete(advanceExpenseType);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                advanceExpenseType.AppToken = CommonUtility.URLAppToken(AppToken);
+                advanceExpenseType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objAdvanceExpenseType != null)
+                {
+                    if (objAdvanceExpenseType.Id > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Material/AdvanceExpenseType.cshtml", advanceExpenseType);
+        }
+
+        #endregion
+
+        #region TripCreation
+        public ActionResult TripCreation()
+        {
+            TripCreation tripCreation = new TripCreation();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            tripCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+            tripCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/TripCreation.cshtml", tripCreation);
+        }
+        [HttpGet]
+        public ActionResult GetGRDetails(int Vehicle_Id = 0, string loaddate = "",string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                TripCreation tripCreation = new TripCreation();
+                dt = tripCreation.GRDetails_Getdata(Vehicle_Id, loaddate);
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+
+        [HttpPost]
+        public ActionResult ManageTripCreation(TripCreation tripCreation)
+        {
+            TripCreation objTripCreation = new TripCreation();
+            try
+            {
+                tripCreation.TripCreationLineList = JsonConvert.DeserializeObject<List<TripCreationLine>>(tripCreation.SaleLine);
+                objTripCreation = tripCreation.TripCreation_InsertUpdate();
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                tripCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+                tripCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objTripCreation != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objTripCreation.IsSucceed)
+                    {
+                        ViewBag.Msg = objTripCreation.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objTripCreation.IsSucceed && objTripCreation.Id != -1)
+                    {
+                        ViewBag.Msg = objTripCreation.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            TripCreation newTripCreation = new TripCreation();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newTripCreation.AppToken = CommonUtility.URLAppToken(AppToken);
+            newTripCreation.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/TripCreation.cshtml", (newTripCreation.IsSucceed ? newTripCreation : tripCreation));
+        }
+
+        //get filter record not done proper pending procedure
+        //[HttpGet]
+        //public ActionResult GetTripCreation(int Vehicleno = 0, int DriverId = 0,string tripno = "", string FromDate = "", string ToDate = "", string AppToken = "")
+        //{
+        //    DataTable dt = new DataTable();
+        //    try
+        //    {
+        //        TripCreation tripCreation = new TripCreation();
+        //        dt = tripCreation.TripCreation_Getdata(Vehicleno, DriverId, tripno, FromDate, ToDate);
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw;
+        //    }
+        //    return Content(JsonConvert.SerializeObject(dt));
+        //}
+
+        #endregion
+
+        #region RateType
+
+        public ActionResult RateType()
+        {
+            RateType rateType = new RateType();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            rateType.AppToken = CommonUtility.URLAppToken(AppToken);
+            rateType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/RateType.cshtml", rateType);
+        }
+
+        [HttpPost]
+        public ActionResult ManageRateType(RateType rateType)
+        {
+            RateType objrateType = new RateType();
+            try
+            {
+                objrateType = rateType.RateType_InsertUpdate(rateType);
+                AppToken = (Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"]);
+                rateType.AppToken = CommonUtility.URLAppToken(AppToken);
+                rateType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objrateType != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objrateType.IsSucceed)
+                    {
+                        ViewBag.Msg = objrateType.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objrateType.IsSucceed && objrateType.Id != -1)
+                    {
+                        ViewBag.Msg = objrateType.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            RateType newrateType = new RateType();
+            //StateMaster newStateMaster = new StateMaster();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newrateType.AppToken = CommonUtility.URLAppToken(AppToken);
+            newrateType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/RateType.cshtml", (objrateType.IsSucceed ? newrateType : rateType));
+        }
+
+        [HttpGet]
+        public ActionResult GetRateType(RateType rateType, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = rateType.RateType_Get();
+                dt.TableName = "StateLists";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteRateType(RateType rateType, int id)
+        {
+            try
+            {
+                rateType.Id = id;
+                RateType objRateType = rateType.RateType_Delete(rateType);
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                rateType.AppToken = CommonUtility.URLAppToken(AppToken);
+                rateType.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objRateType != null)
+                {
+                    if (objRateType.Id > 0)
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Sucess", Msg = "Deleted sucessfully !" }));
+                    }
+                    else
+                    {
+                        return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                    }
+                }
+                else
+                {
+                    return Content(JsonConvert.SerializeObject(new { Status = "Error", Msg = "Something went wronge !" }));
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = "some error occurred, please try again..!";
+            }
+            return View("~/Views/Admin/Material/RateType.cshtml", rateType);
+        }
+        #endregion
+
 
         #region Bill Creation
         public ActionResult BillCreation()
@@ -1220,7 +1525,198 @@ namespace IMS.Controllers
             return View("~/Views/Admin/Material/ConsignmentDashboard.cshtml", consignment);
         }
 
-        
+
+        #endregion
+
+        #region Trip Advance
+        public ActionResult TripAdvance()
+        {
+            TripAdvance tripAdavance = new TripAdvance();
+            AppToken = Request.QueryString["AppToken"].ToString();
+            tripAdavance.AppToken = CommonUtility.URLAppToken(AppToken);
+            tripAdavance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            return View("~/Views/Admin/Material/TripAdvance.cshtml", tripAdavance);
+        }
+
+
+        [HttpPost]
+        public ActionResult ManageTripAdvance(TripAdvance tripAdvance, HttpPostedFileBase IMAGE)
+        {
+            TripAdvance objTripAdvance = new TripAdvance();
+            try
+            {
+                if(IMAGE !=null)
+                {
+                    var fileName = Path.GetFileName(IMAGE.FileName); //getting only file name(ex-ganesh.jpg)  
+                    var ext = Path.GetExtension(IMAGE.FileName);
+                    string name = Path.GetFileNameWithoutExtension(fileName); //getting file name without extension  
+                                                                              // string myfile = name + "_" + tbl.Id + ext; //appending the name with id  
+                                                                              //                                           // store the file inside ~/project folder(Img)  
+
+                    var path = Path.Combine(Server.MapPath("~/Images/TripAdvance/"), fileName);
+                    // tripAdvance.IMAGE = path;
+
+
+                    // var myFilePathAppsetting = System.Web.Configuration.WebConfigurationManager.AppSettings["myFilePath"].ToString();
+                    tripAdvance.IMAGE = fileName;
+                    IMAGE.SaveAs(path);
+                }
+                else if(tripAdvance.Id > 0 && IMAGE == null) //update
+                {
+                    tripAdvance.IMAGE = tripAdvance.IMAGEPath;
+                }
+                else if(IMAGE == null)//Insert
+                {
+                    tripAdvance.IMAGE = "";
+                }
+                
+               
+                
+                // tripAdvance.TripCreationLineList = JsonConvert.DeserializeObject<List<TripCreationLine>>(tripCreation.SaleLine);
+
+                objTripAdvance = tripAdvance.TripAdvance_InsertUpdate(tripAdvance);
+                
+                
+                AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+                tripAdvance.AppToken = CommonUtility.URLAppToken(AppToken);
+                tripAdvance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+                if (objTripAdvance != null)
+                {
+                    // In case of record successfully added or updated
+                    if (objTripAdvance.IsSucceed)
+                    {
+                        ViewBag.Msg = objTripAdvance.ActionMsg;
+                    }
+                    // In case of record already exists
+                    else if (!objTripAdvance.IsSucceed && objTripAdvance.Id != -1)
+                    {
+                        ViewBag.Msg = objTripAdvance.ActionMsg;
+                    }
+                    // In case of any error occured
+                    else
+                    {
+                        ViewBag.Msg = "Unknown Error Occured !!!";
+
+                    }
+                    ModelState.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message.ToString();
+            }
+            TripAdvance newTripAdvance = new TripAdvance();
+            AppToken = Request.QueryString["AppToken"] == null ? Request.Form["AppToken"] : Request.QueryString["AppToken"];
+            newTripAdvance.AppToken = CommonUtility.URLAppToken(AppToken);
+            newTripAdvance.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
+            // to reset fields only in case of added or updated.
+            return View("~/Views/Admin/Material/TripAdvance.cshtml", (newTripAdvance.IsSucceed ? newTripAdvance : tripAdvance));
+        }
+
+
+        [HttpGet]
+        public ActionResult GetstationarygByOfficeid(int Office_Id = 0, string loaddate = "", string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                TripAdvance tripAdvance = new TripAdvance();
+                dt = tripAdvance.GetstationarygByOfficeid(Office_Id);
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult GetAdvanceTrip(string vehicleNo, string DriverName, string AppToken = "")
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                TripAdvance tripAdvance = new TripAdvance();
+                dt = tripAdvance.GetAdvanceTrip(vehicleNo, DriverName);
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult DeleteTripAdvance(int TripAdvanceId,  string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            TripAdvance tripAdvance = new TripAdvance();
+            ReturnObject objR;
+            try
+            {
+                objR = tripAdvance.TripAdvance_Delete(TripAdvanceId);
+            }
+            catch (Exception Ex)
+            { throw Ex; }
+            return Content(JsonConvert.SerializeObject(objR));
+        }
+
+
+        [HttpGet]
+        public ActionResult EditTripAdvance(int TripAdvanceId, string AppToken = "")
+        {
+            DataSet ds = new DataSet();
+            TripAdvance tripAdvance = new TripAdvance();
+            TripAdvance objtripAdvance = new TripAdvance();
+            try
+            {
+                objtripAdvance = tripAdvance.TripAdvance_Edit(TripAdvanceId);
+            }
+            catch (Exception Ex)
+            { throw Ex; }
+            return Json(objtripAdvance, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult SearchVehicleNo(string VehicleNo,  string AppToken = "")
+        {
+            TripAdvance tripAdvance = new TripAdvance();
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = tripAdvance.TripAdvance_Get_VehicleNo(VehicleNo);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+        [HttpGet]
+        public ActionResult SearchDriverName(string DriverName, string AppToken = "")
+        {
+            TripAdvance tripAdvance = new TripAdvance();
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = tripAdvance.TripAdvance_Get_DriverName(DriverName);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Content(JsonConvert.SerializeObject(dt));
+        }
+
+
+
+
+
+
+
         #endregion
 
     }

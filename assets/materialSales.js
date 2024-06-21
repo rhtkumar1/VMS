@@ -745,6 +745,8 @@
             delay: 1000,
         });
 
+
+
         function ResetFromOfficeChange() {
             $("#SearchOrderNo").val("");
             $("#StateId").empty();
