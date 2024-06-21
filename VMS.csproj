@@ -146,6 +146,8 @@
     <Content Include="assets\admin\js\skycons.js" />
     <Content Include="assets\consignment.js" />
     <Content Include="assets\billcreation.js" />
+    <Content Include="assets\TripAdvance.js" />
+    <Content Include="assets\Tripcreation.js" />
     <Content Include="assets\materiaOrderCreation.js" />
     <Content Include="assets\materialPurchase.js" />
     <Content Include="assets\materialSales.js" />
@@ -211,6 +213,7 @@
     <Compile Include="Models\OTP.cs" />
     <Compile Include="Models\SendEmail.cs" />
     <Compile Include="Models\SendSMS.cs" />
+    <Compile Include="Models\ViewModel\AdvanceExpenseType.cs" />
     <Compile Include="Models\ViewModel\Authenticate.cs" />
     <Compile Include="Models\ViewModel\BarCodePrint.cs" />
     <Compile Include="Models\ViewModel\BillCreation.cs" />
@@ -220,8 +223,11 @@
     <Compile Include="Models\ViewModel\FinancialMaster.cs" />
     <Compile Include="Models\ViewModel\DashBoard.cs" />
     <Compile Include="Models\ViewModel\LedgerReport.cs" />
+    <Compile Include="Models\ViewModel\RateType.cs" />
     <Compile Include="Models\ViewModel\ReportInterFace.cs" />
     <Compile Include="Models\ViewModel\StoreTransfer.cs" />
+    <Compile Include="Models\ViewModel\TripAdvance.cs" />
+    <Compile Include="Models\ViewModel\TripCreation.cs" />
     <Compile Include="Models\ViewModel\VehicleMaster.cs" />
     <Compile Include="Models\ViewModel\VehicleModelMaster.cs" />
     <Compile Include="Models\ViewModel\VoucherMaster.cs" />
@@ -392,6 +398,10 @@
     <Content Include="Views\Admin\Masters\VehicleModelMaster.cshtml" />
     <Content Include="Views\Admin\Masters\VehicleMaster.cshtml" />
     <Content Include="Views\Admin\Material\BillCreation.cshtml" />
+    <Content Include="Views\Admin\Material\RateType.cshtml" />
+    <Content Include="Views\Admin\Material\AdvanceExpenseType.cshtml" />
+    <Content Include="Views\Admin\Material\TripCreation.cshtml" />
+    <Content Include="Views\Admin\Material\TripAdvance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -401,11 +411,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\TripAdvance\" />
     <Folder Include="ItemBarCode\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="SqlServerTypes\x64\" />
     <Folder Include="SqlServerTypes\x86\" />
     <Folder Include="UploadFile\" />
+    <Folder Include="Views\Material\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\Report\Material_Sale_Gatepass.rdlc" />

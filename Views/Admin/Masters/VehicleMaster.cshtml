@@ -240,7 +240,7 @@
                      StateLists: StateLists,
                      loadData: function (filter) {
                          return $.grep(this.StateLists, function (StateList) {
-                             return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                             return ((!filter.Vehicle_No || StateList.Vehicle_No.toLowerCase().indexOf(filter.Vehicle_No.toLowerCase()) > -1)
                                  && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                          });
                      }

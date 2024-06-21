@@ -1,4 +1,5 @@
-﻿var IMSMaterialSales = (function (scope) {
+﻿var IMSMaterialSales = (function (scope)
+{
     scope.AppToken = '';
     scope.materialSales = function () {
         $("#drpInvoice").select2();
@@ -10,10 +11,7 @@
         $("#StateId").append($("<option></option>").val("0").html("Select State"));
         $("#StateId").attr('disabled', 'disabled');
 
-
-
         $("body").on("click", "#btnSubmit", function () {
-            debugger;
             let PurchaseLineValues = [];
             let isValid = true;
             let msg = "";
@@ -61,7 +59,7 @@
                         let qty = parseInt($("#txtOrder_Qty_" + index).val());
                         let poLineId = parseInt($("#hdnPOLineId_" + index).val());
                         let isItemType = parseInt($("#hdnItemTypeGrid_" + index).val());
-                        //let itemname = $("#lblItem_" + index)[0].innerText
+                        let itemname = $("#lblItem_" + index)[0].innerText
 
                         if (poLineId === 0) {
                             if (isItemType === 16) {
@@ -86,42 +84,18 @@
                             }
                         }
                         if (isValid) {
-                            oMapping.Line_Id = $("#hdnLineId_" + index).val();
-                            oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
-
-                           // oMapping.UnitTitle = $("#lblUnit_" + index).text();
-                            //Line_Id
-                            //Bill_Id
-                            //GST
-                            //CGST
-                            //SGST
-                            //IGST
-
-                            oMapping.UnitTitle = $("#lblUnit_" + index).text();
-                            oMapping.Available_Qty = availableQty;
-                            oMapping.Item_Id = $("#hdnItemId_" + index).val();
-                            oMapping.ItemTitle = $("#lblItem_" + index).text();
-                            //oMapping.HSN_SAC = $("#lblHSN_SAC_" + index).text();
-                            //oMapping.Quantity = ($("#txtOrder_Qty_" + index).val() === "" ? "0" : $("#txtOrder_Qty_" + index).val());
-                            //oMapping.Rate = $("#txtRate_" + index).val();
-                            //oMapping.LastRate = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
-                            //oMapping.Amount = $("#lblAmount_" + index).text();
-                            //oMapping.Discount_1 = ($("#txtDiscount1_" + index).val() === "" ? "0" : $("#txtDiscount1_" + index).val());
-                            //oMapping.Discount_2 = ($("#txtDiscount2_" + index).val() === "" ? "0" : $("#txtDiscount2_" + index).val());
-                            //oMapping.Taxable_Amount = $("#lblTaxable_Amount_" + index).text();
-                            //oMapping.Discount_1_Amount = ($("#hdnDiscount_1_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_1_Amt_" + index).val());
-                            //oMapping.Discount_2_Amount = ($("#hdnDiscount_2_Amt_" + index).val() === "" ? "0" : $("#hdnDiscount_2_Amt_" + index).val());
-
-                            //lblIGST_
-                            //oMapping.GST = $("#lblGST_" + index).text();
-                            oMapping.CGST = $("#lblCGST_" + index).text();
-                            oMapping.SGST = $("#lblSGST_" + index).text();
-                            oMapping.IGST = $("#lblIGST_" + index).text();
-                            //oMapping.Total_Amount = $("#lblTotal_Amount_Row_" + index).text();
-
-                            //oMapping.PO_Id = $("#hdnPOId_" + index).val();
-                            //oMapping.POLine_Id = $("#hdnPOLineId_" + index).val();
-                            oMapping.IsUpdate = $("#IsUpdateMaterialSales").val();
+                           // oMapping.Line_Id = $("#hdnLineId_" + index).val();
+                           // oMapping.Unit_Id = $("#lblUnit_" + index).attr("data-Unit_Id");
+                            oMapping.GR_No = $("#hdnItemId_" + index).val();
+                            oMapping.GR_Date = $("#hdnItemId_" + index).val();
+                            oMapping.Charge_Weight = $("#hdnItemId_" + index).val();
+                            oMapping.Quentity = $("#lblItem_" + index).text();
+                            oMapping.Consignee_Id = $("#lblHSN_SAC_" + index).text();
+                            oMapping.Origin_Id = $("#lblHSN_SAC_" + index).text();
+                            //oMapping.Origin_Id = ($("#txtOrder_Qty_" + index).val() === "" ? "0" : $("#txtOrder_Qty_" + index).val());
+                            //oMapping.Total_Freight = $("#txtRate_" + index).val();
+                            oMapping.Total_Freight = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
+                            oMapping.Hire_Freight = ($("#lblLastRate_" + index).val() === "" ? "0" : $("#lblLastRate_" + index).val());
                             //oMapping.Order_OfficeID = 0;
                             PurchaseLineValues.push(oMapping);
                             isValid = true;
@@ -213,7 +187,7 @@
                 if ($("#ddlAvailableSaleOrder").val() != "") {
                     var TempPo = $("#ddlAvailableSaleOrder option:selected");
                     let POText = TempPo.text();
-                    if (TempPo.val() != "0" ) {
+                    if (TempPo.val() != "0") {
                         let POQty = parseInt(POText.split(":")[1]);
                         if (!isSpecialService && parseInt($("#Quantity").val()) > POQty) {
                             msg = "Please correct quantity that must not be greater than PO Quantity!!!";
@@ -393,40 +367,6 @@
             $("#SupplyStateId").val(parseInt($(this).val()));
         });
 
-        $(document).on('change', '#Client_Id', function () {
-            debugger;
-            var Client_Id = $(this).val();
-           
-            var Billing_OfficeId = $('#Billing_OfficeId').val();
-            var gsttypeid = $('#GST_TypeId').val();
-            var hsncode = $('#HSN_SAC').val();
-            
-
-            IMSC.ajaxCall("GET", "/Material/GetBillcreationdata?Client_Id=" + Client_Id + "&HSN=" + hsncode + "&OfficeId=" + Billing_OfficeId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
-                var res = JSON.parse(d);
-                if (res !== null) {
-
-                    var result = res.Table;
-                    var hsn = res.Table2;
-                    var OfficestateId = res.Table3;
-                    var clientstateid = res.Table1;
-                    $("#StateId").empty();
-
-                    if (res.Table1.length > 0) {
-                        $("#StateId").removeAttr('disabled');
-                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
-                        $.each(res.Table1, function (index, value) {
-                            $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                        });
-                    } else {
-                        $("#StateId").append($("<option></option>").val("0").html("Select State"));
-                    }
-
-                    BindGrid(result, 1, 0, hsn, OfficestateId, gsttypeid, clientstateid);
-                }
-            });
-        });
-
         $("#drpParty").change(function () {
             let Party_Id = parseInt($('#drpParty').val());
             $('#PartyId').val(Party_Id);
@@ -458,53 +398,89 @@
             window.open("/Reports/ReportViewer.aspx?ReportId=1&SaleId=" + SaleId + "&BillFormat=" + BillFormatId + "");
         });
 
-        $("#btnSearch").click(function (e) {
-            e.preventDefault();
-            var SaleId = parseInt($("#SaleId").val());
-            $("#SaleId").val(SaleId);
-            if (SaleId > 0) {
-                IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
-                    var res = JSON.parse(d);
-                    if (res !== null) {
+        $(document).on('change', '#Vehicle_Id', function () {
 
-                        var result = res.Table;
-                        if (res.Table1.length > 0) {
-                            $("#StateId").empty();
-                            $("#StateId").append($("<option></option>").val(0).html("Select State"));
-                            $.each(res.Table1, function (index, value) {
-                                $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
-                            });
-                        }
-                        if (result.length > 0) {
-                            $("#OfficeId").val(result[0].Office_Id);
-                            $("#InvoiceNo").val(result[0].Invoice_No);
-                            $("#VoucherNo").val(result[0].Voucher_No);
-                            $("#SearchParty").val(result[0].PartyName);
-                            $('#PartyId').val(result[0].Party_Id);
-                            $("#StateId").val(result[0].SupplyState_Id);
-                            $("#SupplyStateId").val(result[0].SupplyState_Id);
-                            $("#SearchOrderNo").val(result[0].PO_No);
-                            $("#POId").val(result[0].PO_Id);
-                            $("#TransactionDate").val(result[0].Transaction_Date);
-                            $("#Dispatch_Date").val(result[0].Dispatch_Date);
-                            $("#Remarks").val(result[0].Remarks);
-                            $("#Transporter").val(result[0].Transporter);
-                            $("#Marka").val(result[0].Marka);
-                            $("#tbodyid").empty();
-                            $("#SaleAmount").val("0");
-                            BindGrid(result, 1, 0);
-                            $("td").each(function () {
-                                $(this).addClass("tbl-css");
-                            });
-                            $("#SearchOrderNo").attr('disabled', 'disabled');
-                        }
-                    }
-                });
-            } else {
-                $('#alertModal').modal('show');
-                $('#msg').html("Please select inovice.");
-            }
+            var loaddate = $('#Load_Date').val();
+           // alert(loaddate);
+
+            var Vehicle_Id = $(this).val();
+
+            //alert(Vehicle_Id);
+            IMSC.ajaxCall("GET", "/Material/GetGRDetails?Vehicle_Id=" + Vehicle_Id + "&loaddate=" + loaddate + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                var res = JSON.parse(d);
+                if (res !== null) {
+
+                   // var result = res.Table;
+                    //var hsn = res.Table2;
+                    //var OfficestateId = res.Table3;
+                    //var clientstateid = res.Table1;
+                    //$("#StateId").empty();
+
+                    //if (res.Table1.length > 0) {
+                    //    $("#StateId").removeAttr('disabled');
+                    //    $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                    //    $.each(res.Table1, function (index, value) {
+                    //        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+                    //    });
+                    //} else {
+                    //    $("#StateId").append($("<option></option>").val("0").html("Select State"));
+                    //}
+
+                    BindGrid(res, 1, 0);
+                }
+            });
         });
+
+
+        //$("#btnSearch").click(function (e) {
+        //    debugger;
+        //    e.preventDefault();
+        //    var SaleId = parseInt($("#SaleId").val());
+        //    $("#SaleId").val(SaleId);
+        //    if (SaleId > 0) {
+        //        IMSC.ajaxCall("GET", "/Material/GetMatrialSales?SaleId=" + SaleId + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+        //            var res = JSON.parse(d);
+        //            if (res !== null) {
+
+        //                var result = res.Table;
+        //                if (res.Table1.length > 0) {
+        //                    $("#StateId").empty();
+        //                    $("#StateId").append($("<option></option>").val(0).html("Select State"));
+        //                    $.each(res.Table1, function (index, value) {
+        //                        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+        //                    });
+        //                }
+        //                if (result.length > 0) {
+        //                    $("#OfficeId").val(result[0].Office_Id);
+        //                    $("#InvoiceNo").val(result[0].Invoice_No);
+        //                    $("#VoucherNo").val(result[0].Voucher_No);
+        //                    $("#SearchParty").val(result[0].PartyName);
+        //                    $('#PartyId').val(result[0].Party_Id);
+        //                    $("#StateId").val(result[0].SupplyState_Id);
+        //                    $("#SupplyStateId").val(result[0].SupplyState_Id);
+        //                    $("#SearchOrderNo").val(result[0].PO_No);
+        //                    $("#POId").val(result[0].PO_Id);
+        //                    $("#TransactionDate").val(result[0].Transaction_Date);
+        //                    $("#Dispatch_Date").val(result[0].Dispatch_Date);
+        //                    $("#Remarks").val(result[0].Remarks);
+        //                    $("#Transporter").val(result[0].Transporter);
+        //                    $("#Marka").val(result[0].Marka);
+        //                    $("#tbodyid").empty();
+        //                    $("#SaleAmount").val("0");
+        //                    debugger;
+        //                    BindGrid(result, 1, 0);
+        //                    $("td").each(function () {
+        //                        $(this).addClass("tbl-css");
+        //                    });
+        //                    $("#SearchOrderNo").attr('disabled', 'disabled');
+        //                }
+        //            }
+        //        });
+        //    } else {
+        //        $('#alertModal').modal('show');
+        //        $('#msg').html("Please select inovice.");
+        //    }
+        //});
 
         $("#btnResetForm").click(function (e) {
             e.preventDefault();
@@ -589,7 +565,7 @@
         })
         $("#SearchParty").autocomplete({
             source: function (request, response) {
-                IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#Billing_OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                IMSC.ajaxCall("GET", "/Material/SearchParty?Party=" + request.term + "&OfficeId=" + Number($("#OfficeId").val()) + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
                     var result = JSON.parse(d);
                     if (result.length === 0) {
                         $("#empty-message").text("No results found");
@@ -759,7 +735,7 @@
                             $("#hdnLastRate").val(result[0].LastPurchaseRate);
                             $("#AvailableQuantity").val(result[0].Available_Qty);
                             $("#Unit_Id").val(result[0].UnitId);
-                            $("#GST").change();                           
+                            $("#GST").change();
                             ResetStockQty(false);
                             $.each(result, function (data, value) {
                                 if (value.Office_ID > 0) {
@@ -812,6 +788,7 @@
     };
     return scope;
 })(IMSMaterialSales || {});
+
 function ResetStockQty(Setval) {
     $('#ddlAvailableQty').empty();
     if (Setval) {
@@ -973,7 +950,7 @@ function setCaluValuew(index, bIsDiscount, quantity, poLineId) {
         $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     }
 }
-function Removes(button) {
+function Remove(button) {
     //Determine the reference of the Row using the Button.
     // pass SaleId and ItemID
     let SaleId = parseInt($("#SaleId").val());
@@ -1008,9 +985,10 @@ function Removes(button) {
     $("#lblTotalAmount").text("Total : " + sumOfTotal.toFixed(2));
     $("#IsUpdateMaterialSales").val(1);
 };
-function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid, clientstateid) {
+
+function BindGrid(result, isqtydisabled, sourceid) {
     debugger;
-    
+
     let totalAmount = 0;
     $.each(result, function (index, value) {
         let quantity = parseFloat(value.Order_Qty);
@@ -1030,62 +1008,62 @@ function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid
         let discount_1_Amt = 0;
         let discount_2_Amt = 0;
 
-       
 
-        //RCM
-        if (gsttypeid == 58) {
-            var officestateid = OfficestateId[0].State_Id;
-            var clntstateid = clientstateid[0].State_Id;
-            var HSNapply = hsn[0].Tax_Slab;
 
-            //if both state same
-            if (officestateid == clntstateid) {
-                var total = value.Total_Freight + value.other_charge;
-                var addhsn =  (total * HSNapply) / 100;
-                var totaldiv = (addhsn) / 2;
-                cgst = totaldiv;
-                sgst = totaldiv;
+        ////RCM
+        //if (gsttypeid == 58) {
+        //    var officestateid = OfficestateId[0].State_Id;
+        //    var clntstateid = clientstateid[0].State_Id;
+        //    var HSNapply = hsn[0].Tax_Slab;
 
-            }
-            //if both state not same
-            else {
-                var total = value.Total_Freight + value.other_charge;
-                var addhsn = total * HSNapply / 100;
-               // var totaldiv = total + addhsn;
-                igst = addhsn;
-                
-            }
-        }
-        //FCM
-        if (gsttypeid == 59) {
-            var officestateid = OfficestateId[0].State_Id;
-            var clntstateid = clientstateid[0].State_Id;
-            var HSNapply = hsn[0].Tax_Slab;
+        //    //if both state same
+        //    if (officestateid == clntstateid) {
+        //        var total = value.Total_Freight + value.other_charge;
+        //        var addhsn = (total * HSNapply) / 100;
+        //        var totaldiv = (addhsn) / 2;
+        //        cgst = totaldiv;
+        //        sgst = totaldiv;
 
-            //if both state same
-            if (officestateid == clntstateid) {
-                var total = value.Total_Freight + value.other_charge;
-                var addhsn = (total * HSNapply) / 100;
-                var totaldiv = (total + addhsn) / 2;
-                cgst = totaldiv;
-                sgst = totaldiv;
+        //    }
+        //    //if both state not same
+        //    else {
+        //        var total = value.Total_Freight + value.other_charge;
+        //        var addhsn = total * HSNapply / 100;
+        //        // var totaldiv = total + addhsn;
+        //        igst = addhsn;
 
-            }
-            //if both state not same
-            else {
-                var total = value.Total_Freight + value.other_charge;
-                var addhsn = total * HSNapply / 100;
-                var totaldiv = total + addhsn;
-                igst = totaldiv;
+        //    }
+        //}
+        ////FCM
+        //if (gsttypeid == 59) {
+        //    var officestateid = OfficestateId[0].State_Id;
+        //    var clntstateid = clientstateid[0].State_Id;
+        //    var HSNapply = hsn[0].Tax_Slab;
 
-            }
-        }
-        //EXEMPTED
-        if (gsttypeid == 60) {
-            cgst = 0;
-            sgst = 0;
-            igst = 0;
-        }
+        //    //if both state same
+        //    if (officestateid == clntstateid) {
+        //        var total = value.Total_Freight + value.other_charge;
+        //        var addhsn = (total * HSNapply) / 100;
+        //        var totaldiv = (total + addhsn) / 2;
+        //        cgst = totaldiv;
+        //        sgst = totaldiv;
+
+        //    }
+        //    //if both state not same
+        //    else {
+        //        var total = value.Total_Freight + value.other_charge;
+        //        var addhsn = total * HSNapply / 100;
+        //        var totaldiv = total + addhsn;
+        //        igst = totaldiv;
+
+        //    }
+        //}
+        ////EXEMPTED
+        //if (gsttypeid == 60) {
+        //    cgst = 0;
+        //    sgst = 0;
+        //    igst = 0;
+        //}
 
         //if (amount > 0) {
         //if (sourceid === 1) {
@@ -1178,49 +1156,36 @@ function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid
         cell = $(row.insertCell(-1));
         cell.append(htmlOrder_Qty);
         //Add Available_Qty cell.
-        let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.GR_Id}" style="background-color: lightgreen;">${value.vehicle_No === null ? "0" : value.vehicle_No}</label>`;
+        let lblAvailable_Qty = `<label id="lblAvailable_Qty_${value.GR_Id}">${value.consignee_name === null ? "0" : value.consignee_name}</label>`;
         cell = $(row.insertCell(-1));
-        cell.append(lblAvailable_Qty);
+        cell.append(lblAvailable_Qty); 
         //Add Unit cell.
-        let lblUnit = `<label id="lblUnit_${value.GR_Id}" data-Unit_Id="${value.GR_Id}" data-index="${value.GR_Id}" >${value.consignee_name}</label>`;
+        let lblUnit = `<label id="lblUnit_${value.GR_Id}" data-Unit_Id="${value.GR_Id}" data-index="${value.GR_Id}" >${value.Title}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(lblUnit);
         //Add Last Rate cell.
-        let htmlLastRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.Title === undefined ? "0" : value.Title}</label>`;
+        let htmlLastRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.Total_Freight === undefined ? "0" : value.Total_Freight}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlLastRate);
         //Add Rate cell.
-        let htmlRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.origin_id === undefined ? "0" : value.Total_Freight}</label>`;
+        let htmlRate = `<label id="lblLastRate_${value.GR_Id}" data-index="${value.GR_Id}" >${value.Total_Freight === undefined ? "0" : value.Total_Freight}</label>`;
         cell = $(row.insertCell(-1));
         cell.append(htmlRate);
         //Add Amount cell.
-        let lblAmount = `<label id="lblAmount_${value.GR_Id}">${value.other_charge}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblAmount);
+       
         //Add Discount_1 cell.
         //let htmlDiscount1 = `<input type="text" id="txtDiscount1_${value.Item_Id}" ${isqtydisabled == 1 ? "disabled" : "enabled"} data-index="${value.Item_Id}" name="txtDiscount1_${value.Item_Id}" onchange="Calculate(this);" value="${sourceid === 1 ? 0 : discount_1}"  tp-type="numeric" style="width:30px;"/>`;
-        
+
         //Add GST cell.
         //let lblGST = `<label id="lblGST_${value.Item_Id}">${gst}</label>`;
         //cell = $(row.insertCell(-1));
         //cell.append(lblGST);
         //Add IGST cell.
-        let lblIGST = `<label id="lblIGST_${value.GR_Id}">${igst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblIGST);
+        
 
-        //Add SGST cell.
-        let lblSGST = `<label id="lblSGST_${value.GR_Id}">${sgst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblSGST);
-        //Add CGST cell.
-        let lblCGST = `<label id="lblCGST_${value.GR_Id}">${cgst}</label>`;
-        cell = $(row.insertCell(-1));
-        cell.append(lblCGST);
-       
-       
+
         //Add Total_Amount cell.
-      
+
     });
     $("[id^='lblTotal_Amount_Row_']").each(function () {
         totalAmount += parseFloat($("#" + this.id).text());
@@ -1229,6 +1194,8 @@ function BindGrid(result, isqtydisabled, sourceid, hsn, OfficestateId, gsttypeid
     $("#lblTotalAmount").text("Total : " + totalAmount.toFixed(2));
     $("#divDeleteMatrial").css('display', 'block');
 };
+
+
 function Calculate(value) {
     $("#IsUpdateMaterialSales").val(1);
     let index = parseInt($('#' + value.id).attr('data-index'));
@@ -1253,18 +1220,3 @@ function Calculate(value) {
         }
     }
 }
-
-//$(document).ready(function () {
-//    $(document).on('change', '#Client_Id', function () {
-//        debugger;
-//        var id = $(this).val(); // Using $(this) to refer to the element that triggered the event
-//        alert(id)
-//    });
-//});
-
-//$("#Client_Id").change(function () {
-//    //var id = $('#Client_Id').val();
-//    alert(id);
-//    alert("hello");
-
-//});

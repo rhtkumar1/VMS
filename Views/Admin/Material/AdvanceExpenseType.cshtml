@@ -1,0 +1,229 @@
+﻿@model IMS.Models.ViewModel.AdvanceExpenseType
+@{
+    ViewBag.Title = "Advance Expense Type";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+         <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Advance Expense Type</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                   
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        @using (Html.BeginForm("ManageAdvanceExpenseType", "Material", FormMethod.Post, new { enctype = "multipart/form-data", @id = "StateMaster" }))
+                        {
+                            @Html.HiddenFor(m => m.Id, htmlAttributes: new { @id = "Id" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            <div class="heading">
+                                <h4>
+                                    Advance Expense Type Detail
+                                </h4>
+
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Type_Id, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @id = "Type", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Name<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Name, htmlAttributes: new { @placeholder = "Enter Name", @id = "Name", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Code <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Code, htmlAttributes: new { @placeholder = "Enter Code ", @id = "Code", @required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Dr Ledger</label>
+                                    @Html.DropDownListFor(m => m.Dr_Ledger_Id, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Dr_Ledger_Id", @class = "form-control" })
+
+                                </div>
+
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Cr Ledger</label>
+                                    @Html.DropDownListFor(m => m.Cr_Ledger_Id, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Cr_Ledger_Id", @class = "form-control" })
+                                </div>
+
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Not Impact On Driver Ac</label>
+                                    <br />
+                                    @Html.CheckBoxFor(m => m.Not_Impact_On_Driver_Ac, new { @checked = "checked", @class = "checkboxcss", @id = "Not_Impact_On_Driver_Ac" })
+
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-10"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-1 form-group pull-right">
+                            <div class="appointment-btn text-lg-right">
+                                <button class="btncustome" id="btnExport" onclick="exportExcel(this)">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+
+
+        IMSC.ajaxCall("GET", "/Material/GetAdvanceExpenseType?AppToken="+'@Model.AppToken', {}, "text", function (d) {
+         var StateLists = JSON.parse(d);
+         if (StateLists !== "null") {
+             var fields = [
+                 {
+                     title: "Action",
+                     width: 80,
+                     itemTemplate: function (value, args) {
+                         return IMSC.genrateDynamicButtons(value, args,@Model.AuthMode);
+                     }
+                 },
+                 { name: "Id", css: "hidden" },
+                 { name: "Name", type: "text", title: "Name", sorting: true, filtering: true, width: 150 },
+                 { name: "Code", type: "text", title: "Code", sorting: true, filtering: false, width: 100 },
+                 { name: "Type_Id", css: "hidden" },
+                 { name: "Constant_Value", type: "text", title: "Type", sorting: true, filtering: false, width: 100 },
+                 { name: "Cr_Ledger_Title", type: "text", title: "Cr_Ledger_Title", sorting: true, filtering: false, width: 100 },
+                 { name: "Dr_Ledger_Title", type: "text", title: "Dr_Ledger_Title", sorting: true, filtering: false, width: 100 },
+                 {
+                     name: "Not_Impact_On_Driver_Ac", type: "text", title: "NIOD", sorting: true, filtering: false, width: 100, itemTemplate: function (value, item) {
+                         return value ? "Y" : "N";
+                     }
+                 },
+             ];
+             var options = {
+                 filtering: true,
+                 editing: true,
+                 sorting: true,
+                 paging: true,
+                 autoload: true,
+                 controller: {
+                     StateLists: StateLists,
+                     loadData: function (filter) {
+                         return $.grep(this.StateLists, function (StateList) {
+                             return ((!filter.Name || StateList.Name.toLowerCase().indexOf(filter.Name.toLowerCase()) > -1)
+                                 && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
+                         });
+                     }
+                 },
+                 fields: fields
+             };
+             $.extend(options, IMSC.grid_options);
+             $("#listGrid").jsGrid(options);
+             IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+        });
+    var editFormData = function (dilogType, AdvanceExpenseType) {
+            $("msg").text = "";
+        if (AdvanceExpenseType.Id > 0) {
+            $("#Id").val(AdvanceExpenseType.Id);
+            $("#Name").val(AdvanceExpenseType.Name);
+            $("#Code").val(AdvanceExpenseType.Code);
+            $("#Type").val(AdvanceExpenseType.Type_Id);
+            $("#Dr_Ledger_Id").val(AdvanceExpenseType.Dr_Ledger_Id);
+            $("#Cr_Ledger_Id").val(AdvanceExpenseType.Cr_Ledger_Id);
+
+            var check = AdvanceExpenseType.Not_Impact_On_Driver_Ac;
+            if (check == true) {
+                var checkbox = document.getElementById('Not_Impact_On_Driver_Ac');
+                checkbox.checked = true;
+            }
+            else {
+                var checkbox = document.getElementById('Not_Impact_On_Driver_Ac');
+                checkbox.checked = false;
+            }
+
+            $("#Not_Impact_On_Driver_Ac").val(AdvanceExpenseType.Not_Impact_On_Driver_Ac);
+                $("#btnSubmit").text("Update")
+            }
+            else {
+                $("#Id").val("0");
+                $("#btnSubmit").text("Submit")
+            }
+        };
+
+    var deleteFormData = function (dialogType, AdvanceExpenseType) {
+        var result = confirm("Are You Sure Want to delete?");
+            if (result == true) {
+                IMSC.ajaxCall("POST", "/Material/DeleteAdvanceExpenseType?id=" + AdvanceExpenseType.Id + "&AppToken=" + '@Model.AppToken', {}, "text", function (d) {
+                    var result = JSON.parse(d);
+                    alert(result);
+                    if (result !== "null" && result !== "") {
+                        alert(result.Msg);
+                window.location.reload();
+            }
+        });
+            } else {
+                return false;
+            }
+    };
+
+
+
+    function exportExcel() {
+        let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
+        TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
+            name: `export.xlsx`, // fileName you could use any name
+            sheet: {
+                name: 'Sheet 1' // sheetName
+            }
+        });
+    }
+
+</script>

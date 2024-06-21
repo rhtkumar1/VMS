@@ -1,0 +1,455 @@
+﻿@model IMS.Models.ViewModel.TripCreation
+@{
+    ViewBag.Title = "Trip Creation";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+<!--Material Sales -->
+<script src="~/assets/Tripcreation.js"></script>
+<!--Material Sales END -->
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-shopping-cart"></i>
+                <span>Trip Creation</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                        <div class="heading">
+                            <h4>
+                                Search
+                            </h4>
+                        </div>
+                        <div class="col-md-12">
+                            <p style="color: red;display:none" id="pMsgSearch"></p>
+                        </div>
+                        <br />
+                        <div class="styled-input">
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Vehicle No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.Vehicle_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicleno", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>From Date <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Reportng_Date, htmlAttributes: new { @id = "fromDate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>To Date <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Reportng_Date, htmlAttributes: new { @id = "todate", @placeholder = "dd/mm/yyyy", @Value = @DateTime.Now.ToString("dd/MM/yyyy"), @class = "form-control clsDate" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-3 form-group">
+                                    <label>Driver Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Driver_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "DriverId", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-2 form-group">
+                                    <label>Trip No<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @placeholder = "Enter Trip No", @id = "tripno", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 form-group pull-left">
+                            <button type="button" style="margin-top: 26px;" name="btnSearch" id="btnSearch" class="btncustome pull-right">Search</button>
+                        </div>
+
+
+
+                        <div class="clearfix"></div>
+                        @using (Html.BeginForm("ManageTripCreation", "Material", FormMethod.Post, new { @id = "MaterialSales" }))
+                        {
+                            @Html.HiddenFor(m => m.Id, htmlAttributes: new { @id = "Id" })
+                            @Html.HiddenFor(m => m.AppToken)
+                            @Html.HiddenFor(m => m.SaleLine, htmlAttributes: new { @id = "SaleLine" })
+                            @*@Html.HiddenFor(m => m.IsUpdateMaterialSales, htmlAttributes: new { @id = "IsUpdateMaterialSales", @value = "0" })
+
+            @Html.HiddenFor(m => m.SupplyStateId, htmlAttributes: new { @id = "SupplyStateId" })
+            @Html.HiddenFor(m => m.PartyId, htmlAttributes: new { @id = "PartyId" })
+            @Html.HiddenFor(m => m.POId, htmlAttributes: new { @id = "POId" })
+
+            @Html.HiddenFor(m => m.SaleAmount, htmlAttributes: new { @id = "SaleAmount" })*@
+
+                            <div class="heading">
+                                <h4>
+                                    Trip Creation
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "Office_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Driver Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Driver_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Driver_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Reporting Date <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Reportng_Date, htmlAttributes: new { @id = "Reportng_Date", @Type = "datetime-local", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Trip Date<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.Load_Date, htmlAttributes: new { @id = "Load_Date", @Type = "datetime-local", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Origin<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Origin_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Origin_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Loading Date</label>
+                                    @Html.TextBoxFor(m => m.Loading_Date, htmlAttributes: new { @id = "Loading_Date", @Type = "datetime-local", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Trip No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Trip_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "Trip_No", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Destination<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Destination_Id, new SelectList(Model.LocationLists, "Value", "Text"), htmlAttributes: new { @id = "Destination_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Reach Date</label>
+                                    @Html.TextBoxFor(m => m.Reach, htmlAttributes: new { @id = "Reach", @Type = "datetime-local", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Client Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Client_Id, new SelectList(Model.ClientLists, "Value", "Text"), htmlAttributes: new { @id = "Client_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Reporting Office<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "Office_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Unload Date</label>
+                                    @Html.TextBoxFor(m => m.Unload, htmlAttributes: new { @id = "Unload", @Type = "datetime-local", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Vehicle_Id, new SelectList(Model.Vehicle_List, "Value", "Text"), htmlAttributes: new { @id = "Vehicle_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Start ODO Meater</label>
+                                    @Html.TextBoxFor(m => m.Start_Odo_Meter, htmlAttributes: new { @placeholder = "Enter Start_Odo_Meter", @id = "Start_Odo_Meter", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Movement Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Movement_Type_Id, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @id = "Movement_Type_Id", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>End ODO Meater</label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @placeholder = "Enter End_Odo_Meter", @id = "End_Odo_Meter", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextBoxFor(m => m.Remarks, htmlAttributes: new { @placeholder = "Enter Remarks", @id = "Remarks", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="clearfix"></div>
+                            <div class="heading">
+                                <h4>
+                                    Freigth Detail
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="clearfix"></div>
+                            <div class="styled-input">
+
+                                <div class="col-md-3 form-group">
+                                    <label>Loded QTY</label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Basic_Freight", @class = "form-control" })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Rate</label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Other_Charges", @class = "form-control" })
+
+                                    @*@Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })*@
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label>Hire Freigth</label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Total_Freight", @class = "form-control" })
+
+                                    @*@Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })*@
+                                </div>
+
+                                <div class="col-md-3 form-group">
+                                    <label>Total Freigth</label>
+                                    @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "SGST", @class = "form-control" })
+                                    @*@Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST", @id = "SGST", @class = "form-control", @readonly = "readonly" })*@
+                                </div>
+
+                                @*<div class="col-md-2 form-group pull-right">
+                    <label>Action</label>
+                    <br />
+                    <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                    <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                </div>*@
+                            </div>
+
+
+                            <div class="clearfix"></div>
+                            @*<div class="styled-input">
+                <br />
+                <label id="lblTotalAmount">Total : 0.00</label>
+            </div>*@
+                            <div class="clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="tblMaterialSales" class="table table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Action</th>
+                                            <th class="tbl-heading">GR No</th>
+                                            <th class="tbl-heading">GR Date</th>
+                                            <th class="tbl-heading">Charge Weight</th>
+                                            <th class="tbl-heading">No Of Pcs</th>
+                                            <th class="tbl-heading">Consignee</th>
+                                            <th class="tbl-heading">Route</th>
+                                            <th class="tbl-heading">Total Freight</th>
+                                            <th class="tbl-heading">Hire Freight</th>
+                                            @*<th class="tbl-heading">Other Charge</th>*@
+                                            @*<th class="tbl-heading">IGST</th>
+                            <th class="tbl-heading">SGST</th>
+                            <th class="tbl-heading">CGST</th>*@
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid"></tbody>
+                                </table>
+                            </div>
+
+
+                            <!--<br />
+
+        <div class="clearfix"></div>
+        <div class="heading">
+            <h4>
+                Amount Detail
+            </h4>
+        </div>
+        <br />
+        <div class="clearfix"></div>
+        <div class="styled-input">
+
+            <div class="col-md-4 form-group">
+                <label>Basic Freigth</label>
+                @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Basic_Freight", @class = "form-control" })
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Other Charge</label>
+                @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Other_Charges", @class = "form-control" })-->
+
+                            @*@Html.TextBox("AvailableQuantity", "", htmlAttributes: new { @placeholder = "Available Quantity", @id = "AvailableQuantity", @class = "form-control", @readonly = "readonly" })*@
+                            <!--</div>
+        <div class="col-md-4 form-group">
+            <label>Total Freigth</label>
+            @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "Total_Freight", @class = "form-control" })-->
+
+                            @*@Html.TextBox("Hsn_Sac", "", htmlAttributes: new { @placeholder = "Hsn_Sac", @id = "Hsn_Sac", @class = "form-control", @readonly = "readonly" })*@
+                            <!--</div>
+
+        <div class="col-md-4 form-group">
+            <label>SGST</label>
+            @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "SGST", @class = "form-control" })-->
+                            @*@Html.TextBox("SGST", "", htmlAttributes: new { @placeholder = "SGST", @id = "SGST", @class = "form-control", @readonly = "readonly" })*@
+                            <!--</div>
+
+        <div class="col-md-4 form-group">
+            <label>CGST</label>
+            @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "CGST", @class = "form-control" })-->
+
+                            @*@Html.TextBox("CGST", "", htmlAttributes: new { @placeholder = "CGST", @id = "CGST", @class = "form-control" })*@
+                            <!--</div>
+        <div class="col-md-4 form-group">
+            <label>IGST</label>
+            @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "IGST", @class = "form-control" })-->
+
+                            @*@Html.TextBox("IGST", "", htmlAttributes: new { @placeholder = "IGST", @id = "IGST", @class = "form-control" })*@
+                            <!--</div>
+        <div class="col-md-4 form-group">
+            <label>Total Bill Amount</label>
+            @Html.TextBoxFor(m => m.End_Odo_Meter, htmlAttributes: new { @id = "BillAmount", @class = "form-control" })-->
+
+                            @*@Html.TextBox("Total", "", htmlAttributes: new { @placeholder = "Total", @id = "Total", @class = "form-control" })*@
+                            <!--<input type="hidden" id="hdnTotalAmount" />
+        </div>-->
+
+                            @*<div class="col-md-2 form-group">
+                <label>Action</label>
+                <br />
+                <a id="btnAdd" name="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                <a id="btnReset" name="btnReset" class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+            </div>*@
+                            <!--</div>-->
+
+                            <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetFormbtnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <input type="hidden" id="hdnAvailable_Qty" name="hdnAvailable_Qty" value="" />
+                                    <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
+                                    <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
+                                    <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
+                                    <input type="hidden" id="hdnLastRate" value="0" name="hdnLastRate" />
+                                    <input type="hidden" id="hdnApptoken" value="0" name="hdnApptoken" />
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div style="display:none" id="divDeleteMatrial">
+                                    <button type="button" name="btnDelete" id="btnDelete" class="btncustome">Delete</button>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="blank-page">
+                    <div id="listGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@ViewBag.Msg' != "") {
+            $('#alertModal').modal('show');
+            $('#msg').html("@ViewBag.Msg");
+        }
+        IMSMaterialSales.AppToken = '@Model.AppToken';
+        $("#hdnApptoken").val(IMSMaterialSales.AppToken);
+        IMSMaterialSales.materialSales();
+    });
+
+    //$(document).on('change', '#Vehicle_Id', function () {
+        
+    //    var loaddate = $('#Load_Date').val();
+    //    alert(loaddate);
+    //    var Vehicle_Id = parseInt(($(this).val());
+        
+    //    alert(Vehicle_Id);
+    //    IMSC.ajaxCall("GET", "/Material/GetGRDetails?Vehicle_Id=" + Vehicle_Id + "&loaddate=" + loaddate + "&AppToken=" + scope.AppToken, {}, "text", function (d) {
+    //        var res = JSON.parse(d);
+    //        if (res !== null) {
+
+    //            var result = res.Table;
+    //            //var hsn = res.Table2;
+    //            //var OfficestateId = res.Table3;
+    //            //var clientstateid = res.Table1;
+    //            //$("#StateId").empty();
+
+    //            //if (res.Table1.length > 0) {
+    //            //    $("#StateId").removeAttr('disabled');
+    //            //    $("#StateId").append($("<option></option>").val("0").html("Select State"));
+    //            //    $.each(res.Table1, function (index, value) {
+    //            //        $("#StateId").append($("<option></option>").val(value.State_Id).html(value.StateName));
+    //            //    });
+    //            //} else {
+    //            //    $("#StateId").append($("<option></option>").val("0").html("Select State"));
+    //            //}
+
+    //            //BindGrid(result, 1, 0, hsn, OfficestateId, gsttypeid, clientstateid);
+    //        }
+    //    });
+    //});
+
+
+    @*$("#btnSearch").click(function () {
+
+
+        let Vehicleno = parseInt($("#Vehicleno").val());
+        let DriverId = parseInt($("#DriverId").val());
+        let tripno = $("#tripno").val();
+        
+            var FromDate = "";
+            if ($("#fromDate").val() !== "") {
+                var arr = $("#fromDate").val().split("/");
+                FromDate = `${arr[2]}/${arr[1]}/${arr[0]}`
+            }  
+            var ToDate = "";
+            if ($("#todate").val() !== "") {
+                var arr = $("#todate").val().split("/");
+                ToDate = `${arr[2]}/${arr[1]}/${arr[0]}`
+             }
+        IMSC.ajaxCall("GET", "/Material/GetTripCreation?Vehicleno=" + Vehicleno + "&DriverId=" + DriverId + "&tripno=" + tripno + "&FromDate=" + FromDate + "&ToDate=" + ToDate+"&AppToken="+'@Model.AppToken', {}, "text", function (d) {
+                var result = JSON.parse(d);
+                if (result.Status !== undefined) {
+                    //Show Error message if any error
+                    scope.message(result.Msg, result.Status);
+                } else {
+                    alert(result);
+                    //listItems = result;
+                    //listGrid.jsGrid("loadData");
+                    //IMSC.filteOnKeyPress("#listGrid");
+                }
+            });
+    });*@
+</script>

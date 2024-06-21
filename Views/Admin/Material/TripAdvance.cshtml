@@ -1,0 +1,387 @@
+﻿@model IMS.Models.ViewModel.TripAdvance
+@{
+    ViewBag.Title = "Trip Advance";
+    Layout = "~/Views/Shared/DashBoard/_Layout.cshtml";
+}
+<!--Material Sales
+<script src="~/assets/Tripcreation.js"></script>
+<!--Material Sales END -->
+
+<script src="~/assets/TripAdvance.js"></script>
+ -->
+@{
+    var AppToken = Convert.ToString(@Model.AppToken);
+}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="content-main">
+        <!--banner-->
+        <div class="banner">
+            <h2>
+                <a href="/admin/dashboard">Home</a>
+                <i class="fa fa-shopping-cart"></i>
+                <span>Trip Advance</span>
+            </h2>
+        </div>
+        <!--//banner-->
+        <!--content-->
+        <div id="modelForm">
+
+            <div class="blank">
+                <div class="blank-page">
+                    @Html.Partial("~/Views/Shared/_MessageBox.cshtml")
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+
+                        <div class="heading">
+                            <h4>
+                                Search Trip Details
+                            </h4>
+
+                        </div>
+                        <br />
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>Vehicle No<span class="mandatory">*</span></label>
+                                @*@Html.DropDownListFor(m => m.VEHICLENO, new SelectList(Model.TypeLists, "Value", "Text"), htmlAttributes: new { @id = "Type", @class = "form-control" })*@
+                                @Html.TextBoxFor(m => m.VehicleNOSearch, htmlAttributes: new { @placeholder = "Enter Name", @id = "VehicleNOSearch", @required = "required", @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>From Date<span class="mandatory">*</span></label>
+                                @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @placeholder = "", @id = "FromDate", @Type = "datetime-local", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>To Date <span class="mandatory">*</span></label>
+                                @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @placeholder = "", @id = "ToDate", @Type = "datetime-local", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>Driver No</label>
+                                @*@Html.DropDownListFor(m => m.DRIVERNAME, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Dr_Ledger_Id", @class = "form-control" })*@
+
+                                @Html.TextBoxFor(m => m.DriverNOSearch, htmlAttributes: new { @placeholder = "Enter Name", @id = "DriverNOSearch", @required = "required", @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="styled-input">
+                            <div class="col-md-4 form-group">
+                                <label>Advance No</label>
+                                @*@Html.DropDownListFor(m => m.ADVANCENO, new SelectList(Model.PartyLists, "Value", "Text"), htmlAttributes: new { @id = "Cr_Ledger_Id", @class = "form-control" })*@
+                                @Html.TextBoxFor(m => m.AdvanceNOSearch, htmlAttributes: new { @placeholder = "Enter Name", @id = "AdvanceNOSearch", @required = "required", @class = "form-control" })
+
+                            </div>
+
+                        </div>
+                       
+                        <div class="clearfix"></div>
+                        <div class="col-md-10"></div>
+                        @*<div class="col-md-1 form-group pull-right">
+                            <div class="appointment-btn text-lg-right">
+                                <button type="reset" name="btnReset" id="btnReset" class="btncustome">Reset</button>
+                            </div>
+                        </div>*@
+                        <div class="col-md-1 form-group pull-right">
+                            <div class="appointment-btn text-lg-right">
+                                <button type="button" name="btnSearch" id="btnSearch" class="btncustome">Search</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+
+
+
+
+                        <div class="clearfix"></div>
+                        @using (Html.BeginForm("ManageTripAdvance", "Material", FormMethod.Post, new { @id = "TripAdvance", enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(m => m.Id, htmlAttributes: new { @id = "Id" })
+                            @Html.HiddenFor(m => m.IMAGEPath, htmlAttributes: new { @id = "IMAGEPath" })
+                            @Html.HiddenFor(m => m.AppToken)
+
+                            <div class="heading">
+                                <h4>
+                                    Trip Advance
+                                </h4>
+                            </div>
+                            <br />
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Office Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.Office_Id, new SelectList(Model.OfficeLists, "Value", "Text"), htmlAttributes: new { @id = "Office_Id", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Advance Date <span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.ADVANCEDATE, htmlAttributes: new { @id = "ADVANCEDATE", @Type = "datetime-local", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Advance No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.ADVANCENO, new SelectList(Model.AdvanceNoLists, "Value", "Text"), htmlAttributes: new { @id = "ADVANCENO", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Vehicle No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.VEHICLENO, new SelectList(Model.VehicleNoLists, "Value", "Text"), htmlAttributes: new { @id = "VEHICLENO", @class = "form-control" })
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Driver Name<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.DRIVERNAME, new SelectList(Model.DriverNameLists, "Value", "Text"), htmlAttributes: new { @id = "DRIVERNAME", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Trip No<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.TRIPNO, new SelectList(Model.TripNoLists, "Value", "Text"), htmlAttributes: new { @id = "TRIPNO", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Advance Type<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.ADVANCETYPE, new SelectList(Model.AdvanceTypeLists, "Value", "Text"), htmlAttributes: new { @id = "ADVANCETYPE", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>DR Account<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.DRACCOUNT, new SelectList(Model.DrAccountLists, "Value", "Text"), htmlAttributes: new { @id = "DRACCOUNT", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>CR Account<span class="mandatory">*</span></label>
+                                    @Html.DropDownListFor(m => m.CRACCOUNT, new SelectList(Model.CrAccountLists, "Value", "Text"), htmlAttributes: new { @id = "CRACCOUNT", @class = "form-control" })
+                                </div>
+                            </div>
+
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Quantity<span class="mandatory">*</span></label>
+                                    @Html.TextBoxFor(m => m.QTY, htmlAttributes: new { @id = "QTY", @class = "form-control" })
+
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Rate</label>
+                                    @Html.TextBoxFor(m => m.RATE, htmlAttributes: new { @id = "RATE", @class = "form-control" })
+
+                                </div>
+                            </div>
+
+
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Amount</label>
+                                    @Html.TextBoxFor(m => m.AMOUNT, htmlAttributes: new { @id = "AMOUNT", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-6 form-group">
+                                    <label>Remarks</label>
+                                    @Html.TextAreaFor(m => m.REMARK, htmlAttributes: new { @id = "REMARK", @class = "form-control" })
+
+                                </div>
+                            </div>
+                            <div class="styled-input">
+                                <div class="col-md-4 form-group">
+                                    <label>Image</label>
+                                    <input type="file" name="IMAGE" id="IMAGE " class="form-control" onchange="validateFileType()" />
+
+
+                                </div>
+                            </div>
+
+
+
+
+                            <br />
+
+                            <div class="clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="tblTripAdvance" class="table table-striped" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="tbl-heading">Action</th>
+                                            <th class="tbl-heading">OfficeId</th>
+                                            <th class="tbl-heading">AdvanceDate</th>
+                                            <th class="tbl-heading">VehicleNo</th>
+                                            <th class="tbl-heading">Driver</th>
+                                            <th class="tbl-heading">Trip</th>
+                                            <th class="tbl-heading">AdvanceType</th>
+                                            <th class="tbl-heading">CrAccount</th>
+                                            <th class="tbl-heading">DrAccount</th>
+                                            <th class="tbl-heading">Quantity</th>
+                                            <th class="tbl-heading">Rate</th>
+                                            <th class="tbl-heading">Amount</th>
+                                            <th class="tbl-heading">Remarks</th>
+                                            <th class="tbl-heading">Image</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid"></tbody>
+                                </table>
+                            </div>
+                            <br />
+                            <div class="clearfix"></div>
+
+
+
+
+                            <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <button type="button" name="btnResetFormbtnResetForm" id="btnResetForm" class="btncustome">Reset</button>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group pull-right">
+                                <div class="appointment-btn text-lg-right">
+                                    <input type="hidden" id="hdnAvailable_Qty" name="hdnAvailable_Qty" value="" />
+                                    <input type="hidden" id="hdnEditRow" name="hdnEditRow" value="" />
+                                    <input type="hidden" id="hdnIs_SameState" value="" name="hdnIs_SameState" />
+                                    <input type="hidden" id="hdnItemType" value="" name="hdnItemType" />
+                                    <input type="hidden" id="hdnLastRate" value="0" name="hdnLastRate" />
+                                    <input type="hidden" id="hdnApptoken" value="0" name="hdnApptoken" />
+                                    <button type="submit" name="btnSubmit" id="btnSubmit" class="btncustome">Submit</button>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                    </div>
+
+
+                    <div class="blank-page">
+                        <div id="listGrid"></div>
+                    </div>
+                </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!--//content-->
+    <!---->
+</div>
+
+<script type="text/javascript">
+      // var AppToken = '';
+    $(document).ready(function ()
+    {
+        //alert('dfd')
+
+        $("#hdnApptoken").val('@Model.AppToken');
+       // alert(AppToken);
+      // AppToken = '@Model.AppToken';
+        //$("#ADVANCENO").prop("disabled", true);
+        //var IMSMaterialSales = (function (scope) {
+        //    scope.AppToken = '';
+        //    Token = scope.AppToken;
+
+        //})
+        //$("#ADVANCENO").removeAttr('disabled');
+    //
+
+    if ('@ViewBag.Msg' != "")
+    {
+          $('#alertModal').modal('show');
+        $('#msg').html("@ViewBag.Msg");
+        //window.location.reload();
+    }
+
+
+           // return scope;
+       // });
+
+        IMSMaterialPurchase.AppToken = '@Model.AppToken';
+        IMSMaterialPurchase.materialPurchase();
+
+    });
+
+
+    //function validateFileType()
+    //{
+    //    debugger;
+    //    var fileName = document.getElementById("IMAGE").value;
+    //    var idxDot = fileName.lastIndexOf(".") + 1;
+    //    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    //    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+    //        //TO DO
+    //    } else {
+    //        alert("Only jpg/jpeg and png files are allowed!");
+    //    }
+    //}
+
+
+    //$(document).on('change', '#Office_Id', function () {
+
+    //    var loaddate = $('#Load_Date').val();
+    //   // alert(AppToken);
+    //    var Office_Id = parseInt(($(this).val()));
+
+    //   // alert(Office_Id);
+    //    $.ajax({
+    //        url: '/Material/GetstationarygByOfficeid',
+    //        type: "GET",
+    //        data: { 'Office_Id': Office_Id,'loaddate':loaddate , 'AppToken': AppToken},
+    //        success: function (responce) {
+    //            alert(responce.data)
+    //           // var res = JSON.parse(d);
+    //        },
+    //        error: function (responce) { alert(json.parse(responce.data)) }
+    //    });
+
+    //    //$.ajax("GET", "/Material/GetstationarygByOfficeid?Office_Id=" + Office_Id, "&loaddate=" + loaddate + "&AppToken=" + AppToken, {}, "text", function (d) {
+    //    //    var res = JSON.parse(d);
+    //    //    alert(res)
+    //    //    if (res !== null) {
+    //    //        debugger;
+    //    //        var result = res.Table;
+    //    //        var hsn = res.Table2;
+    //    //        var OfficestateId = res.Table3;
+    //    //        var clientstateid = res.Table1;
+    //    //        $("#ADVANCENO").empty();
+
+    //    //        if (res.Table1.length > 0) {
+    //    //            alert('BindData');
+    //    //            $("#ADVANCENO").prop("disabled", false);
+    //    //            // $("#ADVANCENO").append($("<option></option>").val("0").html("Select State"));
+    //    //            $.each(res.Table1, function (index, value) {
+    //    //                $("#ADVANCENO").append($("<option></option>").val(value.StationeryNumber).html(value.StationeryNumber));
+    //    //            });
+    //    //        } else {
+    //    //            $("#ADVANCENO").append($("<option></option>").val("0").html("Select Stationery"));
+    //    //        }
+
+    //    //        //        //BindGrid(result, 1, 0, hsn, OfficestateId, gsttypeid, clientstateid);
+    //    //    }
+    //    //    else {
+
+    //    //    }
+    //    //});
+    //});
+
+
+</script>

@@ -129,7 +129,7 @@
                      StateLists: StateLists,
                      loadData: function (filter) {
                          return $.grep(this.StateLists, function (StateList) {
-                             return ((!filter.Title || StateList.Title.toLowerCase().indexOf(filter.Title.toLowerCase()) > -1)
+                             return ((!filter.Model_Name || StateList.Model_Name.toLowerCase().indexOf(filter.Model_Name.toLowerCase()) > -1)
                                  && (!filter.Code || StateList.Code.toLowerCase().indexOf(filter.Code.toLowerCase()) > -1));
                          });
                      }
