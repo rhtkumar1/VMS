@@ -18,19 +18,102 @@
         $("#GR_Date").attr('placeholder', 'dd/mm/yyyy');
         $("#Advance_Date").attr('placeholder', 'dd/mm/yyyy');
 
+        $("#GR_OfficeId").change(function () {
+            officeid = $("#GR_OfficeId").val();
+            IMSC.ajaxCall("GET", "/Material/GetStationaryGRNo?GROffice_Id=" + officeid +"&AppToken=" + scope.AppToken, {}, "text", function (d) {
+                debugger
+                var res = JSON.parse(d);
 
 
-        IMSC.ajaxCall("GET", "/Material/GetConsignmentData?AppToken=" + scope.AppToken, {}, "text", function (d) {
-            var result = JSON.parse(d);
-            if (result.length === 0) {
-                $("#empty-message").text("No results found");
-                return response({ label: "No results found", value: 0 });
-            } else {
-                response($.map(result, function (item) {
-                    return { label: item.Title, value: item.Item_Id };
-                    $("#Item_Id").val(Item_Id);
-                }))
-            }
+            })
+        });
+
+
+        IMSC.ajaxCall("GET", "/Material/GetConsignmentData_ByGRId?AppToken=" + scope.AppToken, {}, "text", function (d) {
+            var res = JSON.parse(d);
+            if (res !== null) {
+                var result = res.Table;
+                debugger
+                $("#Type_Id").val(result[0].Type_Id);
+                $("#Client_Id").val(result[0].Client_Id);
+                $("#IsUpdateConsignment").val(1);
+                $("#GR_OfficeId").val(result[0].GR_OfficeId);
+                $("#Consignee_Id").val(result[0].Consignee_Id);
+                $("#Billing_OfficeId").val(result[0].Billing_OfficeId);
+                $("#Consigner_Id").val(result[0].Consigner_Id);
+                $("#GR_Date").val(result[0].GR_Date);
+                $("#Origin_Id").val(result[0].Origin_Id);
+                $("#GR_No").val(result[0].GR_No);
+                $("#Destination_Id").val(result[0].Destination_Id);
+                $("#Vehicle_Id").val(result[0].Vehicle_Id)
+                $("#Contract_Id").val(result[0].Contract_Id);
+                $("#Loading").val(result[0].Loading);
+                $("#Two_Point_Delivery").val(result[0].Two_Point_Delivery);
+                $("#Unloading").val(result[0].Unloading);
+                $("#Pickup").val(result[0].Pickup);
+                $("#detention").val(result[0].detention);
+                $("#Local_Delivery").val(result[0].Local_Delivery);
+                $("#Other_Charge").val(result[0].Other_Charge);
+                $("#Hamali").val(result[0].Hamali);
+                $("#Labour").val(result[0].Labour);
+                $("#Total_Freight").val(result[0].Total_Freight);
+                $("#Advance_Amount").val(result[0].Advance_Amount);
+                $("#Advance_Date").val(result[0].Advance_Date);
+                $("#Advance_LedgerId").val(result[0].Advance_LedgerId);
+                $("#Driver_Id").val(result[0].Driver_Id);
+                $("#Is_Auto_Bill").val(result[0].Is_Auto_Bill);
+                $("#Is_Auto_Trip").val(result[0].Is_Auto_Trip);
+
+                //$("#tbodyid").empty(Purchase_Id);
+
+                let amount = 0;
+                $.each(result, function (index, value) {
+                    var tBody = $("#tblConsignment > TBODY")[0];
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    let btnRemove = `<a class="btn btn-danger" onclick="Remove(this);" href="javascript:void(0)"><i class="fa fa-trash"></i></a>`;
+                    cell.append(btnRemove);
+
+                    //Add Item cell.
+                    var cell = $(row.insertCell(-1));
+                    cell.html($("#ItemSearch").val());
+                    cell.attr('data-item-id', $("#Item_Id").val());
+                    cell.attr('data-line-Id', 0);
+
+                    //Add Actual_Weight cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Actual_Weight").val());
+                    //Add Charge_Weight cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Charge_Weight").val());
+                    //Add Pcs cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Pcs").val());
+                    //Add Unit cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Unit :selected").text());
+                    cell.attr('data-Unit', $("#Unit").val());
+                    //Add Rate_Type cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Rate_Type").val());
+                    //Add Rate cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Rate").val());
+                    //Add Basic_Freight cell.
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#Basic_Freight").val());
+
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#hdnTotalAmount").val());
+                });
+                $("#divDeleteConsignment").css('display', 'block');
+                $("td").each(function () {
+                    $(this).addClass("tbl-css");
+                });
+            } 
+            
         });
 
 

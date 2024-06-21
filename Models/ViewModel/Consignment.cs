@@ -87,21 +87,13 @@ namespace IMS.Models.ViewModel
             PartyLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Party_Id", "Title", "Party_Master", "And IsActive=1"), "Id", "Value");
             Office_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("office_Id", "Title", "Office_Master", "And IsActive=1"), "Id", "Value");
             Stationary_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Stationery_ID", "Title", "Stationery_Master", "And IsActive=1 "), "Id", "Value");
-            //GR_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=10008 And Sub_Type=1 And IsActive=1"), "Id", "Value");
-            GR_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Id", "Title", "Constant", "And IsActive=1"), "Id", "Value");
+            GR_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Constant_Id", "Constant_Value", "Constant_Values", "And Menu_Id=50002 And IsActive=1"), "Id", "Value");
 
-            ////GR_List.OrderBy(x => x.Id).TOList();
-
-            //GR_List.OrderBy(x => x.Value);
-
-            //GR_List.Sort(Function() a.Text < b.Text);
-
-            // GR_List = GR_List.Items.OrderBy(item => item.Id).Tolist();
             LocationLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("location_Id", "Title", "Location_Master", "And IsActive=1"), "Id", "Value");
             UnitLists = new SelectList(DDLValueFromDB.GETDATAFROMDB("Unit_Id", "Title", "Unit_Master", "And IsActive=1"), "Id", "Value");
             Driver_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("User_Id", "UserName", "User_Master", "And IsActive =1"), "Id", "Value");
 
-            Vehicle_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Id", "Vehicle_No", "VEHICLE_MASTER", "And IsActive=1"), "Id", "Value");
+            Vehicle_List = new SelectList(DDLValueFromDB.GETDATAFROMDB("Id", "Vehicle_No", "VEHICLE_MASTER", "And IsActive=1 Order By Vehicle_No"), "Id", "Value");
 
             ConsignmentLines = new List<ConsignmentLine>();
             Loginid = CommonUtility.GetLoginID();
@@ -175,7 +167,7 @@ namespace IMS.Models.ViewModel
         }
 
 
-        public DataSet GetConsigmentData_By_Id(int GR_Id)
+        public DataSet GetConsignmentData_ByGRId(int GR_Id)
         {
             DataSet ds = new DataSet();
             try
@@ -188,6 +180,24 @@ namespace IMS.Models.ViewModel
             { throw ex; }
 
             return ds;
+        }
+
+        public string GetStationaryGRNo(int GROffice_Id)
+        {
+            string val = "";
+            try
+            {
+                List<SqlParameter> SqlParameters = new List<SqlParameter>();
+                SqlParameters.Add(new SqlParameter("@Office_Id", GR_OfficeId));
+                SqlParameters.Add(new SqlParameter("@Menu_Id", CommonUtility.GetActiveMenuID()));
+                SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
+                SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
+                val = DBManager.ExecuteScalarSUB("Stationery_Master_GenerateSequence", CommandType.StoredProcedure, SqlParameters);
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            return val;
         }
 
         //public Consignment GetConsigmentData_By_Id(int GR_Id)
@@ -294,14 +304,14 @@ namespace IMS.Models.ViewModel
 
         //    return dt;
         //}
-        public DataTable Consignment_Get_BydateFilter(DateTime fromdate, DateTime todate, string GR_No, int? GR_OfficeId, int? Vehicle_Id, int? Billing_OfficeId)
+        public DataTable GetConsignment(string fromdate, string todate, string GR_No, int GR_OfficeId, int Vehicle_Id, int Billing_OfficeId)
         {
             DataTable dt = new DataTable();
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Fromdate", fromdate));
-                SqlParameters.Add(new SqlParameter("@Todate", todate));
+                SqlParameters.Add(new SqlParameter("@Fromdate", CommonUtility.GetDateYYYYMMDD(fromdate)));
+                SqlParameters.Add(new SqlParameter("@Todate", CommonUtility.GetDateYYYYMMDD(todate)));
                 SqlParameters.Add(new SqlParameter("@GR_No", GR_No));
                 SqlParameters.Add(new SqlParameter("@GR_OfficeId", GR_OfficeId));
                 SqlParameters.Add(new SqlParameter("@Vehicle_Id", Vehicle_Id));

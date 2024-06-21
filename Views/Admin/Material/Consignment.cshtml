@@ -46,7 +46,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>GR TYPE <span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.GR_Id, new SelectList(Model.GR_List, "Value", "Text"), htmlAttributes: new { @id = "GR_Id", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(Model.GR_List, "Value", "Text"), htmlAttributes: new { @id = "Type_Id", @class = "form-control" })
                                 </div>
                             </div>
                             <div class="styled-input">
@@ -96,7 +96,7 @@
                             <div class="styled-input">
                                 <div class="col-md-4 form-group">
                                     <label>GR NO<span class="mandatory">*</span></label>
-                                    @Html.DropDownListFor(m => m.GR_No, new SelectList(Model.Stationary_List, "Value", "Text"), htmlAttributes: new { @id = "GR_No", @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.GR_No, htmlAttributes: new { @id = "GR_No", @class = "form-control" })
                                     @*@Html.TextBox("GR_No", "", htmlAttributes: new { @placeholder = "GR_No", @id = "GR_No", @class = "form-control" })*@
                                 </div>
                             </div>

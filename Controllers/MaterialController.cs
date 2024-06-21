@@ -1048,7 +1048,7 @@ namespace IMS.Controllers
         }
 
         #region Consignment
-        public ActionResult ConsignmentIndex()
+        public ActionResult Consignment(int GRId=0, string AppToken = "")
         {
             Consignment consignment = new Consignment();
             AppToken = Request.QueryString["AppToken"].ToString();
@@ -1056,8 +1056,9 @@ namespace IMS.Controllers
             consignment.AuthMode = CommonUtility.GetAuthMode(AppToken).ToString();
             return View("~/Views/Admin/Material/Consignment.cshtml", consignment);
         }
-        public ActionResult ConsignmentDashboard()
+        public ActionResult ConsignmentDashboard(string sMsg = "", string appToken = "")
         {
+            if (sMsg != null && sMsg != "") { ViewBag.Msg = sMsg; }
             Consignment consignment = new Consignment();
             AppToken = Request.QueryString["AppToken"].ToString();
             consignment.AppToken = CommonUtility.URLAppToken(AppToken);
@@ -1067,17 +1068,17 @@ namespace IMS.Controllers
 
 
         [HttpGet]
-        public ActionResult Consignment_Get_Bydate(DateTime fromdate, DateTime todate, string GR_No, int? GR_OfficeId, int? Vehicle_Id, int? Billing_OfficeId, string AppToken = "")
+        public ActionResult GetConsignment(string fromdate, string todate, string GR_No, int GR_OfficeId, int Vehicle_Id, int Billing_OfficeId, string AppToken = "")
         {
             DataTable dt = new DataTable();
             try
             {
                 Consignment consignment = new Consignment();
-                dt = consignment.Consignment_Get_BydateFilter(fromdate, todate, GR_No, GR_OfficeId, Vehicle_Id, Billing_OfficeId);
+                dt = consignment.GetConsignment(fromdate, todate, GR_No, GR_OfficeId, Vehicle_Id, Billing_OfficeId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Content(JsonConvert.SerializeObject(dt));
         }
@@ -1104,7 +1105,7 @@ namespace IMS.Controllers
 
 
         [HttpGet]
-        public ActionResult GetConsignmentData(string appToken = "", string sMsg = "")
+        public ActionResult GetConsignmentData_ByGRId(string appToken = "", string sMsg = "")
         {
             DataSet ds = new DataSet();
             Consignment consignment = new Consignment();
@@ -1114,7 +1115,7 @@ namespace IMS.Controllers
                 if (!string.IsNullOrEmpty(Session["GR_ID"] as string)) {
                     GR_ID = Convert.ToInt32(Session["GR_ID"]);
                 }
-                ds = consignment.GetConsigmentData_By_Id(GR_ID);
+                ds = consignment.GetConsignmentData_ByGRId(GR_ID);
                 
             }
             catch (Exception)
@@ -1124,22 +1125,23 @@ namespace IMS.Controllers
             return Content(JsonConvert.SerializeObject(ds));
         }
 
-        //[HttpGet]
-        //public ActionResult GetConsigmentData(int GR_Id, string AppToken = "")
-        //{
-        //    //DataSet ds = new DataSet();
-        //    //try
-        //    //{
-        //    //    Consignment consignment = new Consignment();
-        //    //    ds = consignment.GetConsigmentData_By_Id(GR_Id);
-        //    //}
-        //    //catch (Exception)
-        //    //{
-        //    //    throw;
-        //    //}
-        //    return View("~/Views/Admin/Material/Consignment.cshtml", Content(JsonConvert.SerializeObject(ds)));
-        //    //return Content(JsonConvert.SerializeObject(ds));
-        //}
+        [HttpGet]
+        public ActionResult GetStationaryGRNo(int GROffice_Id, string AppToken = "")
+        {
+            string val = "";
+            try
+            {
+                Consignment consignment = new Consignment();
+                val = consignment.GetStationaryGRNo(GROffice_Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
+            return View("~/Views/Admin/Material/Consignment.cshtml", Content(JsonConvert.SerializeObject(val)));
+            //return Content(JsonConvert.SerializeObject(ds));
+        }
 
 
         [HttpPost]
