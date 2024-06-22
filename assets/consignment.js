@@ -18,12 +18,14 @@
         $("#GR_Date").attr('placeholder', 'dd/mm/yyyy');
         $("#Advance_Date").attr('placeholder', 'dd/mm/yyyy');
 
-        $("#GR_OfficeId").change(function () {
+        $("#GR_OfficeId").change(function (d) {
             officeid = $("#GR_OfficeId").val();
             IMSC.ajaxCall("GET", "/Material/GetStationaryGRNo?GROffice_Id=" + officeid +"&AppToken=" + scope.AppToken, {}, "text", function (d) {
                 debugger
                 var res = JSON.parse(d);
-
+                if (res.length === 0) {
+                    $("#GR_No").val();
+                } 
 
             })
         });
@@ -31,7 +33,7 @@
 
         IMSC.ajaxCall("GET", "/Material/GetConsignmentData_ByGRId?AppToken=" + scope.AppToken, {}, "text", function (d) {
             var res = JSON.parse(d);
-            if (res !== null) {
+            if (res.length === 0) {
                 var result = res.Table;
                 debugger
                 $("#Type_Id").val(result[0].Type_Id);

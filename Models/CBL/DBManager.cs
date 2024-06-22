@@ -91,7 +91,7 @@ public class DBManager
     }
 
 
-    public static string ExecuteScalarSUB(string Query, CommandType commandType, List<SqlParameter> Parameter)
+    public static string ExecuteScalarSUB(string Query, CommandType commandType, List<SqlParameter> Parameter,string outputparameter)
     {
         using (SqlConnection sqlcon = new SqlConnection((ConnStr)))
         {
@@ -105,9 +105,10 @@ public class DBManager
                 }
 
                 SqlParameter pr1 = new SqlParameter();
-                pr1.ParameterName = "@StationeryNumber";
+                pr1.ParameterName = outputparameter;
                 pr1.DbType = DbType.String;
                 pr1.Direction = ParameterDirection.Output;
+                pr1.Size = -1;
                 Command.Parameters.Add(pr1);
 
                 int Obj2 = Convert.ToInt32(Command.ExecuteScalar());

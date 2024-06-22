@@ -1417,10 +1417,11 @@ namespace IMS.Controllers
             try
             {
                 int GR_ID = 0;
-                if (!string.IsNullOrEmpty(Session["GR_ID"] as string)) {
+                if (Convert.ToInt32(Session["GR_ID"]) > 0) {
                     GR_ID = Convert.ToInt32(Session["GR_ID"]);
+                    ds = consignment.GetConsignmentData_ByGRId(GR_ID);
                 }
-                ds = consignment.GetConsignmentData_ByGRId(GR_ID);
+                
                 
             }
             catch (Exception)

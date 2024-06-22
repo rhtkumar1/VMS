@@ -188,11 +188,12 @@ namespace IMS.Models.ViewModel
             try
             {
                 List<SqlParameter> SqlParameters = new List<SqlParameter>();
-                SqlParameters.Add(new SqlParameter("@Office_Id", GR_OfficeId));
+                SqlParameters.Add(new SqlParameter("@Office_Id", GROffice_Id));
                 SqlParameters.Add(new SqlParameter("@Menu_Id", CommonUtility.GetActiveMenuID()));
                 SqlParameters.Add(new SqlParameter("@Company_Id", CommonUtility.GetCompanyID()));
-                SqlParameters.Add(new SqlParameter("@Fin_Id", CommonUtility.GetFYID()));
-                val = DBManager.ExecuteScalarSUB("Stationery_Master_GenerateSequence", CommandType.StoredProcedure, SqlParameters);
+                SqlParameters.Add(new SqlParameter("@Financial_Id", CommonUtility.GetFYID()));
+                string outputparameter = "@StationeryNumber";
+                val = DBManager.ExecuteScalarSUB("Stationery_Master_GenerateSequence", CommandType.StoredProcedure, SqlParameters,outputparameter);
             }
             catch (Exception ex)
             { throw ex; }
